@@ -1,0 +1,124 @@
+# The Notebook app's screens (modules/python/nb_ui.c; help page "notebook"): the list of notebooks
+# (APPS > Notebook, MENU Open: new, open, rename, delete) and the editor of a cell of the home
+# notebook (ENTER on a Python cell: several lines, the chars picker, cancel, run), errors, ON
+# stopping a cell, a power cycle. The notebook itself is always shown on the home screen.
+requirecfg MOD_PYTHON
+nb store wipe
+app notebook
+expect screen notebook
+expect state nb_view list
+expect state nb_items 0
+expect text "example"
+# F2 new: a name prompt with a name to accept; the home screen shows the new, empty notebook
+key F2
+expect state nb_view prompt
+key ENTER
+expect screen home
+expect state nb_open "Notebook 1"
+expect state home_title "Notebook: Notebook 1"
+expect state history 0
+# a calculation, then a Python cell (MENU 8 Insert Python cell): ENTER adds it and runs it
+type "integrate(x^2,x)\n"
+ifcas src expect state last_output x^3/3
+key MENU 8
+expect state home_mode python
+type "sum(range(5))\n"
+nb expect 2 val 10
+# ENTER on the Python cell: the editor of several lines
+key UP UP
+expect state home_kind python
+key ENTER
+expect screen notebook
+expect state nb_view edit
+expect state nb_kind python
+key CLEAR
+type "for i in range(3):"
+key ENTER
+expect state nb_line 2
+type "print(i*i)"
+key ENTER
+expect state nb_line 3
+expect state py_line "    "
+key CLEAR
+type "sum(range(5))"
+screenshot notebook_python.png
+# F5 done: back on the home screen with the cell changed; ENTER, F1 runs it
+key F5
+expect screen home
+nb expect 2 src "for i in range(3):\n    print(i*i)\nsum(range(5))"
+key UP UP
+key ENTER
+expect state nb_view edit
+key F1
+expect screen home
+nb expect 2 out "0\n1\n4\n"
+nb expect 2 val 10
+expect text "10"
+# cancel forgets an edit
+key UP UP
+key ENTER
+type " ignored"
+key F4
+expect screen home
+nb expect 2 src "for i in range(3):\n    print(i*i)\nsum(range(5))"
+# the chars picker: '#' for a comment
+key UP UP
+key ENTER
+key F3
+key RIGHT RIGHT
+key ENTER
+type " squares"
+key F5
+nb expect 2 src "sum(range(5))# squares"
+# an error: its last line in red
+key MENU 8
+type "1/0\n"
+nb expect 3 ename ZeroDivisionError
+expect text "ZeroDivisionError: divide by zer"
+# the variables are shared between Python cells
+key MENU 8
+type "i+100\n"
+nb expect 4 val 102
+# ON stops a running cell (the test hook presses it at the 200th poll)
+key MENU 8
+type "while True: pass"
+py breakafter 200
+key ENTER
+nb expect 5 ename KeyboardInterrupt
+# the list (MENU 3 Open): rename the open notebook; the home screen follows
+key MENU 3
+expect screen notebook
+expect state nb_view list
+expect state nb_list_sel "Notebook 1"
+key F3
+expect state nb_view prompt
+key CLEAR
+type "Lab 1"
+key ENTER
+expect state nb_open "Lab 1"
+expect text "Lab 1"
+screenshot notebook_list.png
+key CLEAR
+expect screen home
+expect state home_title "Notebook: Lab 1"
+# a power cycle: the notebook and its outputs come back
+key SHIFT ON
+key ON
+expect state home_nb "Lab 1"
+expect state history 5
+nb expect 2 val 10
+# the list: open it again (the home screen shows it), then delete it
+app notebook
+expect state nb_items 1
+key ENTER
+expect screen home
+expect state nb_open "Lab 1"
+expect state nb_cells 5
+app notebook
+key F4
+expect state nb_view confirm
+key ENTER
+expect state nb_items 0
+key CLEAR
+expect screen home
+expect state home_title "Notebook: Unsaved"

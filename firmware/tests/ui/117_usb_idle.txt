@@ -1,0 +1,30 @@
+# SETTINGS ON USB (help page mode-usb): idle on USB power only darkens the screen
+# (STAY ON, the default); the calculator keeps running and the first key or touch
+# just lights it again. SLEEP switches off as on batteries.
+key HOME
+expect state usb_awake 1
+usb vbus on
+wait 301000
+expect state screen_dark 1
+expect screen home
+# the waking key does nothing else
+key 7
+expect state screen_dark 0
+expect state screen home
+key 8
+key ENTER
+expect state last_output 8
+# a touch wakes it too, and the rest of that gesture is ignored
+wait 301000
+expect state screen_dark 1
+touch tap 160 120
+expect state screen_dark 0
+# SLEEP: no dark screen on USB power, the usual auto power-down instead
+setmode "ON USB" SLEEP
+expect state usb_awake 0
+key HOME
+wait 301000
+expect state screen_dark 0
+setmode "ON USB" "STAY ON"
+expect state usb_awake 1
+usb vbus off

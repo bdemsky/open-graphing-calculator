@@ -1,0 +1,79 @@
+# USB: the CALC drive (core/vdrive.c, core/usbdisk.c, app/usb_app.c) with a computer
+# modelled by the simulator (platform/hostdev/usbhost.c: the console `usb` writes files
+# the way macOS and Windows do). Dropping module files installs them from the main loop
+# after the writes go quiet: a new module, a damaged copy, a fragmented file, a module
+# that is in use (waits until it is left), a file that is not a module; each install
+# refreshes the drive (media change), and RESULT.TXT says what happened.
+requirecfg CONTENT_QSPI
+# a charger only: VBUS but no computer, nothing changes
+usb status
+expect state usb_host 0
+usb host on
+expect state usb_host 1
+# MEM > USB status: the diagnostics page (also reachable when USB does not work)
+app mem
+key UP
+expect state menu_item "USB status"
+key ENTER
+expect screen usbstatus
+expect text configured
+expect text "CALC drive"
+screenshot usb_status.png
+key CLEAR
+usb ls
+usb expect README.TXT "Drop .MOD files here to install them."
+usb expect INFO.TXT "Firmware: "
+usb expect INFO.TXT "geometry"
+usb expect MODULES.TXT "manual (Manual)"
+usb expect RESULT.TXT "No module file was dropped"
+usb expect SCREEN.BMP BM
+# the Animation module is not in the standard tier's factory content: drop it (macOS order)
+usb drop {mod:animation} mac
+wait 1000
+expect state usb_result "Installed Animation {ver:animation}"
+expect state toast "Installed Animation {ver:animation}"
+modx bind animation
+# the drive went away and came back (media change): the new directory
+usb status
+wait 2000
+usb expect RESULT.TXT "Installed Animation {ver:animation}"
+usb expect RESULT.TXT "installed and verified"
+usb expect RESULT.TXT {mod:animation}
+usb expect MODULES.TXT "animation (Animation)"
+usb ls
+# a damaged copy (Windows order): checked before anything is written
+usb drop {mod:casx} win corrupt
+wait 1000
+expect state usb_result "advanced CAS {ver:casx}: damaged file"
+wait 2000
+usb expect RESULT.TXT "Nothing was installed."
+usb expect RESULT.TXT "does not match its checksum"
+expect state modx_casx unbound
+# the same file intact, in clusters that are not contiguous
+usb drop {mod:casx} win frag
+wait 1000
+expect state usb_result "Installed advanced CAS {ver:casx}"
+wait 2000
+# a module that is in use waits until it is left
+app geometry
+expect screen geometry
+usb drop {mod:geometry} mac
+wait 1000
+expect state usb_pending {mod:geometry}
+expect state toast "Leave Geometry to install it"
+key HOME
+wait 100
+expect state usb_result "Installed Geometry {ver:geometry}"
+expect state usb_pending ""
+wait 2000
+# a file that is not a module stays on the drive and is ignored
+usb drop NOTES.TXT win
+wait 1000
+expect state toast "Not a module: NOTES.TXT"
+usb expect NOTES.TXT hello
+screenshot usb_drive_toast.png
+# the computer leaves: nothing pending, the drive is fresh next time
+usb host off
+expect state usb_host 0
+usb host on
+usb expect RESULT.TXT "Installed Geometry {ver:geometry}"

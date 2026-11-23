@@ -1,0 +1,54 @@
+%% Finance app (app/finance.c)
+
+@page finance Finance
+{apps} > Finance, with the usual time-value-of-money conventions. The soft keys switch between the screens: {F1} tvm, {F2} amort, {F3} cashflow, {F4} interest, {shift} {F1} days; {F5} solves.
+
+- [[tvm|TVM Solver]]: loans, savings, annuities.
+- [[amortization|Amortization]]: balance, principal and interest of payments.
+- [[cashflow|Cash flows]]: net present value and internal rate of return.
+- [[interest-conv|Interest conversion]]: nominal and effective rates.
+- [[dbd|Days between dates]].
+
+Money you receive is positive, money you pay is negative (a loan: PV positive, PMT negative). All values are kept when the calculator is switched off.
+
+@page tvm TVM Solver
+The time-value-of-money variables:
+
+- N: number of payments. I%: annual interest rate in percent. PV: present value. PMT: payment per period. FV: future value.
+- P/Y: payments per year; C/Y: compounding periods per year (setting P/Y also sets C/Y, the usual convention).
+- PMT: END or BEGIN: payments at the end or beginning of each period ({◀} {▶} or {enter} switch).
+
+Enter the known values, highlight the unknown and press {F5} (solve; also {alpha} {enter}). The footer explains the highlighted field and its sign. The equation is
+
+    0 = PV + (1+i*k)*PMT*(1-(1+i)^-N)/i + FV*(1+i)^-N
+    i = (1+I%/(100*C/Y))^(C/Y/P/Y) - 1
+
+with k = 1 for BEGIN, 0 for END. Example: N=360, I%=6, PV=200000, FV=0, P/Y=12; solving PMT gives -1199.10105.
+
+@page amortization Amortization
+Uses the TVM Solver values (PV, I%, PMT, P/Y, C/Y, END/BEGIN). Enter the first and last payment numbers `Pmt1` and `Pmt2`:
+
+- bal: the balance after payment Pmt2.
+- ΣPrn: the principal paid by payments Pmt1 to Pmt2.
+- ΣInt: the interest paid by payments Pmt1 to Pmt2.
+- Below, under the header `interest princ. balance`: one line per payment with its interest, principal and the balance after it.
+
+In FIX mode the payment and each interest amount are rounded to the displayed decimals (as bal(, ΣPrn(, ΣInt( do on other calculators with the current rounding); in FLOAT mode nothing is rounded.
+
+@page cashflow Cash flows
+Enter the discount rate I% (per period, in percent), the number of cash flows, the initial cash flow CF0 (usually negative, an investment) and CF1, CF2, ... (one per period, up to 12).
+
+- NPV: net present value CF0 + CF1/(1+i) + CF2/(1+i)^2 + ...
+- IRR: internal rate of return in percent, the rate where NPV = 0 ("no sign change" if there is none).
+
+Example: I%=10, CF0=-1000, CF1=500, CF2=400, CF3=300 gives NPV=10.51840721 and IRR=10.65168124.
+
+@page interest-conv Interest conversion
+Nominal (Nom%) and effective (Eff%) annual rates for C/Y compounding periods per year. Editing one updates the other:
+
+    Eff = 100*((1+Nom/(100*C/Y))^C/Y - 1)
+
+Example: Nom%=6 with C/Y=12 gives Eff%=6.167781186.
+
+@page dbd Days between dates
+Enter two dates as numbers YYYYMMDD (for example 20240315 for March 15, 2024); `days` is the number of days from date1 to date2 (negative if date2 is earlier). Gregorian calendar, leap years included: from 20240101 to 20241231 is 365 days.

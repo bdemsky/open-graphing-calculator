@@ -1,0 +1,156 @@
+# STAT TESTS (tests, intervals, Draw), DISTR menu and DRAW, distributions on
+# the home screen and in Y=
+app stat
+key 3
+expect state menu "STAT TESTS"
+screenshot stat_tests_menu.png
+# Z-Test with summary statistics: mu0=3, sigma=2, xbar=3.8, n=5
+key 1
+expect screen statform
+expect text Z-Test
+key RIGHT
+expect text xbar:
+key DOWN
+type "3\n2\n3.8\n5\n"
+key DOWN ENTER
+expect screen statresult
+expect text z=0.894427191
+expect text p=0.371093369523
+screenshot stat_ztest.png
+# Draw: the two tails are shaded
+key ENTER
+expect screen statdraw
+expect text p=0.371093369523
+expect color 0x655F 1000
+screenshot stat_ztest_draw.png
+key CLEAR
+expect screen statresult
+key CLEAR
+expect screen statform
+key CLEAR
+# T-Test from data, one-sided
+stat set L1 5.1,4.9,5.6,5.8,6,5.2,4.7,5.5
+app stat
+key 3 2
+key DOWN
+type "5\n"
+key DOWN DOWN RIGHT RIGHT DOWN ENTER
+expect text t=2.19795038968
+expect text p=0.0319620614694
+expect text df=7
+key CLEAR CLEAR
+# 2-SampTTest (Welch) from L1, L2
+stat set L2 4.2,4.8,5,4.4,4.6,5.1,4.3
+app stat
+key 3 4
+key UP UP ENTER
+expect text t=3.48552271527
+expect text df=12.8523098071
+key CLEAR CLEAR
+# 1-PropZTest and its Draw (upper tail)
+app stat
+key 3 5
+type "0.5\n58\n100\n"
+key RIGHT RIGHT DOWN DOWN ENTER
+expect screen statdraw
+expect text p=0.0547992916996
+key CLEAR CLEAR CLEAR
+# chi² GOF: contributions in CNTRB
+stat set L1 18,22,30,30
+stat set L2 25,25,25,25
+app stat
+key 3 7
+key DOWN DOWN
+type "3\n"
+key ENTER
+expect text chi²=4.32
+expect text p=0.228918864336
+stat expect CNTRB 1.96,0.36,1,1
+key CLEAR CLEAR
+# chi²-Test on a matrix (CAS)
+ifcas src app stat
+ifcas src key 3 8
+ifcas src key CLEAR
+ifcas src key SHIFT LPAREN SHIFT LPAREN
+ifcas src type "20,30,25"
+ifcas src key SHIFT RPAREN
+ifcas src type ","
+ifcas src key SHIFT LPAREN
+ifcas src type "30,20,25"
+ifcas src key SHIFT RPAREN SHIFT RPAREN
+ifcas src key DOWN ENTER
+ifcas src expect text chi²=4
+ifcas src expect text p=0.135335283237
+ifcas src expect text df=2
+ifcas src key CLEAR CLEAR
+ifcas src expect eval chi2exp [[25,25,25],[25,25,25]]
+# ANOVA
+stat set L1 5.1,4.9,5.6,5.8,6,5.2,4.7,5.5
+stat set L2 4.2,4.8,5,4.4,4.6,5.1,4.3
+stat set L3 6.1,5.9,6.5,6.8
+app stat
+key 3
+key UP UP UP UP UP UP UP ENTER
+expect text ANOVA
+key DOWN ENTER
+expect text F=22.3367367994
+key CLEAR CLEAR
+# ZInterval
+app stat
+key 3
+key UP UP UP UP UP UP ENTER
+expect text ZInterval
+key RIGHT DOWN
+type "2\n3.8\n5\n0.95\n"
+key ENTER
+expect text lower=2.04695491885
+expect text upper=5.55304508115
+key CLEAR CLEAR
+# the last results are in VARS > Statistics
+key VARS UP ENTER
+expect state menu Statistics
+expect statecontains menu_item lower
+key CLEAR
+# errors stay on the form
+app stat
+key 3 1
+key RIGHT DOWN
+type "3\n0\n"
+key DOWN DOWN DOWN ENTER
+expect screen statform
+expect text sigma
+key CLEAR
+# DISTR (APPS > Distributions) inserts functions on the home screen
+app distr
+expect state menu DISTR
+screenshot stat_distr.png
+# the menu shows the argument order and puts the ")" after the cursor
+expect text normalcdf(lo,hi[,mu,sd])
+key 2
+expect state entry normalcdf()
+type "~1,1\n"
+ifcas src expect state last_output 0.682689492137
+app distr
+key 3
+type "0.975\n"
+ifcas src expect state last_output 1.95996398454
+ifcas src type "binompdf(3,1/2)\n"
+ifcas src expect state last_output [1/8,3/8,3/8,1/8]
+# DRAW > ShadeNorm
+app distr
+key UP ENTER 1
+expect text ShadeNorm
+type "~1\n1\n0\n1\n"
+key ENTER
+expect screen statdraw
+expect text Area=0.682689492137
+expect color 0x655F 1000
+screenshot stat_shadenorm.png
+key CLEAR CLEAR
+# normalpdf(x) graphs in Y=
+ifcas src key HOME F1
+ifcas src type "normalpdf(x)*20"
+ifcas src key F5 ENTER
+ifcas src expect screen graph
+ifcas src expect color 0x029B 300
+ifcas src screenshot stat_normalpdf_graph.png

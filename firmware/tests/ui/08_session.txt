@@ -1,0 +1,82 @@
+# Session persistence: state survives power off/on (= reset on hardware) and a reboot
+session info
+expect state session_flash 1
+# CAS variables, a function, history and the entry line
+type "a:=7/2\n"
+type "f(t):=t^2+1\n"
+type "3*4\n"
+type "2+"
+# MODE: degrees, FIX 2, polar complex
+key SHIFT HOME ENTER RIGHT ENTER
+key DOWN DOWN DOWN DOWN RIGHT RIGHT RIGHT ENTER
+key DOWN RIGHT ENTER
+key HOME
+expect state fix 2
+expect state complex polar
+# Y= function with colour and a disabled one, window
+key F1
+type "x^2"
+key DOWN
+type "sin(x)"
+key LEFT LEFT LEFT LEFT LEFT LEFT LEFT ENTER LEFT ENTER
+key F2
+type "~5\n"
+key HOME
+expect state y1 x^2
+expect state y2_on 0
+expect state y2_color black
+expect state xmin -5
+# power off saves, power on restores (the simulator restarts the app like a reset)
+key SHIFT ON
+expect state session_rc 0
+key ON
+expect screen home
+expect state history 3
+expect state last_output 12
+expect state entry 2+
+expect state angle deg
+expect state fix 2
+expect state complex polar
+expect state y1 x^2
+expect state y2 sin(x)
+expect state y2_on 0
+expect state y2_color black
+expect state xmin -5
+expect text 12
+key CLEAR
+type "a*2\n"
+expect state last_output 7
+type "f(3)\n"
+ifcas src expect state last_output 10
+type "ans+1\n"
+ifcas src expect state last_output 11
+# FIX 2 survived: approximate results have 2 decimals
+type "1/3.\n"
+ifcas src expect state last_output 0.33
+screenshot session_restored.png
+# reboot = reset without a save: comes back to the last saved session
+type "b:=5\n"
+reboot
+key CLEAR
+expect state history 3
+type "b\n"
+ifcas src expect state last_output b
+# an explicit save, then reboot keeps the newest state
+type "c:=9\n"
+session save
+reboot
+type "c\n"
+expect state last_output 9
+# MEM > Reset all forgets everything
+app mem
+expect state menu MEMORY
+key 6 2
+expect screen message
+key ENTER
+reboot
+expect state history 0
+expect state angle rad
+expect state fix -1
+expect state y1 
+type "c\n"
+ifcas src expect state last_output c

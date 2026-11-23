@@ -1,0 +1,51 @@
+# RPN mode and its stack survive power off/on and a reboot; MEM reset and
+# switching back to algebraic entry
+setmode ENTRY RPN
+key HOME
+type "1\n2\n3"
+key DIV
+type "4\n5"
+expect state rpn_depth 3
+expect state rpn_line 5
+key SHIFT ON
+key ON
+expect screen rpn
+expect state rpn 1
+expect state rpn_depth 3
+expect state rpn_1 4
+expect state rpn_2 2/3
+expect state rpn_3 1
+expect state rpn_line 5
+expect text 2/3
+# QUIT and CLEAR from other screens come back to the RPN stack
+key HOME F1
+key HOME
+expect screen rpn
+key ADD
+expect state rpn_1 9
+# reboot (reset without a save) returns to the last saved session
+session save
+key ADD
+expect state rpn_1 29/3
+reboot
+expect screen rpn
+expect state rpn_1 9
+expect state rpn_depth 3
+# algebraic entry again: the home screen after power-on, the stack is kept
+setmode ENTRY ALGEBRAIC
+key SHIFT ON
+key ON
+expect screen home
+expect state rpn 0
+setmode ENTRY RPN
+key HOME
+expect screen rpn
+expect state rpn_depth 3
+# MEM > Reset all: algebraic entry, empty stack
+app mem
+key 6 2
+key ENTER
+reboot
+expect screen home
+expect state rpn 0
+expect state rpn_depth 0

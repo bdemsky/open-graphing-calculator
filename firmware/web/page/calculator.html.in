@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Open Graphing Calculator</title>
+<meta name="description" content="Open Graphing Calculator simulator: the calculator firmware compiled to WebAssembly, on a picture rendered from the enclosure CAD.">
+<style>
+:root {
+  --bg: #e9ecf1;
+  --fg: #1d2026;
+  --muted: #5b6370;
+  --kbd-bg: #ffffff;
+  --kbd-border: #c4cad3;
+  --press: rgba(0, 0, 0, 0.32);
+  --press-ring: rgba(120, 170, 255, 0.55);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121418;
+    --fg: #e4e7ec;
+    --muted: #9099a6;
+    --kbd-bg: #1f232a;
+    --kbd-border: #3a404b;
+    --press: rgba(0, 0, 0, 0.42);
+    --press-ring: rgba(120, 170, 255, 0.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121418;
+  --fg: #e4e7ec;
+  --muted: #9099a6;
+  --kbd-bg: #1f232a;
+  --kbd-border: #3a404b;
+  --press: rgba(0, 0, 0, 0.42);
+  --press-ring: rgba(120, 170, 255, 0.6);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 12px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+#stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px 4px;
+}
+#calc {
+  position: relative;
+  flex: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#calc img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+#lcd {
+  position: absolute;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000;
+  touch-action: none;
+}
+.key {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 60ms, box-shadow 60ms;
+}
+.key:hover { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.key.pressed {
+  background: var(--press);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--press-ring);
+}
+#help {
+  flex: none;
+  margin: 0 auto;
+  padding: 2px 16px 8px;
+  max-width: 980px;
+  text-align: center;
+  color: var(--muted);
+}
+#help kbd {
+  font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 0 4px;
+  border: 1px solid var(--kbd-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--kbd-bg);
+  color: var(--fg);
+  white-space: nowrap;
+}
+#help .sep { opacity: 0.5; padding: 0 4px; }
+#status { color: var(--muted); }
+#allmods {
+  font: inherit;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+#allmods:hover, #allmods:focus-visible { color: var(--fg); }
+#allmods[aria-pressed="true"] { text-decoration: none; }
+#status.error { color: #d0453b; }
+@media (max-width: 520px) { #help { font-size: 11px; } #help .desk { display: none; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="calc" role="application" aria-label="Graphing calculator">
+    <img id="calcimg" alt="Graphing calculator" draggable="false"
+         src="{{IMG_2X}}" srcset="{{IMG_1X}} {{IMG_1X_W}}w, {{IMG_2X}} {{IMG_2X_W}}w" sizes="{{IMG_SIZES}}">
+    <canvas id="lcd" width="320" height="240" aria-label="Calculator display"></canvas>
+  </div>
+</div>
+<div id="help">
+  <span id="status">Starting…</span>
+  <span class="sep">|</span><button type="button" id="allmods">Install all modules</button>
+  <span class="desk"><span class="sep">|</span>Click or tap the keys, or type:
+  {{KBD_HELP}}</span>
+</div>
+<script>
+{{CALC_MODULE_JS}}
+</script>
+<script>
+{{CALC_API_JS}}
+</script>
+<script>
+window.CALC_KEYMAP = {{KEYMAP_JSON}};
+window.CALC_KEYS = {{KEYS_JSON}};
+</script>
+<script>
+{{CALC_PAGE_JS}}
+</script>
+</body>
+</html>

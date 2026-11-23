@@ -1,0 +1,33 @@
+# The "▲ page" / "▼ page" soft keys show only when they can scroll: a menu
+# that fits on one page has neither; a long menu shows ▼ at the top, both in
+# the middle and ▲ at the end; a hidden page key does nothing. Help and the
+# catalog (their own bars) follow the same rule.
+key VARS
+expect state menu VARS
+expect state softkeys "|||help|back"
+expect state menu_sel 0
+key F2
+expect state menu_sel 0
+key CLEAR
+key MATH
+expect state menu MATH
+expect state softkeys "|▼ page||help|back"
+key F1
+expect state menu_sel 0
+key F2
+expect state softkeys "▲ page|▼ page||help|back"
+key F2
+key F2
+key F2
+expect state softkeys "▲ page|||help|back"
+key CLEAR
+key SHIFT APPS
+expect state menu CATALOG
+expect state softkeys "|▼ page|categ|help|back"
+key CLEAR
+key SHIFT MENU
+expect state softkeys "|▼ page|index|exit|back"
+key F2
+# (the essential pages of the core tier are shorter: two pages)
+ifcfg MANUAL_FULL expect state softkeys "▲ page|▼ page|index|exit|back"
+ifcfg !MANUAL_FULL expect state softkeys "▲ page||index|exit|back"

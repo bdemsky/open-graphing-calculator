@@ -1,0 +1,79 @@
+%% 3D graphing (app/g3d_*.c): the graph screen, the entry editor, the 3D window, the VIEW menu.
+
+@page graph3d 3D graphing
+Draws surfaces z = f(x,y), parametric surfaces x(u,v), y(u,v), z(u,v) and space curves x(t), y(t), z(t), up to six at once in different colours, inside a labelled box. Open it from the home screen with {F1} (graph) and the editor's 2D/3D switch (3D): type the entries and {F5} (graph) adds a 3D [[graph-cells|graph cell]] to the notebook; {enter} on the cell opens this screen on it.
+
+## Soft keys
+- {F1} z= ([[graph3d-eq|entries]]), {F2} window ([[graph3d-window|3D window]]), {F3} view ([[graph3d-view|VIEW menu]]), {F4} trace, {F5} graph. In the entries {F1} reads 2D: the 2D/3D switch of the graph editor.
+- {shift}: reset (standard view), style (shaded or wireframe), color (entry colours or colour by height), zfit (z range from the surfaces).
+
+## Turning and zooming
+- {◀} {▶} turn the box about the z axis by 15°, {▲} {▼} tilt it by 15° (from below to the top view).
+- {+} and {−} zoom the view in and out.
+- Drag on the screen to turn the box, pinch to zoom. While the finger moves the picture is drawn from a coarser grid; it is redrawn in full when you lift it.
+
+## Trace
+{F4} puts a cursor on the first surface. {◀} {▶} move it along x (or u, t), {▲} {▼} along y (or v); the band at the bottom shows its coordinates (x, y, z). {F4} (next) goes to the next surface, {clear} ends the trace. Tapping the screen traces the nearest grid point.
+
+## Contours
+The VIEW menu's Contours draws level curves (lines of equal height) on the surfaces z = f(x,y); Contour map shows them flat, as on a map, seen from above. See [[graph3d-contours]].
+
+## What you see
+- The box is the 3D window. The ends of three of its edges show the window's ranges, and the edge names x, y, z.
+- The axes go through the origin when it is inside the box.
+- Shaded surfaces are lit from the upper left; the underside is darker. Grid lines are drawn on the surface. Surfaces are cut off at the faces of the box.
+- Top left: the drawn entries in their colours, or an error message.
+
+The surfaces are computed once (when you enter the screen or change an entry or the window); turning, zooming and tracing reuse the computed grid. See also [[graphing]].
+
+@page graph3d-eq 3D entries (z=)
+The 3D side of the graph editor ({F1} graph on the home screen, then 3D). The switch at its top right, "2D 3D", goes back to the 2D functions ([[yeq|Y=]]): tap "2D", or press {F1} (2D). Six entries Z1 .. Z6. Each is one of:
+
+- z1(x,y) = an expression in x and y (a surface over the x-y window).
+- x2(u,v), y2(u,v), z2(u,v): a parametric surface, u and v over their ranges in the [[graph3d-window|3D window]].
+- x3(t), y3(t), z3(t): a space curve, t over its range.
+
+{shift} {F1} (type) changes the kind of the highlighted entry, {shift} {F2} (on/off) switches it on or off, {shift} {F3} (color) changes its colour. The {x} key types x, u or t (the entry's first parameter); type v and y with {alpha}.
+
+{▲} {▼} or {enter} move between lines. {◀} at the start of a first line moves to the = sign ({enter} switches the entry on or off) and then to the colour bar ({enter} changes the colour). {clear} empties the line. Tap the colour bar, the name (kind) or the = sign to change them.
+
+Examples:
+- `x^2-y^2` (a saddle), `sin(x)*cos(y)`, `e^(-(x^2+y^2)/4)*4`
+- Sphere: `3*cos(u)*sin(v)`, `3*sin(u)*sin(v)`, `3*cos(v)` with v from 0 to π.
+- Torus: `(3+cos(v))*cos(u)`, `(3+cos(v))*sin(u)`, `sin(v)`.
+- Helix: `3*cos(t)`, `3*sin(t)`, `t/2`.
+
+@page graph3d-window 3D window
+- xmin .. zmax: the box. The surface z = f(x,y) is computed over xmin..xmax and ymin..ymax; everything is cut off at the box faces.
+- umin .. vmax: the parameter ranges of parametric surfaces; tmin, tmax: of space curves.
+- grid: grid cells per side of every surface (4 to 64). More cells look smoother and take longer.
+- tsteps: line segments of every space curve (8 to 1000).
+- levels: the number of [[graph3d-contours|contour]] levels (1 to 30), evenly spaced between zmin and zmax.
+
+Fields accept expressions such as `2π`. {▲} {▼} or {enter} accept a field and move to the next; an invalid value is refused with a message that names the problem (`ERR: grid must be 4 to 64`). {shift} {F4} (zfit) on the graph sets zmin and zmax from the surfaces.
+
+@page graph3d-view 3D VIEW menu
+{F3} (view) on the 3D screens:
+- Standard view: azimuth -60°, elevation 25°, zoom 1 (also {shift} {F1} on the graph).
+- Top view (x-y plane from above), Front view (x-z), Side view (y-z).
+- Contour map: the level curves of the surfaces z = f(x,y) flat in the x-y plane, with a key of the levels ([[graph3d-contours]]). Turning the view, or one of the views above, goes back to 3D.
+- Contours: on or off: level curves on the surfaces z = f(x,y) in the 3D view, instead of their grid lines.
+- Wireframe: the grid lines only, without hidden lines removed (fast). Shaded: lit, filled surfaces with hidden parts removed (a z-buffer) and the grid lines on top.
+- Colour by height: blue (low) through green and yellow to red (high), instead of the entries' colours.
+- Axes, Box and labels: show or hide them.
+- Zoom in, Zoom out, Zoom fit z (zmin and zmax from the surfaces).
+
+@page graph3d-contours 3D contours and the contour map
+Level curves, or contours, join the points of a surface z = f(x,y) at the same height, like the lines of a hiking map. The [[graph3d-window|3D window]]'s levels (9 at first) sets how many: they divide the range zmin to zmax into equal bands, so with z from -5 to 5 and 9 levels they are at z = -4, -3, ..., 4. {shift} {F4} (zfit) first fits zmin and zmax to the surfaces, and the levels with them.
+
+## On the surface
+{F3} (view) then Contours turns them on or off. The surfaces z = f(x,y) are drawn with their level curves instead of the grid lines: dark lines over a shaded surface (hidden where the surface is in front), lines in the entry's colour, or in the height colours, in the wireframe style. Turning, zooming and tracing work as usual.
+
+## Contour map
+{F3} (view) then Contour map shows the surfaces z = f(x,y) from straight above and flat: x to the right, y up, the window's x and y ranges at the corners of the frame. Shaded, the bands between the levels are filled in the height colours (blue low, red high) and the curves drawn over them; wireframe, only the curves are drawn, in the entry's colour or (Colour by height) in the colour of their level. The key at the right lists the level values next to their colours.
+- {+} {−} and a pinch zoom; {F4} traces the surfaces z = f(x,y) as in 3D.
+- An arrow or a drag turns back to the 3D view (at the angles it had), as do the 3D views of the VIEW menu and {shift} {F1} (reset).
+
+Parametric surfaces and space curves have no contours: they keep their grid lines in 3D and are left out of the map (their names are dimmed). A [[graph-cells|3D graph cell]] keeps the contours and the map of the 3D graph it was made from.
+
+Try `x^2+y^2` (circles), `(x^2-y^2)/5` (hyperbolas around a saddle), `sin(x)*cos(y)` (hills and hollows) or, with every range -1 to 1, `sqrt(1-x^2-y^2)` (circles closer together towards the rim).

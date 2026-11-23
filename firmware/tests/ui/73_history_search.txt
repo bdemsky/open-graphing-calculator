@@ -1,0 +1,49 @@
+# History search (MENU F5, app/input_hist.c): newest first, filtered by
+# typed text, ENTER inserts the input, F3 the result, F4 copies; works from
+# other screens (Y=)
+type "12*3\n"
+type "100-1\n"
+type "2^10\n"
+key MENU F5
+expect screen menu
+expect state menu HISTORY
+expect state hist_n 3
+expect state menu_item "2^10 ▶ 1024"
+# keys type as in the entry line: digits filter
+key 1 0 0
+expect state hist_query 100
+expect state menu_item "100-1 ▶ 99"
+screenshot history_search.png
+# results are searched too
+key SHIFT DEL 3 6
+expect state hist_query 36
+expect state hist_n 1
+expect state menu_item "12*3 ▶ 36"
+# a query that matches nothing: empty list
+key 7 7 7
+expect state hist_n 0
+key DEL DEL DEL
+# ENTER inserts the input
+key ENTER
+expect screen home
+expect state entry 12*3
+key CLEAR
+# F3 inserts the result
+key MENU F5 F3
+expect state entry 1024
+key CLEAR
+# F4 copies the input, SHIFT F4 the result
+key MENU F5 DOWN F4
+expect screen home
+expect state clip 100-1
+key MENU F5 SHIFT F4
+expect state clip 1024
+# from Y=: insert a history input into a function
+key F1
+key MENU F5
+expect state menu HISTORY
+key 1 2
+key ENTER
+expect screen yeq
+expect state y1 12*3
+key HOME

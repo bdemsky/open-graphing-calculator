@@ -1,0 +1,121 @@
+# Graphing from the home screen ends in its notebook (app/home.c "graphing into the notebook"; help
+# page "graph-cells"): graph (F1, the 2D editor Y=) then the graph key adds a graph cell and comes
+# back with it selected; a ZOOM from Y= does the same; trace from Y= opens the graph app on a new
+# cell; table then graph; SHIFT F5 graph, and the 3D graph (CATALOG, the console's app graph3d)
+# from home; ENTER on a cell opens the graph app bound to it, its own y= / graph keys stay in the
+# app, HOME writes it back. Graphing started elsewhere (a stat plot) is the plain graph app.
+type "1+1\n"
+# graph (F1), a function, graph (F5): a graph cell, selected, on the home screen
+key F1
+expect screen yeq
+type "x^2"
+key F5
+expect screen home
+expect state history 2
+expect state home_kind graph
+expect state home_sel 2
+expect state gcell_fn x^2
+expect state gcell_fns 1
+expect text y1=x^2
+screenshot graph_flow_yeq.png
+# y= again, a second function, ZOOM ZTrig: another cell, of both functions, in the trig window
+key F1
+key DOWN
+type "sin(x)"
+key F3
+expect screen menu
+key 6
+expect screen home
+expect state history 3
+expect state home_sel 4
+expect state gcell_fns 2
+expect statecontains gcell_window "-6.15"
+# WINDOW from Y=, then graph: a cell too
+key F1
+key F2
+expect screen window
+key F5
+expect screen home
+expect state history 4
+# trace from Y=: the graph app on a new cell; HOME comes back with it selected
+key F1
+key F4
+expect screen graph
+expect state history 5
+key HOME
+expect screen home
+expect state home_bound ""
+expect state home_sel 8
+expect state home_kind graph
+# table (SHIFT F1), then graph: a cell
+key CLEAR
+key SHIFT F1
+expect screen table
+key F5
+expect screen home
+expect state history 6
+expect state home_sel 10
+# SHIFT F5 (graph) on home: a cell of the current Y= functions
+key CLEAR
+key SHIFT F5
+expect screen home
+expect state history 7
+expect state home_sel 12
+expect state home_kind graph
+# ENTER on a cell: the full graph app bound to it; its y= and graph keys stay in the app
+key ENTER
+expect screen graph
+key F1
+expect screen yeq
+key F5
+expect screen graph
+expect state history 7
+key HOME
+expect screen home
+expect state history 7
+expect state home_sel 12
+# on the graph screen F5 reads "back" and goes back to the notebook like HOME (anim is on SHIFT F5)
+key ENTER
+expect screen graph
+expect state softkeys "y=|window|zoom|trace|back"
+key F5
+expect screen home
+expect state history 7
+expect state home_sel 12
+# HOME from Y= without the graph key adds nothing
+key CLEAR
+key F1
+key HOME
+expect state history 7
+# the 3D graph from home (CATALOG, app graph3d): its editor (no surface yet), the graph key comes back with a 3D cell
+app graph3d
+expect screen graph3d_eq
+type "x*y/4"
+key F5
+expect screen home
+expect state history 8
+expect state home_sel 14
+expect state gcell_fn x*y/4
+expect text z1=x*y/4
+screenshot graph_flow_3d.png
+# again, now with a surface: a cell at once
+key CLEAR
+app graph3d
+expect screen home
+expect state history 9
+expect state gcell_fn x*y/4
+# graphing started elsewhere is the plain graph app (no cell)
+app settings
+app graph
+expect screen graph
+key HOME
+expect state history 9
+# the title bar names the notebook; a tap on it opens the notebook menu (as MENU does)
+expect state home_title "Notebook: Unsaved"
+expect text "Notebook: Unsaved"
+screenshot home_title.png
+touch tap 160 8
+expect screen menu
+expect state menu "NOTEBOOK (not saved)"
+key CLEAR
+expect screen home

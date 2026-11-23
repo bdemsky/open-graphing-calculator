@@ -1,0 +1,311 @@
+%% CAS help: integers and number theory
+@group cas-integer Integers and number theory
+Exact integer arithmetic with arbitrarily large numbers: prime factorization, primality, division with remainder, modular arithmetic and counting.
+
+@cmd ifactor
+group: cas-integer
+summary: Prime factorization of an integer
+syntax: ifactor(n)
+example: ifactor(360)
+result: 2^3*3^2*5
+example: ifactor(2^32+1)
+result: 641*6700417
+see: divisors, isprime, factor
+
+Writes the integer `n` as a product of prime powers. Large numbers are handled with Pollard's rho method; very large hard composites may take a long time.
+
+@cmd isprime
+group: cas-integer
+summary: Test whether an integer is prime
+syntax: isprime(n)
+example: isprime(97)
+result: true
+example: isprime(91)
+result: false
+see: nextprime, ifactor
+
+Returns `true` if `n` is a prime number, otherwise `false`. Uses Miller-Rabin tests, which are deterministic for numbers below 3.3*10^24.
+
+@cmd nextprime
+group: cas-integer
+summary: Smallest prime greater than n
+syntax: nextprime(n)
+example: nextprime(100)
+result: 101
+see: prevprime, isprime
+
+Returns the smallest prime number strictly greater than `n`.
+
+@cmd prevprime
+group: cas-integer
+summary: Largest prime less than n
+syntax: prevprime(n)
+example: prevprime(100)
+result: 97
+see: nextprime, isprime
+
+Returns the largest prime number strictly less than `n`. Gives an error for `n` <= 2.
+
+@cmd iquo
+group: cas-integer
+summary: Integer quotient (truncated)
+syntax: iquo(a, b)
+example: iquo(17,5)
+result: 3
+example: iquo(-17,5)
+result: -3
+see: irem, quo, floor
+
+Returns the quotient of the integer division of `a` by `b`, rounded toward zero.
+
+@cmd irem
+group: cas-integer
+summary: Integer remainder (truncated)
+syntax: irem(a, b)
+example: irem(17,5)
+result: 2
+example: irem(-17,5)
+result: -2
+example: irem(17,-5)
+result: 2
+see: iquo, mod, rem
+
+Returns the remainder `a - b*iquo(a,b)`; it has the sign of `a`. Use [[mod]] for a remainder with the sign of `b`.
+
+@cmd divisors
+group: cas-integer
+summary: List of positive divisors
+syntax: divisors(n)
+example: divisors(12)
+result: [1,2,3,4,6,12]
+see: ifactor, euler
+
+Returns the sorted list of all positive divisors of the integer `n`.
+
+@cmd euler
+group: cas-integer
+summary: Euler's totient function
+syntax: euler(n)
+example: euler(36)
+result: 12
+example: euler(13)
+result: 12
+see: divisors, ifactor, euler_gamma
+
+Returns the number of integers from 1 to `n` that are coprime to `n`. Not to be confused with the constant [[euler_gamma]] or the number [[e]].
+
+@cmd perm
+group: cas-integer
+summary: Number of permutations nPr
+syntax: perm(n, k)
+example: perm(5,2)
+result: 20
+see: nPr, comb, factorial
+
+Returns the number of ordered selections of `k` items out of `n`: `n!/(n-k)!`. Returns 0 if `k` > `n`. [[nPr]] is the same command.
+
+@cmd nPr
+group: cas-integer
+summary: Same as perm
+syntax: nPr(n, k)
+example: nPr(10,3)
+result: 720
+see: perm, nCr
+
+Same as [[perm]]: number of permutations of `k` items out of `n`.
+
+@cmd comb
+group: cas-integer
+summary: Number of combinations nCr
+syntax: comb(n, k)
+example: comb(5,2)
+result: 10
+example: comb(n,2)
+result: n*(n-1)/2
+see: nCr, binomial, perm
+
+Returns the binomial coefficient `n!/(k!*(n-k)!)`, the number of ways to choose `k` items out of `n`. Same as [[binomial]]; `n` may be symbolic.
+
+@cmd nCr
+group: cas-integer
+summary: Same as comb
+syntax: nCr(n, k)
+example: nCr(52,5)
+result: 2598960
+see: comb, binomial, nPr
+
+Same as [[comb]]: binomial coefficient.
+
+@cmd iegcd
+group: cas-integer
+summary: Extended Euclidean algorithm
+syntax: iegcd(a, b)
+example: iegcd(12,18)
+result: [-1,1,6]
+see: gcd, invmod
+
+Returns `[u, v, d]` where `d` = gcd(a,b) and `u*a + v*b = d` (Bezout coefficients).
+
+@cmd invmod
+group: cas-integer
+summary: Modular inverse
+syntax: invmod(a, m)
+example: invmod(3,7)
+result: 5
+see: powmod, iegcd, mod
+
+Returns the integer `x` in 0..m-1 with `a*x = 1 (mod m)`. Gives an error if `a` and `m` are not coprime.
+
+@cmd powmod
+group: cas-integer
+summary: Modular power
+syntax: powmod(a, n, m)
+example: powmod(2,100,7)
+result: 2
+example: powmod(3,10^20,1000007)
+result: 537680
+see: invmod, mod
+
+Computes `a^n mod m` efficiently by repeated squaring, without forming the large power. `n` must be non-negative and `m` positive.
+
+@cmd ichinrem
+group: cas-integer
+summary: Chinese remainder theorem
+syntax: ichinrem([a, m], [b, n])
+example: ichinrem([2,3],[3,5])
+result: [8,15]
+see: invmod, mod
+
+Returns `[x, l]` where `x` is the smallest non-negative solution of `x = a (mod m)` and `x = b (mod n)`, and `l` = lcm(m,n) is the modulus of the solution. Gives an error if there is no solution.
+
+@cmd factorial2
+group: cas-integer
+summary: Double factorial n!!
+syntax: n!!
+syntax: factorial2(n)
+example: 10!!
+result: 3840
+example: 9!!
+result: 945
+see: perm, comb
+
+n!! = n (n-2) (n-4) ... down to 1 or 2; 0!! = (-1)!! = 1. Typing `!!` without a space between the marks is the double factorial; `(n!)!` is the factorial of a factorial.
+
+@cmd pochhammer
+group: cas-integer
+summary: Rising factorial
+syntax: pochhammer(a, k)
+example: pochhammer(a,3)
+result: a*(a+1)*(a+2)
+example: pochhammer(3,4)
+result: 360
+see: factorial2, perm
+
+a (a+1) ... (a+k-1) for an integer k >= 0 (1 for k = 0).
+
+@cmd bernoulli
+group: cas-integer
+summary: Bernoulli number
+syntax: bernoulli(n)
+example: bernoulli(16)
+result: -3617/510
+example: bernoulli(1)
+result: -1/2
+see: zeta
+
+The Bernoulli number B_n (B_1 = -1/2), exact, for 0 <= n <= 400.
+
+@cmd fibonacci
+group: cas-integer
+summary: Fibonacci number
+syntax: fibonacci(n)
+example: fibonacci(10)
+result: 55
+example: fibonacci(-6)
+result: -8
+see: rsolve
+
+F_n with F_0 = 0, F_1 = 1, also for negative n (F_-n = (-1)^(n+1) F_n); |n| <= 20000.
+
+@cmd stirling1
+group: cas-integer
+summary: Stirling number of the first kind
+syntax: stirling1(n, k)
+example: stirling1(5,2)
+result: -50
+see: stirling2, partition
+
+The signed Stirling number s(n, k): the coefficient of x^k in x (x-1) ... (x-n+1). Its absolute value counts the permutations of n elements with k cycles. n <= 300.
+
+@cmd stirling2
+group: cas-integer
+summary: Stirling number of the second kind
+syntax: stirling2(n, k)
+example: stirling2(5,2)
+result: 15
+see: stirling1, partition
+
+The number of ways to split n elements into k nonempty sets. n <= 300.
+
+@cmd partition
+group: cas-integer
+summary: Number of integer partitions
+syntax: partition(n)
+example: partition(4)
+result: 5
+example: partition(100)
+result: 190569292
+see: stirling2
+
+The number of ways to write n as a sum of positive integers, order ignored (4 = 3+1 = 2+2 = 2+1+1 = 1+1+1+1). n <= 5000.
+
+@cmd primroot
+group: cas-integer
+summary: Smallest primitive root modulo a prime
+syntax: primroot(p)
+example: primroot(191)
+result: 19
+see: powmod, isprime
+
+The smallest g whose powers g, g^2, ..., g^(p-1) run through all nonzero residues mod p, for a prime p < 2^31.
+
+@cmd contfrac
+group: cas-integer
+summary: Continued fraction expansion
+syntax: contfrac(x)
+syntax: contfrac(x, n)
+example: contfrac(415/93)
+result: [4,2,6,7]
+example: contfrac(pi,5)
+result: [3,7,15,1,292]
+example: contfrac(sqrt(23),5)
+result: [4,1,3,1,8]
+see: exact
+
+The partial quotients [a0, a1, ...] of x = a0 + 1/(a1 + 1/(a2 + ...)). A rational number gives its complete (finite) expansion; for an irrational constant the first n terms (default 200) are computed with high-precision arithmetic, and the list stops early if a term cannot be decided reliably.
+
+@cmd msolve
+group: cas-integer
+summary: Solve a polynomial congruence
+syntax: msolve(eq, x, m)
+example: msolve(9*x=15,x,21)
+result: [4,11,18]
+example: msolve(x^2+x+4=0,x,8)
+result: [3,4]
+see: ichinrem, invmod, factormod
+
+All residues 0 <= x < m with eq true modulo m, for a polynomial equation with integer coefficients and m <= 10^6 (every residue is tried).
+
+@cmd factormod
+group: cas-integer
+summary: Factor a polynomial modulo a prime
+syntax: factormod(poly, p)
+example: factormod(x^4-3*x^2+1,5)
+result: (x-2)^2*(x+2)^2
+example: factormod(x^4+1,2)
+result: (x+1)^4
+example: factormod(4*x^2-21*x*y+20*y^2,3)
+result: (x+y)*(x-y)
+see: factor, msolve
+
+Factors a polynomial in one variable with integer coefficients over the integers mod p (p prime, p < 2^31) into irreducible factors, with coefficients shown between -p/2 and p/2. A homogeneous polynomial in two variables is factored too (through its value at y = 1).

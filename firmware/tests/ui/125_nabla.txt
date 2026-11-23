@@ -1,0 +1,65 @@
+# The del operator: CAS menu templates (∇f, ∇·F, ∇×F, ∇²f), CATALOG entry, textbook display
+# ∇² is laplacian, in the advanced CAS module: the standard tier installs it from the card
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX fs insert 64
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX fs format
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX module library
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX module installall
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX key CLEAR
+key CAS
+expect screen menu
+expect state menu CAS
+# the tenth item (0) is the gradient: ∇( ) with the cursor inside
+key 0
+expect screen home
+expect state entry ∇()
+expect state cursor 2
+type "x^2*y"
+key ENTER
+expect state last_input ∇(x^2*y)
+ifcas src expect state last_output [2*x*y,x^2]
+# textbook history: ∇ is drawn as its own box
+ifcas src expect text "∇"
+screenshot nabla_grad.png
+# the last three items, from the bottom (UP wraps)
+key CAS UP UP UP ENTER
+expect state entry ∇·[]
+type "x*y,y*z,z*x"
+key ENTER
+expect state last_input ∇·[x*y,y*z,z*x]
+ifcas src expect state last_output x+y+z
+key CAS UP UP ENTER
+expect state entry ∇×[]
+type "y,-x,0"
+key ENTER
+ifcas src expect state last_output [0,0,-2]
+key CAS UP ENTER
+expect state entry ∇²()
+type "x^2*y+z^3"
+key ENTER
+# (the core tier has no vector calculus extension: laplacian says so)
+ifcfg CONTENT_QSPI ifcas src expect state last_output 2*y+6*z
+ifcfg !CONTENT_QSPI ifcas src expect statecontains last_output needs the advanced CAS module
+ifcas src expect text "∇·"
+ifcas src expect text "∇×"
+screenshot nabla_history.png
+# DEL removes a whole operator token
+key CAS UP ENTER
+key LEFT DEL
+expect state entry ()
+key CLEAR CLEAR
+# CATALOG: "nabla" finds the ∇ entry, which inserts ∇ alone
+key SHIFT APPS
+expect state menu CATALOG
+key DIV CAS MATH LPAREN CAS
+expect state catalog_query nabla
+expect state menu_item "∇ nabla"
+key ENTER
+expect screen home
+expect state entry ∇
+type "(x*y)"
+key ENTER
+ifcas src expect state last_output [y,x]
+key CLEAR CLEAR
+# the ASCII spelling
+type "nabla.[x,y]\n"
+ifcas src expect state last_output 2

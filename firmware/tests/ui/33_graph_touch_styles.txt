@@ -1,0 +1,85 @@
+# Tap-to-label, long press snaps to special points, tap on the coordinates
+# opens the table there; line styles (keys and touch), shading above/below.
+key F1
+type "x^2-2"
+key DOWN
+type "sin(x)"
+key F5 ENTER
+# a tap traces the nearest curve and labels the point
+touch tap 110 44
+expect state graph_mode trace
+expect state trace_fn 1
+expect state graph_label "(-3.10345, 7.631391)"
+expect text "(-3.10345, 7.631391)"
+screenshot graph_label.png
+# a long press near a special point snaps to it: zero of Y1 at √2
+touch 180 131 down
+wait 800
+touch 180 131 up
+expect state graph_label "Zero (1.414214, 0)"
+expect state trace_x 1.414213562
+# minimum at the y-intercept (0, -2): the extremum name wins
+touch 160 150 down
+wait 800
+touch 160 150 up
+expect statecontains graph_label Minimum (0, -2)
+# intersection of the two curves
+touch 188 107 down
+wait 800
+touch 188 107 up
+expect statecontains graph_label Intersection (1.728466
+screenshot graph_snap.png
+# far from every curve (over 24 px): the free cursor, no trace
+touch 300 40 down
+wait 800
+touch 300 40 up
+expect state graph_mode free
+expect state graph_label ""
+# near a curve but no special point: an ordinary trace with a label
+touch 250 108 down
+wait 800
+touch 250 108 up
+expect state graph_mode trace
+expect statecontains graph_label (
+# tap the coordinate band: TABLE centred on the traced x
+touch tap 120 216
+expect screen table
+expect state table_row 4
+key F5
+# styles: LEFT from the swatch reaches the style; ENTER cycles
+# line -> thick -> thin -> dotted -> above -> below
+key F1 UP
+key SHIFT LEFT LEFT LEFT LEFT
+expect state y1_style line
+key ENTER
+expect state y1_style thick
+key F5
+expect color 0x029b 780
+key F1
+key ENTER ENTER
+expect state y1_style dotted
+key F5
+screenshot style_dotted.png
+key F1 ENTER
+expect state y1_style above
+key F5
+# shading above Y1 in a tint of blue
+expect color 0xae5d 5000
+screenshot style_above.png
+key F1 ENTER
+expect state y1_style below
+key F5
+expect color 0xae5d 5000
+screenshot style_below.png
+# touch: tap the label (between the swatch and '=') cycles the style
+key F1
+touch tap 20 55
+expect state y1_style line
+# saved across power off/on
+touch tap 20 55
+expect state y1_style thick
+key SHIFT ON
+key ON
+key F1
+expect state y1_style thick
+lcdcheck

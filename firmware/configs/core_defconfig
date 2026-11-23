@@ -1,0 +1,8 @@
+# Core / rollback tier: everything in internal flash, works with a dead QSPI
+# (docs/QSPI_CONTENT.md). Flash with USB DFU alone.
+CONFIG_CONTENT_INTERNAL=y
+# Only the essential help pages: the full manual (~110 KB) does not fit next to the CAS
+# and the bank-2 app code. The rollback build keeps the full CAS and every feature that
+# fits; help points to the manual module.
+CONFIG_MANUAL_ESSENTIALS=y
+CONFIG_CAS_SRC=y

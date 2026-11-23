@@ -1,0 +1,22 @@
+# Sparkle Town, CODE_REVIEW_2.md CR2-05 (B2): a quick tap whose DOWN and TAP land in one frame (the console's
+# `touch tap`, an even tick) picks the bubble once: its cheer stays (the time mark was anim_t | 1, a moment ahead).
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 2
+mq engine stop
+mq skill 24 0
+mq step 30
+expect state mq_answer 1/4
+touch tap 149 198
+mq step 1
+expect state mq_moment cheer
+mq step 5
+expect state mq_moment cheer

@@ -1,0 +1,147 @@
+# Navigation and framework usability (docs/usability/navigation.md):
+# first-run hint, context menu, edit feedback, history undo, SHIFT CLEAR
+# (clear all, with confirmation), settings applied by arrows, CATALOG help
+# pages, empty-list text
+# a calculator without a saved session points to help until the first key
+expect statecontains toast help
+screenshot nav_first_run.png
+key LEFT
+expect state toast ""
+# MENU on the home screen: the notebook menu (save, open, new, cells, run all ...); its bar is the
+# edit bar (undo redo copy paste history), so MENU F1..F5 work as in every context menu
+key MENU
+expect state menu "NOTEBOOK (not saved)"
+expect state menu_item Save
+expect statecontains softkeys undo
+screenshot nav_context_menu.png
+key DOWN DOWN DOWN
+expect state menu_item New
+key UP UP UP UP
+expect state menu_item "Insert 3D graph"
+key CLEAR
+expect screen home
+# MENU F3 = copy: nothing to copy is said in the status bar
+key MENU F3
+expect screen home
+expect state toast "nothing to copy here"
+key MENU F4
+expect state toast "clipboard is empty: copy first"
+key MENU F1
+expect state toast "nothing to undo"
+type "6*7\n"
+type "1+1"
+key MENU F3
+expect state toast copied
+expect state clip 1+1
+# CLEAR on an empty line clears the history; MENU F1 brings it back
+key CLEAR
+expect state history 1
+key CLEAR
+expect state history 0
+expect statecontains toast MENU F1
+key MENU F1
+expect state history 1
+expect state toast "history restored"
+expect state last_output 42
+# ... but only right after: typing forgets it
+key CLEAR
+expect state history 0
+type "5"
+key MENU F1 MENU F1
+expect state history 0
+key CLEAR
+# SHIFT CLEAR asks; No is first, so ENTER or a second SHIFT CLEAR keeps everything
+type "b:=7\n"
+key SHIFT CLEAR
+expect state menu "Clear variables + history?"
+expect state menu_item No
+screenshot nav_clear_all.png
+key ENTER
+expect screen home
+expect state history 1
+key SHIFT CLEAR SHIFT CLEAR ENTER
+expect state history 1
+# Yes clears the variables, the entry line and the history; settings are kept
+setmode ANGLE DEGREE
+type "9"
+key SHIFT CLEAR 2
+expect screen home
+expect state history 0
+expect state entry ""
+expect state toast "variables and history cleared"
+expect state angle deg
+ifcas src type "b\n"
+ifcas src expect state last_output b
+# from another screen too; it returns there
+key F1
+expect screen yeq
+key SHIFT CLEAR
+expect state menu "Clear variables + history?"
+key CLEAR
+expect screen yeq
+key HOME
+# the RPN screen keeps its meaning of SHIFT CLEAR: clear the stack
+setmode ENTRY RPN
+key HOME
+type "3\n4\n"
+expect state rpn_depth 2
+key SHIFT CLEAR
+expect state rpn_depth 0
+expect screen rpn
+setmode ENTRY ALGEBRAIC
+key HOME
+# SETTINGS: an arrow changes the setting at once (leaving with done does not lose it)
+setmode ANGLE RADIAN
+key SHIFT HOME
+key RIGHT
+expect state angle deg
+key F5
+expect screen home
+expect state angle deg
+key SHIFT HOME LEFT HOME
+expect state angle rad
+# the graph screens' format key opens SETTINGS at the GRID row
+app graph
+key SHIFT F3
+expect screen mode
+key SHIFT MENU
+expect state help_topic mode-graph
+key CLEAR
+expect screen mode
+key HOME
+# CATALOG: "type to search", help pages in the results, a helpful empty list
+key SHIFT APPS
+screenshot nav_catalog.png
+key 9 7 DIV
+expect state menu_item "? RPN mode"
+screenshot nav_catalog_pages.png
+key ENTER
+expect screen help
+expect state help_topic rpn
+key CLEAR
+expect screen home
+key SHIFT APPS 3 3 3
+expect state catalog_n 0
+expect text "No match"
+key CLEAR
+# confirmation soft keys: F5 no, F1 yes
+type "1+2\n"
+key SHIFT CLEAR F5
+expect screen home
+expect state last_output 3
+key SHIFT CLEAR F1
+expect state history 0
+# a form field: CLEAR empties it, a second CLEAR brings the value back
+app graph
+key F2
+expect screen window
+key CLEAR
+expect state xmin -10
+key CLEAR ENTER
+expect state xmin -10
+expect screen window
+# ZOOM items say what they do
+key F3
+key DOWN DOWN DOWN DOWN
+expect statecontains menu_item round circles
+key CLEAR HOME

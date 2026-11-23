@@ -1,0 +1,269 @@
+# Graphing Calculator — Hardware Architecture
+
+Status: **rev A, built** (ordered 2026-10-19; boards 1-3 brought up 2026-10-27, `bringup/BOARD_RECORDS.md`).
+`kicad/` and `fab/` are the as-built rev A files: order from `fab/` as committed (`ORDER.md`). The schematic
+generator (`gen/design.py`, `./build.sh`) and board generator (`gen/pcb_build.py`) have since had a
+documentation-only update (rev A.1): key-switch values renamed to the logical key names (§7), title blocks and
+comments. Regenerating gives the same copper, drill, BOM and CPL, but rewrites `kicad/` with the new labels;
+don't do that for an order. §13 records the review history and §14 covers touch.
+
+## 1. Goals and constraints
+
+- Colour graphing calculator with an in-house, full-featured symbolic CAS (firmware in C).
+- Run of **2–3 units**. PCB fab + SMT assembly at **JLCPCB**; all on-board parts from the JLC/LCSC library.
+- Enclosure, keycaps and battery door 3D-printed on a Neptune 4 Pro.
+- Powered by **4× AAA** (alkaline or NiMH); also runs from USB-C. No on-board charging.
+- Display purchased separately in the US.
+- microSD slot for file storage and exchange.
+
+## 2. Block diagram
+
+```
+                 4×AAA (3.6–6.4 V)          USB-C VBUS (5 V)
+                        │                          │
+                 AO3401 reverse-prot          M7 diode
+                        │                          │
+                 back-to-back P-FET switch,        │
+                 opens when VBUS present ──────────┤
+                                                   │ VSYS_IN → 0.1 Ω shunt (INA226)
+                                     │ VSYS (≈3.3–6.4 V)
+                                     ├──► switched divider ─► ADC (battery gauge)
+                              TPS62162 buck, 17 µA Iq
+                                     │ 3V3 (always on)
+     ┌───────────────┬───────────────┼────────────────┬─────────────────┐
+     │               │               │                │                 │
+ SY6280 3V3_BUS  SY6280 3V3_SD   STM32H743ZGT6     W25Q128 QSPI     Keypad matrix
+     │               │          480 MHz M7, 1 MB   16 MB flash      52 × TS-1187A
+ SDRAM + LCD    microSD         flash, 1 MB SRAM   (code overflow,  ON key → PA0/WKUP1
+     │               │               │              files, hibernate)
+ W9825G6KH-6 ◄── FMC bus ───────────►│◄── QUADSPI
+ 32 MB SDRAM     (D0–D15 shared)     │
+                ER-TFT032 ST7789 ◄──┤ FMC NOR/SRAM bank (8080, 16-bit)
+                  FT6236 touch    ◄──┤ I2C4 (own bus, powered from 3V3_BUS)
+                 40-pin FPC          │
+                                     ├── USB FS (PA11/PA12) ─► USB-C + USBLC6 ESD
+                                     ├── SDMMC1 4-bit ─► microSD (SY6280 switched)
+                                     ├── SWD + UART test pads
+                                     ├── 25 MHz HSE crystal, 32.768 kHz LSE crystal
+                                     └── BOOT0 pad/button (USB DFU recovery)
+```
+
+## 3. Core
+
+| Item | Choice | Notes |
+|---|---|---|
+| MCU | **STM32H743ZGT6**, LQFP-144 | 1 MB flash, 1 MB SRAM (512 KB AXI + DTCM/ITCM/D2/D3). Cortex-M7 + double-precision FPU, 16 KB I/D caches. LQFP-144 is the smallest package exposing ports F/G needed by the FMC SDRAM interface. ⚠ JLC stock silicon revision: rev **V** allows 480 MHz, rev Y is limited to 400 MHz — firmware plans for 400 MHz. |
+| HSE | 25 MHz crystal X322525MOB4SI (Basic) | PLL source for core, FMC, USB (48 MHz). |
+| LSE | 32.768 kHz SC-32S, CL 7 pF (C97604), 10 pF caps | RTC + wake timer in Standby. Low-CL part chosen for start-up margin with the H7 LSE driver (gm_crit ≈ 0.9 µA/V). |
+| Core supply | Internal LDO; 2× VCAP 2.2 µF | H743 has no SMPS variant on this part. VBAT tied to 3V3 (no coin cell; RTC kept alive by the AAA pack). |
+| Boot / recovery | BOOT0 pulled low, test pad + small button | Holding BOOT0 at reset enters the ROM USB DFU bootloader → board can't be bricked. ⚠ confirm HSE auto-detect for DFU in AN2606. |
+| Debug | See §11 | 1×6 0.1" DEBUG header (SWD + UART, for the Raspberry Pi Debug Probe) and a 2×5 1.27 mm ARM Cortex header (ST-Link). Both, plus the 2×6 EXPANSION header, fitted by JLC (through-hole assembly). |
+
+## 4. Memory
+
+| Function | Part | Bus | Notes |
+|---|---|---|---|
+| Working RAM / CAS heap | **W9825G6KH-6**, 32 MB SDR SDRAM, TSOP-II-54 | FMC SDRAM bank 2 (SDCKE1/SDNE1 on PB5/PB6) → 0xD000_0000 | 16-bit, 13 row / 9 col / 4 banks. Target 100 MHz (FMC clock = HCLK/2 at 200 MHz HCLK). Bank 2 avoids the PC2_C/PC3_C analog-switch pins used by bank 1. MPU region set write-back cacheable. |
+| Code overflow, files, hibernate image | **W25Q128JVSIQ** 16 MB (Basic) | QUADSPI bank 1, memory-mapped at 0x9000_0000 | Pins chosen to avoid FMC: CLK PB2, NCS PG6, IO0–3 PF8/PF9/PF7/PF6. |
+| Display frame buffer | inside ST7789V2 | FMC NOR/SRAM bank 1 (NE1) | Panel holds its own GRAM; MCU only writes changes. |
+
+### Pin map
+
+The full pin assignment is in [`pinmap/pinmap.md`](pinmap/pinmap.md). It is generated by `pinmap/pinmap.py`, which checks every signal against ST's official pin data (`tools/STM32_open_pin_data`). Current result: 93 nets, no conflicts, 21 I/O spare.
+
+## 5. Display
+
+- **Panel (changed 2026-10-19):** EastRising **ER-TFT032IPS-3.2** with capacitive touch **ER-TPC032-3.1** (BuyDisplay): 3.2" 240×320 IPS, ST7789V2, 380 cd/m², FT6236 touch (2 points, I2C 0x38). CTP outline 77.7 × 55.04 × **4.1** mm; visual area 65.95 × 49.2; active area 64.8 × 48.6 (0.2025 mm pitch, 12.5 % larger than the old 2.8"). **One 40-pin 0.5 mm FPC carries the TFT and the touch I2C** (pins 1–4), so there is no separate touch tail, board slot or touch connector any more. Mounted **landscape** (320×240) via MADCTL, FPC on the left. About $15 with touch; datasheet Rev 1.0 is marked "Preliminary"; checked against the full EastRising set in docs/PANEL_VERIFICATION.md. Chosen over the 2.8" Newhaven for larger glass with the same controller and firmware (see the screen study).
+- **Connector:** AFC24-S40FIA-00 (C262686), 40-pin 0.5 mm, front-insert / back-flip latch, **double-sided contacts**, on the top side under the panel. The FPC is made to fold flat behind the module: it wraps the panel's left edge, its 43 mm-wide section with the touch controller lies against the panel back, and the 20.5 mm tail runs ~40 mm in and dips into J3 (contacts facing the PCB). J3 sits at board x 40.7 with its opening facing west, pad 1 north, and **panel pin n → connector pad n** (pin 1 = portrait-left end of the contact row = north in landscape; the fold about a north–south line keeps it north). The MCU and SDRAM moved 8.5 mm right to make room. Assembly: with the board flat and the panel face-down beside it, plug the FPC in, close the latch, then lay the panel over into its pocket.
+- **Interface:** 16-bit 8080 parallel on the FMC (IM2..0 hard-tied to GND = 16-bit 8080):
+  - DB0–15 ← FMC D0–D15 through 1 kΩ series resistors (shared with SDRAM; the FMC arbitrates; the resistors give the panel its data hold time and isolate the LCD stub from the 100 MHz bus)
+  - CSX ← FMC_NE1 (PD7), WRX ← FMC_NWE (PD5), RDX ← FMC_NOE (PD4)
+  - DCX ← FMC_A16 (PD11): command at base address, data at base + 0x2_0000
+  - /RES ← GPIO; TE → GPIO/EXTI for tear-free updates
+- **Bus timing:** the panel shares FMC D0–D15 with the SDRAM (standard FMC practice; separate chip selects). The ST7789 wants 10 ns of data hold after WRX rises; the H743 FMC gives one kernel clock (5 ns). The LCD data lines therefore go through **1 kΩ series resistors** (R26–R41) at the branch point: with the panel's ~8–12 pF they delay every data edge at the panel by ~5–7 ns, which gives ~11 ns of hold whatever drives the bus next, and they isolate the LCD stub from the SDRAM lines. Firmware uses a 75 ns write pulse (DATAST 15) and guards DCX (A16) around command writes.
+- **Backlight (decided):** constant-current sink. The panel's LED cathodes (5 LEDs in parallel per the datasheet table, 6 per a drawing note; 90 mA typ, 100 mA max, Vf 3.2–3.4 V) are tied together into an AO3400A, with a 1 Ω sense resistor and a **TLV9001** rail-to-rail op-amp closing the loop. The setpoint is **DAC1 (PA4) in unbuffered mode** (true 0 V) through 10k/1k, giving about 0–140 mA (firmware limit 90 mA). The panel gives 380 cd/m² at ~90 mA; indoor use needs about 30–50 mA. The anode supply is **chosen by firmware** (PC13 / PD6 drive two P-FET paths, both off at reset): 3V3_BUS normally (efficient, the buck makes it), VSYS only when the requested current needs more headroom than 3.3 V leaves for the sink (detected from BL_SENSE), with break-before-make switching. The 3V3 path's P-FET has its source on LCD_A so its body diode blocks VSYS from back-feeding 3V3_BUS. PC5 measures the actual current, so firmware or a debug session can tell whether the loop is regulating.
+
+## 6. Power
+
+| Rail | Source | Load |
+|---|---|---|
+| VSYS_IN / VSYS 3.25–6.4 V | 4×AAA via AO3401A reverse protection, then a back-to-back P-FET switch that **opens whenever USB VBUS is present** (USB priority; fresh cells would otherwise out-vote USB). A **TLV3012** comparator powered from VBUS (1.24 V reference, trips at VBUS ≈ 4.30 V rising / 4.21 V falling, worst case ≈ 4.36 V with 1% parts; below that the cells simply stay connected and share the load) drives the switch, so on unplug the cells are reconnected within ~20 µs, while VSYS_IN is still ≈ 3.4 V; three 22 µF caps on VSYS_IN carry the load meanwhile. (A plain VBUS divider would only react after VBUS had decayed with VSYS_IN, i.e. after the buck had dropped out: unplugging USB would reset the calculator.) USB enters via an M7 silicon diode (low leakage). VSYS_IN → 0.1 Ω shunt → VSYS | Buck input |
+| 3V3 always-on | **TPS62162DSGR** (3–17 V in, 3.3 V fixed, 1 A, 17 µA Iq) | MCU, QSPI flash, keypad |
+| 3V3_BUS | SY6280AAC load switch (0.52 A limit, Rset 13k), MCU-controlled | SDRAM + LCD logic + backlight op-amp/anode. **One rail on purpose:** the SDRAM and LCD share D0–D15, so powering one without the other would back-power it through its I/O clamps. |
+| 3V3_SD | SY6280AAC load switch, MCU-controlled | microSD card (up to ~100 mA during writes) |
+
+**Power states**
+
+| State | What's on | Est. 3V3 current |
+|---|---|---|
+| Computing (400 MHz, SDRAM active, backlight 40 mA) | everything | ≈ 220 mA |
+| Interactive idle (CPU in Stop between keys, SDRAM self-refresh, screen on) | screen, SDRAM | ≈ 50 mA |
+| **Off = hibernate**: session saved to QSPI, SDRAM and LCD switched off, MCU in Standby + RTC | buck, RTC | ≈ 35 µA typ (more when warm) |
+
+Battery life (4×AAA alkaline ≈ 4 Wh usable at these loads): about 20 h mixed use, about 5 h continuous heavy CAS, more than 3 years in standby. The ON key on **PA0/WKUP1** wakes the MCU from Standby, and a quick restore from QSPI resumes the session. Battery voltage is read on an ADC through a divider that is only switched on during the reading (no constant drain).
+
+## 7. Keypad
+
+- **Layout: our own logical layout** (revised 2026-10-19; the physical key positions and the matrix wiring are unchanged). A row of five soft keys F1–F5 sits under the display; each screen labels them in a soft-key bar at the bottom of the display. SHIFT and ALPHA select the second function / letter printed above each key. The logical layout (legends, SHIFT functions, ALPHA letters, keycap colours) is defined once in `firmware/keys/layout.py`; it generates the firmware keymap, the keycap and top-shell legends, the web simulator's key map and the key tables in the docs. In the generators (rev A.1) each key switch's schematic value is its logical key name (F1, SHIFT, HOME, ASSIGN, ...), and `LAYOUT` in `gen/design.py` lists the keys by the same names in PCB order; the as-built `kicad/` files carry the original key labels.
+- **49 matrix keys + ON**, TS-1187A 5.1 mm tactile switches (Basic, $0.02) under printed keycaps. The 7 × 7 matrix has no diodes. Rows are PG11–PG14, PB0, PB1, PB4 (open-drain outputs). Columns are PE2–PE6, PB12, PB13 (pull-up inputs on distinct EXTI lines, so any key wakes the MCU from Stop). ON is on PA0/WKUP1 and wakes it from Standby.
+
+```
+ [ F1 ][  F2  ][  F3  ][  F4  ][  F5  ]        soft keys (labels on the display)
+ [shift][alpha][  ⌫   ]     [ ▲ ]
+ [home][ apps ][ menu ]  [◀]     [▶]
+                            [ ▼ ]
+ [ CAS][ math ][ vars ][  x   ][clear ]
+ [ sin][ cos  ][ tan  ][  ln  ][ log  ]
+ [ x² ][  xʸ  ][  (   ][  )   ][  ÷   ]
+ [  √ ][  7   ][  8   ][  9   ][  ×   ]
+ [  , ][  4   ][  5   ][  6   ][  −   ]
+ [  → ][  1   ][  2   ][  3   ][  +   ]
+ [ on ][  0   ][  .   ][ (−)  ][enter ]
+```
+SHIFT legends (blue, the SHIFT key's colour) and ALPHA letters (dark grey) are on the white top shell above each key, as an image transfer of a colour laser print (`enclosure/docs/FACE_ARTWORK.md`); the shell itself has no printed legends. The key-to-matrix map is `KEYMAP` in `gen/design.py` (by key name, which is also the switch value in the generated schematic; the as-built `kicad/` files carry the original labels); `firmware/keys/layout.py` says what each key does. On the board the switches carry only their reference designators (SW3, ...) on the silkscreen. Optional, **future orders only**: `gen/annotate.py --key-labels` (off by default) also prints each key's name beside its switch on F.SilkS, DRC-checked (see ORDER.md).
+
+## 8. USB
+
+- USB-C receptacle **TYPE-C-31-M-12** (C165948), USB 2.0 Full Speed device on PA11/PA12 (OTG_FS).
+- 5.1 kΩ CC pull-downs (sink only), **USBLC6-2SC6** ESD protection, VBUS → M7 diode into VSYS_IN (and it opens the battery switch), plus a VBUS sense divider to a GPIO.
+- Uses: file and program transfer (USB mass storage or a custom protocol), firmware update (ROM DFU or our own bootloader), and running from USB power.
+
+## 9. PCB
+
+- **4-layer** JLC stack-up (signal / GND / power / signal), 1.6 mm, HASL lead-free or ENIG. LQFP-144 at 0.5 mm pitch and TSOP-54 at 0.8 mm are within JLC standard capabilities.
+- SDRAM: MCU and SDRAM placed adjacent with a ~7 mm escape channel, 22 Ω series termination on SDCLK at the MCU pin. Routed lengths are 11–113 mm (`gen/lengths.py`; data nets include the LCD branch), SDCLK 36 mm; no length matching was done. The longest net (FMC_A1, 113 mm) arrives ~0.5 ns after the clock, against ~2 ns of command/address setup budget. The layout validator's timing budget (DS12110 / W9825G6KH-6, CL3) shows positive setup/hold margins for command/address and reads at 100 MHz; write data is ~0 ns on STM32H743 **rev Y** silicon (a silicon limit, layout costs ≤ 0.24 ns), so firmware reads REV_ID and runs SDCLK at ~90 MHz on rev Y. A 3V3_BUS plane island on In2 under the SDRAM body ties each VDD/VDDQ pin to its bottom-side 100 nF with a via pair.
+- Routing rules: battery path (BAT_*, BATSW_S, VSYS_IN) 0.8 mm; clocks (SDCLK, QSPI_CLK, SD_CK, crystals) 0.25 mm clearance; no routing on In2/B.Cu under the crystals (GND on In2 there); no vias in SMD pads; GND pads join the pours through thermal reliefs; vias drop unused inner-layer pads so In1 stays a solid plane between them.
+- Outline: **82 × 188.8 mm** board, case about 86.8 × 193.6 mm (a typical handheld graphing-calculator size). Display at the top, keypad below: 5 columns at 15 mm, main rows at 11.15 mm.
+- **Double-sided JLC assembly** (Standard PCBA): top side carries everything except: the MCU/SDRAM decoupling caps (bottom, under the packages), and the two battery holders BT1/BT2 (bottom). The three through-hole pin headers J1/J5/J6 are also fitted by JLC (through-hole assembly), so nothing is hand-soldered.
+- **Batteries (decided):** two SMT holders **BH-AAA-B5AA001** (C964881, reflow-rated, gold-plated phosphor bronze). **Each holds two AAA cells** (62.2 × 22.4 mm). They sit on the back of the PCB, wired in series by PCB traces, and are **placed by JLC** (bottom side). Polarity comes from the datasheet top view: slot A pad 2 = −, pad 1 = +; slot B pad 3 = +, pad 4 = −. A printed battery door in the back shell covers them. Why: no loose wiring, and the PCB holds the contacts in alignment.
+- **microSD:** TF-01A push-push socket (C91145) on the right edge, with the card slot reachable through the enclosure.
+
+## 10. Bill of materials (draft, live JLC data 2026-10-18)
+
+| Ref | Part | LCSC | Type | Stock | Unit $ |
+|---|---|---|---|---|---|
+| U1 | STM32H743ZGT6 | C730184 | Ext | 682 | 10.74 |
+| U2 | W9825G6KH-6 | C62246 | Ext | 6.6k | 5.90 |
+| U3 | W25Q128JVSIQ | C97521 | **Basic** | 67k | 2.57 |
+| U4 | TPS62162DSGR | C40256 | Ext | 4.8k | 1.19 |
+| U | SY6280AAC ×2 | C55136 | Ext | 105k | 0.09 |
+| U | USBLC6-2SC6 | C7519 | Ext | 32k | 0.18 |
+| U | TLV9001IDBVR (backlight) | C398363 | Ext | 53k | 0.09 |
+| Q | AO3401A ×4 (reverse protection, battery switch ×2, gauge) | C15127 | **Basic** | 587k | 0.10 |
+| Q | AO3400A ×4 (battery-switch drivers ×2, gauge switch, backlight sink) | C20917 | **Basic** | 1.1M | 0.10 |
+| U10 | TLV3012BIDBVR (VBUS detect) | C20345924 | Ext | 1.8k | 2.83 |
+| D | M7 (USB input) | C95872 | **Basic** | 6.1M | 0.01 |
+| Y1 | 25 MHz X322525MOB4SI | C9006 | **Basic** | 240k | 0.09 |
+| Y2 | 32.768 kHz SC-32S CL 7 pF | C97604 | Ext | 136k | 0.19 |
+| J4 | USB-C TYPE-C-31-M-12 | C165948 | Ext | 368k | 0.19 |
+| J3 | 40-pin FPC AFC24-S40FIA-00 | C262686 | Ext | 37k | 0.22 |
+| SW (52) | TS-1187A-B-A-B | C318884 | **Basic** | 296k | 0.02 |
+| J2 | microSD TF-01A push-push | C91145 | Ext | 184k | 0.19 |
+| BT1–2 | BH-AAA-B5AA001 (2×AAA each) | C964881 | Ext | 8.5k | 1.53 |
+| U9 | INA226AIDGSR power monitor | C49851 | Ext | 40k | 0.75 |
+| R | 0.1 Ω 1% 2512 shunt | C160587 | Ext | 148k | 0.06 |
+| — | passives (0402/0603 R, C), inductor for buck | various | mostly Basic | — | ~1.50 |
+
+Approximate parts cost per board: **$33**, plus a **~$30** FCTP panel bought separately. There are 16 Extended part types; see `ORDER.md` for the full JLC estimate (~$260–320 for 5 PCBs + 2 assembled, shipped).
+
+**Bought separately:** see `ORDER.md`.
+
+## 11. Debuggability (designed for remote, AI-driven bring-up)
+
+Requirement: Claude debugs the boards when they arrive, working from the Mac with no one probing by hand. Everything needed must be observable and controllable over USB.
+
+**On the board**
+- **SWD + UART on one 0.1" header** (DEBUG: 3V3, SWCLK, SWDIO, GND, TX, RX). This matches the Raspberry Pi Debug Probe's cables. Through OpenOCD: flash, halt, step, read and write any memory or register, semihosting/RTT logs, and a UART console.
+- **INA226 power monitor** (I2C2 at 0x40, PB10/PB11) on a 0.1 Ω shunt carrying *all* system current (battery or USB). Firmware reports VSYS voltage and current in every power state. This catches shorts, a stuck rail or bad sleep current immediately. Alert line on PF10. Its sense inputs go through matched 10 Ω filter resistors placed right at the shunt pads (Kelvin taps). Firmware puts it in shutdown in standby (0.5 µA).
+- **Rail monitors:** 1:2 dividers from 3V3_BUS and 3V3_SD to ADC1 (PA6, PC4). 3V3 is read via VREFINT, the battery via the switched divider (PA3), and backlight current via the sense resistor (PC5).
+- **Expansion / logic-analyzer header** (2×6 0.1"): I2C2, USART6 (a second console), MCO1 clock output (PA8, to check clocks) and 5 GPIO timing markers (PA15, PB9, PB15, PA5, PB7).
+- **Test points** on VSYS_IN, VSYS, BAT_P, VBUS, 3V3, 3V3_BUS, 3V3_SD, VDDA, plus 2× GND.
+- **Bring-up LED** (PB8), RESET and BOOT buttons, and the ROM USB DFU bootloader as an unbrickable fallback.
+
+**Firmware hooks (planned)**: a debug console over UART/USB that can inject key presses, dump the frame buffer (so Claude can "see" the screen), report power-monitor telemetry, and run a memory test, an SDRAM/QSPI/SD self-test and an LCD pattern test.
+
+**Bench setup on the Mac**
+- Raspberry Pi Debug Probe → USB (CMSIS-DAP + UART); OpenOCD 0.12 (installed) supports the STM32H7.
+- Optional but valuable: a USB hub with per-port power switching (works with `uhubctl`), so Claude can power-cycle the calculator; a cheap 8-channel USB logic analyzer (sigrok-cli); a webcam aimed at the screen.
+
+## 14. Capacitive touch (added 2026-10-18; panel changed 2026-10-19)
+
+- **Controller:** FT6236 (FocalTech, on the panel's FPC) at I2C address 0x38 on **I2C4** (PD12 SCL, PD13 SDA, 4.7k pull-ups to 3V3_BUS). TP_INT is on PC1 (EXTI1) and TP_RST on PA7, each with a 10k pull-up to 3V3_BUS. These arrive on **J3 pins 1–4** (IRQ, RST, SCL, SDA); the touch controller is powered from the panel's VCI (3V3_BUS), so it is fully off in standby. Firmware sets I2C4 and the touch pins to analog before switching the rail off.
+- The old Newhaven panel's separate 6-pin touch tail, the board slot and the Molex J7 are gone.
+
+## 12. Open questions / next steps
+
+1. ✅ Pin map verified against ST pin data (`pinmap/pinmap.py`). Still to do: re-check SDRAM/LCD timing and the FMC bank configuration in firmware.
+2. ✅ Backlight: constant-current sink from a DAC setpoint (see §5).
+6. ⚠ microSD card-detect polarity assumed as a switch to GND (no datasheet confirmation yet); firmware can invert it.
+7. ✅ SDRAM/LCD back-powering: solved by the shared 3V3_BUS. Firmware rule remains: set FMC pins to analog before BUS_EN goes low, and SDMMC pins to analog before SD_EN goes low.
+3. Decided: microSD yes. Buzzer, expansion header and NiMH charging: no (spare pins left for a later revision).
+4. Enclosure concept: thickness is set by the AAA holders (about 13 mm) + the PCB (1.6 mm) + the switches and keycaps, about 25–28 mm total, typical for a graphing calculator.
+5. Then: KiCad schematic, ERC, layout, DRC, JLC BOM/CPL export, enclosure CAD.
+
+## 13. Schematic review (2026-10-18) and resolutions
+
+An independent review agent checked every IC against its datasheet. It found **no blockers**: all pinouts and footprints, all 144 MCU pins, battery polarity, SDRAM mapping and the FPC pin map were confirmed. Resolutions:
+
+| # | Finding | Resolution |
+|---|---|---|
+| M1 | SDRAM/LCD on separate switched rails back-power each other via the shared FMC bus | Merged into one **3V3_BUS** rail |
+| M2 | Fresh cells (6.4 V) out-vote USB through the diode-OR, so batteries drain on USB | **USB-priority P-FET battery switch**; USB through a silicon diode |
+| M3 | LM358 at 3.3 V can't drive the AO3400A gate reliably | **TLV9001** rail-to-rail op-amp |
+| M4 | Dual-contact FPC connector doesn't fix pin-1 orientation | Handled in layout (§5) |
+| m | Standby leakage: SD-detect pull-up (33 µA with a card) and Schottky reverse leakage | Internal pull-up instead; M7 silicon diode |
+| m | LSE crystal CL 12.5 pF marginal for the H7 driver | CL 7 pF crystal |
+| m | DAC buffer can't reach 0 V | Unbuffered DAC; divider retuned |
+| m | 4.7 µF/10 µF capacitors in small packages lose capacitance | ≥4.7 µF now 0603/0805 |
+| m | LCD stub on the 100 MHz data bus | series resistors on the LCD branch (22 Ω, later 1 kΩ for hold time) |
+| m | LCD_RESET floats during MCU reset | 100k pull-down |
+| m | Spare switch pads unassigned | Pads 2/3 tied to the same nets as 1/4 (confirmed common in the XKB drawing) |
+
+**Firmware notes from the review:**
+- MPU region for the LCD bank (0x6000_0000) as Device/Strongly-ordered, so speculative reads don't pulse RDX.
+- VDD33_USB with the USB regulator bypassed (USB33DEN = 1, USBREGEN = 0).
+- Wait about 16 ms after enabling the battery gauge before sampling.
+- Low-battery cutoff at a pack voltage of about 3.6 V (SDRAM needs VDD ≥ 3.0 V).
+- Before Standby, send the W25Q deep power-down command (B9h) and put the INA226 in shutdown.
+
+**Open, needs hardware:**
+- microSD card-detect polarity
+- AFC24 FPC connector pin-1 geometry: resolved on paper (docs/PANEL_VERIFICATION.md); confirm the fold reach on the first board
+- INA226 VBUS-pin current in shutdown
+- AN2606 DFU details
+
+
+## 15. Ideas for a thinner calculator (not planned)
+
+The case is about 25.5 mm thick (`enclosure/V3_THIN.md` has the measured stack). Two parts set it:
+
+- **Below the board, about 15 mm: the AAA cells** (10.5 mm across, in holders on the back of the keypad area).
+  The back's floor is flat, so the display end carries about 12 mm of empty space under the board.
+- **Above the board, about 10 mm: the display stack.** Parts under the panel (up to 2.2 mm), the panel's ribbon
+  folded under it, the 4.1 mm panel and the 1.6 mm face plate. The face is flat, so the keypad area is as tall
+  as the display area, although the keys need only about 5 mm.
+
+A rev B could save about 4–5 mm (to about 20.5–21 mm, with the same AAA cells and flat, support-free faces)
+by having **no board under the display**:
+
+- **One shorter board under the keypad only**, with the processor, memory and power parts on its back beside the
+  battery holders. They are about 2 mm tall, so they fit in the depth the cells already need. The display
+  hangs off the board's top edge and drops into the space the board used to leave empty; a panel whose
+  ribbon exits toward the keypad plugs into a connector on the board's edge without the 180° fold.
+- **Or two boards**: a thin, cheap keypad board (switches only) and a main board placed wherever there is
+  room, joined by a connector or flex cable. This costs the interconnect, a second assembly and their
+  alignment, but frees the layout if the parts don't fit beside the holders.
+
+**Dropping the battery holders** saves about 1.3 mm more: each holder has a 1.3 mm floor between the cells
+and the board (`V3_THIN.md`). The cells could lie in a compartment of the back shell with spring contacts (in
+the shell, wired to the board, or on the board itself, pressing on the cell ends), or as tabbed cells
+soldered in (not user-replaceable). Either way the cells sit just clear of the board's back-side parts.
+The preferred option is the **compartment in the back shell with spring contacts**: the cells stay
+user-replaceable behind the battery door, and the contacts are standard AAA spring/plate contacts pressed or
+clipped into printed slots, wired to two pads on the board (or touching spring pads on it).
+
+The first check for either layout is a fit study: the back of an 82 × 120 mm keypad board with the two
+62 × 22 mm holders, the LQFP-144, the SDRAM, the flash, the power parts and the connectors. If they fit, one
+board is simpler. Going much thinner than about 20 mm needs a flat lithium cell (4–6 mm) with a charger and
+protection circuit instead of AAA cells (about 15 mm overall). The case also has to hold the display by
+itself (`case.py --bar-clips` and a ledge under the panel).

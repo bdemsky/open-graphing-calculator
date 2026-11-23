@@ -1,0 +1,70 @@
+%% Notebook (modules/python nb_*.c: the list of notebooks and the cell editor in the Python module; app/py_core.c its core side)
+
+@page notebook Notebook
+The calculator keeps notebooks: columns of cells with text, math, Python and graphs, saved as you work and readable by Jupyter on a computer ([[notebook-files]]). The open notebook is always the one on the [[home-notebook|home screen]]: that is where its cells are shown, added and run. A computer's browser can show and edit the same notebook at the same time ([[browser]]). Two screens help: the list of notebooks and the editor of a cell. They are part of the Python module ([[python]]).
+
+## The list of notebooks
+{menu} 3 Open on the home screen, or {apps} > Notebook, lists the notebooks: those kept in the calculator, then those in the `CALC/NOTEBOOKS` folder of a microSD card (marked "card"), then the example notebooks (marked "example", below).
+- {▲} {▼} choose one, {enter} or {F1} open opens it: the home screen shows it. {F2} new asks for a name (letters, digits, spaces; up to 35 characters) and starts an empty notebook on the home screen. {F3} rename, {F4} delete (it asks first). {F5} more: copy to the card or back to the calculator, and go back to the previous version.
+- Touch: tap a notebook to choose it, tap it again (or tap twice) to open it, drag to scroll.
+- {clear} goes back to the home screen.
+
+Calculations without a name are stored first as "Notebook 1" (2, 3, ...) when you open another notebook: they are never lost.
+
+## Example notebooks
+Worked examples come with the Python module: Conservative field and potential, Diagonalize a matrix, Fit and plot data, Fourier and Laplace pairs, Linear program, Verify an ODE solution. Each opens with its results and graphs; change a cell, run it ({enter}) or run all ({menu} 9 Run all), and the notebook is saved in the calculator under its name, where it then replaces the example in the list. Delete that copy to get the original back. Examples cannot be renamed or deleted; {F5} more copies one to the card. Their cells store variables (`mat`, `xs`, `odesol`, ...) like any calculation. Formula sheets: [[refresher]].
+
+## Editing a cell
+{enter} on a Python cell of the home screen (or on a text cell of several lines) opens it here: the notebook's cells are shown with this one's lines in place, and the line being edited is also at the bottom, in the entry line, where the CAS and MATH menus, the catalog and copy and paste work as on the home screen.
+- {enter} starts a new line (in Python indented like the one above, four spaces more after `:`), {▲} {▼} go to the line above or below, {⌫} at the start of a line joins it to the one above.
+- {F1} run keeps the changes, runs the cell and goes back to the home screen; {F5} done keeps the changes, {F4} cancel forgets them. {F2} tab types four spaces, {shift} {F1} removes four, {shift} {F2} types `calc.`. {F3} chars offers characters the keyboard lacks (`#` `*` `_` `$` `'`, the backquote and Python words).
+- {clear} clears the line; on an empty line it removes the line; on the only, empty line it ends editing.
+- A tap on another cell ends editing.
+- A line longer than about 230 characters cannot be edited on the calculator (a long text line is split at a space).
+- {on} stops a cell that runs: Python with `KeyboardInterrupt`, the CAS too.
+
+There is no Save to remember: a notebook with a name is saved when the calculator is switched off (also when the battery runs low), when you open another notebook, and two minutes after the last change; until then the home screen's title shows a star before its name. The calculator keeps the previous version of a notebook while there is room; {F5} more, Previous version in the list brings it back.
+
+While the browser page edits a cell ([[browser]]) the calculator says "This cell is being edited in the browser" and does not edit it until the page is done with it.
+
+See [[notebook-cells]] for what each kind of cell does.
+
+@page notebook-cells Notebook: the cells
+A notebook ([[notebook]]) has four kinds of cells. On the home screen a calculation is a math cell, {menu} adds text and Python cells, and graphing adds graph cells ([[graph-cells]]); the browser page ([[browser]]) can add and change cells of every kind.
+
+## Text
+Text in Markdown, shown formatted: `# Heading`, `## Heading`, paragraphs (lines next to each other join), `**bold**`, `*italic*`, code between backquotes, lists (`- item`, `1. item`), `> quote`, code blocks between lines of three backquotes, and math between `$` signs, shown in textbook form when it can be: `$x^2+1$` in a line, `$$\frac{-b+\sqrt{b^2-4ac}}{2a}$$` on a line of its own. Inside `$` the calculator's own form works (`x^2/2`, `√(x)`) and the common LaTeX commands (`\frac`, `\sqrt`, `^{}`, `\cdot`, `\pi`, `\le`).
+
+## Math
+One line of CAS input, as on the home screen ([[home-screen]]), with the same settings and variables (`a:=3` in a math cell is `a` on the home screen too; `ans` is not changed). The result is shown in textbook form, an error in red: `1/0` gives "CASError: division by zero".
+
+## Python
+Python code, run by the module's interpreter: every Python cell of the open notebook shares its variables, as in Jupyter. What the cell prints is shown under it, then the value of its last line when that is an expression (an expression of the `calc` library in textbook form, [[python-calc]]). An error shows its last line in red (the browser page shows the whole traceback). `calc.plot(e, xmin, xmax)` in a cell draws the plot under it instead of opening the graph screen. Opening a notebook restarts Python (the browser page's Restart does it at any time): run the cells again to get their variables back.
+
+## Graph
+On the home screen a graph cell keeps its functions, window and style, made by graphing from the home screen ([[graph-cells]]); {enter} on it opens the graph app. A graph cell typed in the browser page is a function of `x` and, if you like, its range: `sin(x)` (from −10 to 10) or `x^2-1, -3, 3`; running it draws the plot under it, the y range fitted to the values.
+
+```
+M  integrate(x^2,x)                          x³/3
+Py for k in range(3): print(k)               0 1 2
+G  sin(x), -5, 5                             (the plot)
+```
+
+@page notebook-files Notebook: files, card and computer
+Notebooks are Jupyter notebooks (`.ipynb`, nbformat 4.5): a computer opens them in Jupyter or VS Code.
+
+## Where they are kept
+- In the calculator: a part of the 16 MB flash chip (4 MB) holds the notebooks, each up to 256 KB, with the previous version of each kept while there is room. They need no card. A power cut while a notebook is saved keeps the version before.
+- On a microSD card: in the folder `CALC/NOTEBOOKS`, one `.ipynb` file each. A notebook opened from the card is saved there. {F5} more in the list copies a notebook between the card and the calculator.
+
+## On a computer by USB
+Connect the calculator ([[usb]]): the CALC drive has a folder `NOTEBOOKS` with every notebook kept in the calculator as `NAME.ipynb`. Copy them to the computer as usual.
+- To bring a notebook to the calculator, drop its `.ipynb` file on the CALC drive (or into `NOTEBOOKS`). When the copy is done the calculator reads it, keeps it under the file's name and says "Imported NAME"; `RESULT.TXT` says what happened. A notebook of the same name is replaced; its previous version is kept ({F5} more, Previous version). The drive then refreshes itself.
+- A notebook is not imported while the list of notebooks or the cell editor is open: leave it first ("Leave Notebook to import it").
+- The `NOTEBOOKS` folder shows the notebooks as they were when the drive was last refreshed: it refreshes after a notebook is saved (while the browser page follows a notebook, when the page has gone).
+- The browser page ([[browser]]) opens and saves notebook files on the computer directly.
+
+## In Jupyter
+Text cells are Markdown cells; Python cells are code cells. A math cell becomes a code cell `calc.eval(r"...")` and a graph cell `calc.plot(r"...", xmin, xmax)`, both after `import calc`, so they run again on a computer that has a `calc` library; the calculator also stores the line as typed and reads it back from there. Outputs are kept as Jupyter shows them: printed text, the value (with its LaTeX), errors with their traceback, and plots as PNG pictures. An animated graph cell (its functions use t) keeps one picture and, in its metadata, its animation: t from, to, seconds and mode.
+
+Notebooks made on a computer can be imported: all their cells are kept (unknown kinds as text); pictures other than the calculator's plots are left out, and the cell says so. A file that is not a notebook, or a notebook of an old format (nbformat 3), is refused with the reason.

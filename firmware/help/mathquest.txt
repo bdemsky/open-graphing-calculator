@@ -1,0 +1,14 @@
+%% Math Quest (modules/mathquest, app/mquest_core.c, docs/MATHQUEST.md): math games for
+%% grades 3, 4 and 5, a code module that is not part of the release.
+
+@page mathquest Math Quest: math games for grades 3 to 5
+Math games for grades 3, 4 and 5, a module ([[code-modules]]) outside the release: install MATHQnnn.MOD from the card (Memory > Modules). In APPS it is called Sparkle Town: children see a game, grown-ups the learning behind it.
+
+- Tap a player, pick a buddy, type a name: the first adventure starts at once. The map is Sparkle Town, a street to walk along with a pet that follows: tap a building to go in (or the arrow keys and ENTER), drag to look along the street; the town grows as she plays. Worlds are story chapters that open one after another; the Arcade (the funfair) has speed games and three keypad action games.
+- Every answer is a game action: pop the right bubble, catch the right star, dash through the right gate, frost a pie, build a rug, turn the clock's hands, drop coins in the till, aim with a protractor, hop along a number line. Typing the answer works too, and now and then the answer is made: type it and blow its bubble. Kart Race is a real race to the podium. {F1} (trick) shows the guide's trick, {F2} uses a power-up.
+- Each order starts as a little scene: the friend acts out the story on a stage (a tap skips it). The friends remember what she did and talk about it in town; each has a little story told a step a play day, ending in a party, a toy wedding or a trip, and two stories open new games (Cake Kitchen, Pet Shop). Treasure Heist hides clues round a cave and locks the treasure with a combination.
+- The Sparkle Kitchen (first on the street) is a cake counter: a friend orders a fraction of a cake (1/2, 3/4, 2/3 ... at her level), the oven bakes it cut in equal pieces with sparkles earned by playing, two pieces the same merge (two quarters make a half) and the plate she gives is her answer; spare pieces go to the cafe. Now and then a round has a twist (night mode, giant bubbles, gravity flip, mirror world) and some play days bring a surprise (a visitor, lantern night, bubble day, a parade).
+- A wrong answer is a moment in the story and gets one more try, then the game shows why and a similar order follows; nothing is ever lost.
+- The Arcade has speed games, keypad action games and the toy box: Bongo Beats (drums on the beat), a kaleidoscope, magic squares, number magic and more.
+- Coins earned by playing buy furniture, pets, windows and outfits; five rooms to decorate by dragging, squishies to collect. Swipe between rooms, worlds and pages.
+- Grown-ups: {F5} shows a problem past the curriculum (a percent, a negative number, a power, a square root, an equation with a letter); type its answer for standards, the fact grid, review statistics, time and sessions, the daily limit, the free-fun share, theme packs (/CALC/THEMES/*.THM) and the play log (saved to the card as /CALC/MQLOGnnn.CSV).

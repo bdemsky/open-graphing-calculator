@@ -1,0 +1,56 @@
+# Sparkle Town's teaching moments (modules/mathquest/mq_teach.c): the first order with a big idea (here
+# fractions) brings the friend with it in short parts. Each part opens with a try: right, and "You already
+# know this!" skips it; a miss (or "show me") shows it, the picture moving and the friend telling it; "skip"
+# jumps a part, "done" goes back to the game. The lightbulb's "big idea" button shows it again.
+# Screenshots mq_teach_*.png.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 4
+mq fun off
+mq new Noa 3
+mq engine stop
+mq notebook 2
+# a fraction order: its acted story, then the big idea (first time)
+mq skill 24 0
+mq step 200
+mq tap 160 120
+mq step 4
+expect statecontains mq_teach 6 0 0
+screenshot mq_teach_try.png
+# fair pieces: "not fair" is right -- she knew it
+mq teach pick 1
+mq step 2
+screenshot mq_teach_knew.png
+mq step 100
+expect state mq_teach "6 1 0"
+# the bottom number: a miss, so it is shown
+key 1
+mq step 30
+expect state mq_teach "6 1 2"
+screenshot mq_teach_show.png
+key ENTER
+key ENTER
+mq step 2
+expect state mq_teach "6 2 0"
+# skip the top number
+key DEL
+expect state mq_teach "6 3 0"
+# done: back to the game
+mq teach done
+expect state mq_teach ""
+expect state mq_moment play
+# the lightbulb: its big idea button
+mq bulb
+mq step 2
+screenshot mq_teach_bulb.png
+mq tap 264 98
+mq step 2
+expect statecontains mq_teach 6 0
+mq teach done
+mq correct
+expect state mq_moment cheer

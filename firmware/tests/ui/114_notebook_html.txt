@@ -1,0 +1,47 @@
+# NOTEBOOK.HTML on the CALC drive (app/nbhtml.c): the open notebook as one static page (no
+# scripts, nothing from elsewhere): text cells as HTML, math results and graph cells as PNG pictures
+# (data URLs) of the calculator's drawing. tools/nbhtml_check.py (make test) checks the copy got here.
+type "1/3+1/6\n"
+key SQRT 8 RPAREN ENTER
+key MENU 7
+type "- one item"
+key ENTER
+key MENU 7
+type "Some **bold** text"
+key ENTER
+key F1
+key CLEAR
+type "x^2-2"
+key HOME
+key SHIFT F5
+type "1/0\n"
+usb host on
+usb ls
+usb expect NOTEBOOK.HTML "<!DOCTYPE html>"
+usb expect NOTEBOOK.HTML "<title>Calculations</title>"
+usb expect NOTEBOOK.HTML "<ul><li>one item</li>"
+usb expect NOTEBOOK.HTML "Some <b>bold</b> text"
+usb expect NOTEBOOK.HTML "<div class=\"in\">1/3+1/6</div>"
+usb expect NOTEBOOK.HTML "alt=\"1/2\""
+usb expect NOTEBOOK.HTML "data:image/png;base64,iVBORw0KGgo"
+usb expect NOTEBOOK.HTML "y1=x^2-2"
+usb expect NOTEBOOK.HTML "class=\"g\""
+usb expect NOTEBOOK.HTML "err"
+usb expect NOTEBOOK.HTML "<footer>"
+usb expect README.TXT NOTEBOOK.HTML
+usb get NOTEBOOK.HTML build/ui_notebook.html
+# it follows the notebook: a new calculation is in it once the calculator has been left alone for
+# 10 s (the drive is generated again: a media change), not while keys are pressed
+type "6*7\n"
+wait 3000
+usb lacks NOTEBOOK.HTML "6*7"
+wait 11000
+usb expect NOTEBOOK.HTML "<div class=\"in\">6*7</div>"
+# saved under a name (another notebook): at once, under its name
+ifcfg MOD_PYTHON nb store wipe
+ifcfg MOD_PYTHON key MENU 1
+ifcfg MOD_PYTHON type "Trip"
+ifcfg MOD_PYTHON key ENTER
+ifcfg MOD_PYTHON expect state home_title "Notebook: Trip"
+ifcfg MOD_PYTHON wait 3000
+ifcfg MOD_PYTHON usb expect NOTEBOOK.HTML "<title>Trip</title>"

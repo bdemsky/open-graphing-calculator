@@ -1,0 +1,62 @@
+# Sparkle Town's error patterns (modules/mathquest/mq_diag.c): her answers keep forgetting the carry into the
+# tens; the pattern is spotted, and the next such slip brings the friend: her answer next to the right one,
+# the tens ringed, the step replayed (the 1 hops up to the tens), then they finish the order together. The
+# clock's hands swapped (her answer, the clock with nothing hidden). The grown-ups' Skills tab lists the
+# patterns with their status and her last example. Screenshots mq_diag_*.png.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 3
+mq engine stop
+mq seed 4
+mq fun off
+mq scene off
+# three orders of adding, a carry in the ones, each answered without carrying the ten: the third time the
+# pattern is spotted and the friend comes at once
+mq skill 16 3
+wait 3000
+mq diag slip 0
+mq step 40
+expect statecontains mq_diag off 0 watching
+mq skill 16 3
+wait 3000
+mq diag slip 0
+mq step 40
+mq skill 16 3
+wait 3000
+mq diag slip 0
+expect statecontains mq_diag on 0 spotted
+
+mq step 2
+expect text yours
+expect text it is
+screenshot mq_diag_carry.png
+mq diag next
+mq diag next
+mq step 40
+screenshot mq_diag_carry_hop.png
+key ENTER
+key ENTER
+expect statecontains mq_diag off
+expect state mq_scene play
+# the clock: the hands swapped
+mq skill 38 1
+mq diag show 8
+mq step 2
+screenshot mq_diag_clock.png
+mq diag done
+# the grown-ups: Skills, then "patterns"
+mq go map
+mq gate seed 11
+key F5
+type "8"
+key ENTER
+expect state mq_scene parent
+touch tap 276 25
+mq step 2
+expect text Forgets to carry into the tens
+screenshot mq_diag_parent.png

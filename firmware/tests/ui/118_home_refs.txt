@@ -1,0 +1,104 @@
+# Earlier results on the home notebook (app/nbdoc.c nbd_refs; help page "home-notebook"): Ans is the
+# latest result, Out[n] (or out[n]) the result of the cell with execution count n, the small dim [n]
+# by each result; a missing n is an error that says so. A selected calculation's soft keys put its
+# input, its result or Out[n] on the entry line; SHIFT ENTER its result. In the core: no Python
+# module needed (the core tier runs this too).
+expect screen home
+type "6*7\n"
+type "2+5\n"
+expect state last_output 7
+# the [n] of each result (the execution count): Out[n] names it
+expect text [1]
+expect text [2]
+screenshot home_refs.png
+type "Out[1]+1\n"
+expect state last_output 43
+type "out[2]*10\n"
+expect state last_output 70
+# Ans: the latest result, also through the ANS key (SHIFT (-)) and an operator first
+type "Ans+1\n"
+expect state last_output 71
+key SHIFT NEG
+expect state entry Ans
+type "-1\n"
+expect state last_output 70
+type "/7\n"
+expect state last_input Ans/7
+expect state last_output 10
+# a missing n: an error naming it; Ans skips errors
+type "Out[42]*2\n"
+expect state last_error 1
+expect state last_output "ERR:UNDEFINED Out[42]: no such result"
+type "Ans*3\n"
+expect state last_output 30
+# a cell edited in place gets a new number; Out[n] of its old number is gone
+key UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP
+expect state home_sel 0
+key MENU
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state home_edit 0
+key CLEAR
+type "6*8"
+key ENTER
+expect state history 9
+type "Out[10]\n"
+expect state last_output 48
+type "Out[1]\n"
+expect state last_output "ERR:UNDEFINED Out[1]: no such result"
+# a selected calculation: input, result, Out[n] (its own number on the key), edit, ≈
+key UP
+expect state home_sel 21
+expect state softkeys "input|result|Out[ ]|edit|≈"
+key UP UP
+expect state home_sel 19
+expect state softkeys "input|result|Out[11]|edit|≈"
+screenshot home_refs_select.png
+key F1
+expect state entry Out[10]
+expect state home_sel -1
+key CLEAR
+key UP UP UP
+key F2
+expect state entry 48
+key CLEAR
+key UP UP UP
+key F3
+expect state entry Out[11]
+type "+2\n"
+expect state last_output 50
+# SHIFT ENTER on a selected input: its result; ENTER copies it as ever
+key UP UP UP UP
+expect state home_sel 20
+key SHIFT ENTER
+expect state toast "this cell has no result"
+key UP UP
+expect state home_sel 18
+key SHIFT ENTER
+expect state entry 48
+key CLEAR
+key UP UP UP UP UP UP
+key ENTER
+expect state entry Out[10]
+key CLEAR
+# the selection's soft keys end with it
+key UP
+key CLEAR
+expect state softkeys "graph|frac|func|mtrx|≈"
+# Classic display: the [n] there too
+key SHIFT HOME
+key DOWN DOWN DOWN DOWN DOWN DOWN RIGHT ENTER
+expect state textbook 0
+key HOME
+type "1+1\n"
+expect text [14]
+screenshot home_refs_classic.png
+key SHIFT HOME LEFT ENTER
+expect state textbook 1
+key HOME
+# after a power cycle and a reboot the results are still there (rebuilt from the stored texts)
+session save
+reboot
+type "Out[13]+Out[14]\n"
+expect state last_output 52
+type "Ans-2\n"
+expect state last_output 50

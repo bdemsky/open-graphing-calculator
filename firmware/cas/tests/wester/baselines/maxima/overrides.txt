@@ -1,0 +1,158 @@
+# Maxima per-problem overrides for run_baselines.py (format: see giac/overrides.txt).
+# Inputs here are Maxima syntax.
+#
+# Maxima 5.49.0 (MacPorts, ECL), run in batch mode.  Maxima asks questions
+# ("Is a positive, negative or zero?") where other engines assume or branch;
+# in batch mode there is no answer, so the problem is an ERROR that names the
+# question.  Assumptions are added (pre: assume(...)) only when the problem
+# itself states them, in its title or in its sampling domain.
+
+== E5
+in: std1([1,2,3,4,5])
+note: std is the population deviation; std1 is the sample (n-1) one Wester asks for
+
+== H17
+pre: R:map(rhs,solve(x^3+x^2-7=0,x))
+pre: u(r):=x-r
+in: expand(apply("*",map(u,R)))
+
+== H26
+in: subst((1+sqrt(5))/2,a,factor(x^4-3*x^2+1,a^2-a-1))
+note: Wester's Macsyma input: factor over Q(phi) with the minimal polynomial of phi
+
+== H31
+in: subst(%i*sqrt(3),a,factor(x^3+y^3,a^2+3))
+note: factor over Q(a) with the minimal polynomial a^2+3 of sqrt(-3), then a = sqrt(-3) = %i*sqrt(3)
+
+== K4
+in: rectform(log(3+4*%i))
+
+== K5
+in: rectform(tan(x+%i*y))
+
+== P7
+in: matrix([x,y]) . (a*matrix([1,3,5],[2,4,6])+matrix([7,-9,11],[-8,10,-12]))
+note: Maxima's * is elementwise; . is the matrix product
+
+== P44
+pre: g(f):=makelist(diff(f,v_),v_,[r,t])
+in: map(g,makelist(diff(r^2*sin(t),v_),v_,[r,t]))
+
+== P45
+pre: g(f):=[f,diff(f,t)]
+in: transpose(apply(matrix,map(g,[cos(t),sin(t)])))
+
+# ---------------------------------------------------------------- assumptions stated by the problem
+== W8
+pre: assume(a>0,a<1)
+in: integrate(t^(a-1)/(1+t),t,0,inf)
+note: 0 < a < 1 is in Wester's statement; with a > 0 alone Maxima asks "Is a an integer?"
+
+== V10
+pre: assume(a>0,b>a)
+in: integrate(1/(a+b*cos(x)),x)
+note: a^2 < b^2 is in Wester's statement (domain a > 0); without it Maxima asks "Is 4*b^2-4*a^2 positive or negative?"
+
+== Y11
+pre: assume(s>0,s<1)
+in: integrate(x^(s-1)/(1-x),x,0,inf)
+note: 0 < s < 1 is the problem's domain (the Mellin strip); without it Maxima asks "Is s an integer?"
+
+== Y12
+pre: assume(s>0,s<1)
+in: integrate(bessel_j(3,x)/x^3*x^(s-1),x,0,inf)
+note: 0 < s < 1 is the problem's domain; without it Maxima asks "Is s-3 positive, negative or zero?"
+
+== J14
+pre: assume(z>0,z<1)
+in: hgfred([1/2,1/2],[3/2],z^2)
+note: 0 < z < 1 is the problem's domain; without it Maxima asks "Is z zero or nonzero?"
+
+== W23
+pre: assume(u>0,u<3)
+in: integrate((unit_step(t-1)-unit_step(t-2))*cos(t),t,0,u)
+note: 0 < u < 3 is the problem's domain; without it Maxima asks "Is u positive, negative or zero?"
+
+# ---------------------------------------------------------------- translation
+== J16
+in: at(diff(zeta(x),x),x=0)
+note: subst() cannot put a number into the derivative's variable ("diff: variable must not be a number"); at() is Maxima's evaluation at a point
+
+== X10
+in: ratdisrep(taylor(sqrt(sec(x)),x,3*%pi/2,4))
+uncertain: for a Puiseux series taylor's order counts the integer powers that multiply 1/sqrt(x-3pi/2); order 4 (not our order 4 - 1) is needed to keep the (x-3pi/2)^(7/2) term that our order 4 keeps (as for Giac)
+
+# ---------------------------------------------------------------- review of the first full run
+# Every WRONG, UNGRADED and ERROR case of the first full run was reviewed.  Translation problems
+# were fixed in engine_maxima.py (csolve with conjugate/realpart/imagpart/abs declares the
+# variable complex; trigonometric equations go to to_poly_solve first, since solve() keeps only
+# the principal solution).  The blocks below are the hand decisions; the remaining WRONG and
+# ERROR cases are Maxima's own answers (see the notes).
+
+# 'manual' checks (no automatic grader), decided by hand as for Giac and SymPy
+== A12
+alt: UNEVAL | v > 0 and 4*v*w > 0 and 4*w*(3*ww^2+4*v^2*w^2+w^2) > 0 and 64*v^2*w^2*(w^2-ww^2)*(ww^2+v^2*w^2) > 0 and 64*v^2*w^2*(w^2-ww^2)^3*(ww^2+v^2*w^2) > 0 | conjunction returned unsimplified (only factored)
+
+== J3
+alt: PASS | -(k^2*jacobi_cn(u,k^2)*jacobi_sn(u,k^2)) | -k^2 sn cn: Maxima's second argument is the parameter m = k^2 (the input was translated the same way)
+
+== J10
+alt: UNEVAL | assoc_legendre(n,m,0) | returned unevaluated
+
+== N18
+alt: PASS | (-y < x and x < y and 0 < y) | -y < x < y (so y > 0) is |x| < y
+
+== O9
+alt: PASS | [x*y*z,-((y*z^4-2*x^2*y^2*z^2)/2),0] | the curl of [x y z, x^2 y^2 z^2 - y z^4/2, 0] equals the field (checked with SymPy)
+
+== P26
+override: WRONG | returns only the 2 roots of x^2+x+1 and drops the 5 roots of the quintic factor; Maxima prints a warning ("solve is unable to find some of the roots") but returns the short list as the eigenvalues
+
+== P30
+alt: PASS | [[-1,0,0,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,0,1,1],[0,0,0,0,1]] | Jordan form: -1 and blocks [[1,1],[0,1]] twice
+
+== U9
+alt: UNEVAL | diff(g(y^2+x^2),y,1)+diff(g(y^2+x^2),x,1) | the derivatives of g(x^2+y^2) stay noun forms (no chain rule), so nothing is factored
+
+# automatic grader undecided
+== P10
+alt: PASS | [[1,conj(f(4-5*i))],[2-3*i,6]] | conj(f(4-5i)) is the exact Hermitian-transpose entry for an unknown f; Wester's f(4+5i) assumes conj(f(z)) = f(conj(z)) (as for Giac and SymPy)
+
+== Z12
+alt: PASS | (y^3+3*y)/6 = x | implicit solution of the IVP: y(0) = 0 and (3y^2+3) y' = 6 gives y'(0) = 2; Cardano on y^3 + 3y = 6x gives Wester's explicit answer (checked with SymPy)
+
+# grading conventions
+== O10
+alt: PASS | [[0,1,2,1],[0,-(1/3),1/3,-(1/3)],[1,1/2,0,-(1/2)],[0,0,0,0]] | orthogonal (not normalized) basis of the span; the dependent 4th vector comes back as the zero vector (the convention accepted for Giac)
+
+# Maxima's own answers, left as graded
+== E3
+note: WRONG kept: quantile() interpolates (R's type 7) and gives 11/4; Maxima has no quartile with Wester's 2 or 5/2 convention
+== D2
+note: WRONG kept: float() arithmetic is IEEE double, which underflows to 0.0 (bfloat would not, but the input is a float)
+== I10
+note: WRONG kept: trigsimp cancels the 0/0 to 1/cos(x)^2
+== I12
+note: WRONG kept: diff simplifies the 0/0 expression to 0
+== K8
+note: WRONG kept: the default radexpand:true simplifies sqrt(1/z) to 1/sqrt(z), false for z < 0
+== K10
+note: WRONG kept: same radexpand simplification, 2/sqrt(z) for z < 0
+== K13
+note: WRONG kept: sqrt(exp(6 i)) simplifies to exp(3 i), the wrong branch
+== K16
+note: WRONG kept: log(exp(10 i)) simplifies to 10 i, outside the principal branch
+== M32
+note: WRONG kept: the root -1.554894 of 2 - x^2 = x^3/9 (where 2 - x^2 > x) is lost
+== M37
+note: WRONG kept: algsys's floating-point roots for the real pair (+-0.5332, 0.6172, 2.0655) have residuals ~4e-7 (the grader allows 1e-8)
+== M37b
+note: WRONG kept: same output as M37
+== P16
+note: WRONG kept: rank() does not see that 6 sqrt 6 / (2 sqrt 2) = 24 sqrt 3 / 8
+== P17
+note: WRONG kept: rank() does not apply the trigonometric identities
+== W27
+note: WRONG kept: pi b + 3 pi a instead of pi (a + b)
+# ERROR: Maxima asks a sign question that batch mode cannot answer (R15 T13 T14 W24-W26 W28-W30 X17
+# Y2 Y7 Z24); no assumption is added unless the problem states it.  P38 and X16 are Maxima errors.

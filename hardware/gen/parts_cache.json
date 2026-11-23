@@ -1,0 +1,236 @@
+{
+ "C|100nF|0402,0603,0805|16": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C307331",
+  "mfr": "CL05B104KB54PNC",
+  "package": "0402"
+ },
+ "C|100nF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C307331",
+  "mfr": "CL05B104KB54PNC",
+  "package": "0402"
+ },
+ "C|10nF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C15195",
+  "mfr": "CL05B103KB5NNNC",
+  "package": "0402"
+ },
+ "C|10pF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C32949",
+  "mfr": "CL05C100JB5NNNC",
+  "package": "0402"
+ },
+ "C|10uF|0402,0603,0805|25": {
+  "footprint": "Capacitor_SMD:C_0603_1608Metric",
+  "lcsc": "C96446",
+  "mfr": "CL10A106MA8NRNC",
+  "package": "0603"
+ },
+ "C|10uF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C15525",
+  "mfr": "CL05A106MQ5NUNC",
+  "package": "0402"
+ },
+ "C|10uF|0603,0805|25": {
+  "footprint": "Capacitor_SMD:C_0603_1608Metric",
+  "lcsc": "C96446",
+  "mfr": "CL10A106MA8NRNC",
+  "package": "0603"
+ },
+ "C|10uF|0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0603_1608Metric",
+  "lcsc": "C19702",
+  "mfr": "CL10A106KP8NNNC",
+  "package": "0603"
+ },
+ "C|10uF|0805|25": {
+  "footprint": "Capacitor_SMD:C_0805_2012Metric",
+  "lcsc": "C15850",
+  "mfr": "CL21A106KAYNNNE",
+  "package": "0805"
+ },
+ "C|15pF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C1548",
+  "mfr": "0402CG150J500NT",
+  "package": "0402"
+ },
+ "C|18pF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C1549",
+  "mfr": "0402CG180J500NT",
+  "package": "0402"
+ },
+ "C|1nF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C1523",
+  "mfr": "0402B102K500NT",
+  "package": "0402"
+ },
+ "C|1uF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C52923",
+  "mfr": "CL05A105KA5NQNC",
+  "package": "0402"
+ },
+ "C|2.2uF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C12530",
+  "mfr": "CL05A225MQ5NSNC",
+  "package": "0402"
+ },
+ "C|22uF|0402,0603,0805|10": {
+  "footprint": "Capacitor_SMD:C_0805_2012Metric",
+  "lcsc": "C45783",
+  "mfr": "CL21A226MAQNNNE",
+  "package": "0805"
+ },
+ "C|22uF|0603,0805|10": {
+  "footprint": "Capacitor_SMD:C_0805_2012Metric",
+  "lcsc": "C45783",
+  "mfr": "CL21A226MAQNNNE",
+  "package": "0805"
+ },
+ "C|22uF|0603,0805|25": {
+  "footprint": "Capacitor_SMD:C_0805_2012Metric",
+  "lcsc": "C45783",
+  "mfr": "CL21A226MAQNNNE",
+  "package": "0805"
+ },
+ "C|4.7uF|0402,0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0402_1005Metric",
+  "lcsc": "C23733",
+  "mfr": "CL05A475MP5NRNC",
+  "package": "0402"
+ },
+ "C|4.7uF|0603,0805|6.3": {
+  "footprint": "Capacitor_SMD:C_0603_1608Metric",
+  "lcsc": "C19666",
+  "mfr": "CL10A475KO8NNNC",
+  "package": "0603"
+ },
+ "R|100k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25741",
+  "mfr": "0402WGF1003TCE",
+  "package": "0402"
+ },
+ "R|100|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25076",
+  "mfr": "0402WGF1000TCE",
+  "package": "0402"
+ },
+ "R|10M|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C7250",
+  "mfr": "0603WAF1005T5E",
+  "package": "0603"
+ },
+ "R|10M|0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C7250",
+  "mfr": "0603WAF1005T5E",
+  "package": "0603"
+ },
+ "R|10k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25744",
+  "mfr": "0402WGF1002TCE",
+  "package": "0402"
+ },
+ "R|10|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25077",
+  "mfr": "0402WGF100JTCE",
+  "package": "0402"
+ },
+ "R|13k|0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C22797",
+  "mfr": "0603WAF1302T5E",
+  "package": "0603"
+ },
+ "R|1k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C11702",
+  "mfr": "0402WGF1001TCE",
+  "package": "0402"
+ },
+ "R|1|0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C22936",
+  "mfr": "0603WAF100KT5E",
+  "package": "0603"
+ },
+ "R|200k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25764",
+  "mfr": "0402WGF2003TCE",
+  "package": "0402"
+ },
+ "R|22k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25768",
+  "mfr": "0402WGF2202TCE",
+  "package": "0402"
+ },
+ "R|22|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25092",
+  "mfr": "0402WGF220JTCE",
+  "package": "0402"
+ },
+ "R|2M|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C22976",
+  "mfr": "0603WAF2004T5E",
+  "package": "0603"
+ },
+ "R|33k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25779",
+  "mfr": "0402WGF3302TCE",
+  "package": "0402"
+ },
+ "R|4.7k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25900",
+  "mfr": "0402WGF4701TCE",
+  "package": "0402"
+ },
+ "R|47k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25792",
+  "mfr": "0402WGF4702TCE",
+  "package": "0402"
+ },
+ "R|5.1k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25905",
+  "mfr": "0402WGF5101TCE",
+  "package": "0402"
+ },
+ "R|51k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0402_1005Metric",
+  "lcsc": "C25794",
+  "mfr": "0402WGF5102TCE",
+  "package": "0402"
+ },
+ "R|6.8k|0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C23212",
+  "mfr": "0603WAF6801T5E",
+  "package": "0603"
+ },
+ "R|82k|0402,0603|0.0": {
+  "footprint": "Resistor_SMD:R_0603_1608Metric",
+  "lcsc": "C23254",
+  "mfr": "0603WAF8202T5E",
+  "package": "0603"
+ }
+}

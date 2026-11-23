@@ -1,0 +1,36 @@
+# 2D history: textbook results, wide results on several lines, tall ones fall back to text, touch
+ifcas src type "factor(x^2-1)\n"
+ifcas src expect state last_output (x-1)*(x+1)
+ifcas src expect text (x-1)*(x+1)
+type "sqrt(8)/3\n"
+ifcas src expect text 2*√(2)/3
+ifcas src type "integrate(1/(1+x^2),x)\n"
+ifcas src type "identity(3)\n"
+ifcas src expect state last_output [[1,0,0],[0,1,0],[0,0,1]]
+screenshot output2d.png
+key CLEAR CLEAR
+# a result wider than the screen is broken into lines (nothing to scroll)
+ifcas src type "expand((x+1)^9)\n"
+ifcas src key UP
+ifcas src expect state home_sel 1
+ifcas src expect state hscroll 0
+ifcas src screenshot output_wide.png
+ifcas src key ENTER
+ifcas src expect statecontains entry x^9+9*x^8
+ifcas src key CLEAR
+# a result too tall for 2D is shown as text
+ifcas src type "identity(9)\n"
+ifcas src expect text [[1,0,0,0,0,0,0,0,0],
+key CLEAR CLEAR
+# touch: tap a result to select it, tap again to paste it
+type "1/4\n"
+touch tap 300 80
+expect state home_sel 1
+touch tap 300 80
+expect state entry 1/4
+expect state home_sel -1
+# tap in the entry line moves the cursor between boxes
+key CLEAR
+key F2 ENTER 1 2 DOWN 3
+touch tap 2 130
+expect state cursor 0

@@ -1,0 +1,45 @@
+# Regression tests for statistics: list editor UP while editing, the first
+# bad field of a test form, stat plot pixel mapping, ZoomStat without finite X
+#
+# list editor: ENTER on the append row, then UP goes one row up (not two)
+app stat
+key 1
+type "5\n3\n9\n"
+expect state statedit_row 4
+key ENTER UP
+expect state statedit_row 3
+key ENTER DOWN
+expect state statedit_row 4
+key HOME
+# 1-PropZTest: fields are read in form order, so the error names p0
+app stat
+key 3 5
+key CLEAR DOWN
+type "q+\n"
+key DOWN DOWN DOWN ENTER
+expect text "ERR: p0: missing"
+key HOME
+# a scatter point at (Xmax, 0) is drawn in the plot's last column, like the
+# function plotter's pixel of Xmax (the 3x3 box mark spans columns 318..320)
+stat set L4 10
+stat set L5 0
+key F1 SHIFT F1
+key 1
+key RIGHT DOWN DOWN
+type "L4\n"
+type "L5\n"
+expect state statplot1 "on 0 L4 L5 1 0 1"
+key HOME F1 F5
+expect pixel 317 120 0xffff
+expect pixel 318 120 0xd8e3
+expect pixel 319 120 0xd8e3
+# ZoomStat with no finite X value: refused, the window is unchanged
+stat set L4 nan,nan
+stat set L5 1,2
+key SHIFT F1
+key 1
+key UP UP ENTER
+expect text "no plot with data is on"
+expect state xmin -10
+expect state xmax 10
+key HOME

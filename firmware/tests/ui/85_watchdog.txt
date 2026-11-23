@@ -1,0 +1,38 @@
+# Watchdog (hal.h; hardware: IWDG1, platform/stm32h743/iwdg.c): a hang resets the calculator after
+# ~2 s, and like a crash the reset counts towards safe mode (core/safemode.h). The simulators model
+# the watchdog on their virtual clock. Runs in every tier.
+expect state watchdog on
+expect state last_reset poweron
+type "w:=5\n"
+session save
+# the main loop and the waits keep it fed
+wait 5000
+expect state last_reset poweron
+# a hung loop (no kicks for 2 s): reset, the saved session comes back, About says why
+wdg hang
+expect state last_reset watchdog
+expect state boot_attempts 2
+expect state safemode 0
+ifcas src expect eval w 5
+wdg info
+app mem
+key ENTER
+expect text "Last reset: watchdog"
+key HOME
+# three unfinished boots in a row (here: hangs) start safe mode
+wdg hang
+expect state safemode 0
+wdg hang
+expect state safemode 1
+expect state boot_attempts 4
+expect state last_reset watchdog
+app mem
+key ENTER
+expect text crash loop
+key HOME
+# switching off and on leaves it
+key SHIFT ON
+key ON
+expect state safemode 0
+expect state last_reset wake
+ifcas src expect eval w 5

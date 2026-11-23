@@ -1,0 +1,131 @@
+# Sparkle Town's Sparkle Kitchen (modules/mathquest/mq_merge.c): a cake counter. A friend orders a fraction of
+# a cake (S_PARTITION at her rung); the oven bakes a whole cake (one sparkle, earned only by playing); a knife cuts
+# a piece in equal slices (a half in 2: two quarters); slices of any sizes snap onto the round plate, which is her
+# answer, and "Give!" hands it over. The first visit is the guide's demo, step by step, by touch.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+modx sfx clear
+mq seed 11
+mq fun off
+mq new Mia 2
+# from town: the kitchen is first on the street
+mq go map
+mq town 60
+mq step 30
+screenshot mq_town_kitchen.png
+key ENTER
+mq step 20
+expect state mq_scene merge
+expect state mq_energy 10
+# the first visit: Pip would love 1/2 of a cake; the hand taps the oven
+expect state mq_kitchen who=0,order=1/2,plate=0,pieces=0,flags=8
+screenshot mq_merge_start.png
+# tap the oven: the demo's cake (free), whole, flies onto the counter
+touch tap 29 186
+mq step 20
+expect state mq_energy 10
+screenshot mq_merge_demo_knife.png
+# pick the knife that cuts in 2
+touch tap 100 149
+mq step 10
+screenshot mq_merge_demo_cut.png
+# tap the cake: two halves
+touch tap 19 55
+mq step 10
+expect statecontains modx_sfx merge
+screenshot mq_merge_demo_plate.png
+# a half onto Pip's plate
+touch drag 19 55 220 132 8
+mq step 10
+expect state mq_kitchen who=0,order=1/2,plate=12,pieces=1,flags=8
+screenshot mq_merge_demo_give.png
+# Give!
+touch tap 284 132
+mq step 8
+expect statecontains modx_sfx cheer
+screenshot mq_merge_thanks.png
+mq step 60
+# a later visit: Momo would love 3/4 of a cake (a half is left on the counter; the knives cut in 2, 3, 4, 6)
+mq merge order 3 4 2
+mq step 5
+screenshot mq_merge_order.png
+# the half on the plate is not enough: "a little more, please!"
+touch drag 49 55 220 132 8
+touch tap 284 132
+mq step 5
+expect state mq_kitchen who=2,order=3/4,plate=12,pieces=1,flags=3
+screenshot mq_merge_again.png
+# three eighths for 3/4 (the bigger bottom number taken for the bigger piece): shown how
+mq merge take 0
+mq merge put 12 24
+mq merge put 13 24
+mq merge put 14 24
+mq merge put 12
+mq merge put 13
+mq merge put 14
+touch tap 284 132
+mq step 5
+expect state mq_kitchen who=2,order=3/4,plate=9,pieces=3,flags=7
+screenshot mq_merge_shown.png
+# the eighths back; a new cake from the oven (key 1), cut in 2, one half cut in 2 again
+mq merge take 0
+mq merge take 0
+mq merge take 0
+key 1
+mq step 20
+touch tap 73 149
+touch tap 139 55
+mq step 10
+touch tap 169 55
+mq step 10
+expect statecontains modx_sfx merge
+screenshot mq_merge_cut.png
+# a half and a quarter snap onto the plate: three quarters of the cake's place filled (the fewest pieces)
+touch drag 139 55 220 132 8
+touch drag 169 55 220 132 8
+mq step 10
+expect state mq_kitchen who=2,order=3/4,plate=18,pieces=2,flags=7
+screenshot mq_merge_plate.png
+touch tap 284 132
+mq step 5
+expect statecontains modx_sfx cheer
+mq step 60
+# a lemon order on the visitor's day (the visitor wishes for a whole cake), by the keys
+mq event visitor 2
+mq merge open
+mq merge order 2 3 4
+mq merge energy 3
+key 1
+mq step 20
+expect state mq_energy 2
+# down to the knives, right to the one that cuts in 3, ENTER picks it; up to the counter, along to the cake, ENTER cuts
+key DOWN
+key DOWN
+key RIGHT
+key RIGHT
+key DOWN
+key RIGHT
+key ENTER
+key UP
+key UP
+key UP
+key RIGHT
+key RIGHT
+key ENTER
+mq step 3
+expect statecontains modx_sfx merge
+mq step 10
+expect statecontains mq_kitchen order=2/3
+screenshot mq_merge_lemon.png
+# spare pieces to the cafe in town
+mq merge cafe 0
+mq merge cafe 1
+mq go map
+mq town 546
+mq step 30
+screenshot mq_town_cafe_treats.png

@@ -1,0 +1,129 @@
+%% Graphing: graph modes, analysis (CALC), sliders, styles, touch. Format: see app/EXTENDING.md.
+
+@page graphing Graphing
+The graphing screens work together: [[yeq|Y=]] holds what is drawn, [[window|WINDOW]] the visible range, [[graph|GRAPH]] draws it, [[table|TABLE]] lists values. Graphing started on the home screen ({F1} graph, the graph editor: 2D, or 3D with its switch; then {F5} graph) puts the graph into the home notebook as a [[graph-cells|graph cell]]; {enter} on the cell opens the full graph screen on it (trace, CALC, zoom), and {home} writes it back into the cell.
+
+- [[graph-modes]]: functions, parametric and polar curves, sequences, implicit relations, slope fields of differential equations
+- [[graph-styles]]: thick, thin, dotted lines, shading above or below
+- [[graph-calc]]: zeros, minimum, maximum, intersections, derivatives, integrals
+- [[graph-sliders]]: change a parameter such as `a` in `a*x^2` and watch the graph move
+- [[animation]]: play a slider over time (`sin(x-t)`), comet drawings, animated GIFs
+- [[graph-touch]]: labels, snapping to special points, table at the cursor
+- [[graph-trace]], [[zoom]], [[mode-graph]]
+
+@page graph-modes Graph modes
+The graph mode decides what Y= holds and how GRAPH draws it. Choose it in the header line at the top of Y= (tap it, or {▲} on the first entry, {◀} {▶} to a mode, {enter}), with {menu} on Y=, or in [[mode|settings]] (row GRAPH). Each mode has its own six entries, colours and styles; the [[window|WINDOW]] shows the ranges of the mode.
+
+- FUNC: functions Y1 to Y6 of x, see [[yeq]].
+- PAR: curves X1T, Y1T of t, see [[graph-par]].
+- POL: polar curves r1 to r6 of θ, see [[graph-pol]].
+- SEQ: sequences u1 to u6 of n, see [[graph-seq]].
+- IMPL: equations and inequalities in x and y, see [[graph-impl]].
+- DE: slope fields and solution curves of y' = f(x, y), see [[graph-de]].
+
+{x} types the variable of the mode: x, t, θ or n. Everything is saved when the calculator is switched off.
+
+@page graph-par Parametric curves
+In PAR mode each entry is a pair X1T(t), Y1T(t); the curve is drawn for t from Tmin to Tmax in steps of Tstep ([[window|WINDOW]], defaults 0, 2π, π/24). Both expressions are needed.
+
+    X1T=3cos(t)
+    Y1T=2sin(t)
+
+draws an ellipse. {F4} (trace) steps t by Tstep and shows T, X and Y; [[table|TABLE]] lists T with X1T and Y1T. [[graph-calc|CALC]] offers value, dy/dx (dy/dt divided by dx/dt) and arc length between two values of t.
+
+@page graph-pol Polar curves
+In POL mode each entry is r1(θ) to r6(θ), drawn as x = r·cos θ, y = r·sin θ for θ from θmin to θmax in steps of θstep ([[window|WINDOW]]). In DEGREE mode θ is in degrees: set θmax to 360.
+
+    r1=2sin(4θ)
+
+draws an eight-petal rose. {F4} (trace) shows θ, R, X and Y; CALC offers value, dy/dx and arc length.
+
+@page graph-seq Sequences
+In SEQ mode each entry has two lines: u1(n) = the formula, and u1(nMin) = the initial value(s). A formula may use the previous terms `u1(n-1)` and `u1(n-2)` of any sequence u1 to u6 (type `u` with {alpha} {4}); it then needs one or two initial values, for n = nMin and nMin+1, separated by a comma.
+
+    u1(n)=1.5u1(n-1)          u1(nMin)=1
+    u2(n)=u2(n-1)+u2(n-2)     u2(nMin)=1,1
+
+A formula without previous terms (`n^2`) needs no initial value. [[window|WINDOW]]: nMin (first n), nMax (last n), PlotStart and PlotStep (which terms are drawn), plus the X and Y range.
+
+The header line of Y= chooses the plot:
+
+- TIME: the points (n, u(n)), dotted by default (line style connects them).
+- WEB: the cobweb of a sequence that uses only its own u(n-1): the curve y = f(x), the line y = x and the steps of the iteration starting at u(nMin). ZoomFit makes a square window around the values.
+
+{F4} (trace) steps n by 1. TABLE lists n and the sequences.
+
+@page graph-impl Implicit relations
+In IMPL mode each entry is a relation in x and y: an equation such as `x^2+y^2=16` or an inequality `y<sin(x)`, `x*y≥2` (`<` `=` `>` are {shift} {4} {5} {6}, `≤` `≥` {shift} {1} {3}). An expression without a relation means expression = 0.
+
+- Equations are drawn as curves found by marching squares on a 2-pixel grid (the left side minus the right side changes sign there; jumps across poles are skipped).
+- Inequalities shade the region where they hold in a light tint of the entry's colour and draw the boundary: dashed for < and >, solid for ≤ and ≥. All shading is drawn before the curves, so curves stay visible.
+- The free cursor (arrow keys) shows X, Y and F, the left side minus the right side of the first relation.
+
+There is no TRACE or TABLE for relations. Free single letters other than x and y become [[graph-sliders|sliders]].
+
+@page graph-de Slope fields
+In DE mode each entry is a first-order differential equation y1' = f(x, y), on two lines: y1' holds f(x, y) and IC1 the initial points of the solution curves, as points `(x0,y0)` separated by commas (up to four; a single number y0 means the point (0, y0)). Type y with {alpha} {→}; {x} types x.
+
+    y1'=x-y          IC1=(0,1),(0,-2)
+    y2'=-x/y         IC2=(0,3)
+
+GRAPH draws the slope field: on a grid of short segments, each with the slope f(x, y) at its centre, in the entry's colour (an undefined slope leaves its segment out, an infinite one is vertical). The grid follows the screen, so it keeps its density when you zoom or pan. Through every initial point a solution curve is drawn forward and backward with the Runge-Kutta method (RK4, steps of about two pixels, smaller where the curve bends). A curve ends at the edge of the window, where the slope is undefined, at a vertical tangent (y' = -x/y at y = 0) or where the solution blows up (y' = y^2 + x^2).
+
+Add curves on the graph:
+
+- Move the free cursor with the arrow keys (the bottom line shows X, Y and the slope y'), then {enter}: a solution curve through that point.
+- Long press on the graph: a curve through the pressed point.
+- {⌫} while tracing a curve added this way removes it; {menu} on [[yeq|Y=]] removes all of them. Up to eight are kept, the oldest goes first, and they are saved with the session.
+
+{F4} (trace) follows a solution curve: {◀} {▶} step x by a pixel, {▲} {▼} switch curves, a typed number moves to that x; the bottom line shows X, Y and y'. Past the end of a solution Y is undefined. A tap near a curve traces it. There is no CALC or TABLE in DE mode. Free single letters other than x and y become [[graph-sliders|sliders]] ({enter} on the free cursor adds a curve instead of opening the slider settings).
+
+@page graph-styles Line styles
+Each entry has a line style, shown as a small mark under its name in [[yeq|Y=]]. Move {◀} past the colour swatch to the style (or tap the name) and press {enter} to cycle:
+
+- line (default): 2 pixels
+- thick: 4 pixels
+- thin: 1 pixel
+- dotted: a dot every 4 pixels (sequences: the points only)
+- above: shade the region above the function (FUNC only)
+- below: shade the region below the function (FUNC only)
+
+Shading uses a light tint of the function's colour, so overlapping regions stay distinguishable and the curves are drawn on top.
+
+@page graph-calc CALC: graph analysis
+{shift} {F4} (calc) on a graph screen opens the analysis menu over the graph (also apps > Graph analysis). The result is shown at the bottom, the point is marked and labelled, and the main value is stored in `ans`.
+
+- value: type x (or t, θ, n) and {enter}: the value of the traced curve; {▲} {▼} show the other curves at the same x. ans = y.
+- zero: Left bound?, Right bound?, Guess?: a root between the bounds nearest the guess (Brent's method; touching zeros such as x² at 0 are found too). ans = x.
+- minimum, maximum: Left bound?, Right bound?, Guess?: the extremum between the bounds (sampling, then Brent's parabolic search). ans = x.
+- intersect: First curve?, Second curve? ({▲} {▼} choose, {enter}), Guess?: the intersection nearest the guess. With exactly two functions switched on there is nothing to choose: it asks for the guess at once. ans = x.
+- dy/dx: the slope at the point (Richardson-extrapolated central differences). ans = slope.
+- ∫f(x)dx: Lower limit?, Upper limit?: the integral (adaptive Gauss-Kronrod 7-15); the area is shaded until {clear}. ans = integral.
+- inflection: Left bound?, Right bound?, Guess?: where the second derivative changes sign. ans = x.
+- arc length: From?, To?: the length of the curve between two x (PAR, POL: two values of t or θ).
+- table at cursor: [[table|TABLE]] centred on the traced value.
+
+At each prompt (top left; the keys that answer it are shown at the top right) move the cursor with {◀} {▶}, or type a number (it replaces the cursor position), then {enter}. A tap on the graph moves there and confirms. {clear} cancels. When nothing is found the bottom line says what to try (`No zero between the bounds: widen them`). PAR and POL offer value, dy/dx, arc length and table; SEQ value and table.
+
+@page graph-sliders Sliders
+A single letter in a Y= expression that is not the variable of the mode (x, t, θ, n; x and y in IMPL and DE) is a parameter: GRAPH shows a slider for it above the coordinates, for example `a` and `b` in
+
+    Y1=a*x^2+b
+
+- Drag the knob (or tap the track) to change the value; the graph is re-drawn while you drag. The parameters are inputs of the compiled functions, so nothing is recompiled.
+- {+} {−} step the highlighted slider, {,} highlights the next one, {enter} (without TRACE) opens its settings.
+- Tap a slider's name, or {enter}: value, min, max and step (defaults 1, -10, 10, 0.1). {F5} (graph) returns.
+- When you let go, the value is stored in the CAS variable (`a:=1.5`), so the home screen and Y1( ) agree. A variable that is already defined starts at its value, and storing a new value on the home screen moves the slider.
+- Up to eight parameters; three sliders are visible at a time (the highlighted one and its neighbours).
+
+Slider settings and values are saved with the session.
+
+@page graph-touch Labels and snapping
+Touch gestures on [[graph|GRAPH]]:
+
+- Tap near a curve: TRACE on the nearest curve at that x, with a label showing the coordinates.
+- Long press (hold still for more than 0.6 s): snap to the nearest special point within about 14 pixels: a zero, minimum, maximum, intersection of two functions or the y-intercept, labelled with its name. Elsewhere it behaves like a tap. In DE mode it adds a solution curve through the point ([[graph-de]]).
+- Tap the coordinates at the bottom while tracing: [[table|TABLE]] centred on the traced value.
+- Drag to pan, pinch to zoom; on a slider, drag its knob.
+
+During a [[graph-calc|CALC]] prompt a tap moves the cursor there and confirms the step.

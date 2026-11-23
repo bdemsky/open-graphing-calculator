@@ -1,0 +1,67 @@
+# Python from the console (`py`, `pyexec`; the same interpreter as the Python screen), the
+# calc library's results, the code-load binding (the image copied and relocated into the
+# SDRAM code area) and the fallback without the module.
+requirecfg MOD_PYTHON
+py expect "1+1" 2
+py expect "print('a', 'b')" "a b"
+py expect "2**100" 1267650600228229401496703205376
+py expect "0.1+0.2" 0.30000000000000004
+py expect "import math; math.sqrt(2)" 1.4142135623730952
+py expect "import cmath; cmath.phase(-1)" 3.141592653589793
+py expect "sorted({3, 1, 2})" "[1, 2, 3]"
+py expect "import json; json.dumps({'a': [1, 2]})" "'{\"a\": [1, 2]}'"
+py expect "import re; re.match('[a-z]+', 'abc1').group(0)" "'abc'"
+# state persists between commands, and with the screen
+py n = 10
+py expect "sum(range(n))" 45
+pyexec "def f(k):\n    return k * n\nf(4)"
+expect state py_exc ""
+py expect "f(5)" 50
+# the calc library (the console's namespace has math, calc's functions and x, y, z, t)
+ifcas src py expect "solve(x**2-2, x)" "[-sqrt(2), sqrt(2)]"
+ifcas src py expect "integrate(1/(1+x**2), x)" atan(x)
+ifcas src py expect "diff(sin(x)*x)" cos(x)*x+sin(x)
+ifcas src py expect "limit((1+1/x)**x, x, calc.eval('inf'))" e
+ifcas src py expect "expand((x+y)**3)" x^3+3*x^2*y+3*x*y^2+y^3
+ifcas src py expect "latex(sqrt(x)/2)" "'\\\\frac{\\\\sqrt{x}}{2}'"
+ifcas src py expect "approx(calc.eval('pi'))" 3.141592653589793
+ifcas src py expect "Expr(1)/3 + 1/6" 0.5
+ifcas src py expect "Expr(1)/3 + Expr(1)/6" 1/2
+# a cell: out= lines, then the value of the last expression and its LaTeX
+ifcas src pyexec "print('s')\nsolve(x**2-9, x)"
+# errors: CASError, Python's own, the stack limit
+py expect "calc.eval('1/0')" "Traceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nCASError: division by zero"
+py expect "try:\n    calc.eval('1/0')\nexcept calc.CASError as e:\n    print('caught', e)" "caught division by zero"
+py def r(k): return r(k + 1)
+py r(0)
+expect state py_exc RuntimeError
+py expect "open('x')" "Traceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nOSError: no files yet: Python on the calculator has no file system"
+# ON during time.sleep and during a CAS call made from Python
+py breakafter 5
+py import time; time.sleep(30)
+expect state py_exc KeyboardInterrupt
+py expect "1+2" 3
+# a program built line by line (file mode)
+py add "total = 0"
+py add "for k in range(1, 11):"
+py add "    total += k * k"
+py add "print(total)"
+py run
+py expect "total" 385
+# a fresh interpreter
+py reset
+py expect "'n' in globals()" False
+py expect "x" x
+# binding: the module was copied into the code area and relocated (modx list shows it)
+modx list
+expect state modx_python bound
+# without the module: the screen and the console say how to get it
+modx off python
+app python
+expect screen message
+expect text "PYTHON NOT INSTALLED"
+key CLEAR
+expect state py_module unbound
+modx on python
+py expect "1+1" 2
+expect state py_module ok

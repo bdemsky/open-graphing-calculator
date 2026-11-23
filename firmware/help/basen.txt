@@ -1,0 +1,164 @@
+%% Base-n app and bit commands (app/basen.c, cas/src/xcmds.c)
+
+@page basen Base-n
+{apps} > Base-n is a programmer's calculator: type an integer expression and press {enter}; the result is shown in HEX, DEC, OCT and BIN, wrapped to the word size.
+
+- An entry that starts with an operator (`+`, `-`, `*`, `/`, `^`, or `and`, `or` from BITS) starts with Ans, the last result: `ff` {enter} then `and 0f` {enter}. `Ans` here is the app's own last result.
+- {▲} {▼}, the soft keys {F1} .. {F4} (hex, dec, oct, bin) or a tap on a row choose the input base (highlighted): plain numbers you type are read in that base, e.g. `ff and f0` in HEX. Literals with a prefix always work: `0x1F`, `0b101`, `0o17`. Hex digits A-F are {alpha} {CAS}, {math}, {vars}, {x}, {sin}, {cos}.
+- {F5} (bits) opens the BITS menu: `and`, `or`, [[bitxor|xor]], `not`, [[shl]], [[shr]], [[rotl]], [[rotr]], the word size (8, 16, 32, 64 bits) and signed/unsigned.
+- Results are integers: divisions are truncated toward minus infinity (floor), and everything wraps around like a register of the chosen width (two's complement when signed).
+- {clear} clears the entry; on an empty entry it leaves the app. The settings and the last result are kept when the calculator is switched off.
+
+On the home screen the same works with the CAS: `0x1F` is 31, `5 and 3` is 1 (with two integers `and`, `or`, `not` are bitwise), [[hex]], [[bin]], [[oct]] show integers in a base and [[wordsize]] sets the width used by the bit commands.
+
+@group cas-bits Bits and number bases
+Integer literals `0x1F` (hex), `0b101` (binary), `0o17` (octal); `and`, `or`, `not` of integers are bitwise. The commands below work on integers wrapped to the [[wordsize]] (default 64 bits, signed).
+
+@cmd bitand
+group: cas-bits
+summary: Bitwise and
+syntax: bitand(a, b, ...)
+example: bitand(12,10)
+result: 8
+example: 0xFF and 0x0F
+result: 15
+see: bitor, bitxor, bitnot
+
+Bitwise and of integers (two's complement for negative values). `a and b` with two integers is the same.
+
+@cmd bitor
+group: cas-bits
+summary: Bitwise or
+syntax: bitor(a, b, ...)
+example: bitor(12,10)
+result: 14
+see: bitand, bitxor
+
+Bitwise inclusive or. `a or b` with two integers is the same.
+
+@cmd bitxor
+group: cas-bits
+summary: Bitwise exclusive or
+syntax: bitxor(a, b, ...)
+syntax: xor(a, b)
+example: bitxor(12,10)
+result: 6
+example: xor(5,1)
+result: 4
+see: bitand, bitor
+
+Bitwise exclusive or; `xor` is the same command.
+
+@cmd xor
+group: cas-bits
+summary: Bitwise exclusive or of two integers
+syntax: xor(a, b)
+syntax: a xor b
+example: xor(12,10)
+result: 6
+example: true xor false
+result: true
+see: bitxor, logic-ops
+
+Same as [[bitxor]].
+
+@cmd bitnot
+group: cas-bits
+summary: Bitwise complement
+syntax: bitnot(a)
+example: bitnot(5)
+result: -6
+see: bitand, wordsize
+
+Inverts every bit of the word. With signed words `bitnot(a)` is `-a-1`; with unsigned 8-bit words `bitnot(5)` is 250. `not a` with an integer is the same.
+
+@cmd shl
+group: cas-bits
+summary: Shift left
+syntax: shl(a, n)
+syntax: shl(a)
+example: shl(1,4)
+result: 16
+see: shr, rotl
+
+Shifts the bits of `a` left by `n` places (default 1); bits shifted out of the word are lost.
+
+@cmd shr
+group: cas-bits
+summary: Logical shift right
+syntax: shr(a, n)
+syntax: shr(a)
+example: shr(16,2)
+result: 4
+see: shl, rotr
+
+Shifts the bits of `a` right by `n` places (default 1), filling with zeros.
+
+@cmd rotl
+group: cas-bits
+summary: Rotate left
+syntax: rotl(a, n)
+example: rotl(1,3)
+result: 8
+see: rotr, shl
+
+Rotates the bits of the word left by `n` places (default 1): bits leaving at the top come back at the bottom.
+
+@cmd rotr
+group: cas-bits
+summary: Rotate right
+syntax: rotr(a, n)
+example: rotr(2,1)
+result: 1
+see: rotl, shr
+
+Rotates the bits of the word right by `n` places (default 1).
+
+@cmd wordsize
+group: cas-bits
+summary: Word size and signedness of the bit commands
+syntax: wordsize(bits, signed)
+syntax: wordsize()
+example: wordsize(8,false)
+result: [8,false]
+example: bitnot(5)
+result: 250
+example: rotr(1,1)
+result: 128
+example: wordsize(64,true)
+result: [64,true]
+see: bitnot, hex
+
+Sets the width (1 to 64 bits) and whether results are signed (two's complement) or unsigned; returns the current setting. The default is 64 bits, signed. The [[basen|Base-n app]] uses its own word size for its entries and leaves this setting unchanged.
+
+@cmd hex
+group: cas-bits
+summary: Integer as a hexadecimal string
+syntax: hex(n)
+example: hex(255)
+result: "0xFF"
+example: 0x1F+1
+result: 32
+see: bin, oct
+
+Returns the integer in base 16 as text. Negative numbers are shown in two's complement of the [[wordsize]].
+
+@cmd bin
+group: cas-bits
+summary: Integer as a binary string
+syntax: bin(n)
+example: bin(10)
+result: "0b1010"
+see: hex, oct
+
+Returns the integer in base 2 as text.
+
+@cmd oct
+group: cas-bits
+summary: Integer as an octal string
+syntax: oct(n)
+example: oct(8)
+result: "0o10"
+see: hex, bin
+
+Returns the integer in base 8 as text.

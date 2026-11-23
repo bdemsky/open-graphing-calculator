@@ -1,0 +1,81 @@
+# The home notebook and the notebook store (app/home.c, modules/python nb_*.c; help page
+# "notebook-menu"): MENU Save names the unsaved notebook and stores it (.ipynb); the Notebook app is
+# the same document; New starts an unsaved one; Open lists the stored notebooks (the unsaved
+# calculations are saved under a name first, never lost); Python cells run; Rename; a power cycle.
+requirecfg MOD_PYTHON
+nb store wipe
+type "6*7\n"
+# MENU 1 Save: an unsaved notebook asks for a name
+key MENU 1
+expect screen nbname
+expect text "Save the notebook as:"
+type "Physics"
+key ENTER
+expect screen home
+expect state home_nb Physics
+expect state home_dirty 0
+expect state toast saved
+expect state home_title "Notebook: Physics"
+nb list
+type "1+2\n"
+expect state home_dirty 1
+# the title bar: a star while it has changes not yet stored
+expect state home_title "Notebook: *Physics"
+expect text "Notebook: *Physics"
+# APPS > Notebook: the list of notebooks, this one in it; CLEAR comes back
+app notebook
+expect screen notebook
+expect state nb_view list
+expect state nb_open Physics
+expect state nb_list_sel Physics
+expect state nb_cells 2
+key CLEAR
+expect screen home
+expect state history 2
+# MENU 1 Save stores it now; the menu's title is the name
+key MENU 1
+expect state home_dirty 0
+expect state home_title "Notebook: Physics"
+key MENU
+expect state menu Physics
+key CLEAR
+# New: an empty unsaved notebook (the named one is saved)
+key MENU 4
+expect screen home
+expect state home_nb ""
+expect state history 0
+# Open: the list of notebooks; the unsaved calculations are saved under a name first
+type "5+5\n"
+key MENU 3
+expect screen notebook
+expect state nb_view list
+expect state nb_items 1
+key ENTER
+expect screen home
+expect state nb_open Physics
+expect state toast "saved as Notebook 1"
+expect state home_nb Physics
+expect state history 2
+# a Python cell: typed on the entry line, ENTER runs it (the module's interpreter)
+key MENU 8
+expect state home_mode python
+type "6*7+1"
+key ENTER
+expect state home_kind python
+expect state last_output 43
+expect text 43
+screenshot home_notebook_python.png
+# Rename
+key MENU 5
+expect screen nbname
+key CLEAR
+type "Mechanics"
+key ENTER
+expect screen home
+expect state toast renamed
+# a power cycle: the named notebook is open again, as it was
+key SHIFT ON
+key ON
+expect screen home
+expect state home_nb Mechanics
+expect state last_output 43

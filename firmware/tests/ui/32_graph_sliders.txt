@@ -1,0 +1,85 @@
+# Sliders for free parameters (as in graphing apps): drag, +/- keys, settings form,
+# value stored in the CAS variable, defined variables start at their value,
+# saved across power off/on.
+key F1
+type "a*x^2+b"
+key F5 ENTER
+expect state sliders 2
+expect state slider_a 1
+expect state slider_b 1
+expect text a=1
+expect text b=1
+screenshot slider_graph.png
+# rows above the soft-key bar: a at y 172..189, b at 190..207; track x 100..308
+touch 200 180 down
+touch 260 180 move
+expect state slider_a 5.4
+touch 260 180 up
+ifcas src expect eval "a" "5.4"
+ifcas stub expect eval "a" "27/5"
+# re-plotting while dragging is fast: no recompilation, only new parameter values
+state graph_render_us
+# keys: + and - step the selected slider, the comma selects the next one
+key ADD ADD
+expect state slider_a 5.6
+key COMMA SUB
+expect state slider_b 0.9
+# tap the knob track: jump there
+touch tap 100 198
+expect state slider_b -10
+# ENTER opens the selected slider's settings (value, min, max, step)
+key ENTER
+expect screen slider
+expect text b=
+key SHIFT MENU
+expect state help_topic graph-sliders
+key CLEAR
+type "3"
+key ENTER
+type "0"
+key ENTER
+type "4"
+key ENTER
+type "0.5"
+key ENTER
+screenshot slider_form.png
+key F5
+expect state slider_b 3
+expect eval "b" "3"
+key SUB SUB SUB SUB SUB SUB SUB SUB
+expect state slider_b 0
+# tap a slider's name: its settings
+touch tap 30 180
+expect screen slider
+expect text a=
+key F5
+# a variable defined on the home screen: the slider follows it
+key HOME
+type "2"
+key ASSIGN
+type "a\n"
+# GRAPH adds a graph cell of the Y= functions; ENTER opens the graph app on it
+key SHIFT F5
+expect state home_kind graph
+key ENTER
+expect screen graph
+expect state slider_a 2
+# the trace follows the parameter values
+key F4
+expect statecontains trace_y 0.00196
+key HOME
+key F1 CLEAR
+type "c*sin(x)"
+key F5 ENTER
+expect state sliders 1
+expect state slider_c 1
+# saved: power off/on keeps the slider settings
+key SHIFT ON
+key ON
+key SHIFT F5
+expect state slider_c 1
+key F1 CLEAR
+type "a*x^2+b"
+key F5
+expect state slider_b 0
+lcdcheck

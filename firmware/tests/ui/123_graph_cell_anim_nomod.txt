@@ -1,0 +1,42 @@
+# An animated graph cell without the Animation module (every tier; emulated with `modx off` where
+# there are modules; help page "graph-cells"): the cell shows its first frame and says why it does
+# not move; F5 play says how to get the module; the arrows move the plot as in a still cell;
+# NOTEBOOK.HTML's caption says it is animated.
+ifcfg CONTENT_QSPI modx off animation
+type "1+1\n"
+key F1
+type "sin(x-t)"
+key F5
+expect screen home
+expect state home_sel 2
+expect state gcell_anim 1
+expect state gcell_t 0
+expect text anim
+expect text "still frame: animation needs the Animation module"
+expect state softkeys "graph|frac|func|mtrx|play"
+screenshot anim_cell_still.png
+# play: a message says how to get it
+key F5
+expect screen message
+expect text "ANIMATION NOT INSTALLED"
+key CLEAR
+expect screen home
+expect state gcell_t 0
+# the arrows move the plot (no frames to step)
+key UP
+expect state home_sel 2
+key RIGHT
+expect state gcell_t 0
+expect state gcell_window "-7.5 12.5 -10 10"
+key CLEAR
+# ENTER: the graph app on it as on any cell (its slider t at the cell's frame)
+key ENTER
+expect screen graph
+expect state slider_t 0
+key HOME
+expect screen home
+expect state gcell_anim_cfg "0 6.28319 4 0"
+# NOTEBOOK.HTML: a still frame, the caption says it is animated
+usb host on
+usb ls
+usb expect NOTEBOOK.HTML "<i>animated (t from 0 to 6.283)</i>"

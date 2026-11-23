@@ -1,0 +1,112 @@
+# Clipboard (MENU F3 copy, MENU F4 paste, MENU SHIFT F1 cut, MENU SHIFT F2
+# clips, app/input_clip.c): home line, history items, Y=, list editor,
+# matrix editor, persistence across a power cycle
+expect state clips 0
+# paste with an empty clipboard does nothing
+key MENU F4
+expect state entry ""
+type "2+3"
+key MENU F3
+expect state clip 2+3
+expect state entry 2+3
+key MENU F4
+expect state entry 2+32+3
+# paste is an undo step
+key MENU F1
+expect state entry 2+3
+# cut: copy, then clear the line
+type "*7"
+key MENU SHIFT F1
+expect state clip 2+3*7
+expect state entry ""
+expect state clips 2
+key MENU F1
+expect state entry 2+3*7
+key ENTER
+expect state last_output 23
+# copy a result from the history: select it with UP
+key UP
+expect state home_sel 1
+key MENU F3
+expect state clip 23
+type "1+"
+key MENU F4
+expect state entry 1+23
+key CLEAR
+# the same text is stored once; clips lists them newest first
+key UP UP MENU F3
+expect state clip 2+3*7
+expect state clips 3
+key MENU SHIFT F2
+expect state menu CLIPBOARD
+expect state menu_item 2+3*7
+screenshot clips.png
+key DOWN
+expect state menu_item 23
+key ENTER
+expect screen home
+expect state entry 23
+expect state clip 23
+key CLEAR
+# into Y=: paste into the focused function
+key F1
+expect screen yeq
+key MENU F4
+expect screen yeq
+expect state y1 23
+key CLEAR
+type "x^2"
+key MENU F3
+expect state clip x^2
+key HOME
+key MENU F4
+expect state entry x^2
+key CLEAR
+# list editor: copy a value and the whole list, paste the list into L2
+app stat
+key 1
+expect screen statedit
+type "4\n5\n6\n"
+key UP UP UP
+key MENU F3
+expect state clip 4
+key UP
+expect state statedit_row 0
+key MENU F3
+expect state clip {4,5,6}
+key RIGHT
+expect state statedit_list L2
+key MENU F4 ENTER
+ifcas src stat expect L2 4,5,6
+key HOME
+# matrix editor: copy the whole matrix on the size line, paste it into [B]
+ifcas src key SHIFT MATH 3
+ifcas src key ENTER
+ifcas src expect screen matedit
+ifcas src key UP
+ifcas src type "2\n2\n1\n2\n3\n4\n"
+ifcas src key UP UP UP
+ifcas src key MENU F3
+ifcas src expect state clip [[1,2],[3,4]]
+ifcas src key HOME
+ifcas src key SHIFT MATH 3 DOWN ENTER
+ifcas src expect screen matedit
+ifcas src key MENU F4
+ifcas src expect text [B]
+ifcas src screenshot matrix_paste.png
+ifcas src key HOME
+ifcas src type "matB\n"
+ifcas src expect state last_output [[1,2],[3,4]]
+# a matrix result can be pasted the same way
+ifcas src key UP MENU F3
+ifcas src expect state clip [[1,2],[3,4]]
+# the clipboard survives switching off
+type "7*6"
+key MENU SHIFT F1
+expect state clip 7*6
+key SHIFT ON
+key ON
+expect screen home
+expect state clip 7*6
+key MENU F4
+expect state entry 7*6

@@ -1,0 +1,171 @@
+%% Matrices: MATRIX menu, matrix editor, matrix commands (app/matrix.c, cas/src/xcmds.c)
+
+@page matrix-menu MATRIX menu
+{shift} {math} (matrix) opens the matrix menu; it is also in [[apps|apps]] as Matrix. In the matrix editor the soft keys {F1} {F2} {F3} open NAMES, MATH and EDIT, and {F5} (→home) goes to the home screen with the matrix name typed, ready for `[A]⁻¹` ({shift} {÷}), `det([A])` ...
+
+- NAMES: inserts a matrix name `[A]` ... `[J]` (with its size when it is defined).
+- MATH: matrix commands, the common ones first: [[det]], [[inv]], [[transpose]], [[rref]], [[identity]], [[dim]], [[augment]], [[rank]], [[trace]], [[eigenvals]], [[eigenvects]], [[ref]], [[norm]], [[cond]], [[lu]], [[qr]], [[cholesky]], [[fill|Fill]], [[randMat|randM]], [[rowSwap]], [[rowAdd|row+]], [[mRow|*row]], [[mRowAdd|*row+]], [[cumSum]]. The labels show the order of the arguments (`mRow( k,M,i)`).
+- EDIT: opens the [[matrix-edit|matrix editor]] for `[A]` ... `[J]` or for a CAS variable that holds a matrix.
+
+`[A]` ... `[J]` are the CAS variables `matA` ... `matJ`, so they work in every CAS command, are listed under {vars} > Matrix, and are saved with the session. Store a matrix with {→}:
+
+    [[1,2],[3,4]]→[A]
+    [A]^2
+    ▶ [[7,10],[15,22]]
+    det([A])
+    ▶ -2
+
+Results stay exact (fractions, roots, symbols); a decimal entry makes the computation approximate.
+
+@page matrix-edit Matrix editor
+The first line shows the name and the size `rows×columns`. Below are the cells; the bottom line shows the selected cell in full.
+
+- Size: the editor opens on the size line ({▲} from the first row goes back to it); type the number of rows, {enter} (or {▶}), the number of columns, {enter} (or {▼}). A number that could still get a second digit (1 or 2) is applied by the next key, so typing 12 does not first cut the matrix to 1 row; {clear} drops it. Existing entries are kept, new ones are 0. Up to 20×20.
+- Cells: the arrow keys move; type to replace a cell or press {enter} to edit it; {enter} stores it and moves to the next cell. Entries can be expressions (`1/3`, `√(2)`, `a+b`), they are evaluated by the CAS.
+- {clear} cancels an edit; {clear} again (or {home}) leaves the editor.
+- {F5} (→home) leaves it with the name (`[A]`) typed at the cursor of the home screen: {F5} {shift} {÷} {enter} inverts the matrix.
+- A matrix that does not exist yet starts as a 3×3 zero matrix.
+
+@cmd dim
+group: cas-linalg
+summary: Dimensions of a matrix or length of a list
+syntax: dim(matrix)
+syntax: dim(list)
+example: dim([[1,2,3],[4,5,6]])
+result: [2,3]
+example: dim([5,6,7])
+result: 3
+see: size, redim
+
+Returns `[rows, columns]` for a matrix and the number of elements for a list.
+
+@cmd fill
+group: cas-linalg
+summary: Matrix of the same size filled with one value
+syntax: fill(value, matrix)
+example: fill(7,[[1,2],[3,4]])
+result: [[7,7],[7,7]]
+see: zeros, matrix
+
+Like the Fill( command of other calculators: returns a matrix with the size of `matrix` whose entries are all `value`. Store the result to replace the matrix: `fill(0,[A])→[A]`.
+
+@cmd randMat
+group: cas-linalg
+summary: Random integer matrix
+syntax: randMat(rows, cols)
+syntax: randMat(rows, cols, max)
+example: dim(randMat(2,3))
+result: [2,3]
+see: randpoly, identity
+
+Like randM( on other calculators: a matrix of random integers between `-max` and `max` (default 9).
+
+@cmd augment
+group: cas-linalg
+summary: Join matrices side by side
+syntax: augment(A, B)
+example: augment([[1,2],[3,4]],[[5],[6]])
+result: [[1,2,5],[3,4,6]]
+example: augment([[1,2],[3,4]],[5,6])
+result: [[1,2,5],[3,4,6]]
+see: rref, concat
+
+Appends the columns of `B` to `A` (both need the same number of rows). A list `B` is used as a column. With two lists it concatenates them.
+
+@cmd ref
+group: cas-linalg
+summary: Row echelon form
+syntax: ref(matrix)
+example: ref([[1,2,3],[4,5,6]])
+result: [[1,2,3],[0,1,2]]
+see: rref, rank
+
+Gaussian elimination: every pivot is 1 and the entries below the pivots are 0 (above them they are not reduced, see [[rref]]). Exact for exact entries; with decimals the largest pivot is chosen.
+
+@cmd rowSwap
+group: cas-linalg
+summary: Swap two rows
+syntax: rowSwap(matrix, i, j)
+example: rowSwap([[1,2],[3,4]],1,2)
+result: [[3,4],[1,2]]
+see: rowAdd, mRow, mRowAdd
+
+Returns the matrix with rows `i` and `j` exchanged (rows count from 1).
+
+@cmd rowAdd
+group: cas-linalg
+summary: Add one row to another (row+)
+syntax: rowAdd(matrix, i, j)
+example: rowAdd([[1,2],[3,4]],1,2)
+result: [[1,2],[4,6]]
+see: mRowAdd, rowSwap
+
+Like row+( on other calculators: adds row `i` to row `j` and returns the matrix.
+
+@cmd mRow
+group: cas-linalg
+summary: Multiply a row (*row)
+syntax: mRow(k, matrix, i)
+example: mRow(3,[[1,2],[3,4]],2)
+result: [[1,2],[9,12]]
+see: mRowAdd, rowAdd
+
+Like *row( on other calculators: multiplies row `i` by `k`.
+
+@cmd mRowAdd
+group: cas-linalg
+summary: Add a multiple of a row to another (*row+)
+syntax: mRowAdd(k, matrix, i, j)
+example: mRowAdd(-3,[[1,2],[3,4]],1,2)
+result: [[1,2],[0,-2]]
+see: mRow, rowAdd, ref
+
+Like *row+( on other calculators: row `j` becomes row `j` + `k` times row `i`.
+
+@cmd cumSum
+group: cas-linalg
+summary: Cumulative sums
+syntax: cumSum(matrix)
+syntax: cumSum(list)
+example: cumSum([[1,2],[3,4]])
+result: [[1,2],[4,6]]
+example: cumSum([1,2,3,4])
+result: [1,3,6,10]
+see: sum
+
+For a matrix the cumulative sums run down each column; for a list along the list.
+
+@cmd cond
+group: cas-linalg
+summary: Condition number of a matrix
+syntax: cond(matrix)
+syntax: cond(matrix, p)
+example: cond([[1,2],[3,4]])
+result: 21
+example: cond([[2,0],[0,1/2]],2)
+result: 4
+see: norm, inv, det, singvals
+
+Returns `norm1(A)*norm1(inv(A))` with the 1-norm (largest absolute column sum); `inf` for a singular matrix. Large values mean that solving with the matrix loses accuracy.
+
+With p = 1 or `inf` the same with that norm; with p = 2 the ratio of the largest to the smallest singular value (any shape, exact when [[singvals]] is; needs the advanced CAS module).
+
+@cmd setElem
+group: cas-linalg
+summary: Matrix with one entry replaced
+syntax: setElem(matrix, i, j, value)
+example: setElem([[1,2],[3,4]],2,1,9)
+result: [[1,2],[9,4]]
+see: redim
+
+Returns a copy of the matrix with entry (`i`,`j`) set to `value` (the matrix editor uses it).
+
+@cmd redim
+group: cas-linalg
+summary: Resize a matrix
+syntax: redim(matrix, rows, cols)
+example: redim([[1,2],[3,4]],3,1)
+result: [[1],[3],[0]]
+see: dim, setElem
+
+Returns a matrix of the new size: existing entries are kept, new ones are 0 (1 to 99 rows and columns).

@@ -1,0 +1,129 @@
+# Sparkle Town's twists and surprises (mq_play.c twists, mq_events.c): night mode, giant bubbles,
+# gravity flip, mirror world, the finale's remix; a visitor with a wish, lantern night, bubble day,
+# a parade of friends.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 5
+mq fun off
+mq scene off
+mq new Mia 2
+mq grant bosses
+mq level 0 0
+mq twist 1
+mq step 20
+expect state mq_mod "Night mode!"
+screenshot mq_twist_night.png
+mq twist 2
+mq step 20
+screenshot mq_twist_giant.png
+mq twist 3
+mq step 30
+screenshot mq_twist_flip.png
+mq correct
+mq step 50
+mq skill 17 1
+mq mech "Gate Dash"
+mq twist 4
+mq step 20
+expect state mq_mod "Mirror world!"
+screenshot mq_twist_mirror.png
+mq correct
+mq step 20
+expect state mq_moment cheer
+# the games friends' stories open: Cake Kitchen (type the amount, mix on the beat), Pet Shop
+mq opengames
+mq skill 0 1
+mq mech "Cake Kitchen"
+mq step 15
+screenshot mq_game_cook.png
+expect statecontains modx_music "8 0"
+mq correct
+mq step 10
+screenshot mq_game_cook_cheer.png
+mq skill 45 1
+mq mech "Pet Shop"
+mq step 15
+screenshot mq_game_pets.png
+mq correct
+mq step 10
+screenshot mq_game_pets_cheer.png
+# the surprises of the play days
+mq go map
+mq day 7
+mq event visitor 0
+mq step 30
+expect state mq_event visitor
+screenshot mq_event_visitor.png
+mq event lantern
+mq step 60
+expect state mq_event lantern
+screenshot mq_event_lantern.png
+mq event parade
+mq step 60
+expect state mq_event parade
+screenshot mq_event_parade.png
+mq event bubbles
+mq step 60
+expect state mq_event bubbles
+screenshot mq_event_bubbles.png
+# eight visitors (the one away longest comes next) and nine festivals
+mq town 200
+mq event visitor 3
+mq step 30
+screenshot mq_event_visitor_coco.png
+mq event visitor 4
+mq step 30
+screenshot mq_event_visitor_biscuit.png
+mq event visitor 5
+mq step 30
+screenshot mq_event_visitor_ziggy.png
+mq event visitor 6
+mq step 30
+screenshot mq_event_visitor_pearl.png
+mq event visitor 7
+mq step 30
+screenshot mq_event_visitor_bao.png
+mq event snow
+mq step 60
+expect state mq_event snow
+screenshot mq_event_snow.png
+mq event rainbow
+mq step 60
+screenshot mq_event_rainbow.png
+mq event kites
+mq step 60
+screenshot mq_event_kites.png
+mq event stars
+mq step 60
+screenshot mq_event_stars.png
+mq town 330
+mq event picnic
+mq step 60
+screenshot mq_event_picnic.png
+mq town 560
+mq event birthday 2
+mq step 60
+expect state mq_event birthday
+screenshot mq_event_birthday.png
+mq event none
+# the town by the time of day (minutes of play): dusk, then night with the windows lit
+mq day 5
+mq town 300
+mq playtime 12
+mq step 30
+screenshot mq_town_dusk.png
+mq playtime 15
+mq step 30
+screenshot mq_town_night.png
+mq town 700
+mq step 40
+screenshot mq_town_night2.png
+mq playtime 2
+mq town 140
+mq step 30
+screenshot mq_town_house.png

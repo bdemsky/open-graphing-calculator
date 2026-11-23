@@ -1,0 +1,111 @@
+# The Python console (APPS > Python; modules/python, app/py_core.c, help page "python"):
+# start, a line, a loop and a def (blocks continue after ':' and end with an empty line),
+# an exception with its traceback, the ON key stopping a long loop, the calc library,
+# the calculator keys' text (√ ^ (−)), history, the soft keys, plot opening the graph.
+requirecfg MOD_PYTHON
+app python
+expect screen python
+expect text "MicroPython v1.29.0 with calc"
+expect text ">>>"
+type "1+1\n"
+expect state py_last 2
+expect text ">>> 1+1"
+screenshot python_start.png
+# a loop: ':' starts a block, the next line is indented, an empty line runs it
+type "for i in range(4):\n"
+expect state py_block "for i in range(4):"
+expect state py_line "    "
+expect text "..."
+type "print(i*i)\n"
+type "\n"
+expect state py_last 9
+expect state py_block ""
+# a function
+type "def sq(n):\n"
+type "return n*n\n\n"
+type "sq(12)\n"
+expect state py_last 144
+# an exception: its traceback on the screen, in red
+type "1/0\n"
+expect state py_exc ZeroDivisionError
+expect text "Traceback (most recent call last):"
+expect text "ZeroDivisionError: divide by zero"
+screenshot python_traceback.png
+# KeyboardInterrupt: the ON key during a long loop (the test hook presses it at the 300th poll,
+# exactly as the key interrupt would: app.c cas_break -> py_break_isr)
+py breakafter 300
+type "while True:\n"
+type "pass\n\n"
+expect state py_exc KeyboardInterrupt
+expect text "KeyboardInterrupt: "
+type "2+2\n"
+expect state py_last 4
+# the calc library: symbols x y z t, the CAS's solve / integrate / factor
+type "solve(x^2-4,x)\n"
+expect state py_last "[-2, 2]"
+type "integrate(sin(x),x)\n"
+expect state py_last -cos(x)
+type "factor(x^2-1)\n"
+expect state py_last (x-1)*(x+1)
+screenshot python_calc.png
+type "integrate(x^2,x,0,3)\n"
+expect state py_last 9
+# calculator keys: √( becomes sqrt(, (−) a minus
+key SQRT
+type "16)\n"
+expect state py_last 4.0
+key NEG
+type "3*2\n"
+expect state py_last -6
+# history: UP recalls the last entries
+key UP
+expect state py_line "⁻3*2"
+key UP
+expect state py_line √(16)
+key DOWN DOWN
+expect state py_line ""
+# the soft keys: F2 indents, SHIFT F1 dedents, F3 picks characters, F4 drops a block, F5 clears
+key F2
+expect state py_line "    "
+key SHIFT F1
+expect state py_line ""
+key F3
+screenshot python_chars.png
+key RIGHT ENTER
+expect state py_line #
+key CLEAR
+type "if 1:\n"
+key F4
+expect state py_block ""
+expect text "(block dropped)"
+# F1 runs a block of several statements at once (the last expression's value is shown)
+type "a=6\n"
+type "b=7\n"
+type "a*b"
+key F1
+expect state py_last 42
+# touch: dragging the output down shows earlier rows
+touch drag 160 50 160 150
+expect text "(scrolled)"
+key F5
+expect notext "a*b"
+expect state py_rows 0
+# help, then back
+key SHIFT F5
+expect state help_topic python
+expect screen help
+key CLEAR
+# plot opens the graph with the expression in Y1
+app python
+type "plot(x^2,~3,3)\n"
+expect screen graph
+expect state y1 x^2
+expect state xmin -3
+# CLEAR on an empty line leaves Python; the interpreter keeps its state
+app python
+expect state py_line ""
+key CLEAR
+expect screen home
+app python
+type "sq(5)\n"
+expect state py_last 25

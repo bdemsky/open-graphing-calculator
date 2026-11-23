@@ -1,0 +1,87 @@
+# Stat plots (SHIFT F1 on the graph screens): scatter + regression line, ZoomStat, histogram,
+# box plots, normal probability plot, settings saved across power-off
+stat set L1 1,2,3,4,5,6,7,8,9,10
+stat set L2 2.3,4.1,6.2,8.4,9.9,12.5,13.8,16.4,18.1,19.9
+key F1 SHIFT F1
+expect screen menu
+expect state menu "STAT PLOTS"
+expect text Plot1 Off
+screenshot stat_plots_menu.png
+key 1
+expect screen statform
+expect text Plot1
+key RIGHT
+expect state statplot1 "on 0 L1 L2 1 0 1"
+# the Type row explains the chosen type; F4 graph, F5 zoomstat
+key DOWN
+expect text Scatter: points
+key UP
+screenshot stat_plot1.png
+# ZoomStat action: window fitted to the data, then the graph
+key UP UP ENTER
+expect screen graph
+expect state xmin 0.1
+expect state xmax 10.9
+expect state ymin 0.54
+expect state ymax 21.66
+expect color 0xD8E3 30
+screenshot stat_scatter.png
+# with the LinReg line stored in Y1 (blue, the points stay red)
+app stat
+key 2 3
+key DOWN DOWN DOWN RIGHT DOWN ENTER
+key HOME F1 F5 ENTER
+expect screen graph
+screenshot stat_scatter_linreg.png
+# PlotsOff / PlotsOn
+key SHIFT F1 4
+expect state statplot1 "off 0 L1 L2 1 0 1"
+key HOME F1 SHIFT F1 5
+expect state statplot1 "on 0 L1 L2 1 0 1"
+expect state statplot3 "on 0 L1 L2 1 0 3"
+# Plot2 alone: histogram of L3 (green); Ylist and Mark are hidden for it
+stat set L3 1,2,2,3,3,3,4,4,5,9
+key HOME F1 SHIFT F1 4
+key HOME F1 SHIFT F1 2
+key RIGHT DOWN RIGHT RIGHT DOWN
+expect notext Ylist:
+expect notext Mark:
+key CLEAR
+type "L3"
+key DOWN
+expect text Freq:
+expect state statplot2 "on 2 L3 L2 1 0 4"
+key DOWN DOWN ENTER
+expect screen graph
+expect state xmin 1
+expect state xmax 10
+expect state xscl 1
+expect state ymax 3.75
+expect color 0x04A7 50
+screenshot stat_histogram.png
+# Plot3: modified box plot of L3 (magenta): 9 is an outlier
+key F1
+key CLEAR
+key SHIFT F1 3
+key RIGHT DOWN RIGHT RIGHT RIGHT DOWN
+key CLEAR
+type "L3"
+key DOWN
+expect state statplot3 "on 3 L3 L2 1 0 3"
+key DOWN DOWN DOWN ENTER
+expect screen graph
+expect color 0xC814 20
+screenshot stat_boxplot.png
+# normal probability plot
+key SHIFT F1 3
+key DOWN RIGHT RIGHT
+expect state statplot3 "on 5 L3 L2 1 0 3"
+key DOWN DOWN DOWN DOWN ENTER
+expect screen graph
+expect state ymin -1.644853627
+screenshot stat_normprob.png
+# settings survive a power cycle
+key SHIFT ON
+key ON
+expect state statplot2 "on 2 L3 L2 1 0 4"
+expect state statplot3 "on 5 L3 L2 1 0 3"

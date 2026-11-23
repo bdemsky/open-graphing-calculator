@@ -1,0 +1,159 @@
+# Usability fixes of the apps (docs/usability/apps.md): hints that say what a
+# field is, F5 in more places, Ans in Base-n, the size line of the grids,
+# convert( near the top of UNITS, the step shown by geometry tools.
+#
+# --- matrix editor: a size being typed is applied when it is complete, so
+# 12 rows never passes through 1 row (which would drop rows 2..)
+ifcas src key SHIFT MATH 3
+ifcas src key DOWN ENTER
+ifcas src expect screen matedit
+ifcas src expect text [B]
+ifcas src expect text "size: type the rows"
+ifcas src key DOWN
+ifcas src type "1\n2\n3\n4\n5\n6\n7\n8\n9\n"
+ifcas src key UP UP UP
+ifcas src type "1"
+ifcas src expect text "1_"
+ifcas src expect text "ENTER or an arrow sets it"
+ifcas src type "2"
+ifcas src expect eval "dim(matB)" "[12,3]"
+ifcas src expect eval "matB" "[[1,2,3],[4,5,6],[7,8,9],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]"
+# CLEAR drops a size that is still being typed
+ifcas src key UP UP UP
+ifcas src type "1"
+ifcas src key CLEAR
+ifcas src expect eval "dim(matB)" "[12,3]"
+ifcas src expect screen matedit
+ifcas src type "2"
+ifcas src key RIGHT
+ifcas src expect eval "dim(matB)" "[2,3]"
+ifcas src type "2"
+ifcas src key ENTER
+ifcas src expect eval "matB" "[[1,2],[4,5]]"
+ifcas src screenshot matrix_size.png
+# F5 (→home) types the matrix name on the home screen: [B]⁻¹ inverts it
+ifcas src key F5
+ifcas src expect screen home
+ifcas src expect state entry [B]
+ifcas src key SHIFT DIV ENTER
+ifcas src expect state last_output [[-5/3,2/3],[4/3,-1/3]]
+ifcas src key CLEAR
+# the MATH menu starts with det( and inv(
+ifcas src key SHIFT MATH 2 2
+ifcas src expect state entry inv()
+ifcas src key CLEAR
+#
+# --- equation solver: F5 on the eq: line solves for its only variable;
+# every root on its own row; F5 on a root row uses that root
+app solver
+key 1
+type "x^3-2x=1"
+expect text "type an equation, e.g. x^3-2x=1, then ENTER"
+key ENTER
+expect text "F5: solve for x (its value is the guess)"
+key UP
+key F5
+expect text "x solved: 3 roots, left-right=0"
+expect text "root1=-1"
+expect text "root2=-0.6180339887"
+expect text "root3=1.618033989"
+expect state screen eqsolver
+screenshot solver_roots.png
+key DOWN DOWN DOWN DOWN DOWN
+expect text "F5: use this root as x"
+key F5
+expect text "x=1.618033989 (root 3 of 3)"
+expect text "x=1.618033989"
+# two variables: F5 on the eq: line asks for the unknown
+key UP
+type "x+y=3\n"
+key UP
+key F5
+expect text "Select the unknown"
+#
+# --- polynomial: the footer shows the polynomial the coefficients make
+key F2
+expect screen polyroot
+expect text "degree 1..10, then the coefficients from x^n down"
+type "3\n1\n0\n~2\n~1\n"
+expect text "p(x)=x^3-2x-1"
+#
+# --- linear system: column names and the size in words
+key F3
+expect screen linsys
+expect text "2 equations, 2 unknowns"
+expect text "= b"
+key UP
+type "3"
+key RIGHT
+type "4"
+expect text "3 equations, 3 unknowns"
+expect text "x3"
+screenshot linsys_grid.png
+key HOME
+#
+# --- finance: every TVM field says what it is; F5 elsewhere explains itself
+app finance
+key 1
+expect text "N: number of payments; F5 solves"
+key DOWN DOWN
+expect text "PV: present value (received +, paid -); F5 solves"
+key F2
+expect text "interest princ.   balance"
+key F5
+expect text "results update as you enter values"
+key HOME
+#
+# --- base-n: an operator first uses the result (like the home screen);
+# a tap on a row picks the input base; HEX shows where a-f are
+app basen
+key F2
+expect text "type a number or expression, ENTER"
+ifcas src type "255\n"
+ifcas src expect text "start with + - and or"
+ifcas src key ADD
+ifcas src expect text Ans+
+ifcas src type "1\n"
+ifcas src expect text 256
+ifcas src key SUB
+ifcas src type "1\n"
+ifcas src expect text 255
+touch tap 100 60
+expect text "input HEX"
+expect text "a-f: alpha + CAS math vars x sin cos"
+ifcas src key F5 1
+ifcas src expect text "Ans and "
+ifcas src type "f0\n"
+ifcas src expect text F0
+ifcas src expect text 240
+ifcas src screenshot basen_ans.png
+touch tap 100 82
+expect text "input DEC"
+key CLEAR
+#
+# --- UNITS: convert( is item 2, the uncertainty commands are listed
+key SHIFT VARS 2
+expect state entry convert()
+key CLEAR
+key SHIFT VARS UP UP UP
+expect state menu_item "nominal( value without ±"
+key ENTER
+expect state entry nominal()
+key CLEAR
+#
+# --- geometry: multi-step tools show the step and what is picked
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F2
+ifcfg GEOMETRY key 1
+ifcfg GEOMETRY touch tap 160 121
+ifcfg GEOMETRY touch tap 240 121
+ifcfg GEOMETRY touch tap 200 61
+ifcfg GEOMETRY key F5
+ifcfg GEOMETRY key 2
+ifcfg GEOMETRY touch tap 240 121
+ifcfg GEOMETRY expect text "Angle: vertex (step 2/3, picked B)"
+ifcfg GEOMETRY key CLEAR CLEAR
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 4
+ifcfg GEOMETRY expect text "Polygon: 1st vertex"
+ifcfg GEOMETRY key CLEAR CLEAR

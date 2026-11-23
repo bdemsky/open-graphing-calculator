@@ -1,0 +1,95 @@
+# Graph cells of the home notebook (app/gcell.c; help page "graph-cells"): GRAPH (SHIFT F5) adds a
+# plot of the Y= functions inline, with its own functions, window and style; the selected cell pans
+# (arrows, drag), zooms (+ −, pinch) and changes its height (a drag on its bottom edge) in place;
+# ENTER opens the graph app on it and the home screen writes the app's state back; several cells
+# scroll with the notebook; an empty Y= opens Y= for the new cell.
+key F1
+type "x^2"
+key HOME
+type "1+1\n"
+key SHIFT F5
+expect screen home
+expect state history 2
+expect state home_kind graph
+expect state home_sel 2
+expect state gcell_fn x^2
+expect state gcell_window "-10 10 -10 10"
+expect state gcell_h 120
+expect text y1=x^2
+screenshot graph_cell.png
+# arrows pan (LEFT/RIGHT at once; then all four until CLEAR), + and − zoom about the centre
+key RIGHT
+expect state home_gactive 1
+expect state gcell_window "-7.5 12.5 -10 10"
+key UP
+expect state gcell_window "-7.5 12.5 -7.5 12.5"
+key ADD
+expect state gcell_window "-2.5 7.5 -2.5 7.5"
+key SUB
+expect state gcell_window "-7.5 12.5 -7.5 12.5"
+screenshot graph_cell_active.png
+key CLEAR
+expect state home_gactive 0
+expect state home_sel 2
+# UP / DOWN pass over it when it is only selected
+key UP
+expect state home_sel 1
+key DOWN DOWN
+expect state home_sel -1
+# touch: a pinch on a graph cell selects and zooms it; a drag on the selected cell pans it
+touch pinch 160 70 40 80
+expect state home_sel 2
+expect statecontains gcell_window "-"
+touch drag 160 70 60 70
+expect state home_sel 2
+# the bottom edge: drag to change the height
+key CLEAR
+key UP
+expect state home_sel 2
+expect state gcell_h 120
+touch drag 160 175 160 215 4
+expect state gcell_h 160
+screenshot graph_cell_tall.png
+# ENTER: the graph app on this cell (its function and window); zoom there, back home: written back
+key ENTER
+expect screen graph
+expect state y1 x^2
+key F3
+key 3
+expect screen graph
+expect state xmin -10
+key HOME
+expect screen home
+expect state gcell_window "-10 10 -10 10"
+expect state gcell_h 160
+expect state home_bound ""
+# a second graph of other functions: the first keeps x^2; both scroll with the notebook
+key F1
+key CLEAR
+type "sin(x)"
+key HOME
+key SHIFT F5
+expect state history 3
+expect state gcell_fn sin(x)
+expect text y1=sin(x)
+touch drag 160 60 160 200 8
+expect text y1=x^2
+screenshot graph_cells_scrolled.png
+key CLEAR
+# Y= empty: GRAPH opens Y= for the new cell; the function typed there is the cell's
+key F1
+key CLEAR
+key HOME
+key SHIFT F5
+expect screen yeq
+type "x^3"
+key HOME
+expect screen home
+expect state history 4
+expect state gcell_fn x^3
+# the cells survive a power cycle
+key SHIFT ON
+key ON
+expect state history 4
+expect state gcell_fn x^3
+expect text y1=x^3

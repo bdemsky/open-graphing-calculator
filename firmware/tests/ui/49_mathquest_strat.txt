@@ -1,0 +1,201 @@
+# Sparkle Town's ways to work it (modules/mathquest/mq_strat.c): school's strategies as hands-on models, each a
+# friend's trick. The friend shows it first (the teaching segment; "try one" skips it), then she works her own
+# with her hands: hops dragged onto a path, blocks into houses, bags tapped full, a garden split or turned, a
+# floor cut at the tens, groups peeled off a pile, a ribbon labelled, a cake cut and frosted, coins sorted,
+# X marks on a line. One screenshot per family (and per model, for the render audit): mq_strat_*.png.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 4
+mq fun off
+mq new Noa 3
+mq scene off
+mq school 4 40
+mq engine stop
+mq notebook 2
+mq skill 16 0
+# adding: Pip's jumping trick, shown by Pip, then her own (hops of ten dragged onto the path)
+mq strat 0 bulb 38 25
+mq step 20
+expect statecontains mq_strat "0 1 0"
+screenshot mq_strat_add_teach.png
+mq strat try
+expect statecontains mq_strat "0 1 1 0"
+mq strat act 10
+mq step 4
+screenshot mq_strat_add.png
+mq strat act 10
+mq strat act 1
+mq strat act 1
+mq strat act 1
+mq strat act 1
+mq strat act 1
+expect statecontains mq_strat "0 1 1 2"
+mq strat act 63
+expect statecontains mq_strat "0 1 2"
+mq settle
+expect state mq_strat ""
+expect state mq_moment cheer
+# multiplying: Dabble's floor trick, cut at the tens
+mq skill 16 0
+mq strat 9 bulb 23 4
+mq strat try
+mq strat act 20
+mq strat act 12
+mq step 4
+screenshot mq_strat_mul.png
+mq strat back
+# the rules of times: the turn-around trick, both rectangles (turned half way, then all the way)
+mq strat 14 bulb 2 4 1
+mq strat try
+mq strat act 45
+mq step 2
+screenshot mq_strat_prop_turn.png
+mq strat act 90
+mq step 30
+screenshot mq_strat_prop_turned.png
+mq strat back
+# the break-apart trick: the garden split into two pieces beside its sum
+mq strat 16 bulb 7 6 5
+mq strat try
+mq strat act 5
+mq strat act 35
+mq step 4
+screenshot mq_strat_prop_split.png
+mq strat back
+# sharing: Dot's peel-off trick
+mq strat 22 bulb 96 4
+mq strat try
+mq strat act 0
+mq step 4
+screenshot mq_strat_div.png
+mq strat back
+# stories: Bramble's ribbon trick
+mq strat 24 bulb 45 72
+mq strat try
+mq strat act 0
+mq step 4
+screenshot mq_strat_word.png
+mq strat back
+# slices: Momo's cake-strip trick, then the pie
+mq strat 27 bulb 3 4
+mq strat try
+mq strat act 4
+mq strat act 0
+mq strat act 1
+mq step 4
+screenshot mq_strat_frac.png
+mq strat back
+mq strat 28 bulb 2 6 0
+mq strat try
+mq strat act 6
+mq strat act 0
+mq step 4
+screenshot mq_strat_frac_pie.png
+mq strat back
+mq strat 29 bulb 3 4
+mq strat try
+mq strat act 1
+mq strat act 1
+mq step 4
+screenshot mq_strat_frac_line.png
+mq strat back
+# places: Dot's block trick and Tango's coin trick
+mq strat 34 bulb 2 12 5
+mq strat try
+mq strat act 2
+mq strat act 2
+mq strat act 17
+mq strat act 17
+mq strat act 17
+mq strat act 32
+mq step 4
+screenshot mq_strat_pv.png
+mq strat back
+mq strat 35 bulb 247
+mq strat try
+mq strat act 2
+mq strat act 17
+mq strat act 32
+mq step 4
+screenshot mq_strat_pv_money.png
+mq strat back
+# measures: Olli's time-line trick, Bramble's X marks
+mq strat 36 bulb 165 85
+mq strat try
+mq strat act 10
+mq strat act 5
+mq step 4
+screenshot mq_strat_meas.png
+mq strat back
+mq strat 37 bulb
+mq strat try
+mq strat act 1
+mq strat act 2
+mq step 4
+screenshot mq_strat_meas_plot.png
+mq strat back
+# more models: making ten, compensation, bags, friendly pairs, area division, the columns shown
+mq strat 3 bulb 97 25
+mq strat try
+mq strat act 3
+mq step 4
+screenshot mq_strat_make10.png
+mq strat back
+mq strat 4 bulb 299 45
+mq strat try
+mq strat act 1
+mq step 4
+screenshot mq_strat_comp.png
+mq strat back
+mq strat 19 bulb 3 4
+mq strat try
+mq strat act 0
+mq strat act 0
+mq step 4
+screenshot mq_strat_share.png
+mq strat back
+mq strat 18 bulb 25 7 4
+mq strat try
+mq step 4
+screenshot mq_strat_friendly.png
+mq strat act 2
+mq step 4
+screenshot mq_strat_friendly_pair.png
+mq strat back
+mq strat 23 bulb 96 4
+mq strat try
+mq strat act 20
+mq step 4
+screenshot mq_strat_areadiv.png
+mq strat back
+mq strat 6 show 476 358
+mq strat next
+mq strat next
+mq strat next
+mq step 70
+screenshot mq_strat_cols.png
+mq strat back
+# a "use this way" order: the order asks for it, the model answers it in the game
+mq strat order 16 7 6 5
+expect statecontains mq_way 17
+mq strat try
+mq strat auto
+mq settle
+expect state mq_moment cheer
+# the lightbulb offers her order's best way
+mq skill 16 2
+mq bulb
+mq step 4
+screenshot mq_strat_bulb.png
+# the grown-ups: the ways she has met, by their Common Core names
+key CLEAR
+mq go parent
+mq step 4
+mq tap 200 26
+mq step 4
+screenshot mq_strat_parent.png

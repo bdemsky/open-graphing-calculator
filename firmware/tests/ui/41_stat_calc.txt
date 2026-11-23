@@ -1,0 +1,105 @@
+# STAT CALC: 1-Var / 2-Var statistics, regressions (RegEQ -> Y1, RESID),
+# results in VARS > Statistics
+stat set L1 1,2,3,4,5,6,7,8,9,10
+stat set L2 2.3,4.1,6.2,8.4,9.9,12.5,13.8,16.4,18.1,19.9
+stat set L3 1,1,2,1,1,1,1,1,1,3
+app stat
+key 2
+expect state menu "STAT CALC"
+key 1
+expect screen statform
+expect text 1-Var Stats
+# help for the form
+key SHIFT MENU
+expect screen help
+expect state help_topic stat-calc
+key CLEAR
+expect screen statform
+key ENTER ENTER ENTER
+expect screen statresult
+expect state stat_last "1-Var Stats"
+expect text xbar=5.5
+expect text Sx=3.0276503541
+expect text n=10
+expect text Q1=3
+screenshot stat_1var.png
+key DOWN
+expect text Q3=8
+key DOWN DOWN DOWN DOWN DOWN DOWN
+expect text maxX=10
+key CLEAR
+expect screen statform
+# with a frequency list (the form returns with Calculate highlighted)
+key UP
+type "L3\n"
+key ENTER
+expect text n=13
+expect text xbar=6
+key CLEAR CLEAR
+# 2-Var
+app stat
+key 2 2
+key ENTER ENTER ENTER ENTER
+expect text ybar=11.16
+key DOWN DOWN DOWN DOWN DOWN
+expect text Σxy=776.9
+key CLEAR CLEAR
+# LinReg(ax+b) with RegEQ -> Y1
+app stat
+key 2 3
+expect text LinReg(ax+b)
+key DOWN DOWN DOWN RIGHT
+key DOWN ENTER
+expect screen statresult
+expect text a=1.97696969697
+expect text b=0.286666666667
+expect text r=0.999256139049
+expect text y=1.9769697*x+0.28666667
+stat expect RESID 0.0363636363636358,-0.140606060606061,-0.0175757575757593,0.205454545454545,-0.271515151515152,0.351515151515152,-0.325454545454546,0.297575757575757,0.0206060606060595,-0.156363636363637
+screenshot stat_linreg.png
+expect statecontains y1 1.976969696969696
+# the stored equation graphs and evaluates
+key CLEAR CLEAR
+ifcas src type "Y1(2)\n"
+ifcas src expect state last_output 4.24060606061
+# results in VARS
+key VARS
+expect text Statistics
+key UP ENTER
+expect statecontains menu_item "a = 1.97"
+key ENTER
+expect statecontains entry 1.97696969696969
+key CLEAR
+# quadratic, exponential, power
+app stat
+key 2 5
+key DOWN DOWN DOWN LEFT DOWN ENTER
+expect text c=0.186666666667
+expect text R²=0.998546613651
+key CLEAR CLEAR
+app stat
+key 2 9
+key DOWN DOWN DOWN DOWN ENTER
+expect text a=2.77038890593
+expect text b=1.24683922283
+key CLEAR CLEAR
+# nonlinear fits converge (scipy reference values in tests/unit/test_stat.c)
+stat set L1 1,2,3,4,5,6,7,8,9,10,11,12
+stat set L2 4.6,4.9,4.3,2.9,1.2,-0.3,-0.9,-0.6,0.6,2.4,4,4.9
+app stat
+key 2
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text SinReg
+key DOWN DOWN DOWN DOWN ENTER
+expect text a=2.960577
+expect text b=0.595233
+key CLEAR CLEAR
+# errors stay on the form
+stat set L2 1,2
+app stat
+key 2 3
+key DOWN DOWN DOWN DOWN ENTER
+expect screen statform
+expect text Xlist has 10 values, Ylist 2
+key CLEAR
+expect screen home

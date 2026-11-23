@@ -1,0 +1,133 @@
+# RPN mode with CAS values: exact results, CAS/MATH/TEST menus applied to the
+# stack, the argument convention of multi-argument commands, STO, MODE settings
+setmode ENTRY RPN
+key HOME
+expect screen rpn
+# x ENTER 2 ^
+type "x\n2"
+key POW
+ifcas src expect state rpn_1 x^2
+# CAS menu on an empty line applies to level 1
+key CLEAR CLEAR
+type "x^2-1\n"
+key CAS 1
+ifcas src expect state rpn_1 (x-1)*(x+1)
+key CAS 2
+ifcas src expect state rpn_1 x^2-1
+type "2"
+key SUB
+ifcas src expect state rpn_1 x^2-3
+# solve( ,x): the variable defaults to x when level 1 is not a name
+key CAS 4
+ifcas src expect state rpn_1 [-√(3),√(3)]
+# ... or comes from level 1 (2: expr 1: var)
+key CLEAR CLEAR
+type "t^2-4\nt\n"
+key CAS 4
+ifcas src expect state rpn_1 [-2,2]
+ifcas src expect state rpn_depth 1
+# diff with x
+key CLEAR CLEAR
+type "x^3\n"
+key CAS 5
+ifcas src expect state rpn_1 3*x^2
+# definite integral: 3: expr 2: a 1: b (variable x) ...
+key CLEAR CLEAR
+type "x^2\n0\n1\n"
+key CAS 7
+ifcas src expect state rpn_1 1/3
+ifcas src expect state rpn_depth 1
+# ... or 4: expr 3: var 2: a 1: b
+type "t\nt\n0\n2\n"
+key CAS 7
+ifcas src expect state rpn_1 2
+# limit: 2: expr 1: a
+type "sin(x)/x\n0\n"
+key CAS 8
+ifcas src expect state rpn_1 1
+# LASTARG brings back the arguments of limit
+key SHIFT NEG
+ifcas src expect state rpn_1 0
+ifcas src expect state rpn_2 sin(x)/x
+# SHIFT 5 (=) builds an equation from levels 2 and 1, ready for solve
+key CLEAR CLEAR
+type "x^2\n9\n"
+key SHIFT 5
+ifcas src expect state rpn_1 x^2=9
+key CAS 4
+ifcas src expect state rpn_1 [-3,3]
+# MATH templates: a number being typed is pushed first, then the command applies
+key CLEAR CLEAR
+type "8"
+key MATH 6
+ifcas src expect state rpn_1 2
+type "16\n4"
+key MATH 7
+ifcas src expect state rpn_1 2
+type "5"
+key MATH 1
+expect state rpn_1 5
+# two-argument functions take level 2 and level 1 (mod(17,5), min(3,7))
+type "17\n5"
+key MATH 0
+expect state rpn_1 2
+type "3\n7"
+key MATH 8
+expect state rpn_1 3
+# postfix entries: ³ and ! (the last MATH entry)
+type "2"
+key MATH 5
+expect state rpn_1 8
+type "5"
+key MATH UP ENTER
+expect state rpn_1 120
+expect state rpn_error
+# STO: store level 1 into the name on the command line
+type "42\n"
+type "a"
+key ASSIGN
+expect state rpn_1 120
+type "a+1\n"
+expect state rpn_1 43
+# a name in VARS goes into the command line (not applied)
+key VARS ENTER
+expect screen menu
+key ENTER
+expect screen rpn
+expect state rpn_line a
+key CLEAR
+# angle mode applies: sin 30 in DEGREE
+setmode ANGLE DEGREE
+key HOME
+type "30"
+key SIN
+expect state rpn_1 1/2
+# RESULT APPROX
+setmode RESULT APPROX
+key HOME
+key CLEAR
+type "2\n3"
+key DIV
+expect state rpn_1 0.666666666667
+# FIX 2 changes the display only; the stack keeps the value
+setmode DECIMAL 2
+key HOME
+expect state rpn_1 0.67
+expect text 0.67
+type "3"
+key MUL
+ifcas src expect state rpn_1 2.00
+# the stub's level holds the double 2/3 itself, so 3 × gives exactly 2
+ifcas stub expect state rpn_1 2
+screenshot rpn_fix2.png
+setmode DECIMAL FLOAT
+key HOME
+# COMPLEX r∠θ shows complex values in polar form
+setmode COMPLEX r∠θ
+key HOME
+type "(1+i)\n"
+ifcas src expect statecontains rpn_1 ∠
+setmode RESULT EXACT
+setmode ANGLE RADIAN
+expect state angle rad
+expect state exact 1

@@ -1,0 +1,36 @@
+%% USB: connecting the calculator to a computer (app/usb_app.c, platform/stm32h743/usb.c).
+
+@page usb Connecting to a computer
+Connect the calculator's USB-C port to a computer with a USB cable. The calculator keeps working as usual, runs from the computer's power, and does not switch itself off while the computer uses the connection. A USB charger only powers it: nothing else changes.
+
+## The CALC drive
+The computer shows a drive named CALC. Its files are made by the calculator when you connect it:
+- `README.TXT`: what the drive is for.
+- `INFO.TXT`: the firmware version, the battery, the free space for modules, the installed modules with their versions, and the last events (as Memory, About lists them).
+- `MODULES.TXT`: the installed modules in detail.
+- `RESULT.TXT`: what happened to the last module file you dropped on the drive.
+- `SCREEN.BMP`: a picture of the calculator's screen as it is when the computer reads it.
+- `NOTEBOOK.HTML`: the open notebook (the [[home-notebook|home screen's]]) as one page that any phone, tablet or computer shows, also without a network: text cells, calculations with their results as the calculator draws them, graph cells as pictures, Python cells with their output. Copy it anywhere to keep or send it. It follows the notebook, unsaved too: after a change, once the calculator has been left alone for about 10 seconds (and the computer is not reading the drive), the drive refreshes itself with the new page (at most every 30 seconds; at once when another notebook is opened, created or saved under a name). While the browser page ([[browser]]) follows the notebook the drive waits, then catches up when the page has gone. A refresh makes the drive leave and come back for a moment, as after a module install.
+- `NOTEBOOKS`: the notebooks kept in the calculator, as Jupyter files `NAME.ipynb` ([[notebook-files]]). Drop a `.ipynb` file on the drive to import it.
+- `CALCULATOR.HTML`: the calculator's open notebook in the computer's browser, to read, edit and run there, the cells running on the calculator ([[browser]]).
+
+These files are read-only. Nothing else you put on the drive is kept when the calculator is switched off or disconnected.
+
+## Installing modules by drag and drop
+Drag a module file (a `.MOD` file from the `MODULES` folder of a firmware release, such as `GEOME010.MOD`) onto the CALC drive.
+- When the copy is finished, the calculator checks the whole file first: that it is a module, complete and undamaged, and made for this firmware. Only then does it write it, with the progress bar of [[install-content]], keeping the version it replaces (Memory, Modules can go back to it).
+- A short message says what happened: "Installed Geometry 0.1.0", or why not (for example "damaged file": copy it again; "for another firmware": use the modules of this firmware's release). `RESULT.TXT` keeps the details.
+- Then the drive refreshes itself so the computer sees the new files: the module file disappears from it, `MODULES.TXT` and `RESULT.TXT` are new. The computer may say the drive was not ejected properly; that is expected, nothing is lost.
+- A module that is in use is installed when you leave it: for example, a new Geometry module waits until you leave the Geometry app ("Leave Geometry to install it").
+- Files that are not modules are ignored.
+
+## The microSD card on the computer
+APPS, microSD tools, Connect card to computer turns the card in the slot into a second drive of the computer, so you can copy files to and from it (for example the `MODULES` folder of a release, or screenshots). Meanwhile a full screen says "Connected to computer", and the calculator does not use the card itself.
+- When you are done, eject the drive on the computer, then press EXIT ({F5}, or {clear}). If the computer has not ejected it yet, the calculator asks first: taking the card back before the computer has finished writing can damage its files.
+- Without a computer connected, or without a card in the slot, the calculator says so.
+
+## If the computer does not see the calculator
+{apps} Memory, USB status shows, four times a second, what the calculator sees of the connection: whether the cable brings power (VBUS), the state of the connection (powered, configured by the computer, suspended), the last error, and counts of what has happened. Try another cable (some cables only charge) or another port.
+
+## For developers
+The USB connection also carries the calculator's console (a serial port; `tools/calcctl.py` finds it by itself) and can restart the calculator for a firmware update over USB (`calcctl.py flash`, no button needed). See the firmware's README.

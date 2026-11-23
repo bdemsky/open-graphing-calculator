@@ -1,0 +1,6 @@
+{
+ "engine": "giac",
+ "available": true,
+ "info": "giac 2.1.0, icas command line",
+ "timeout_s": 30.0
+}

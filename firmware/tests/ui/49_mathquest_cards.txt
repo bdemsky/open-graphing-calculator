@@ -1,0 +1,46 @@
+# Sparkle Town: a card lands where it says (the user's report: in the Shop, "Shop Till" and "Pet Shop" started
+# Bubble Pop). The Shop's cards tapped as she would: each starts the game it names, and the round's next order is
+# still there; the decorating store is the Store (the Sparkle Store), a different place. Every card of every world:
+# tests/unit/test_mq_cards.c; the bot's card-lands and round-game.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+expect text installed and verified
+key CLEAR
+app mathquest
+mq new Mia 2
+mq fun off
+mq opengames
+mq world 4
+mq step 2
+expect state mq_cards "50:0=Shop Till;50:1=Pet Shop;50:2=Bubble Pop;50:3=finale;"
+screenshot mathquest_cards_shop.png
+touch tap 43 110
+mq step 4
+expect state mq_scene play
+expect state mq_mech "Shop Till"
+expect state mq_here "Shop Till"
+mq correct
+mq step 60
+mq next
+mq step 30
+expect state mq_mech "Shop Till"
+mq go map
+mq world 4
+mq step 2
+touch tap 121 110
+mq step 4
+expect state mq_scene play
+expect state mq_mech "Pet Shop"
+expect state mq_here "Pet Shop"
+mq correct
+mq step 60
+mq next
+mq step 30
+expect state mq_mech "Pet Shop"
+# the decorating store is the Sparkle Store (its own name; the Shop is the place with the money games)
+mq go shop
+mq step 2
+expect text Store

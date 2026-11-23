@@ -1,0 +1,176 @@
+# Animation in 2D (the "animation" code module: modules/animation, app/anim_core.c,
+# app/modx.h): the not-installed fallback, installing it from the card (standard tier;
+# the advanced tier has it in the factory content), play / pause / step, loop, bounce,
+# once, the slider form's animation rows, TRACE and CALC following the moving curve,
+# PAR comet drawing, SEQ terms appearing, IMPL with a parameter. Frames are stepped
+# with the console (`anim step N`: N frames of 40 ms), not by the clock.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+# not installed (emulated on every tier with `modx off`): SHIFT F5 says how to get it (F5 is back)
+modx off animation
+key F1
+type "sin(x-t)"
+key F5 ENTER
+expect screen graph
+expect state sliders 1
+expect text back
+key SHIFT F5
+expect screen message
+expect text ANIMATION NOT INSTALLED
+expect text Install the Animation module (Memory > Modules).
+screenshot anim_not_installed.png
+key CLEAR
+expect screen graph
+expect state anim_module "Install the Animation module (Memory > Modules)."
+expect state modx_animation off
+modx on animation
+# the standard tier installs it from the release's module library on the card
+ifcfg !MOD_ANIMATION expect state module_manual ok
+ifcfg !MOD_ANIMATION module library
+ifcfg !MOD_ANIMATION module install /CALC/MODULES/{mod:animation}
+ifcfg !MOD_ANIMATION expect text installed and verified
+ifcfg !MOD_ANIMATION key CLEAR
+app settings
+app graph
+expect screen graph
+expect state anim_module ok
+expect state modx_animation bound
+# the slider form has the animation rows: t from 0 to 2π in 2 s, loop
+key ENTER
+expect screen slider
+expect text start=
+type "0"
+key ENTER DOWN DOWN DOWN
+type "0"
+key ENTER
+type "6.283185307179586"
+key ENTER
+type "2"
+key ENTER
+type "0"
+key ENTER
+key F5
+expect screen graph
+expect state slider_t 0
+# play: SHIFT F5 opens the ANIMATION menu, 1 plays; SHIFT F5 then reads pause
+key SHIFT F5
+expect state menu ANIMATION
+key 1
+expect screen graph
+expect state anim_playing 1
+expect state anim_kind param
+expect state anim_var t
+expect text back
+anim step 25
+expect statecontains anim_value 3.14159
+expect statecontains slider_t 3.14159
+screenshot anim_wave.png
+# any key pauses and does nothing else; the value goes to the variable
+key LEFT
+expect state anim_playing 0
+expect state graph_mode plain
+expect text back
+ifcas src expect eval "t" "3.14159265359"
+# the clock: 25 frames per second at most, 1 s of play advances half a sweep
+key SHIFT F5 1
+wait 1000
+expect state anim_playing 1
+expect statecontains anim_phase 0.0000
+state anim_fps
+state anim_frames
+key LEFT
+expect state anim_playing 0
+# bounce: back and forth
+key SHIFT F5 2
+expect state toast "mode: bounce"
+anim cfg t 0 1 2 1
+anim seek 0.5
+anim play
+anim step 30
+expect state anim_value 0.9
+anim step 20
+expect state anim_value 0.5
+anim pause
+# once: stops at the end
+anim cfg t 0 1 2 2
+anim seek 0.5
+anim play
+anim step 100
+expect state anim_playing 0
+expect state anim_value 1
+# TRACE follows the curve; CALC zero between 2 and 4 is computed again for every frame
+anim cfg t 0 2 2 0
+anim seek 0
+anim stop
+key F4
+expect state graph_mode trace
+key SHIFT F4 2
+type "2"
+key ENTER
+type "4"
+key ENTER ENTER
+expect statecontains graph_result X=3.14159
+anim play
+expect state anim_playing 1
+anim step 10
+expect statecontains graph_result X=3.54159
+expect state anim_value 0.4
+expect state graph_mode trace
+screenshot anim_calc_live.png
+anim step 5
+expect statecontains graph_result X=3.74159
+key CLEAR
+expect state anim_playing 0
+key CLEAR CLEAR
+# PAR: comet drawing along t
+setmode GRAPH PAR
+key HOME F1
+type "3sin(2t)"
+key DOWN
+type "3cos(3t)"
+key F5
+key SHIFT F5 3
+expect state anim_comet 1
+key SHIFT F5 1
+expect state anim_kind comet
+anim step 50
+expect statecontains anim_value 0.5
+screenshot anim_comet.png
+key LEFT
+expect text 50%
+anim stop
+expect state anim_kind none
+# SEQ: the terms appear one by one
+setmode GRAPH SEQ
+key HOME F1
+type "1.2u1(n-1)"
+key DOWN
+type "1"
+key F5
+expect state anim_comet 1
+anim play
+anim step 30
+expect state anim_kind comet
+screenshot anim_seq.png
+anim stop
+anim comet off
+# IMPL: a circle with a radius slider
+setmode GRAPH IMPL
+key HOME F1
+type "x^2+y^2=r^2"
+key F5
+expect state sliders 1
+anim cfg r 1 8 2 1
+anim play
+anim step 25
+expect statecontains slider_r 4.5
+screenshot anim_impl.png
+anim stop
+setmode GRAPH FUNC
+# help
+key HOME
+manual animation
+expect state help_topic animation
+expect text Animation: graphs that move
+key CLEAR

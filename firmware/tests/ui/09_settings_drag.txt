@@ -1,0 +1,14 @@
+# Settings: dragging a finger up/down scrolls the rows (the bottom rows are
+# hidden at first); the focused row stays on screen, and a tap still selects.
+key SHIFT HOME
+expect state screen mode
+expect text ANGLE
+expect notext LIGHT
+touch drag 160 200 160 60 8
+expect text LIGHT
+expect notext ANGLE
+screenshot settings_scrolled.png
+touch drag 160 60 160 220 8
+expect text ANGLE
+key CLEAR
+expect state screen home

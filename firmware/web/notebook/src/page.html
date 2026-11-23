@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="generator" content="web/notebook/build.py">
+<title>Calculator notebook</title>
+<!--@LICENSES@-->
+<style>
+/*@CSS@*/
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="title"><span class="logo" aria-hidden="true">&#x2211;</span><input id="nbname" value="Untitled" aria-label="notebook name" spellcheck="false"><span class="ext">.ipynb</span><span id="dirty" hidden aria-label="not saved on the calculator yet">&#x25cf;</span></div>
+  <div id="conn" data-state="off" role="status" aria-live="polite"><span class="dot" aria-hidden="true"></span><span id="conntext">Not connected</span><button id="btn-connect" type="button">Connect</button></div>
+</header>
+<div id="banner" hidden><strong>Open this file in Chrome or Edge to connect to the calculator.</strong> This browser has no Web Serial: you can open notebooks here (Open, or drop a file on the page) to read them, but not run them.</div>
+<div id="offline" hidden><span id="offline-text">Not connected.</span></div>
+<nav id="toolbar" aria-label="notebook">
+  <span class="group">
+    <button id="btn-notebooks" type="button" title="The calculator's notebooks: open, new, rename, delete">Notebooks</button>
+    <button id="btn-new" type="button" title="A new notebook on the calculator">New</button>
+    <button id="btn-open" type="button" title="Open a notebook file (.ipynb) from the computer: connected, it goes to the calculator and opens there (Ctrl/Cmd-O; or drop one on the page)">Open</button>
+    <button id="btn-save" type="button" title="Save the notebook as a file on the computer (Ctrl/Cmd-S)">Save</button>
+    <button id="btn-saveas" type="button" title="Save as another file on the computer (Ctrl/Cmd-Shift-S)">Save as</button>
+    <button id="btn-download" type="button" title="Download the notebook with its outputs (.ipynb)">Download</button>
+  </span>
+  <span class="group edit">
+    <button id="btn-add" type="button" title="Insert a cell below (B)">+</button>
+    <button id="btn-cut" type="button" title="Cut the cell (X)">Cut</button>
+    <button id="btn-copy" type="button" title="Copy the cell (C)">Copy</button>
+    <button id="btn-paste" type="button" title="Paste below (V)">Paste</button>
+    <button id="btn-up" type="button" title="Move the cell up (Shift-K)">&#x25b2;</button>
+    <button id="btn-down" type="button" title="Move the cell down (Shift-J)">&#x25bc;</button>
+    <select id="kind" title="Cell type: Y Python, T Math, G Graph, Shift-G 3D graph, M Text" aria-label="cell type">
+      <option value="python">Python</option><option value="math">Math</option><option value="graph">Graph</option><option value="graph3d">3D graph</option><option value="markdown">Text</option>
+    </select>
+  </span>
+  <span class="group run">
+    <button id="btn-run" type="button" title="Run the cell and go to the next (Shift-Enter)">&#x25b6; Run</button>
+    <button id="btn-runall" type="button" title="Run every cell">Run all</button>
+    <button id="btn-interrupt" type="button" title="Stop the running cell (I, I)">&#x25a0; Interrupt</button>
+    <button id="btn-restart" type="button" title="Restart Python on the calculator (0, 0)">&#x21bb; Restart</button>
+    <button id="btn-restartall" type="button" class="edit" title="Restart Python and run every cell">Restart &amp; run all</button>
+    <button id="btn-clear" type="button" class="edit" title="Clear every output">Clear outputs</button>
+  </span>
+  <span class="group right">
+    <button id="btn-help" type="button" title="Help (H)">Help</button>
+  </span>
+</nav>
+<main>
+  <section id="notebook" aria-label="cells"><div id="cells"></div>
+    <div id="empty" hidden><p id="emptytext">No notebook is open on the calculator.</p><p><button id="btn-emptylist" type="button">Choose a notebook</button> <button id="btn-emptynew" type="button">New notebook</button></p></div>
+    <div class="tail edit"><button id="btn-addcell" type="button" class="addcell" title="Add a cell at the end">+ cell</button></div></section>
+</main>
+<div id="toast" hidden role="status" aria-live="polite"></div>
+<div id="drop" hidden><div>Drop a notebook (.ipynb) to open it</div></div>
+<input type="file" id="file" accept=".ipynb,application/x-ipynb+json,application/json" hidden>
+<dialog id="notebooks" aria-label="the calculator's notebooks">
+<h2>Notebooks on the calculator</h2>
+<ul id="nblist"></ul>
+<p class="dialogfoot"><button id="btn-listnew" type="button" onclick="document.getElementById('btn-new').click();document.getElementById('notebooks').close()">New notebook</button> <button id="notebooks-close" type="button">Close</button></p>
+</dialog>
+<dialog id="help">
+<!--@HELP@-->
+<p class="dialogfoot"><button id="help-close" type="button" autofocus>Close</button></p>
+</dialog>
+<script>
+/*@JS@*/
+</script>
+</body>
+</html>

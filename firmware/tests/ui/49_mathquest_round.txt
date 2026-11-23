@@ -1,0 +1,60 @@
+# Sparkle Town: Hop Along's rounding teaches the method (the user: "teach rounding as opposed to just picking the
+# closer side"; "show the number, but not on the scale"). The number is on its card, never on the line. The help
+# fades: (0) the line shows the two round numbers and the middle; (1) she finds the two round numbers first (three
+# pairs to pick); (2) the numbers only. After a right hop the line shows where the number really sits and why it
+# goes that way ("47 is past the middle: up to 50!", "45 is on the middle: the middle goes up").
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 3
+mq engine stop
+mq grant bosses
+# (0) the most help: both tens and the middle, the number on its card only
+mq roundhelp 0
+mq skill 15 0
+expect state mq_mech "Hop Along"
+expect statecontains mq_round "0 1"
+mq step 10
+expect text the middle
+screenshot mq_round_help0.png
+mq correct
+mq step 2
+expect text the middle
+screenshot mq_round_reveal.png
+mq step 60
+# (1) she finds the two tens first: three pairs, no go button yet; a wrong pair wobbles with a hint
+mq roundhelp 1
+mq skill 15 0
+expect statecontains mq_round "1 0"
+mq step 10
+expect text Which two tens is it between?
+screenshot mq_round_help1.png
+mq correct
+expect state mq_moment cheer
+mq step 60
+# (2) the numbers only: no line, the two round numbers on the pads
+mq roundhelp 2
+mq skill 15 1
+expect statecontains mq_round "2 1"
+mq step 10
+screenshot mq_round_help2.png
+mq correct
+mq step 2
+screenshot mq_round_help2_reveal.png
+mq step 60
+# halfway: the middle rounds up, shown
+mq roundhelp 0
+mq skill 15 3
+mq step 10
+screenshot mq_round_half.png
+mq correct
+mq step 2
+screenshot mq_round_half_reveal.png
+mq roundhelp -1

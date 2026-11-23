@@ -1,0 +1,174 @@
+# Drag to scroll on every scrolling screen (app/touch_scroll.c): the content
+# follows the finger (finger up shows later rows, finger left later columns),
+# one row / column per row height / column width, the focus is pulled along
+# so it stays visible, and a drag never acts like a tap.
+# --- home (Textbook view): drag down shows older history, any key returns
+type "111+0\n222+0\n333+0\n444+0\n555+0\n666+0\n777+0\n888+0\n"
+expect notext 222+0
+touch drag 160 40 160 140 8
+expect text 222+0
+expect notext 888+0
+expect state home_sel -1
+key 1
+expect text 888+0
+expect notext 222+0
+key CLEAR
+# a selected entry pushed off the bottom hands the selection to one on screen
+key UP
+expect state home_sel 15
+touch drag 160 40 160 140 8
+expect state home_sel 12
+key CLEAR CLEAR
+# --- home (Classic view)
+setmode DISPLAY CLASSIC
+setmode PREVIEW OFF
+setmode REPEAT OFF
+type "111+0\n222+0\n333+0\n444+0\n555+0\n666+0\n777+0\n888+0\n"
+expect notext 222+0
+touch drag 160 40 160 140 8
+expect text 222+0
+expect notext 888+0
+key UP
+expect text 888+0
+expect state home_sel 15
+touch drag 160 40 160 140 8
+expect state home_sel 11
+touch drag 160 140 160 40 8
+expect text 888+0
+key CLEAR CLEAR
+setmode DISPLAY TEXTBOOK
+# --- menus (menu.c): UNITS; the drag scrolls without choosing an item
+key SHIFT VARS
+expect state menu UNITS
+expect notext Magnetic
+touch drag 160 200 160 60 8
+expect screen menu
+expect text Magnetic
+expect notext Length
+expect state menu_item Mass
+touch drag 160 60 160 220 8
+expect text Length
+expect state menu_item Mass
+key CLEAR
+# --- help index (help.c)
+app help
+expect state help_topic index
+expect state help_top 0
+touch drag 160 200 160 60 8
+expect state help_top 9
+expect state help_topic index
+key CLEAR
+# --- WINDOW form (form.c): the SEQ window has 10 fields
+setmode GRAPH SEQ
+key HOME F1 F2
+expect screen window
+expect text nMin=
+expect notext Yscl=
+touch drag 160 200 160 60 8
+expect text Yscl=
+expect notext nMin=
+expect state xmin -10
+touch drag 160 60 160 200 8
+expect text nMin=
+key HOME
+setmode GRAPH FUNC
+# --- STAT form (stat_form.c): the field pushed off moves the focus; no action runs
+app stat
+key 3 3
+expect text 2-SampZTest
+expect notext Draw
+touch drag 160 200 160 60 8
+expect screen statform
+expect text Draw
+expect notext Input:
+touch drag 160 60 160 200 8
+expect text Input:
+key HOME
+# --- STAT results (stat_form.c)
+stat set L1 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+app stat
+key 2 1
+key ENTER ENTER ENTER
+expect screen statresult
+expect text xbar=10.5
+expect notext maxX=20
+touch drag 160 200 160 60 8
+expect text maxX=20
+expect notext xbar=10.5
+key HOME
+# --- list editor (stat_edit.c): rows and columns
+stat set L2 1,2
+stat set L3 1
+stat set L4 1
+stat set L5 1
+app stat
+key 1
+expect state statedit_row 1
+expect notext 18
+touch drag 160 180 160 40 8
+expect text 18
+expect state statedit_row 9
+expect state statedit_list L1
+touch drag 300 100 20 100 8
+expect state statedit_list L3
+expect text L5
+expect notext L1(
+key HOME
+# --- spreadsheet (sheet_ui.c): both directions at once
+app sheet
+expect state sheet_sel A1
+expect notext 21
+touch drag 200 200 60 40 8
+expect state sheet_sel B11
+expect text 21
+touch drag 60 40 200 200 8
+expect state sheet_sel B11
+expect notext 21
+key HOME
+# --- grid widget (xform.c xgrid: linear system, matrix editor)
+app solver
+key 3
+expect screen linsys
+key UP
+type "6"
+key ENTER
+type "7"
+key ENTER
+expect text "1,1="
+expect notext ◀
+touch drag 300 100 100 100 8
+expect text ◀
+expect text "1,3="
+touch drag 100 100 300 100 8
+expect notext ◀
+expect text "1,3="
+key HOME
+# --- row form widget (xform.c xform: solver, finance)
+app finance
+key 3
+key DOWN
+type "8\n"
+expect notext IRR=
+touch drag 160 180 160 40 8
+expect text IRR=
+expect notext count=
+expect text CF8=0
+touch drag 160 40 160 180 8
+expect text count=
+key HOME
+app solver
+key 2
+type "6\n"
+expect text degree=6
+expect notext x6=
+touch drag 160 180 160 40 8
+expect notext degree=6
+key HOME
+# --- CATALOG (menu.c): a drag does not choose an item
+key SHIFT APPS
+expect state menu CATALOG
+touch drag 160 200 160 60 8
+expect screen menu
+expect state menu CATALOG
+key CLEAR
+expect screen home

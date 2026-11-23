@@ -1,0 +1,83 @@
+# The example notebooks built into the Python module (firmware/notebooks/*.ipynb, modules/python/
+# nb_examples.c; docs/NOTEBOOK.md "Example notebooks"): listed by MENU Open after the user's
+# notebooks with "example", opened like a stored notebook, saved to the store at the first change
+# (the store's copy then replaces the example in the list), back after that copy is deleted; they
+# cannot be renamed or deleted, and can be copied to the card. Every example runs without an error.
+requirecfg MOD_PYTHON
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX fs insert 64
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX fs format
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX module library
+ifcfg CONTENT_QSPI ifcfg !MOD_CASX module installall
+nb store wipe
+app notebook
+expect screen notebook
+expect state nb_items 0
+expect state nb_examples 6
+expect text "example"
+expect state nb_list_sel "Conservative field and potential"
+screenshot notebook_examples.png
+# F4 and F3 on an example: not deleted, not renamed
+key F4
+expect state toast "Examples cannot be deleted"
+expect state nb_view list
+key F3
+expect state toast "Examples cannot be renamed"
+expect state nb_view list
+# ENTER opens it on the home screen, not yet stored
+key DOWN
+expect state nb_list_sel "Diagonalize a matrix"
+key ENTER
+expect screen home
+expect state home_nb "Diagonalize a matrix"
+expect state home_dirty 0
+nb examples
+# run it: a change, saved to the store under its name
+nb runall
+nb expect 3 val [[2,[[-1/2,1]]],[5,[[1,1]]]]
+nb expect 6 val [[2,0],[0,5]]
+nb flush
+nb list
+app notebook
+expect state nb_items 1
+expect state nb_examples 5
+key UP
+expect state nb_list_sel "Diagonalize a matrix"
+expect text "Diagonalize a matrix"
+# delete the stored copy: the example is listed again
+key F4
+expect state nb_view confirm
+key ENTER
+expect state toast Deleted
+expect state nb_items 0
+expect state nb_examples 6
+key CLEAR
+# every example opens and runs all its cells without an error
+nb open "Conservative field and potential" example
+nb runall
+nb expect 8 val 2
+nb open "Fit and plot data" example
+nb runall
+nb expect 5 val 1.96*x+0.22
+nb open "Fourier and Laplace pairs" example
+nb runall
+nb expect 3 val (s+2)/((s+2)^2+9)
+nb open "Linear program" example
+nb runall
+nb expect 2 val [12,[x=4,y=0]]
+nb open "Verify an ODE solution" example
+nb runall
+nb expect 5 val exp(-x)*(cos(2*x)+sin(2*x)/2)
+nb expect 7 val 0
+nb close
+nb store wipe
+# F5 more on an example: copy it to the card
+fs insert 8
+fs format
+app notebook
+key F5
+expect state nb_view menu
+key 3
+expect state toast "Copied to the card"
+expect state nb_items 1
+fs expect "/CALC/NOTEBOOKS/Conservative field and potential.ipynb" "\"nbformat\": 4"
+key CLEAR

@@ -1,0 +1,372 @@
+# Math Quest (modules/mathquest, app/mquest_core.c): installing the module from the
+# card, a new player, a scripted playthrough of a few levels with a fixed seed
+# (right answers, a wrong one with the misconception named and a similar problem,
+# the worked example, the level celebration), a boss, a fact game, the room and
+# the sticker book, the parent screen behind the grown-ups' gate (standards, the fact
+# grid, time, settings), and the progress surviving a power cycle. Animations are
+# advanced with `mq step N` (N frames of 40 ms), not by the clock.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+expect text installed and verified
+key CLEAR
+app mathquest
+expect screen mathquest
+expect state mq_scene title
+expect text Sparkle Town
+screenshot mathquest_title.png
+# a new player by touch: the card, a buddy, a name typed with letters (ALPHA)
+touch tap 85 130
+expect state mq_scene name
+touch tap 23 58
+type "mia"
+expect text Mia_
+mq step 4
+screenshot mathquest_new_player.png
+key ENTER
+# she starts in her town (always, the user); the garden is her first stop -- no tutorial: a game (Bubble Pop),
+# its goal hinted in place
+expect state mq_scene map
+mq level 0 0
+expect state mq_scene play
+expect state mq_moment play
+expect state mq_mech "Bubble Pop"
+expect state mq_player Mia
+expect text Pop the bubble that fits!
+# her first game is the placement (eight orders across the strands, multiplication first)
+expect state mq_placing 1
+expect state mq_run 0/8
+mq step 6
+screenshot mathquest_first_play.png
+key F5
+key CLEAR
+expect state mq_scene map
+mq seed 3
+mq fun off
+mq step 4
+screenshot mathquest_map.png
+# Garden level 1: equal groups
+mq world 0
+expect state mq_scene world
+# no level select: a few different games to pick, each its own picture (the engine picks the orders)
+expect text What shall we play?
+expect text Build It
+expect text Big finale
+mq step 4
+screenshot mathquest_world.png
+touch tap 69 120
+expect state mq_scene play
+key F5
+expect state mq_scene world
+# a stop's intro (the guide's trick) is still there for the stop's skill
+mq level 0 0
+key F5
+expect state mq_scene world
+# (the stop's own skill from here: the engine's choice is 49_mathquest_free.txt)
+mq engine stop
+mq level 0 0
+expect state mq_scene play
+expect state mq_skill "Equal groups"
+mq step 20
+screenshot mathquest_play.png
+mq correct
+expect state mq_combo 1
+expect state mq_moment cheer
+mq step 10
+screenshot mathquest_right.png
+mq settle
+mq step 2
+expect state mq_run 1/8
+# a wrong answer: a dud in the game (the friend says what it means), one more try, then a helper
+# friend pops in, walks through a similar order step by step, and she solves her own: teamwork
+mq try
+expect state mq_moment play
+mq step 6
+screenshot mathquest_dud.png
+mq try
+expect state mq_moment help
+mq step 12
+screenshot mathquest_helper.png
+mq next
+mq next
+mq step 30
+screenshot mathquest_helper_step.png
+mq next
+mq next
+mq next
+mq next
+mq next
+mq next
+expect state mq_moment play
+mq step 4
+screenshot mathquest_helper_cheer.png
+mq correct
+expect state mq_moment cheer
+mq step 6
+screenshot mathquest_teamwork.png
+mq settle
+mq step 62
+# the lightbulb: the story acted again with its operation (never the answer)
+mq bulb
+expect state mq_bulb 1
+mq step 40
+screenshot mathquest_bulb.png
+mq step 60
+expect state mq_moment play
+# the guide's trick on request: a little show, the model revealed in stages
+mq showme
+expect state mq_moment trick
+expect state mq_example_step 1/4
+mq step 20
+screenshot mathquest_example.png
+mq next
+expect state mq_example_step 2/4
+mq next
+mq next
+mq next
+expect state mq_scene play
+expect state mq_moment play
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene done
+mq step 10
+screenshot mathquest_level_done.png
+# the done screen: stay and play again, beside the way on (the arrows choose it)
+expect text Stay & play again!
+key LEFT
+mq step 4
+screenshot mathquest_level_done_stay.png
+key RIGHT
+mq next
+expect state mq_scene world
+# Bakery: tap slices to shade a fraction, and the number line
+mq grant bosses
+mq skill 29 1
+# Bakery: tap slices to frost a fraction (keys 1-8 work too), then ok
+mq grant bosses
+mq skill 29 1
+expect state mq_skill "Cut fair shares"
+mq step 20
+touch tap 102 116
+touch tap 140 116
+mq step 4
+screenshot mathquest_slices.png
+mq info
+# Bakery number line: tap where the fraction is
+mq skill 25 0
+expect state mq_skill "Fractions on a line"
+key RIGHT RIGHT
+mq step 4
+screenshot mathquest_numberline.png
+# more models: a clock, coins, a bar graph, a protractor, a line plot, the coordinate grid
+mq skill 39 1
+mq step 30
+screenshot mathquest_clock.png
+mq skill 44 2
+mq step 30
+screenshot mathquest_coins.png
+mq skill 62 1
+mq step 30
+screenshot mathquest_graph.png
+mq skill 56 1
+mq step 30
+screenshot mathquest_protractor.png
+mq skill 64 1
+mq step 30
+screenshot mathquest_lineplot.png
+mq skill 70 0
+mq step 30
+screenshot mathquest_coord.png
+mq skill 65 1
+mq step 30
+screenshot mathquest_table.png
+mq skill 50 1
+mq step 30
+screenshot mathquest_area_split.png
+# the Garden boss: mixed problems, a hat, the next world opens
+mq boss 0
+expect state mq_scene play
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene done
+expect text Big finale won!
+mq step 10
+screenshot mathquest_boss.png
+mq next
+key CLEAR
+expect state mq_scene map
+# a fact game: catch the falling stars
+mq game 0
+expect state mq_scene factgame
+mq step 30
+screenshot mathquest_stars.png
+mq correct
+mq correct
+mq wrong
+mq step 5
+screenshot mathquest_stars_hint.png
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq correct
+mq step 40
+expect text You did it!
+expect state mq_fg_score 12
+mq step 60
+expect notext Best:
+screenshot mathquest_stars_end.png
+mq next
+expect state mq_scene arcade
+mq step 4
+screenshot mathquest_arcade.png
+# the snail race and the cafe
+mq game 3
+mq correct
+mq correct
+mq settle
+mq step 2
+screenshot mathquest_race.png
+key CLEAR
+mq game 1
+mq correct
+mq step 20
+screenshot mathquest_cafe.png
+key CLEAR
+mq game 2
+mq correct
+mq correct
+mq correct
+mq step 20
+screenshot mathquest_bloom.png
+key CLEAR
+key CLEAR
+expect state mq_scene map
+# the home (tests/ui/49_mathquest_home.txt covers it): the starter bedroom
+mq fun 36000
+key F1
+expect state mq_scene room
+expect state mq_room Bedroom
+mq step 4
+screenshot mathquest_room.png
+key CLEAR
+# the book, and the sticker book from it
+key F2
+expect state mq_scene book
+key F1
+expect state mq_scene stickers
+mq step 4
+screenshot mathquest_stickers.png
+key CLEAR
+# grown-ups: F5 shows the gate, its problem answered on the keys opens their screen (seed 11: 5n + 17 = 57)
+mq gate seed 11
+key F5
+mq step 2
+expect state mq_scene map
+expect state mq_gate up
+type "8"
+key ENTER
+expect state mq_scene parent
+# (the map's sparkles settle: the old hold took 2.6 s of real time here)
+mq step 70
+screenshot mathquest_parent_skills.png
+key DOWN DOWN
+key F2
+mq step 2
+expect text fluent
+screenshot mathquest_parent_facts.png
+# focus this week: the 4 table by its key, a single fact by a tap on its cell, for this week
+key 4
+touch tap 119 107
+touch tap 255 136
+mq step 2
+screenshot mathquest_parent_focus.png
+expect text Focus this week
+expect state mq_focus 22
+mq focus clear
+key F3
+key F4
+key F3
+touch tap 69 132
+mq step 2
+screenshot mathquest_parent_time.png
+key F4
+mq step 2
+screenshot mathquest_parent_setup.png
+key F5
+expect state mq_scene map
+# progress survives switching off and on
+mq save
+key SHIFT ON
+key ON
+app mathquest
+expect state mq_scene title
+expect text Mia
+touch tap 85 130
+expect state mq_player Mia
+expect state mq_bosses 255
+# a new play day starts with a surprise gift
+expect state mq_scene surprise
+touch tap 160 110
+mq step 30
+expect text yay!
+screenshot mathquest_surprise.png
+mq next
+expect state mq_scene map

@@ -1,0 +1,84 @@
+# Integration: values with an uncertainty (±) in the spreadsheet, the
+# statistics lists, with units and in RPN mode; ± typed from the UNITS menu
+# (SHIFT VARS 1). Lists hold plain numbers: a ± value is stored as its value.
+# spreadsheet: correlated cells, units, a linked list gets the values
+app sheet
+ifcas src sheet set A1 9.81±0.02
+ifcas src sheet set A2 =A1*2
+ifcas src sheet expect A2 19.62±0.04
+ifcas src sheet set A3 =A1-A1
+ifcas src sheet expect A3 0.0±0
+ifcas src sheet set C1 3_m
+ifcas src sheet set C2 =C1*(2±0.1)
+ifcas src sheet expect C2 (6.0±0.3)_m
+# typed into a cell with the UNITS menu's ±
+sheet select B1
+type "4"
+key SHIFT VARS 1
+type "0.5\n"
+ifcas src sheet expect B1 4.0±0.5
+sheet link A L1
+ifcas src stat expect L1 9.81,19.62,0
+ifcas src redraw
+ifcas src screenshot unc_sheet.png
+# a list of ± values stored from the home screen keeps the unrounded values
+# (bug: the elements became undef)
+key HOME
+ifcas src type "{pm(1.234,0.1),pm(2,0.2)}"
+ifcas src key ASSIGN
+ifcas src type "L2\n"
+ifcas src expect state last_output [1.23±0.10,2.0±0.2]
+ifcas src stat expect L2 1.234,2
+ifcas src type "mean(L2*pm(1,0.1))\n"
+ifcas src expect state last_output 1.62±0.16
+# the list editor: a ± entry stores its value (bug: ENTER did nothing, silently)
+app stat
+key 1
+key RIGHT RIGHT
+expect state statedit_list L3
+type "1.25"
+key SHIFT VARS 1
+type "0.01\n"
+ifcas src stat expect L3 1.25
+ifcas stub key CLEAR CLEAR
+# a refused entry says why and stays on the line (bug: the message was never drawn)
+type "1+\n"
+expect text ERR:
+ifcas src expect state statedit_row 2
+screenshot unc_list_error.png
+key CLEAR CLEAR
+# units: (2.0±0.1) m / (0.50±0.02) s from the UNITS menu
+key HOME
+type "(2"
+key SHIFT VARS 1
+type "0.1)"
+key SHIFT VARS DOWN DOWN ENTER ENTER
+expect state entry (2±0.1)_m
+type "/(0.5"
+key SHIFT VARS 1
+type "0.02)"
+key SHIFT VARS DOWN DOWN DOWN DOWN DOWN ENTER ENTER
+expect state entry (2±0.1)_m/(0.5±0.02)_s
+key ENTER
+ifcas src expect state last_output (4.0±0.3)_m/s
+ifcas src type "convert(ans,"
+ifcas src type "_km/h)\n"
+ifcas src expect state last_output (14.4±0.9)_km/h
+# RPN: 2±0.1 ENTER 3 × ; levels are CAS values (x ENTER - is 0±0, see
+# 65_rpn_values.txt)
+setmode ENTRY RPN
+key HOME
+ifcas src type "2"
+ifcas src key SHIFT VARS 1
+ifcas src type "0.1\n"
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src type "3"
+ifcas src key MUL
+ifcas src expect state rpn_1 6.0±0.3
+ifcas src type "5"
+ifcas src key SHIFT VARS DOWN DOWN ENTER DOWN DOWN DOWN ENTER
+ifcas src expect state rpn_line 5_km
+ifcas src key ENTER MUL
+ifcas src expect state rpn_1 (30.0±1.5)_km
+ifcas src screenshot unc_rpn.png
+setmode ENTRY ALGEBRAIC

@@ -1,0 +1,125 @@
+# Animated graph cells on the calculator (app/gcell.c, app/anim_core.c ANIM_T_CELL, the Animation
+# module; help page "graph-cells"): a cell whose functions use t shows "anim" in its caption and its
+# first frame (t at the start of its range), it does not play by itself (battery); selected, F5
+# plays it (the module's timing; the soft key reads pause, the caption ▶ and t), any key pauses it,
+# the arrows step t; ENTER opens the graph app with its animation of t set to the cell's settings and
+# frame (the ANIMATION menu plays there); settings changed there come back to the cell; a 3D cell of
+# t plays the same way. Frames are stepped with the console (`anim step N`: N frames of 40 ms).
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+ifcfg !MOD_ANIMATION module library
+ifcfg !MOD_ANIMATION module install /CALC/MODULES/{mod:animation}
+ifcfg !MOD_ANIMATION key CLEAR
+type "1+1\n"
+key F1
+type "2sin(x-t)"
+key F5
+expect screen home
+expect state home_sel 2
+expect state gcell_anim 1
+expect state gcell_t 0
+expect state gcell_anim_cfg "0 6.28319 4 0"
+expect text anim
+expect notext "still frame"
+expect state softkeys "graph|frac|func|mtrx|play"
+expect state anim_playing 0
+screenshot anim_cell.png
+# the arrows step t by 1/50 of its range (loop: around at the ends)
+key RIGHT
+expect state gcell_t 0.125664
+expect text "anim t=0.1257"
+key LEFT
+expect state gcell_t 0
+key LEFT
+expect state gcell_t 6.15752
+key RIGHT
+expect state gcell_t 6.28319
+key RIGHT
+expect state gcell_t 0.125664
+key LEFT
+expect state gcell_t 0
+# selected again, it keeps its frame
+key HOME
+expect state home_sel -1
+key UP
+expect state home_sel 2
+expect state gcell_t 0
+# F5 plays it from its t: frames of the module, a quarter of the range in 1 s of 4
+key F5
+expect state anim_playing 1
+expect state anim_kind cell
+expect state softkeys "graph|frac|func|mtrx|pause"
+anim step 25
+expect statecontains gcell_t 1.570
+expect text "▶ anim t=1.571"
+expect state gcell_fresh 1
+screenshot anim_cell_playing.png
+# any key pauses it and does only that; the arrows step from there
+key DOWN
+expect state anim_playing 0
+expect state home_sel 2
+expect state softkeys "graph|frac|func|mtrx|play"
+expect statecontains gcell_t 1.570
+key RIGHT
+expect statecontains gcell_t 1.696
+# + − zoom; then all the arrows move the plot, as in a still cell
+key ADD
+expect state gcell_window "-5 5 -5 5"
+key RIGHT
+expect state gcell_window "-3.75 6.25 -5 5"
+expect statecontains gcell_t 1.696
+key CLEAR
+# ENTER: the graph app on the cell, its slider t at the cell's frame, the animation of t with the
+# cell's settings (SHIFT F5: the ANIMATION menu plays it there)
+key ENTER
+expect screen graph
+expect statecontains slider_t 1.696
+key SHIFT F5
+expect state menu ANIMATION
+key 1
+expect state anim_playing 1
+expect state anim_kind param
+expect state anim_var t
+anim step 5
+key CLEAR
+expect state anim_playing 0
+# settings changed there (t from 0 to π in 2 s, bounce) come back to the cell with HOME
+anim cfg t 0 3.14159 2 1
+key HOME
+expect screen home
+expect state home_sel 2
+expect state gcell_anim_cfg "0 3.14159 2 1"
+expect state gcell_t 0
+# bounce: 1.2 sweeps there and back
+key F5
+anim step 60
+expect statecontains gcell_t 2.5132
+key CLEAR
+expect state anim_playing 0
+# a 3D cell of t: the same (a new cell takes the settings of the animation of t)
+key CLEAR
+key F1
+key F1
+type "sin(x-t)*cos(y)"
+key F5
+expect screen home
+expect state home_sel 4
+expect state gcell_anim 1
+expect state gcell_anim_cfg "0 3.14159 2 1"
+key F5
+expect state anim_playing 1
+anim step 5
+expect statecontains gcell_t 0.31415
+screenshot anim_cell_3d.png
+key CLEAR
+expect state anim_playing 0
+# a cell that is not animated: the plain soft keys
+key CLEAR
+key F1
+expect screen yeq
+key CLEAR
+type "x^2"
+key F5
+expect state gcell_anim 0
+expect state softkeys "graph|frac|func|mtrx|≈"

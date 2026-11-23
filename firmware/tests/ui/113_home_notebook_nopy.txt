@@ -1,0 +1,35 @@
+# The home notebook without the Python module (not installed, emulated on the QSPI tiers with
+# `modx off`; the core tier has none): calculations, text cells, graph cells and the session work;
+# saving, opening and Python cells say why they cannot.
+ifcfg CONTENT_QSPI modx off python
+type "2+2\n"
+expect state last_output 4
+key MENU 1
+expect screen message
+expect text Python
+key CLEAR
+expect screen home
+key MENU 8
+expect screen message
+key CLEAR
+expect state home_mode math
+key MENU 7
+type "plain notes"
+key ENTER
+expect state home_kind text
+key F1
+key CLEAR
+type "x^2-1"
+key HOME
+key SHIFT F5
+expect state home_kind graph
+expect state gcell_fn x^2-1
+key ADD
+expect state gcell_window "-5 5 -5 5"
+key CLEAR CLEAR
+key SHIFT ON
+key ON
+expect state history 3
+expect state gcell_window "-5 5 -5 5"
+expect text y1=x^2-1
+screenshot home_notebook_nopy.png

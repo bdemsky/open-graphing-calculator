@@ -1,0 +1,145 @@
+# CALC menu (SHIFT F4 on the graph screens): value, zero, minimum, maximum, intersect, dy/dx,
+# integral (shaded), inflection, arc length, table at the cursor. Results are
+# shown on the graph and stored in ans.
+key F1
+type "x^2-2"
+key DOWN
+type "sin(x)"
+key F5 ENTER
+key SHIFT F4
+expect screen menu
+expect state menu CALCULATE
+key SHIFT MENU
+expect state help_topic graph-calc
+key CLEAR
+expect state menu CALCULATE
+# zero of Y1: left bound by cursor keys, right bound typed, guess at the cursor
+key 2
+expect screen graph
+expect state calc_prompt "Left bound?"
+expect state trace_fn 1
+key LEFT LEFT LEFT LEFT LEFT LEFT LEFT LEFT LEFT LEFT
+key ENTER
+expect state calc_prompt "Right bound?"
+type "3"
+key ENTER
+expect state calc_prompt "Guess?"
+key ENTER
+expect state calc_prompt ""
+expect statecontains graph_result Zero  X=1.41421356
+expect state graph_label "Zero (1.414214, 0)"
+expect eval "ans" "1.41421356237"
+screenshot calc_zero.png
+# minimum of Y1 over [-2, 2]
+key SHIFT F4 3
+type "~2"
+key ENTER
+type "2"
+key ENTER ENTER
+expect statecontains graph_result Minimum  X=0
+expect statecontains graph_result Y=-2
+# maximum of sin over [0, 3]: switch the curve with DOWN
+key SHIFT F4 4
+key DOWN
+expect state trace_fn 2
+type "0"
+key ENTER
+type "3"
+key ENTER ENTER
+expect statecontains graph_result Maximum  X=1.57079633
+expect statecontains graph_result Y=1
+# intersection of Y1 and Y2 near x = 1.5: with exactly two curves there is
+# nothing to choose, so it asks for the guess at once (curve choice: 36_graph_usability)
+key SHIFT F4 5
+expect state calc_prompt "Guess?"
+expect text "Guess?  Y1 and Y2"
+type "1.5"
+key ENTER
+expect statecontains graph_result Intersection  X=1.72846632
+screenshot calc_isect.png
+# ∫ Y1 from 0 to 1 = 1/3 - 2, with the area shaded (tint of blue)
+key SHIFT F4 7
+expect state trace_fn 1
+type "0"
+key ENTER
+type "1"
+key ENTER
+expect statecontains graph_result -1.6666667
+ifcas src expect eval "ans" "-1.66666666667"
+ifcas stub expect eval "ans" "-5/3"
+expect color 0xae5d 100
+screenshot calc_integ.png
+key CLEAR
+expect state graph_result ""
+# dy/dx of Y1 at 1
+key SHIFT F4 6
+type "1"
+key ENTER
+expect state graph_result dy/dx=2
+# value: Y1(2), then DOWN shows Y2(2)
+key SHIFT F4 1
+expect state calc_prompt "Value at?"
+type "2"
+key ENTER
+expect statecontains graph_result Value  X=2  Y=2
+expect eval "ans" "2"
+key DOWN
+expect statecontains graph_result Y=0.90929743
+# arc length of sin from 0 to 1
+key SHIFT F4 9
+type "0"
+key ENTER
+type "1"
+key ENTER
+expect state graph_result "Arc length=1.3114425"
+# inflection point of sin near π
+key SHIFT F4 8
+type "2"
+key ENTER
+type "4"
+key ENTER
+key ENTER
+expect statecontains graph_result Inflection  X=3.14159265
+# x^2-2 has none
+key SHIFT F4 8
+key UP
+type "2"
+key ENTER
+type "4"
+key ENTER ENTER
+expect state graph_result "No inflection between the bounds: widen them"
+# table centred on the trace cursor
+key SHIFT F4
+type "3"
+key ENTER
+key CLEAR
+key F4
+type "3"
+key ENTER
+expect state trace_x 3
+key SHIFT F4 0
+expect screen table
+expect state table_start -1
+expect state table_row 4
+screenshot calc_table.png
+# CALC in another mode: only the operations that apply
+key F1 UP UP UP UP UP UP UP RIGHT ENTER
+expect state graph_type PAR
+expect state yeq_row 0
+type "x"
+key DOWN
+type "x^2"
+key F5 SHIFT F4 2
+expect screen message
+key CLEAR
+key SHIFT F4 6
+type "1"
+key ENTER
+expect state graph_result dy/dx=2
+key SHIFT F4 9
+type "0"
+key ENTER
+type "1"
+key ENTER
+expect state graph_result "Arc length=1.47894286"
+lcdcheck

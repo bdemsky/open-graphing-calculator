@@ -1,0 +1,64 @@
+# The CAS running out of memory (the arena really exhausted, and results refused up front
+# as too large) in every app that evaluates: the error is shown, nothing crashes, and the
+# next evaluation works with all the memory back.
+requirecfg CAS_SRC
+key HOME
+type "expand((x+1)^3000*(y+1)^3000)\n"
+expect state last_error 1
+expect text out of memory
+type "expand((x+y+z)^300)\n"
+expect state last_error 1
+expect text result too large
+# the forms browser
+ifcfg CAS_FORMS type "forms(expand((x+1)^3000*(y+1)^3000))\n"
+ifcfg CAS_FORMS expect state last_error 1
+type "2+3\n"
+expect state last_output 5
+# graphing: a function the CAS cannot even simplify
+key F1
+expect screen yeq
+type "x*factorial(19999)^200"
+key DOWN
+type "x^2"
+key F5 ENTER
+expect screen graph
+expect text integer too large
+screenshot oom_graph.png
+key CLEAR HOME
+type "4*5\n"
+expect state last_output 20
+# solver
+app solver
+key 1
+expect screen eqsolver
+type "expand((x+1)^3000*(y+1)^3000)=1"
+key ENTER
+key ALPHA ENTER
+expect text out of memory
+screenshot oom_solver.png
+key HOME
+type "6*7\n"
+expect state last_output 42
+# spreadsheet
+app sheet
+expect screen sheet
+sheet set A1 =expand((x+1)^3000*(y+1)^3000)
+sheet expect A1 "ERR:out of memory"
+sheet set A2 =1+1
+sheet value A2 2
+redraw
+screenshot oom_sheet.png
+key HOME
+# RPN
+setmode ENTRY RPN
+key HOME
+expect screen rpn
+type "(x+1)^3000*(y+1)^3000\n"
+key CAS 2
+type "3\n4"
+key ADD
+ifcas src expect state rpn_1 7
+setmode ENTRY ALGEBRAIC
+key HOME
+type "8+1\n"
+expect state last_output 9

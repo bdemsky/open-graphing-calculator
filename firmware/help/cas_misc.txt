@@ -1,0 +1,189 @@
+%% CAS help: miscellaneous helpers
+@group cas-misc Programming-free helpers
+Conditional expressions, variables and assumptions, and commands that take expressions and equations apart.
+
+@cmd when
+group: cas-misc
+summary: Conditional expression
+syntax: when(cond, a, b)
+example: when(3>2,1,0)
+result: 1
+example: f(x):=when(x<0,-x,x)
+result: when(x<0,-x,x)
+example: f(-3)
+result: 3
+see: ifte, assume
+
+Returns `a` if the condition is true and `b` if it is false. If the condition cannot be decided (for example it contains a variable without a value), the `when` expression is kept, which makes it useful for defining functions piece by piece. [[ifte]] is the same command.
+
+@cmd ifte
+group: cas-misc
+summary: Same as when
+syntax: ifte(cond, a, b)
+example: ifte(1>2,yes,no)
+result: no
+see: when
+
+Same as [[when]]: if `cond` then `a` else `b`.
+
+@cmd purge
+group: cas-misc
+summary: Delete variables
+syntax: purge(x, y, ...)
+example: a:=5
+result: 5
+example: purge(a)
+result: true
+example: a
+result: a
+see: restart, unassume, vars
+
+Removes the stored values, function definitions and assumptions of the given names, so they become free symbols again. Returns `true`.
+
+@cmd restart
+group: cas-misc
+summary: Delete all variables and functions
+syntax: restart()
+syntax: restart
+example: a:=5
+result: 5
+example: restart
+result: true
+example: a
+result: a
+see: purge, vars
+
+Clears every user variable and user-defined function (also the matrices `[A]`..`[J]`). Returns `true`. `restart` and `restart()` are the same.
+
+@cmd type
+group: cas-misc
+summary: Kind of an expression
+syntax: type(expr)
+example: type(1/2)
+result: "rational"
+example: type(x=1)
+result: "equation"
+example: type([[1,2]])
+result: "matrix"
+see: has
+
+Returns a string describing the expression: `"integer"`, `"rational"`, `"real"` (decimal), `"identifier"`, `"vector"`, `"matrix"`, `"string"`, `"equation"`, `"function"` or `"expression"`.
+
+@cmd assume
+group: cas-misc
+summary: Declare a property of a variable
+syntax: assume(x>0)
+syntax: assume(x>=0)
+syntax: assume(x<0)
+syntax: assume(x, integer)
+syntax: assume(-1<x and x<1)
+syntax: assume(x>y)
+syntax: assume(abs(x)<1)
+example: assume(a>0)
+result: a>0
+example: sqrt(a^2)
+result: a
+example: assume(n,integer)
+result: n
+example: cos(n*pi)
+result: (-1)^n
+example: assume(u>1)
+result: u>1
+example: assume(v>=u-1)
+result: v>=u-1
+example: v>0
+result: true
+see: unassume, about, purge
+
+Records an assumption about a variable, which simplification, limits and integrals then use. Variables are real by default.
+
+- Relations with `>`, `>=`, `<`, `<=` between any real expressions: `x>0`, `x>1`, `x>y`, `y>=x-1`; `and` of several; `abs(x)<1` means `-1<x and x<1`.
+- A relation in one variable bounds it: with `-3*pi<x and x<-5*pi/2`, `abs(cos(x))` is `-cos(x)`, and `atan(tan(z))` is `z` when `z` lies between -pi/2 and pi/2.
+- A relation typed on its own is decided when the assumptions (or, for a polynomial in one variable, the real numbers) settle it: `x^4-x+1>0` is `true`.
+- Properties: `integer`, `positive`, `negative`, `nonnegative`, `real`.
+- A new sign assumption replaces the previous one; `integer` is kept.
+- With `a>0`, `sqrt(a^2)` is `a` and `abs(a)` is `a`; with `n` integer, `sin(n*pi)` is 0.
+
+@cmd unassume
+group: cas-misc
+summary: Remove assumptions on variables
+syntax: unassume(x, y, ...)
+example: assume(a>0)
+result: a>0
+example: unassume(a)
+result: true
+example: about(a)
+result: real
+see: assume, about
+
+Forgets all assumptions on the given variables. Returns `true`.
+
+@cmd about
+group: cas-misc
+summary: Show assumptions on a variable
+syntax: about(x)
+example: about(q)
+result: real
+example: assume(a>0)
+result: a>0
+example: about(a)
+result: a>0
+see: assume, unassume
+
+Returns what is assumed about `x`: a relation such as `a>0`, `integer`, a list of both, or `real` if nothing has been assumed.
+
+@cmd has
+group: cas-misc
+summary: Test whether an expression contains x
+syntax: has(expr, x)
+example: has(x^2+y,x)
+result: true
+example: has(x^2+y,z)
+result: false
+see: type, subst
+
+Returns `true` if `x` (a variable or subexpression) occurs in `expr`, otherwise `false`.
+
+@cmd lhs
+group: cas-misc
+summary: Left side of an equation
+syntax: lhs(eq)
+example: lhs(x+1=3)
+result: x+1
+example: lhs([1,2,3])
+result: 1
+see: rhs, left
+
+Returns the left side of an equation or relation. For a list, returns its first element. [[left]] is the same command.
+
+@cmd rhs
+group: cas-misc
+summary: Right side of an equation
+syntax: rhs(eq)
+example: rhs(x+1=3)
+result: 3
+example: rhs([1,2,3])
+result: 3
+see: lhs, right
+
+Returns the right side of an equation or relation. For a list, returns its last element. [[right]] is the same command.
+
+@cmd left
+group: cas-misc
+summary: Same as lhs
+syntax: left(eq)
+example: left(x+1=3)
+result: x+1
+see: lhs
+
+Same as [[lhs]]: left side of an equation, or first element of a list.
+
+@cmd right
+group: cas-misc
+summary: Same as rhs
+syntax: right(eq)
+example: right(x+1=3)
+result: 3
+see: rhs
+
+Same as [[rhs]]: right side of an equation, or last element of a list.

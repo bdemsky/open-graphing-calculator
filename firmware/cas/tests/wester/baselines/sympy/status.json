@@ -1,0 +1,6 @@
+{
+ "engine": "sympy",
+ "available": true,
+ "info": "SymPy 1.14.0 (Python 3.13.16)",
+ "timeout_s": 30.0
+}

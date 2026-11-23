@@ -1,0 +1,241 @@
+%% Pages for the built-in screens and menus (topic ids = screen names, see app/ui.h).
+
+@page home-screen Home screen
+Type an expression and press {enter}: the input appears on the left, the result on the right. The home screen is a notebook (the title bar shows its name, "Notebook: Unsaved" until it has one; {menu} is its menu): graph cells, text and Python cells, saving and opening are in [[home-notebook]]. The CAS computes exactly (fractions, roots, π) unless RESULT is APPROX in [[mode|settings]] or the input contains a decimal number. {home} comes back here from any screen.
+
+- {enter} on an empty line repeats the last entry; {F5} (≈) evaluates the line as a decimal. On an empty line (or with a history entry selected) {F5} switches the last result (the selected one) between decimal and exact: `approx(Ans)`, `exact(Ans)`. Back from a decimal that ≈ made, it gives the exact value again (`ln(9)`, ≈, ≈: `2·ln(3)`), not a fraction close to the decimal.
+- Results are simplified as they are shown (SIMPLIFY AUTO in [[mode-simplify|settings]]): `cos(x)^2+sin(x)^2` gives 1. {shift} {F3} (simplify) simplifies further, {shift} {F4} (rewrite) offers factor, expand, partfrac, trig forms and more: see [[result-actions]].
+- A line that starts with an operator (`+`, `*`, `^`, `²`, ...) continues from the last result: `*2` means `Ans*2`.
+- {shift} {(−)} inserts `Ans`, the last result.
+- {shift} {enter} (entry) recalls earlier inputs, newest first; press it again for older ones.
+- {▲} selects a history entry (input or result), {▲} {▼} move the selection, {enter} pastes it into the entry line, {clear} deselects. While one is selected the soft keys paste its input, its result or `Out[n]` ({shift} {enter}: its result); `Out[n]` is the result marked [n] and `Ans` the latest one ([[home-notebook]]).
+- {menu} opens the [[notebook-menu]] (save, open, new, text and Python cells, run all, edit in place).
+- {clear} clears the entry line; on an empty line it clears the history ({menu} {F1} right after brings it back). {shift} {clear} (clear all) asks, then deletes the variables and functions, the entry line and the history; settings, Y=, lists and apps are kept ([[mem]]: Reset all).
+- `expr→name` ({→}) stores a value; `f(x):=x^2` ({shift} {→} types `:=`) defines a function. Use [[vars|vars]] to insert stored names.
+- `Y1(2)` evaluates the Y= function Y1 at 2 (vars, Y-VARS).
+- Soft keys: {F1} graph (the graph editor: 2D functions, or 3D with its switch; graphing them adds a [[graph-cells|graph cell]] here), {F2} frac, {F3} func and {F4} mtrx ([[textbook-templates|templates]]), {F5} ≈; {shift} {F1} .. {F5}: table, solve, simplify, rewrite ([[result-actions]]), graph (adds a [[graph-cells|graph cell]]).
+- Built-in function and command names work in any case: `COS(x)`, `Sin(x)`, `LN(2)`, `SQRT(2)`, `PI` (see [[editing]]). Variables are case-sensitive: `X` and `x` are different.
+
+Results follow the number format of [[mode-format|settings]] (FIX, SCI, ENG) and the [[mode-complex|COMPLEX]] setting. See also [[editing]] and [[errors]].
+
+@page result-actions Simplify and rewrite results
+One key rewrites a result, so you do not have to type `simplify(...)`. On the home screen:
+
+- {shift} {F3} (simplify) applies [[simplify]].
+- {shift} {F4} (rewrite) opens the REWRITE menu; {1} .. {9} or {enter} choose: 1 forms (the [[forms-browser|alternate forms]] of the result: pick one from a list), 2 [[factor]], 3 [[expand]], 4 ≈ / exact ([[approx]] or [[exact]]), 5 [[partfrac]] (partial fractions), 6 [[texpand]] (trig expand), 7 [[tlin]] (trig reduce: powers to multiple angles), 8 [[tcollect]] (trig combine), 9 [[collect]] in x; for a result with trig functions or exponentials also {0} exp→trig ([[exp2trig]], Euler's formula) and trig→exp ([[trig2exp]], the last item: {▲} {enter}).
+- For a matrix the menu is: 1 simplify, 2 x⁻¹ ([[inv]]), 3 [[det]], 4 [[transpose]], 5 ≈ / exact, 6 factor, 7 expand.
+- For a value with a unit (`3_m`): 1 simplify, 2 convert to: the entry line becomes `convert(Ans,)` with the cursor in the hole and the [[units|UNITS]] menu opens; choose the unit (or type it) and press {enter}. 3 [[usimplify]] (to SI units), 4 ≈ / exact, 5 factor, 6 expand.
+- {F5} (≈) on an empty line switches the last result between decimal and exact.
+
+The command acts on, in this order: the history entry selected with {▲} (its input or its result), the entry line being typed, or the last result. The result is a new history entry whose input shows what was done, for example `simplify(Ans)` or `factor(x^2-1)`, so the history reads like what you would have typed. Both Classic and Textbook display work the same way.
+
+{shift} {F3} is simplify; the menu's first item lists all the [[forms-browser|alternate forms]] instead.
+
+In [[rpn|RPN]] {shift} {F4} (simplify) and {shift} {F5} (rewrite) act on level 1 (a line being typed is pushed first; undo brings the old level back). For collect, a name in level 1 is the variable; for convert to, level 1 is the unit and level 2 the value (`3_m` {enter} `_ft` {enter}, then {shift} {F5} {2}).
+
+Results are also simplified automatically as they are shown, with a quicker pass that keeps the forms you ask for: see [[mode-simplify]].
+
+@page forms-browser Alternate forms: equivalent ways to write a result
+{shift} {F4} (rewrite) {1} (forms) lists different ways to write the result, the line being typed or the selected history entry: factored and expanded, over one denominator or as partial fractions, trig and log rewritings. In [[rpn|RPN]] {shift} {F5} {1} does the same for level 1. The list comes from [[forms]]: every form has been checked to be equal to the original.
+
+- The simplest forms come first and have a blue square at the left: they are "equally simple" (within 20 % of the smallest). A dashed line separates them from the longer forms.
+- A form that is equal only on part of the domain says where in small print below it: `if x≠1` (a cancelled factor: the original is undefined at 1), `if x>0`, `if x real`.
+- {▲} {▼} choose a form, {F1} {F2} page, drag the list to scroll. Forms are shown in textbook (2D) form; in Classic display, or when a form is too wide, as text.
+- {enter} or {F3} (use), or a tap on the chosen form, takes it: on the home screen it becomes a new result whose input reads `forms(Ans)` (or `forms(` the line `)`), so Ans is the chosen form; in RPN it replaces level 1 ({F5} undo brings the old value back).
+- {menu} {F3} or {shift} {F3} copies the chosen form to the [[clipboard]].
+- {clear} or {F5} (back) returns without a change; {F4} is this help.
+
+The search takes up to about a second; a longer expression may show fewer forms. simplify itself is {shift} {F3} ([[result-actions]]).
+
+@page mode Settings
+{shift} {home} (also {shift} {F3} format on the graph screens, or apps > Settings) lists the settings. {▲} {▼} choose a row, {◀} {▶} change its option at once (or tap an option). The rows scroll when there are more than fit on the screen. {shift} {menu} or {F4} (help) explains the highlighted row, {F1} (about) shows the firmware version, {F5} (done) or {clear} returns to the home screen. Settings are kept when the calculator is off.
+
+- [[mode-angle|ANGLE]]: RADIAN or DEGREE.
+- [[mode-result|RESULT]]: EXACT or APPROX.
+- [[mode-digits|DIGITS]]: significant digits of approximate results.
+- [[mode-format|FORMAT]] and DECIMAL: NORMAL, SCI or ENG notation, FLOAT or a fixed number of decimals.
+- [[mode-complex|COMPLEX]]: REAL, a+bi or r∠θ.
+- [[mode-display|DISPLAY]] TEXTBOOK/CLASSIC, [[mode-preview|PREVIEW]], [[mode-repeat|REPEAT]] 0.(3), [[mode-theme|THEME]] LIGHT/DARK, [[mode-font|FONT]] NORMAL/LARGE.
+- ENTRY: ALGEBRAIC or [[rpn|RPN]]; [[mode-simplify|SIMPLIFY]]: AUTO (results simplified as they are shown) or OFF.
+- [[mode-graph|GRID and AXES]] of the graph.
+- [[mode-light|LIGHT]]: screen brightness.
+- [[mode-usb|ON USB]]: stay on with the screen dark, or sleep, when idle on USB power.
+
+@page mode-angle Angle mode: degrees or radians
+RADIAN or DEGREE. In DEGREE mode the trigonometric functions take degrees and the inverse functions return degrees: `sin(30)` is 1/2. The status bar shows RAD or DEG.
+
+Independently of the mode, `°` and `ʳ` from the angle menu ({shift} {,}) mark an angle as degrees or radians: `sin(30°)` is 1/2 in both modes. See [[menu-angle]].
+
+@page mode-result Exact or approximate results
+EXACT keeps fractions, roots and π exact: `1/3` stays `1/3`, `√(8)` becomes `2*√(2)`. APPROX gives decimal results with DIGITS significant digits: `1/3` becomes `0.333333333333`.
+
+In EXACT mode a decimal point in the input makes that part approximate (`1/3.0`), and [[approx]] gives a decimal value of one expression. [[exact]] converts decimals back to fractions.
+
+@page mode-simplify Automatic simplification
+AUTO (the default) simplifies every result of the home screen and of RPN as it is shown, with a quick pass: the Pythagorean identities (`cos(x)^2+sin(x)^2` is 1, `sec(x)^2-tan(x)^2` is 1), like terms across products (`x*(x+1)-x^2` is x), common factors of fractions (`(x^2-1)/(x-1)` is x+1) sums of fractions (`1/(x-1)-1/(x+1)` is `2/(x^2-1)`) and Euler's formula when exponentials and trig functions of one argument meet (`(e^(i*x)+e^(-i*x))/2` is cos(x), `e^(i*x)-(cos(x)+i*sin(x))` is 0, `(e^x+e^-x)/2` is cosh(x)); a lone `e^(i*x)` or `cos(x)+i*sin(x)` keeps its form. It never changes a form you asked for: results of [[factor]], [[expand]], [[partfrac]], [[texpand]], [[collect]], [[approx]] and the other rewriting commands stay as they are, and a factored expression you type, such as `(x-1)*(x+1)`, is kept. Decimals, units and uncertainties are left alone.
+
+OFF shows results as the CAS computes them. Either way {shift} {F3} applies the full [[simplify]] and {shift} {F4} the other [[result-actions|rewritings]]. The pass is the command [[autosimplify]]; graphs, tables, the solvers and the other apps never use it.
+
+@page mode-digits Significant digits
+DIGITS (6, 8, 10, 12 or 15) sets how many significant digits approximate results show in FORMAT NORMAL with DECIMAL FLOAT. `approx(pi,30)` computes more digits for one value (see [[approx]]).
+
+@page mode-format Number format
+FORMAT and DECIMAL control how decimal (approximate) numbers in results are shown. Exact results (integers, fractions, roots) are not changed.
+
+- NORMAL FLOAT: up to DIGITS significant digits; very large or small numbers in scientific notation (`1.5ᴇ-7`).
+- NORMAL with DECIMAL 0..9: that many decimals (FIX), e.g. FIX 2 shows `3.14`; numbers that do not fit switch to scientific notation.
+- SCI: always scientific notation, `1.2345ᴇ3`; with DECIMAL n, n decimals in the mantissa.
+- ENG: engineering notation, the exponent is a multiple of 3: `12.345ᴇ3`.
+
+`ᴇ` means "times ten to the power" ({shift} {×} types it). The status bar shows FIX2, SCI, ENG3 etc. when a format other than NORMAL FLOAT is active. Numbers are rounded for display only; Ans and stored values keep full precision.
+
+@page mode-complex Complex mode
+How results with the imaginary unit i are shown:
+
+- REAL: a calculation whose input has no `i` but whose result is complex is an error (ERR:NONREAL ANS), e.g. `√(-4)`. Entering `i` ({shift} {.}) still works. A power of a negative number with an exponent p/q, q odd, is the real root: `(-8)^(1/3)` is -2, `(-1)^(2/3)` is 1, `integrate(x^(-1/3),x,-1,8)` is 9/2 (see [[nth-roots]]).
+- a+bi (default): rectangular form, `√(-4)` gives `2*i`. Powers use the principal branch: `(-8)^(1/3)` is `2*(-1)^(1/3)`, i.e. 1+√(3)i.
+- r∠θ: polar form, modulus ∠ argument; the argument follows the ANGLE mode: `1+i` gives `√(2)∠π/4`, `(-8)^(1/3)` gives `2∠π/3`.
+
+See [[i]], [[abs]], [[arg]], [[re]], [[im]], [[conj]].
+
+@page mode-graph Grid and axes
+GRID ON draws a dotted grid at the Xscl/Yscl tick marks of the graph, AXES OFF hides the axes. See [[graph]] and [[window]].
+
+@page mode-light Screen brightness
+LIGHT sets the backlight to 20 to 100 %. {shift} {▲} and {shift} {▼} change it in 10 % steps from any screen. A lower setting saves battery. See [[power]].
+
+
+@page mode-usb Idle on USB power
+ON USB decides what happens after five minutes without a key or touch while the calculator is powered over USB (a computer or a charger):
+
+- STAY ON (the default): only the screen goes dark. The calculator keeps running, so the computer link, the browser page, the CALC drive and a running program carry on. Any key or touch lights the screen again; that key or touch does nothing else.
+- SLEEP: the calculator switches itself off as on batteries (not while a computer is using the USB link).
+
+On batteries the calculator always switches off after five minutes, whatever this setting says.
+@page yeq Y= functions
+Up to six functions Y1 to Y6 of x, drawn by [[graph|GRAPH]] and listed by [[table|TABLE]]. Open it with {F1} (graph) on the home screen or {F1} (y=) on any graph screen. In the other [[graph-modes]] Y= holds parametric curves, polar curves, sequences, relations or differential equations (slope fields). It is the 2D side of the graph editor: the switch at the top right, "2D 3D", opens the 3D entries ([[graph3d-eq]]); tap "3D" or press {F1} (3D).
+
+- Type the expression after `=`; {x} types x (t, θ or n in the PAR, POL and SEQ modes). {▲} {▼} move between functions, {clear} clears one.
+- {◀} at the start of an expression moves to the `=`: {enter} switches the function on or off (a highlighted `=` is on). {◀} once more moves to the colour swatch: {enter} changes the colour (8 colours). {◀} again moves to the [[graph-styles|line style]].
+- The header line at the top shows the [[graph-modes|graph mode]] (FUNC, PAR, POL, SEQ, IMPL, DE). {▲} on the first entry moves there: choose a mode with {◀} {▶} {enter} (or tap it); the focus then goes to the mode's first entry. Typing on the header also goes to the first entry.
+- {menu}: the options of the highlighted entry (on/off, next colour, next line style, clear) and the graph modes; in DE mode also removing the solution curves added on the graph.
+- Soft keys: {F1} 3D (the 3D entries) {F2} window {F3} zoom {F4} trace {F5} graph, and with {shift}: plots, tblset, format, calc, table ([[softkeys]]).
+- Single letters such as `a` become [[graph-sliders|sliders]] on the graph.
+- Menus (CAS, math, catalog, vars) insert into the expression.
+- On the home screen, `Y1(2)` evaluates Y1 at x=2 (vars, Y-VARS).
+- Touch: tap the swatch, the name (style), the `=` or the expression; tap the header to change the mode; drag to scroll.
+
+@page window WINDOW
+{F2} (window) on a graph screen. The visible part of the plane for [[graph|GRAPH]]: Xmin, Xmax, Xscl (distance between tick marks), Ymin, Ymax, Yscl. The [[graph-modes]] add their ranges first: Tmin, Tmax, Tstep (PAR), θmin, θmax, θstep (POL), nMin, nMax, PlotStart, PlotStep (SEQ). The list scrolls.
+
+{▲} {▼} or {enter} move between fields; the line at the bottom says what the selected field means. Typing replaces the value; fields accept expressions such as `2π` or `-π/2`. Invalid input or a range with min ≥ max is refused with a message that names the problem (`ERR: Xmin must be less than Xmax`) and the old value stays. {clear} empties a field and a second {clear} brings its value back. [[zoom|ZOOM]] sets the window too.
+
+@page tblset TBLSET
+{shift} {F2} (tblset) on a graph screen: TblStart is the first x value of the [[table|TABLE]] and ΔTbl the step between rows (not zero; a negative step counts down). Fields accept expressions; the line at the bottom explains the selected field.
+
+@page graph GRAPH
+{F5} (graph) draws the entries that are switched on in [[yeq|Y=]], each in its colour and [[graph-styles|style]], over the [[window|WINDOW]], with axes and tick marks (grid optional, see [[mode-graph]]). See [[graphing]] for all graphing features. With nothing to draw the graph says so at the top left (`y= (F1): enter a function`); an entry with an error shows its message there in red.
+
+- The arrow keys move a free cursor; its coordinates are shown at the bottom.
+- {F4} (trace) moves the cursor along a function, see [[graph-trace]]; with nothing to trace the bottom line says so.
+- {F3} (zoom) zooms, see [[zoom]].
+- {shift} {F4} (calc) analyses the graph, see [[graph-calc]].
+- Sliders for parameters: {+} {−} {,} {enter}, see [[graph-sliders]].
+- {clear} clears a result or label, leaves TRACE, then returns to the home screen.
+- Touch: drag to pan, pinch to zoom, tap to trace and label, long press to snap to special points, see [[graph-touch]].
+
+@page graph-trace TRACE
+{F4} (trace) puts the cursor on a function of the graph and shows x and y.
+
+- {◀} {▶} move by one pixel in x; at the edge the window pans. In PAR, POL and SEQ mode they step t, θ or n.
+- {▲} {▼} switch to the previous / next function (then to the statistics plots, if any).
+- Typing a number moves the cursor to that x; {enter} confirms.
+- {enter} centres the window on the cursor.
+- Touch: tap the graph to trace the nearest function at that x; tap the coordinates for the [[table|TABLE]] there.
+
+@page zoom ZOOM
+{F3} (zoom) on a graph screen changes the [[window|WINDOW]]:
+
+- Zoom In / Zoom Out: factor 2 about the cursor (or the centre).
+- ZStandard: x and y from -10 to 10.
+- ZDecimal: steps of 0.1 per pixel, centred on 0.
+- ZSquare: equal scales on both axes (circles look round).
+- ZTrig: x from -2π to 2π in steps of π/2, y from -4 to 4.
+- ZoomFit: y range fitted to the functions over the current x range (PAR, POL, SEQ, statistics plots: both ranges).
+- ZoomStat: both ranges fitted to the data of the stat plots that are on ([[stat-plots]]).
+
+On a touch screen a pinch zooms too.
+
+@page table TABLE
+{shift} {F5} (table) on a graph screen, or {shift} {F1} on the home screen, shows x and the switched-on Y functions in columns, starting at TblStart with step ΔTbl ([[tblset|TBLSET]]). In the other [[graph-modes]]: T with X1T and Y1T, θ with r1.., n with u1... From the graph, CALC table at cursor (or a tap on the trace coordinates) centres the table on the traced value.
+
+- {▲} {▼} move through the rows; the table scrolls past its ends.
+- {◀} {▶} move between columns; more than three functions scroll horizontally.
+- The selected cell is shown with full precision at the bottom.
+- Typing a number (digits, {.}, {(−)}, π) goes to that x: it is shown at the bottom (`go to X=2.5`), {enter} makes it the first row, {clear} cancels. Expressions such as `2π` work.
+- Touch: tap a cell, drag to scroll.
+
+@page menu-cas CAS menu
+{CAS} lists the most used symbolic commands. Each inserts a template with the cursor where the expression goes:
+
+- [[factor]], [[expand]], [[simplify]]
+- [[solve]] `solve( ,x)`: solve an equation for x
+- [[diff]] `diff( ,x)`: derivative with respect to x
+- [[integrate]] `integrate( ,x)` and `integrate( ,x,a,b)`: antiderivative, definite integral
+- [[limit]] `limit( ,x,a)`
+- [[approx]]: decimal value
+- [[nabla|∇]] `∇( )`, `∇·[ ]`, `∇×[ ]`, `∇²( )`: gradient, divergence, curl, Laplacian in x, y, z
+
+All other commands are in the [[catalog|catalog]]. {shift} {menu} on an entry shows its help page.
+
+@page menu-math MATH menu
+{math}: [[abs]], [[round]], [[floor]], [[ceil]], `³` (cube), cube root and ˣ√ (see [[nth-roots]]), [[min]], [[max]], [[mod]] and `!` ([[factorial]]). Choose with {▲} {▼} {enter} or the number key.
+
+@page nth-roots Roots
+- `√(x)` ({√}) is the square root, see [[sqrt]].
+- The cube root ({shift} {√}, also in the math menu) inserts `( )^(1/3)`: type the number inside the parentheses.
+- ʸ√x ({shift} {xʸ}, ˣ√ in the math menu) works after the radicand: type `16`, press {shift} {xʸ} and type `4`; the line reads `16^(1/4)`, the 4th root of 16.
+- Odd roots of negative numbers depend on the [[mode-complex|COMPLEX]] setting. REAL: the real root, `(-8)^(1/3)` is -2, `(-1)^(2/3)` is 1 and `(-8)^(-1/3)` is -1/2. a+bi and r∠θ: the principal complex root, `(-8)^(1/3)` is `2*(-1)^(1/3)` (1+1.732i). Even roots of negative numbers are not real (ERR:NONREAL ANS in REAL). Graphs always use the real root.
+
+@page powers Powers
+`x²` ({x²}), `³` ({shift} {x²}), `⁻¹` ({shift} {÷}) and `^` ({xʸ}) raise to a power. `10^(` and `e^(` are on {shift} {log} and {shift} {ln}. See [[exp]], [[sqrt]].
+
+@page menu-test Relations
+The relations are {shift} keys: `<` `=` `>` on {shift} {4} {5} {6} and `≤` `≠` `≥` on {shift} {1} {2} {3}. With numbers they evaluate to `true` or `false`; with unknowns they build equations and inequalities for [[solve]], e.g. `solve(x^2≤4,x)`.
+
+@page menu-angle Angle menu
+{shift} {,}: `°` marks an angle in degrees and `ʳ` in radians, independent of the [[mode-angle|ANGLE mode]]: `sin(90°)` is 1 in RADIAN mode, `cos(πʳ)` is -1 in DEGREE mode.
+
+@page catalog Catalog
+{shift} {apps} lists every command and function alphabetically. Type to search: letters filter the list as you type (ALPHA is switched on automatically) and the best matches come first, also by the command's description (`deriv` finds diff). Help pages whose title matches are listed too, marked ?: `undo`, `rpn` or `degree` find the page that explains it ({enter} opens it). An empty search says so; {⌫} brings matches back. {⌫} erases a letter, {shift} {⌫} the whole search. {◀} {▶} step through the categories (algebra, calculus, trigonometry, matrices, statistics, probability, number theory, units, finance, ...); {F3} (categ) lists them. {enter} inserts the highlighted entry (an entry marked ▶ opens its app); {shift} {menu} shows its help page; {clear} closes the catalog. The commands are also grouped in the [[index|help index]].
+
+@page vars Vars menu
+{vars} inserts names into the entry line:
+
+- Variables: the variables you stored (`a:=5`, `5→a`).
+- Functions: the functions you defined (`f(x):=x^2`); inserts `f(`.
+- Y-VARS: Y1..Y6 from [[yeq|Y=]]; inserts `Y1(` so that `Y1(2)` evaluates the function at 2.
+
+Apps add their own categories. Empty categories are hidden. Delete names with [[purge]] or apps > Memory ([[mem]]).
+
+@page apps Apps
+{apps} lists the applications: Table, Graph analysis, Statistics, Distributions, Stat plots, Matrix, Solver, Finance, Base-n, Units & constants, Settings, Memory ([[mem]]) and Help (this manual). Choose with {▲} {▼} {enter} or a number key. Each app labels the soft keys {F1} .. {F5} at the bottom of its screens ([[softkeys]]). Graphing is not in the list: {F1} (graph) on the home screen opens the graph editor (2D or 3D), and {enter} on a [[graph-cells|graph cell]] opens the full graph or 3D graph on it.
+
+
+@page mem Memory and saved session
+apps > Memory:
+
+- About: why the calculator last started or restarted (for example "Last reset: watchdog" after a hang), safe mode, firmware version and build tier, memory use, the size of the saved session, whether the full manual is installed, and how the flash chip, the microSD card, the watchdog and the other parts answered at start-up. At the end, "Last events": the last 16 important events, newest first, each with the start it happened in and the time since that start, for example "boot 12 +3.4 s: qspi: write 003f00+4 failed (-2): reset and retry" (a flash write that needed a second try), "start: watchdog (the firmware hung)", "safe mode: crash loop", "session: save failed" or "battery: empty". An event that repeats shows how many times ("(3 times)"). The list is kept when the calculator restarts, switches off or gets new batteries; "none" if nothing happened. The same list is in INFO.TXT on the CALC drive ([[usb]]).
+- Save session now: write the session to flash immediately.
+- Clear CAS variables: delete all stored variables and functions.
+- Clear home history.
+- Reset settings: every MODE setting back to its default (variables, history, lists and the RPN stack are kept).
+- Reset all: everything back to factory state, including the saved session.
+- Install content: install the full manual (and other content modules) from the folder `CALC/MODULES` on the microSD card ([[install-content]]).
+- Modules: the installed modules with their versions, each followed by the versions of it on the microSD card; verify, go back to the previous version or remove one, or pick any version on the card to install it.
+- Remove content: remove every installed module (help then shows only the essential pages; your saved work is not touched).
+- Clear event log: forget the "Last events" of About (after asking).
+
+The items that delete something ask first (No is highlighted). {shift} {clear} (clear all), on any screen, clears the CAS variables and functions together with the home entry line and history, after asking (on the RPN screen it clears the stack instead).
+
+The session (settings, home history and entry line, Y= functions and colours, WINDOW and TBLSET, CAS variables, functions, assumptions and Ans, and the state of apps) is saved in the calculator's flash memory when it switches off and one minute after the last key press. It is restored when the calculator starts, also after a battery change or a firmware update. A power loss while saving keeps the previous copy.

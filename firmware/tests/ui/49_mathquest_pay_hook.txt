@@ -1,0 +1,28 @@
+# Sparkle Town (CR-12 of the code review): with the fun budget used up, paying at the shop's counter is never
+# interrupted -- no friend at the door takes her away mid-purchase; the counter and its coins stay.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+mq engine stop
+mq seed 21
+mq fun 2000
+mq coins 300
+mq go map
+mq step 2
+key F1
+expect state mq_scene room
+key F1
+expect state mq_scene shop
+mq pay setup 0 0
+mq pay open Heart_chair
+expect state mq_pay "count pay"
+touch tap 187 160
+expect state mq_pay_counter "0 0 1 0 0 0"
+mq step 300
+expect state mq_scene shop
+expect state mq_pay "count pay"

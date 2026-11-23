@@ -1,0 +1,89 @@
+%% RPN mode (app/rpn.c). Format: see app/EXTENDING.md ("Help pages").
+
+@page rpn RPN mode
+RPN (reverse Polish notation) works like classic RPN calculators: you put values on a stack first and then apply operators and functions to them. Switch it on in [[mode|settings]] ({shift} {home}) with ENTRY: RPN (ALGEBRAIC is the default). The choice and the stack are kept when the calculator switches off.
+
+    2 {enter} 3 {÷}
+    ▶ 1: 2/3
+    x {enter} 2 {xʸ}
+    ▶ 1: x^2
+
+## The screen
+The stack fills the screen from the bottom: level 1 is the newest value, just above the command line; higher levels are above it. Values are exact CAS values and are shown with the number format of the settings. Long values wrap onto several lines.
+
+Each level holds the value itself, not only the text you see, so RPN gives the same results as the home screen:
+
+- A value with an uncertainty (`2±0.1`, [[uncertainty]]) stays the same measurement wherever it moves: `x` {enter} {−} gives `0±0` like `x-x`, and `x` {enter} {×} has the uncertainty of x·x. Stored with {→} into a variable, it stays linked to the level it came from.
+- Numbers keep all their digits when the display rounds them (FORMAT, DECIMAL), and exact values (`1/3`, `√2`) stay exact.
+- Copies of a level (DUP, OVER, PICK, LASTARG, UNDO) are the same value. A value you type again, echo, paste or edit is a new one (editing a level without changing it keeps its value).
+
+Up to 1024 different values can be on the stack (copies share theirs); more gives "Stack full".
+
+## Entering values
+- Type a value and press {enter} to push it. {enter} on an empty line duplicates level 1 (DUP).
+- An operator key pushes a number you are typing first: `2` {enter} `3` {+} gives 5.
+- A whole expression works too: `x^2+1` {enter} pushes x^2+1 (once the line holds a name or an operator, operator keys type into it). Start with `(` to type numeric algebra such as `(2+3)*4`.
+- Several values and commands separated by spaces ({alpha} {0}) run left to right: `2 3 + 4 *` gives 20. Command names such as `swap`, `drop`, `factor` or `diff` work as words.
+- {(−)} changes the sign of the number being typed (after ᴇ: of the exponent); on an empty line it negates level 1.
+- `expression→name` stores like on the home screen and pushes the value.
+
+## Operators and functions
+On an empty line (or after a number being typed) these keys take their arguments from the stack and push the result:
+
+- {+} {−} {×} {÷} {xʸ}: level 2 op level 1, e.g. 2: 8  1: 3  {−} gives 5.
+- {x²}, {shift} {÷} (x⁻¹), {sin} {cos} {tan} {log} {ln}, {√}, {shift} {log} 10^x, {shift} {ln} e^x and the inverse trig functions apply to level 1.
+- Commands from the [[menu-cas|CAS]], [[menu-math|MATH]] and [[menu-test|TEST]] menus, the [[catalog|CATALOG]] and functions from [[vars|VARS]] apply directly to the stack when the line is empty. Names and values from VARS go into the command line.
+
+## Commands with several arguments
+Arguments are taken in stack order: the last argument is in level 1, the first one in the highest level used, as usual in RPN. `mod`, `min`, `max`, `gcd`, `lcm`, `nCr`, `nPr` and similar take two levels; other functions take level 1.
+
+Commands with a variable take it from the stack when that level holds a name, else they use x:
+
+- `solve`, `diff`, `integrate( ,x)`: 2: x^2-2  1: x, or just 1: x^2-2 (variable x).
+- `integrate( ,x,a,b)`: 4: expr  3: var  2: a  1: b, or 3: expr  2: a  1: b with x.
+- `limit( ,x,a)`: 3: expr  2: var  1: a, or 2: expr  1: a with x.
+- TEST `=`: 2: x^2  1: 2 gives x^2=2, ready for `solve`.
+
+## Stack keys
+- {enter} on an empty line: DUP. {⌫}: DROP level 1. {)}: SWAP levels 1 and 2.
+- {clear}: clear the command line; on an empty line clear the whole stack (undoable). {shift} {clear} always clears the stack.
+- {shift} {enter} or {F5} (undo): UNDO the last stack operation; press it again to redo.
+- {shift} {(−)}: LASTARG, push the arguments of the last command again.
+- Soft keys: {F1} .. {F5} swap, drop, roll, pick, undo; {shift} {F1} .. {F3} dup, over, rot.
+- {shift} {F4} (simplify) simplifies level 1; {shift} {F5} (rewrite) opens the [[result-actions|REWRITE]] menu ([[forms-browser|alternate forms]], factor, expand, ≈ / exact, partfrac, trig forms, collect) for level 1. A line being typed is pushed first; {F5} (undo) brings the old value back.
+- {,} on an empty line: the [[rpn-stack|STACK menu]] with every stack command.
+- {menu} {F3} copies level 1 (or the selected level of the interactive stack, or the command line being typed); {menu} {F4} pastes into the command line. See [[clipboard]].
+- {▼} on an empty line: edit level 1 in the command line; {enter} replaces it, {clear} cancels.
+- {→}: with a name on the command line, stores level 1 into that variable (`5` {enter}, {alpha} `A` {→}). With an empty line it stores level 2 into the name in level 1.
+
+## Interactive stack
+{▲} on an empty line selects level 1; {▲} {▼} move the selection up and down the stack (it scrolls). The soft keys act on the selected level n (the digit keys 1 to 6 too):
+
+- {F1} (echo), {1} or {enter}: copy the value into the command line.
+- {F2} (pick) or {2}: copy level n to level 1. {F3} (roll) or {3}: move level n to level 1. {F4} (rolld) or {4}: move level 1 to level n.
+- {F5} (dropn) or {5}: drop levels 1 to n. {shift} {F1} (edit) or {6}: edit level n in place.
+- {⌫} drops only the selected level. {clear} or {▼} below level 1 leaves; any other key leaves and does its job.
+
+## Touch
+Tap a level to select it, tap it again to copy it into the command line. Drag up and down to scroll through the stack. In the interactive stack, tap the soft keys.
+
+## Settings
+ANGLE, RESULT (exact or approximate), [[mode-simplify|SIMPLIFY]], DIGITS, FORMAT and COMPLEX of the [[mode|settings]] apply as on the home screen; changing FORMAT re-displays the whole stack. Up to 32 KB of stack levels are saved when the calculator switches off, with their full values (uncertainties stay linked to each other and to your variables); if the stack is bigger the oldest levels are dropped.
+
+See also [[rpn-stack]] and [[home-screen]].
+
+@page rpn-stack RPN stack commands
+The STACK menu ({,} on an empty command line in [[rpn|RPN mode]]) runs these commands. They can also be typed as words on the command line (`swap`, `rolld`, ...). Commands marked (n) take the count n from level 1 first.
+
+- DUP: copy level 1. DUP2: copy levels 1 and 2. DUPN (n): copy levels 1 to n.
+- DROP: remove level 1. DROP2: remove levels 1 and 2. DROPN (n): remove levels 1 to n.
+- SWAP: exchange levels 1 and 2. OVER: copy level 2 to level 1.
+- ROT: move level 3 to level 1. ROLL (n): move level n to level 1. ROLLD (n): move level 1 to level n.
+- PICK (n): copy level n to level 1.
+- DEPTH: push the number of levels.
+- CLEAR: remove all levels.
+- LASTARG: push the arguments of the last command again.
+- UNDO: undo the last stack operation (once more: redo).
+- →NUM: approximate level 1 (`approx`).
+
+Example: 3: a  2: b  1: c, then `2` ROLLD gives 3: a  2: c  1: b.

@@ -1,0 +1,31 @@
+# Text cells on the home screen are shown formatted (app/m2d_home.c md_text, the browser page's
+# subset): headings, paragraphs joined and word wrapped, **bold**, *italic* (plain, no stars),
+# `code`, bullet and numbered lists. Editing the cell shows its Markdown as typed.
+requirecfg MOD_PYTHON
+nb store wipe
+nb new "Markdown"
+nb add text "# Projectile\n## Setup\nThrown at speed **v0** and angle *theta*;\nheight `h(t)`.\n\n- gravity g\n- no air drag\n1. find the time\n2. find the range"
+expect screen home
+expect text Projectile
+expect text "Setup"
+expect text "v0"
+expect text "theta"
+expect text "h(t)"
+expect text "gravity g"
+expect text "find the range"
+expect notext "**"
+expect notext "*theta"
+expect notext "# Projectile"
+screenshot home_markdown.png
+# editing shows the Markdown itself
+key UP
+key MENU
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "Edit in place"
+key ENTER
+expect screen notebook
+expect state nb_view edit
+redraw
+expect text "# Projectile"
+expect text "**v0**"
+screenshot home_markdown_edit.png

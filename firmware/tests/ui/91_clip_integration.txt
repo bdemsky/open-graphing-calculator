@@ -1,0 +1,92 @@
+# Integration: the clipboard (MENU F3 copy, MENU F4 paste) between geometry
+# measurements, spreadsheet cells, the home history and the matrix editor.
+# Bugs: MENU F3 on the spreadsheet copied nothing and left an empty entry
+# line open; on the geometry screen it copied nothing.
+# geometry: a 4 x 3 triangle (world (x, y) = pixel (160 + 20x, 121 - 20y)), area and perimeter
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 4
+ifcfg GEOMETRY touch tap 160 121
+ifcfg GEOMETRY touch tap 240 121
+ifcfg GEOMETRY touch tap 200 61
+ifcfg GEOMETRY touch tap 161 122
+ifcfg GEOMETRY key F5
+ifcfg GEOMETRY key 3
+ifcfg GEOMETRY touch tap 200 121
+ifcfg GEOMETRY geo expect m1 "area a = 6"
+ifcfg GEOMETRY key F5
+ifcfg GEOMETRY key 1
+ifcfg GEOMETRY touch tap 220 91
+ifcfg GEOMETRY geo expect m2 "perim a = 11.2111"
+# nothing highlighted: the newest measurement, with 12 digits
+ifcfg GEOMETRY key F1
+ifcfg GEOMETRY key MENU F3
+ifcfg GEOMETRY expect screen geometry
+ifcfg GEOMETRY expect state clip 11.2111025509
+# the cursor on a row of the measurement list: that one
+ifcfg GEOMETRY geo cursor -7.5 4.2
+ifcfg GEOMETRY key MENU F3
+ifcfg GEOMETRY expect state clip 6
+ifcfg GEOMETRY key CLEAR
+# without the Geometry app (core tier): the 6 comes from a home result
+ifcfg !GEOMETRY key HOME
+ifcfg !GEOMETRY type "6\n"
+ifcfg !GEOMETRY key UP MENU F3
+ifcfg !GEOMETRY expect state clip 6
+ifcfg !GEOMETRY key CLEAR
+# ... into a spreadsheet cell: paste opens the entry line, ENTER stores it
+app sheet
+sheet select A1
+key MENU F4
+expect state sheet_mode edit
+key ENTER
+sheet value A1 6
+sheet set A2 =A1*2.5
+# copy a cell: its value; the sheet stays in browse mode
+sheet select A2
+key MENU F3
+ifcas src expect state clip 15.0
+ifcas stub expect state clip 15
+expect state sheet_mode browse
+# ... into the home screen and back from the history
+key HOME
+key MENU F4
+ifcas src expect state entry 15.0
+type "+1\n"
+ifcas src expect state last_output 16.0
+key UP MENU F3
+ifcas src expect state clip 16.0
+key CLEAR
+# ... into the matrix editor: a 2 x 2 [A], the first cell pasted
+ifcas src key SHIFT MATH 3
+ifcas src key ENTER
+ifcas src expect screen matedit
+ifcas src key UP
+ifcas src type "2\n2\n"
+ifcas src key MENU F4 ENTER
+ifcas src type "1\n2\n3\n"
+ifcas src key HOME
+ifcas src type "matA\n"
+ifcas src expect state last_output [[16.0,1],[2,3]]
+# a matrix result goes back into a sheet cell
+ifcas src key UP MENU F3
+ifcas src expect state clip [[16.0,1],[2,3]]
+ifcas src app sheet
+ifcas src sheet select B1
+ifcas src key MENU F4 ENTER
+ifcas src sheet expect B1 [[16.0,1],[2,3]]
+ifcas src sheet set B2 =det(B1)
+ifcas src sheet value B2 46
+# the editing line of a cell is copied as typed
+sheet select C1
+type "7*6"
+key MENU F3
+expect state clip 7*6
+key ENTER
+ifcas src sheet value C1 42
+# the clips list holds all of them, newest first
+key MENU SHIFT F2
+expect state menu CLIPBOARD
+expect state menu_item 7*6
+screenshot clip_integration.png
+key CLEAR

@@ -1,0 +1,83 @@
+# Event log (core/evlog.h): the last important events in reset-proof RAM and in the saved
+# session; shown on MEM > About ("Last events", newest first, a count for repeats), in
+# INFO.TXT on the CALC drive and by the console `evlog`; cleared by Memory > Clear event log
+# or `evlog clear`. Events are injected with `evlog add`. Runs in every tier.
+evlog clear
+expect state last_reset poweron
+# nothing yet: About says none
+key SHIFT HOME
+key F1
+expect screen help
+key ADD ADD ADD ADD ADD ADD ADD ADD ADD ADD
+expect text "Last events"
+expect text "none"
+key HOME
+# two events, the first one three times in a row
+evlog add qspi: write 003f00+4 failed (-2): reset and retry
+evlog add qspi: write 003f00+4 failed (-2): reset and retry
+wait 1200
+evlog add qspi: write 003f00+4 failed (-2): reset and retry
+evlog add usb: not started: core soft reset timed out
+key SHIFT HOME
+key F1
+key ADD ADD ADD ADD ADD ADD ADD ADD ADD ADD
+expect text "Last events"
+expect text "boot 1 +0.0 s: qspi: write 003f00+4 failed"
+expect text "(3 times)"
+expect text "boot 1 +1.2 s: usb: not started: core soft"
+expect notext "Last events: none"
+screenshot evlog_about.png
+key HOME
+# a restart (reset): the RAM record survives, the boot counter goes on
+reboot
+evlog add modstore: word 0a1000: w 0 r 0: reset and retry
+evlog
+# a crash restart is an event of its own
+reboot crash
+evlog
+# switching off and on: Standby loses the RAM record, the saved session brings it back
+key SHIFT ON
+key ON
+expect state last_reset wake
+app mem
+key ENTER
+key ADD ADD ADD ADD ADD ADD ADD ADD ADD ADD
+expect text "boot 3 +0.0 s: start: crash (fault"
+expect text "boot 2 +0.0 s: modstore: word 0a1000: w 0"
+expect text "boot 1 +1.2 s: usb: not started: core soft"
+screenshot evlog_after_power.png
+key HOME
+# the CALC drive's INFO.TXT has the same list
+usb host on
+usb expect INFO.TXT "Last events:"
+usb expect INFO.TXT "boot 3 +0.0 s: start: crash (fault handler)"
+usb expect INFO.TXT "(3 times)"
+usb expect INFO.TXT "boot 1 +1.2 s: usb: not started: core soft reset timed out"
+usb cat INFO.TXT
+usb host off
+# a session save that fails is an event
+session fail 99
+app mem
+key DOWN ENTER
+expect text "Saving failed"
+key CLEAR
+session fail 0
+evlog
+# Memory > Clear event log (asks first; No is the default)
+app mem
+key UP UP
+expect state menu_item "Clear event log"
+key ENTER
+key DOWN ENTER
+expect text "Event log cleared."
+key CLEAR
+evlog
+# the cleared log stays cleared across a power cycle (it was saved)
+key SHIFT ON
+key ON
+app mem
+key ENTER
+key ADD ADD ADD ADD ADD ADD ADD ADD ADD ADD
+expect text "Last events"
+expect text "none"
+key HOME

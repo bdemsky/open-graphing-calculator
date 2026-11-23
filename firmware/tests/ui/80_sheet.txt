@@ -1,0 +1,98 @@
+# Spreadsheet: entry, formulas, references, ranges, fill-down, cycles,
+# links to the statistics lists, MODE number format, CSV, persistence
+app sheet
+expect screen sheet
+expect state sheet_sel A1
+# type numbers into A1..A3 (ENTER moves down)
+type "3\n4.5\n1/2\n"
+expect state sheet_sel A4
+sheet value A1 3
+ifcas src sheet value A3 0.5
+ifcas src sheet expect A3 1/2
+# a formula with a range, typed with ALPHA letters (lowercase refs work)
+key UP UP UP RIGHT
+type "=sum(a1:a3)\n"
+ifcas src sheet value B1 8
+ifcas src sheet expect B1 8.0
+# relative / absolute references and fill-down
+sheet set C1 =A1*$B$1
+sheet fill C1 3
+sheet input C2 =A2*$B$1
+sheet input C3 =A3*$B$1
+ifcas src sheet value C2 36
+ifcas src sheet value C3 4
+# a label; ranges skip labels
+sheet set A5 "\"mass\""
+sheet expect A5 mass
+sheet set B2 =mean(A1:A5)
+ifcas src sheet value B2 2.6666666667
+# cycles are detected, errors propagate to the cells that use them
+sheet set D1 =D2+1
+sheet set D2 =D1*2
+sheet expect D1 ERR:CYCLE
+sheet expect D2 ERR:CYCLE
+sheet set D3 =D1+1
+sheet expect D3 ERR:REF
+sheet set D2 5
+ifcas src sheet value D1 6
+ifcas src sheet value D3 7
+# an edit recalculates its dependency chain
+sheet set A1 10
+ifcas src sheet value B1 15
+ifcas src sheet value C1 150
+sheet select A1
+redraw
+screenshot sheet_grid.png
+ifcas src expect text 4.5
+expect text mass
+# column A feeds list L3 (labels and empty cells are skipped)
+sheet link A L3
+ifcas src stat expect L3 10,4.5,0.5
+sheet set A4 2
+ifcas src stat expect L3 10,4.5,0.5,2
+sheet fromlist E L3
+ifcas src sheet value E4 2
+# MODE number format applies to the displayed values
+setmode DECIMAL 2
+sheet select A2
+redraw
+ifcas src expect state sheet_disp 4.50
+setmode DECIMAL FLOAT
+# copy / paste moves relative references by the distance
+sheet select C1
+key F4
+sheet select F2
+key F5
+sheet input F2 =D2*$B$1
+ifcas src sheet value F2 75
+# editing from the grid: ENTER preloads the input, CLEAR CLEAR cancels
+sheet select A2
+key ENTER
+expect state sheet_mode edit
+screenshot sheet_edit.png
+key CLEAR CLEAR
+expect state sheet_mode browse
+# DEL clears a cell (and the linked list follows)
+key DEL
+expect state sheet_text
+ifcas src stat expect L3 10,0.5,2
+ifcas src sheet value B1 10.5
+# CSV on a RAM card: values, formulas, re-import
+fs insert 8
+fs format
+sheet export /SHEET.CSV
+ifcas src fs expect /SHEET.CSV 10,10.5,105
+sheet export /SHEETF.CSV f
+fs expect /SHEETF.CSV =sum(a1:a3)
+sheet import /SHEETF.CSV
+ifcas src sheet value B1 10.5
+sheet expect A5 mass
+ifcas src expect state sheet_cells 17
+# saved with the session
+session save
+reboot
+app sheet
+expect screen sheet
+ifcas src sheet value B1 10.5
+sheet input C2 =A2*$B$1
+ifcas src expect state sheet_cells 17

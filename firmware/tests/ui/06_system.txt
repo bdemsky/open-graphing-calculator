@@ -1,0 +1,24 @@
+# console plumbing, patterns, power off/on, screen dump
+version
+help
+keys list
+pattern orient
+screenshot pattern_orient.png
+key ENTER
+expect screen home
+pattern bars
+pattern off
+fbinfo
+screen
+power
+bl 40
+key SHIFT UP
+expect state backlight 50
+key SHIFT ON
+screenshot off.png
+expect color 0x0000 1
+key ON
+expect screen home
+wait 1200
+casmem
+lcdcheck

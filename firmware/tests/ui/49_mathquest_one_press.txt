@@ -1,0 +1,64 @@
+# Sparkle Town: one press, one act (the user: "sometimes it flips through a screen and then jumps to another
+# without giving me a chance to do the first question"). A finger that lands on one screen and lifts on another
+# does nothing on the new one, and the second tap of a double tap is not for the screen the first one brought.
+# Each of these answered the next order before she could see it (the bot's press-two-acts / order-shown-kept).
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 2
+mq engine stop
+mq skill 24 0
+mq step 30
+expect state mq_answer 1/4
+# 1. a double tap on the cheer: the first goes on to the next order, the second lands on one of its bubbles
+#    160 ms later -- it is not her answer (it was: a wrong pick, combo 1 -> 0)
+mq correct
+mq step 2
+expect state mq_moment cheer
+touch 160 150 down
+mq step 1
+touch 160 150 up
+expect state mq_run 1/8
+expect state mq_moment play
+expect state mq_answer 1/2
+mq step 3
+touch 143 199 down
+mq step 1
+touch 143 199 up
+expect state mq_combo 1
+expect state mq_moment play
+expect state mq_run 1/8
+mq step 2
+expect state mq_combo 1
+expect state mq_moment play
+# 2. a finger lands on the cheer and is still down when the cheer ends; it lifts over a bubble of the new order:
+#    the release is not "on" and not an answer (it was: it picked that bubble)
+mq correct
+mq step 2
+expect state mq_moment cheer
+touch 200 150 down
+mq settle
+mq step 2
+expect state mq_moment play
+expect state mq_run 2/8
+expect state mq_answer 1/3
+touch 200 150 up
+mq step 1
+expect state mq_combo 2
+expect state mq_moment play
+expect state mq_run 2/8
+# 3. a quick tap on the order she has looked at is taken at once (a wrong bubble here: it wilts, combo 0)
+mq step 12
+touch 243 133 down
+mq step 1
+touch 243 133 up
+mq step 1
+expect state mq_combo 0
+expect state mq_run 2/8

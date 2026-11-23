@@ -1,0 +1,16 @@
+# USB: the browser notebook on the CALC drive (web/notebook, app/usb_app.c). CALCULATOR.HTML is
+# the "webui" data module's payload, served under a long name (long-name entries + an NBnnnn~1.HTM alias,
+# core/vdrive.c); dropping the module file installs it again.
+# The page itself is tested by `make notebook-test` (web/notebook/test).
+requirecfg MOD_WEBUI
+usb host on
+usb ls
+usb expect CALCULATOR.HTML "<!doctype html>"
+usb expect CALCULATOR.HTML "Content-Security-Policy"
+usb expect README.TXT "CALCULATOR.HTML  use the calculator from the computer"
+# install it again from the drive (Windows order, fragmented)
+usb drop {mod:webui} win frag
+wait 1000
+expect state usb_result "Installed Notebook page {ver:webui}"
+wait 2000
+usb expect CALCULATOR.HTML "Calculator notebook"

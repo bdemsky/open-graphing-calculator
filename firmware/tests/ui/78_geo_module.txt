@@ -1,0 +1,38 @@
+# The Geometry app as a code module (modules/geometry, app/geo_core.c): the
+# not-installed fallback, and the construction kept by the core while the
+# module is unbound (switched off, a store change) and across a power cycle.
+requirecfg CONTENT_QSPI
+app geometry
+expect screen geometry
+key F2
+key 1
+touch tap 180 141
+geo expect count 1
+key HOME
+# not installed (emulated with `modx off`): APPS > Geometry says how to get it
+modx off geometry
+expect state modx_geometry off
+app geometry
+expect screen message
+expect text "Install the Geometry"
+expect text "(Memory > Modules)."
+key ENTER
+# the console says the same
+modx list
+modx on geometry
+# back: the construction the core kept
+app geometry
+expect screen geometry
+geo expect count 1
+geo expect A "A = (1, -1)"
+# a power cycle with the module bound, then one before it was used again
+key SHIFT ON
+key ON
+app geometry
+geo expect count 1
+modx unbind
+key SHIFT ON
+key ON
+app geometry
+geo expect A "A = (1, -1)"
+screenshot geo_module.png

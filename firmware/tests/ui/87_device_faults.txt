@@ -1,0 +1,97 @@
+# Optional devices failing (docs/QSPI_CONTENT.md, failure matrix): a QSPI that does not answer
+# (JEDEC check failed: no storage) or answers garbage (reads ff / 00, writes fail), a microSD card
+# that does not answer. The calculator keeps working; help falls back; the session goes to the
+# microSD card when there is one; Memory > About says what is wrong. Runs in every tier.
+# --- QSPI absent
+fault qspi absent
+reboot
+expect screen home
+expect state toast "flash fault: Memory > About"
+expect state session_flash 0
+ifcfg CONTENT_QSPI expect state module_manual nodev
+type "1+2\n"
+expect state last_output 3
+manual graph
+ifcfg CONTENT_QSPI expect state help_missing 1
+ifcfg CONTENT_QSPI expect text not responding
+ifcfg CONTENT_INTERNAL expect state help_missing 1
+key HOME
+app mem
+key ENTER
+ifcfg CONTENT_QSPI expect text the QSPI flash is not responding
+key F2
+expect text QSPI: not responding (JEDEC 000000)
+key HOME
+# no card: the session cannot be saved (Memory > Save session now), and About says so
+app mem
+key DOWN ENTER
+expect text Saving failed
+key HOME
+app mem
+key ENTER
+key F2 F2
+expect text NOT saved
+key HOME
+# with a card the session is kept there and comes back
+fs insert 64
+fs format
+type "qq:=42\n"
+session save
+key HOME
+fs ls /CALC
+fs expect /CALC/AUTOSAVE.SES SES1
+reboot
+expect eval qq 42
+app mem
+key ENTER
+key F2 F2 F1
+expect text kept on the microSD card
+key HOME
+# installing content is refused clearly
+ifcfg CONTENT_QSPI app mem
+ifcfg CONTENT_QSPI key DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+ifcfg CONTENT_QSPI expect text The QSPI flash is not responding
+ifcfg CONTENT_QSPI key HOME
+# --- QSPI answering garbage: reads all ff, writes fail
+fault qspi dead ff
+reboot
+expect screen home
+ifcfg CONTENT_QSPI expect state module_manual absent
+expect eval qq 42
+type "qq:=43\n"
+session save
+reboot
+expect eval qq 43
+# reads all 00
+fault qspi dead 00
+reboot
+expect screen home
+expect eval qq 43
+manual graph
+ifcfg CONTENT_QSPI expect state help_missing 1
+key HOME
+# --- back to a working QSPI: the factory manual is still there, the card copy is not needed
+fault qspi ok
+reboot
+ifcfg CONTENT_QSPI expect state module_manual ok
+# --- a microSD card that does not answer: installing says so, nothing else changes
+fault sd dead
+ifcfg CONTENT_QSPI app mem
+ifcfg CONTENT_QSPI key DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+ifcfg CONTENT_QSPI expect text microSD:
+ifcfg CONTENT_QSPI screenshot install_sd_dead.png
+ifcfg CONTENT_QSPI key HOME
+app mem
+key ENTER
+key F2
+expect text microSD: not responding
+key HOME
+fault sd ok
+# Memory > Reset all also deletes the card copy of the session
+app mem
+key DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "Reset all"
+key ENTER DOWN ENTER
+key HOME
+reboot
+ifcas src expect eval qq qq

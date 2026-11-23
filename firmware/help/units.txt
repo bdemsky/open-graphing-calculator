@@ -1,0 +1,109 @@
+%% Units and physical constants (cas/src/units.c, app/units_menu.c)
+
+@page units Units
+A quantity is a number times units written with an underscore: `9.8_m/s^2`, `3_s`, `5_kg*m^2/s^2`. After the first `_` the units are joined by `*`, `/` and integer powers `^2`, `^-1` without spaces. The UNITS menu ({shift} {vars}, also in [[apps|apps]]; {shift} {CAS} opens the physical constants) inserts them by category; {alpha} {3} types `_`. Its first item types `±` for a value with an uncertainty ([[uncertainty]]), the second starts [[convert]] ({shift} {vars} {2}): `convert(60_mph,_m/s)` is `26.8224_m/s`. After the categories come the other unit commands and [[nominal]], [[uncert]], [[ucov]].
+
+    9.8_m/s^2*3_s
+    ▶ 29.4_m/s
+    convert(5_ft,_m)
+    ▶ 1.524_m
+    2_m+30_cm
+    ▶ 2.3_m
+
+- Arithmetic works on quantities as on numbers; equal units combine (`2_m+3_m` is `5_m`).
+- Sums of different units of the same kind are converted to SI base units; units of different kinds give `ERR:DOMAIN incompatible units` (`1_m+2_s`).
+- Products that mix units of one kind are converted to SI (`5_km*2_m` is `10000_m^2`, `5_m/(2_ft)` is a plain number).
+- [[convert]] converts to chosen units, [[usimplify]] to SI with a derived unit (N, J, W, Pa, V, ...), `convert(q,"US")` to feet, pounds and seconds.
+- Functions such as sin, exp and ln need dimensionless arguments: `sin(30_deg)` is 1/2, `ln(2_m/(1_m))` is `ln(2)`, `sin(1_m)` is an error.
+- SI prefixes: Y Z E P T G M k h da d c m u (micro) n p f a, e.g. `_km`, `_uF`, `_MeV`, `_kWh`.
+- Temperatures: [[convert]] treats a lone temperature as absolute (`convert(20_degC,_degF)` is `68_degF`), [[deltaconvert]] as a difference (10 degC = 18 degF). Adding different temperature units is refused.
+- Conversion factors are exact (the inch is 0.0254 m, the pound 0.45359237 kg); a converted value whose decimal expansion does not end is shown as a decimal.
+
+## Units by category
+- Length: m, in, ft, yd, mi, nmi, au, ly, pc, Ang. Area: ha, acre. Volume: L (l), gal, qt, pt, cup, floz, tbsp, tsp (US).
+- Time: s, min, h (hr), d, wk, yr. Speed: mph, kph, knot. Frequency: Hz, rpm, Bq, Ci.
+- Mass: g, t, lb, oz, ton, slug, ct, u, Da. Force: N, dyn, lbf, kgf. Energy: J, cal, eV, Wh, Btu, erg. Power: W, hp.
+- Pressure: Pa, bar, atm, psi, mmHg, Torr, inHg. Temperature: K, degC, degF, degR.
+- Electric: A, C, Ah, V, ohm, S, F, H, Wb, T, gauss. Angle: rad, deg, arcmin, arcsec, rev, sr. Other: mol, cd, lm, lx, Gy, Sv.
+
+See also [[constants]].
+
+@page constants Physical constants
+The Constants entry of the UNITS menu inserts physical constants (CODATA 2022 values; the ones fixed by the SI are exact). In EXACT mode they stay symbolic, in APPROX mode, with decimals or inside [[approx]] they are replaced by value and SI units:
+
+    approx(_me*_c^2)
+    ▶ 8.18710578797ᴇ-14_kg*m^2/s^2
+    convert(_me*_c^2,_MeV)
+    ▶ 0.510998950692_MeV
+
+- `_c` speed of light, `_hP` Planck constant, `_hbar` h/2π, `_qe` elementary charge, `_kB` Boltzmann, `_NA` Avogadro, `_R` molar gas constant, `_Fc` Faraday.
+- `_G` gravitation, `_g0` standard gravity 9.80665 m/s², `_eps0`, `_mu0` vacuum permittivity and permeability, `_ke` Coulomb constant, `_Z0` vacuum impedance.
+- `_me`, `_mp`, `_mn` electron, proton, neutron mass, `_mu` atomic mass constant, `_a0` Bohr radius, `_Rinf` Rydberg constant, `_alpha` fine-structure constant, `_muB`, `_muN` Bohr and nuclear magneton, `_Phi0` flux quantum, `_sigma` Stefan-Boltzmann, `_Vm` molar volume of an ideal gas at 0 °C and 1 atm.
+
+@group cas-units Units and constants
+Quantities are numbers times units such as `_m` or `_km/h` (see [[units]] and [[constants]]).
+
+@cmd convert
+group: cas-units
+summary: Convert a quantity to other units
+syntax: convert(quantity, units)
+syntax: convert(quantity, "SI")
+syntax: convert(quantity, "US")
+example: convert(5_ft,_m)
+result: 1.524_m
+example: convert(100_km/h,_mph)
+result: 62.1371192237_mph
+example: convert(20_degC,_degF)
+result: 68_degF
+example: convert(2_N*3_m,"SI")
+result: 6_J
+see: deltaconvert, usimplify, uvalue
+
+## Refresher
+Units multiply like numbers: convert by multiplying with 1 = (new unit)/(old unit); both sides must have the same dimension (powers of m, kg, s, A, K, mol, cd). Temperatures: a lone temperature converts as a point on the scale (with the offset), a difference with [[deltaconvert]].
+example: convert(9.81_m/s^2*70_kg,_N)
+result: 686.7_N
+## Syntax
+Converts to the given units, which must have the same dimension (else `incompatible units`). "SI" gives SI base units or a single derived unit, "base" always base units, "US" feet, pounds, seconds and degrees Rankine. A lone temperature is converted as an absolute temperature (with the offset of the Celsius and Fahrenheit scales). Lists and sums are converted element by element.
+
+@cmd deltaconvert
+group: cas-units
+summary: Convert a temperature difference
+syntax: deltaconvert(quantity, units)
+example: deltaconvert(10_degC,_degF)
+result: 18_degF
+see: convert
+
+Like [[convert]], but temperatures are differences: no offset is applied (10 degC more is 18 degF more).
+
+@cmd usimplify
+group: cas-units
+summary: Express a quantity in SI units
+syntax: usimplify(quantity)
+example: usimplify(3_kg*2_m/_s^2)
+result: 6_N
+example: usimplify(3_mA*2_kohm)
+result: 6_V
+see: convert
+
+Same as `convert(quantity,"SI")`: SI base units, or a derived unit (N, J, W, Pa, C, V, ohm, F, H, Wb, T, S) when one matches the dimension.
+
+@cmd uvalue
+group: cas-units
+summary: Number part of a quantity
+syntax: uvalue(quantity)
+example: uvalue(3_m/s)
+result: 3
+see: uunits
+
+Returns the quantity without its units.
+
+@cmd uunits
+group: cas-units
+summary: Units of a quantity
+syntax: uunits(quantity)
+example: uunits(3_m/s)
+result: _m/s
+see: uvalue
+
+Returns the units part of a quantity.

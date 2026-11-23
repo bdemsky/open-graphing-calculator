@@ -1,0 +1,72 @@
+# Spreadsheet usability: fill↓ proposes the last row of the neighbouring
+# data, fill / copy / link confirm what they did, SHIFT plot graphs linked
+# columns in one step, exponents drawn with E in cells
+app sheet
+sheet set A1 1
+sheet set A2 2
+sheet set A3 3
+sheet set A4 4
+sheet select B1
+key ENTER CLEAR
+type "=a1^2\n"
+key UP
+key F3
+expect state sheet_mode fill
+key ENTER
+expect state sheet_mode browse
+expect text filled B1 to B4
+ifcas src sheet value B4 16
+key F4
+expect text copied B1
+# plotting needs a link: the refusal says how
+key SHIFT F3
+expect screen sheet
+expect text link the column first: SHIFT link
+# link A and B, each confirmed on the entry line
+key LEFT SHIFT F1
+expect state menu "COLUMN A FEEDS LIST"
+key 2
+expect text column A feeds L1
+key RIGHT SHIFT F1 3
+expect text column B feeds L2
+screenshot sheet_linked.png
+# SHIFT plot: B against A, the nearest linked column on the left
+stat set L1 1,2,3,4
+key SHIFT F3
+expect screen graph
+expect state statplot1 "on 0 L1 L2 1 0 1"
+expect state xmin 0.7
+expect state xmax 4.3
+expect color 0xD8E3 20
+screenshot sheet_plot.png
+# on the left column the X is itself and Y the next linked column
+app sheet
+key LEFT
+key SHIFT F3
+expect state statplot1 "on 0 L1 L2 1 0 1"
+# with D linked: B (L2) is the nearest on its left
+app sheet
+sheet select D1
+sheet set D1 5
+sheet set D2 6
+sheet set D3 6
+key SHIFT F1 4
+key SHIFT F3
+expect screen graph
+expect state statplot2 "on 0 L2 L3 1 0 4"
+# a column linked alone gives a histogram
+sheet link A ""
+sheet link B ""
+app sheet
+key SHIFT F3
+expect screen graph
+expect state statplot3 "on 2 L3 L2 1 0 3"
+# small and large numbers are drawn with E in the cells
+app sheet
+sheet set F1 1.5*10^(-7)
+sheet select F1
+redraw
+ifcas src expect text 1.5ᴇ-7
+key SHIFT F1 1
+expect text column F: no link
+sheet link D ""

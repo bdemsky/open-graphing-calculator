@@ -1,0 +1,97 @@
+# Help viewer: contextual help (SHIFT MENU), catalog/menu item help, links, history, scrolling, touch
+requirecfg MANUAL_FULL
+manual list
+# home screen
+key SHIFT MENU
+expect screen help
+expect state help_topic home-screen
+expect text Home screen
+screenshot help_home.png
+key CLEAR
+expect screen home
+# other screens
+key F1 SHIFT MENU
+expect state help_topic yeq
+key CLEAR
+expect screen yeq
+key F2 SHIFT MENU
+expect state help_topic window
+key CLEAR F5 SHIFT MENU
+expect state help_topic graph
+key CLEAR
+expect screen graph
+key F1 SHIFT F5 SHIFT MENU
+expect state help_topic table
+key CLEAR HOME
+# MODE: help for the highlighted row
+key SHIFT HOME DOWN DOWN DOWN DOWN DOWN
+key SHIFT MENU
+expect state help_topic mode-complex
+key CLEAR
+expect screen mode
+key HOME
+# CAS menu item -> command page
+key CAS DOWN
+key SHIFT MENU
+expect state help_topic expand
+expect text Syntax
+key CLEAR
+expect state menu CAS
+key CLEAR
+# MATH menu items with explicit topics
+key MATH 6
+key CLEAR
+key MATH DOWN DOWN DOWN DOWN DOWN SHIFT MENU
+expect state help_topic nth-roots
+key CLEAR CLEAR
+# catalog entry -> its page; ENTER from help returns to the catalog
+key SHIFT APPS DIV
+expect statecontains menu_item n
+key SHIFT MENU
+expect screen help
+key CLEAR
+expect state menu CATALOG
+key CLEAR
+expect screen home
+# links: select with RIGHT, follow with ENTER, back with DEL
+manual index
+expect state help_topic index
+key RIGHT
+expect state help_link getting-started
+key ENTER
+expect state help_topic getting-started
+expect state help_history 1
+screenshot help_getting_started.png
+key DOWN DOWN DOWN
+expect state help_top 3
+key ADD
+expect statecontains help_top 1
+key SUB SUB
+expect state help_top 0
+key DEL
+expect state help_topic index
+expect state help_history 0
+# SHIFT HELP inside help opens the index
+manual factor
+key SHIFT MENU
+expect state help_topic index
+key DEL
+expect state help_topic factor
+key CLEAR
+expect screen home
+# touch: drag scrolls, tapping a link follows it
+manual index
+touch drag 160 200 160 80 6
+expect state help_top 8
+manual mode
+touch tap 25 204
+expect state help_topic mode-angle
+expect state help_history 2
+key CLEAR
+# unknown command help falls back to the index; command pages from the console
+manual solve
+expect text Refresher
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect text Syntax
+key CLEAR
+lcdcheck

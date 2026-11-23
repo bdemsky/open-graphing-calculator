@@ -1,0 +1,5 @@
+# The release version MAJOR.MINOR.PATCH: the firmware and every module of a release carry it (one
+# version per release; README.md "Versions and releases"). make release raises PATCH when anything
+# changed since the last release (tools/release_version.py); MAJOR and MINOR are raised by hand:
+# `make version-bump PART=minor`, or edit this line.
+release 0.2.15

@@ -1,0 +1,115 @@
+# Graph cells show what they graph (app/gcell.c; help page "graph-cells"): a caption line above the
+# plot with the cell's functions in their curves' colours (switched off: dim), compact (x², ·),
+# cut with an ellipsis when too long, also for 3D cells (z1=...) and in NOTEBOOK.HTML; a graph cell
+# without a function draws no plot (one dim line) and stays when the home screen is entered again;
+# the picture of a function using a variable is drawn again when the variable changes (never stale).
+requirecfg MOD_PYTHON
+type "1+1\n"
+key F1
+key CLEAR
+type "x^2"
+key DOWN
+key CLEAR
+type "sin(x)*2"
+key F5
+expect screen home
+expect state gcell_caption "#0050D8y1=x² #D81C18y2=sin(x)·2"
+expect text "y1=x²"
+expect text "y2=sin(x)·2"
+expect text "y1=x^2  y2=sin(x)*2"
+expect state gcell_h 120
+expect state gcell_empty 0
+screenshot graph_caption.png
+# a function switched off: dim in the caption, not plotted (the page sends specs like this one)
+nb spec 2 "w -10 10 -10 10 1 1\no 0 1 120\nf 1 0 0 x^2\nf 0 1 0 sin(x)*2"
+expect state gcell_caption "#0050D8y1=x² #D81C18(off)y2=sin(x)·2"
+# too long for the line: cut with …
+nb spec 2 "w -10 10 -10 10 1 1\no 0 1 120\nf 1 0 0 x^2+3*x-sqrt(x+1)\nf 1 1 0 sin(x)*cos(x)+tan(x/3)\nf 1 4 0 exp(-x^2)*pi"
+expect state gcell_caption "#0050D8y1=x²+3·x-√(x+1) #D81C18y2=sin(x)·cos(x)+tan(x/3) #009438y3=exp(-x²)·π"
+expect text "y1=x²+3·x-√(x+1)  y2=sin(x)·cos(x)+tan(x/3)…"
+screenshot graph_caption_cut.png
+# a graph cell without a function (as the browser page makes one): one line, no plot, no axes
+# (the state names the selected graph cell, else the last one)
+nb insert 2 graph
+expect state history 3
+key CLEAR
+expect state home_sel -1
+expect state gcell_empty 1
+expect state gcell_h 20
+expect state gcell_caption ""
+expect text "graph: enter a function"
+screenshot graph_cell_empty.png
+# selected, arrows do nothing to it; y= and back home: it stays (only a cell the graph flow made goes)
+key UP
+expect state home_sel 4
+expect state home_kind graph
+key RIGHT
+expect state gcell_window "-10 10 -10 10"
+key CLEAR
+key F1
+key HOME
+expect state history 3
+# a function for it: the plot appears
+nb spec 3 "w -5 5 -5 5\no 0 1 100\nf 1 5 0 x/2"
+expect state history 3
+expect state home_sel -1
+expect state gcell_empty 0
+expect state gcell_h 100
+expect state gcell_caption "#F08000y1=x/2"
+expect state gcell_window "-5 5 -5 5"
+# 3D: the caption names z
+key MENU
+key UP
+key ENTER
+expect screen graph3d_eq
+key CLEAR
+type "x*y/4"
+key HOME
+expect state history 4
+expect state gcell_caption "#0050D8z1=x·y/4"
+expect text "z1=x·y/4"
+# a 3D cell without a surface: one line too
+key CLEAR
+nb insert 4 graph
+nb spec 5 "3d -60 25 1 1 0 1 1 24 200\nw -5 5 -5 5 -5 5\np 0 6.28 0 6.28 0 6.28\no 0 0 120"
+expect state home_sel -1
+expect state gcell_empty 1
+expect text "3D graph: enter z=f(x,y)"
+# a function of a variable: drawn again when the variable changes (the picture is never stale)
+type "a:=1\n"
+key F1
+key CLEAR
+type "a*x"
+key DOWN
+key CLEAR
+key F5
+expect statecontains gcell_caption "=a·x"
+expect state gcell_fresh 1
+key CLEAR
+type "a:=-3\n"
+expect state home_sel -1
+expect statecontains gcell_caption "=a·x"
+expect state gcell_fresh 1
+screenshot graph_cell_variable.png
+# ... and when a MODE setting changes (degrees: sin(x) is drawn again)
+key F1
+key CLEAR
+type "sin(x)"
+key F5
+expect state gcell_fresh 1
+key CLEAR
+key SHIFT HOME
+expect screen mode
+key ENTER
+key RIGHT ENTER
+expect state angle deg
+key HOME
+expect state home_sel -1
+expect statecontains gcell_caption "=sin(x)"
+expect state gcell_fresh 1
+# NOTEBOOK.HTML: the caption in the curves' colours
+usb host on
+usb ls
+usb expect NOTEBOOK.HTML "<span style=\"color:#0050d8\">y1=x²+3·x-√(x+1)</span>"
+usb expect NOTEBOOK.HTML "<span style=\"color:#f08000\">y1=x/2</span>"
+usb expect NOTEBOOK.HTML "<i>graph: no function</i>"

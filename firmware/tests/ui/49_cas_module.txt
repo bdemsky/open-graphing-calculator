@@ -1,0 +1,31 @@
+# The advanced CAS extension (code module "casx": modules/casx, cas/ext/adv, cas/src/casx.h):
+# its commands bind the module on first use; without it they say how to get it (not an
+# unknown function); the standard tier installs it from the card's module library, the
+# advanced tier has it in the factory content, the core tier links it into the firmware.
+requirecfg CAS_SRC
+# not installed (emulated on every QSPI tier with `modx off`)
+ifcfg CONTENT_QSPI modx off casx
+ifcfg CONTENT_QSPI type "jordan([[1,1],[0,1]])\n"
+ifcfg CONTENT_QSPI expect state last_error 1
+ifcfg CONTENT_QSPI expect text needs the advanced CAS module
+ifcfg CONTENT_QSPI screenshot casx_not_installed.png
+ifcfg CONTENT_QSPI expect state modx_casx off
+ifcfg CONTENT_QSPI modx on casx
+# the standard tier installs it from the release's module library on the card
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI fs insert 64
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI fs format
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI module library
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI module install /CALC/MODULES/{mod:casx}
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI expect text installed and verified
+ifcfg !MOD_CASX ifcfg CONTENT_QSPI key CLEAR
+# installed (or built in): the commands work, and bind the module on first use
+expect eval "jordan([[1,1],[0,1]])" "[[1,1],[0,1]]"
+ifcfg CONTENT_QSPI expect state modx_casx bound
+expect eval "fibonacci(30)" "832040"
+expect eval "factormod(x^4+1,5)" "(x^2-2)*(x^2+2)"
+expect eval "minpoly([[2,0],[0,2]])" "x-2"
+expect eval "rsolve(f(n+1)=2*f(n),f(n),[f(0)=3])" "3*2^n"
+# a store change unbinds it and the CAS forgets the commands until the next use
+ifcfg CONTENT_QSPI modx off casx
+ifcfg CONTENT_QSPI modx on casx
+expect eval "stirling2(5,2)" "15"

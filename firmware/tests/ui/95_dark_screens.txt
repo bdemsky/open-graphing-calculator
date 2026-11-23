@@ -1,0 +1,97 @@
+# Integration: the dark theme on every screen added in Phase 2 (3D graph,
+# geometry, spreadsheet, microSD tools, CATALOG, clipboard, history search,
+# edit bar) and their menus; the screenshots are checked by eye. Found with
+# it: the spreadsheet drew a cell's value over its formula in the entry line
+# (light and dark).
+setmode THEME Dark
+expect state theme dark
+# 3D graph: entries, window, view menu, the surface
+app settings
+app graph3d
+key F1
+type "(x^2-y^2)/5"
+expect screen graph3d_eq
+screenshot dark_g3d_eq.png
+key F5
+expect screen graph3d
+screenshot dark_g3d.png
+key F2
+screenshot dark_g3d_window.png
+key F3
+expect screen menu
+screenshot dark_g3d_view.png
+key CLEAR
+key HOME
+# geometry: a construction with a measurement, the tool menu, a tool half done
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 4
+ifcfg GEOMETRY touch tap 160 121
+ifcfg GEOMETRY touch tap 240 121
+ifcfg GEOMETRY touch tap 200 61
+ifcfg GEOMETRY touch tap 161 122
+ifcfg GEOMETRY key F5
+ifcfg GEOMETRY key 3
+ifcfg GEOMETRY touch tap 200 121
+ifcfg GEOMETRY screenshot dark_geo.png
+ifcfg GEOMETRY key F4
+ifcfg GEOMETRY expect screen menu
+ifcfg GEOMETRY screenshot dark_geo_menu.png
+ifcfg GEOMETRY key CLEAR
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 6
+ifcfg GEOMETRY touch tap 100 100
+ifcfg GEOMETRY expect screen geometry
+ifcfg GEOMETRY screenshot dark_geo_tool.png
+ifcfg GEOMETRY key CLEAR CLEAR
+key HOME
+# spreadsheet: values, a label, an error, the entry line, the tools menu
+app sheet
+sheet set A1 3
+sheet set A2 "\"mass\""
+sheet set A3 =A9/0
+sheet set B1 =A1*2
+sheet select B1
+redraw
+expect text ERR
+screenshot dark_sheet.png
+key ENTER
+expect state sheet_mode edit
+screenshot dark_sheet_edit.png
+key CLEAR CLEAR
+key SHIFT F2
+expect state menu SPREADSHEET
+screenshot dark_sheet_tools.png
+key CLEAR
+# microSD tools
+app sdtools
+expect state menu MICROSD
+screenshot dark_sdtools.png
+key CLEAR
+# CATALOG with a query, the categories, the clipboard list, history search
+key HOME
+type "1+1\n"
+key SHIFT APPS
+key MUL LOG DIV
+screenshot dark_catalog.png
+key F3
+screenshot dark_catalog_categories.png
+key CLEAR
+expect screen home
+key MENU
+expect screen menu
+screenshot dark_edit_bar.png
+key SHIFT F2
+expect state menu CLIPBOARD
+screenshot dark_clips.png
+key CLEAR
+key MENU F5
+expect state hist_n 1
+screenshot dark_hist_search.png
+key CLEAR
+key HOME
+# help pages of the new apps
+manual sheet
+screenshot dark_help_sheet.png
+key CLEAR
+setmode THEME Light

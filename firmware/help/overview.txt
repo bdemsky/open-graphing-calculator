@@ -1,0 +1,39 @@
+%% Overview pages for new users (also chapters of the printed manual, tools/gen_manual.py).
+
+@page screen-layout The screen
+The display has three parts.
+
+- The status bar at the top: the angle mode (DEG or RAD), EXACT or APPROX, the number format when it is not the default (FIX2, SCI3, ENG, ...), the name of the current screen in the middle, a badge while {shift} (SHIFT) or {alpha} (a, A, a-LK, A-LK for letter lock) is pending, OVR in overwrite mode, and the battery gauge (USB when powered over USB) at the right.
+- The body: the screen itself, for example the history and the entry line of the home screen, a graph or a list editor.
+- The soft-key bar at the bottom: the labels of {F1} .. {F5} ([[softkeys]]). After {shift} it shows the second row of labels. The label of the screen you are on is highlighted.
+
+## Moving between screens
+- {home} returns to the calculator (the home screen, or the RPN stack in RPN mode) from anywhere.
+- {apps} lists the applications ([[apps-overview]]); a number key or {▲} {▼} {enter} opens one.
+- {menu} opens the options of the current screen: every soft key with its name, and the edit keys ([[edit-bar]]).
+- {shift} {menu} opens help for the current screen, or for the highlighted menu entry.
+- {clear} first clears what you are typing, then leaves the screen.
+- Menus and messages appear over the screen; {clear} closes them and you are back where you were.
+
+## Messages
+Errors and confirmations appear in a box over the screen; any key or a tap closes it. Error messages are listed in [[errors]].
+
+@page apps-overview Apps at a glance
+{apps} opens the list of applications. Each one is described in its own chapter of help.
+
+- Graphs are not in the list: {F1} (graph) on the home screen opens the graph editor, 2D (functions, parametric, polar and sequence graphs and implicit relations) or 3D (surfaces, parametric surfaces and space curves), and graphing adds a graph cell to the notebook ([[graph-cells]], [[graphing]], [[graph]], [[graph3d]]).
+- Table, Graph analysis: tables of values, zeros, extrema and integrals ([[table]], [[graph-calc]]).
+- Statistics, Distributions, Stat plots: lists, 1-Var and 2-Var statistics, regressions, tests, intervals, probability distributions and plots ([[stat]], [[stat-distr]], [[stat-plots]]).
+- Matrix: the matrices [A] to [J] ([[matrix-menu]]).
+- Solver: equations, polynomials and linear systems ([[solver]]).
+- Finance: time value of money, amortization, cash flows, interest conversion and days between dates ([[finance]]).
+- Base-n: binary, octal and hexadecimal numbers ([[basen]]).
+- Units & constants: units, conversions and physical constants ([[units]], [[constants]]); measurements with uncertainty use ± ([[uncertainty]]).
+- Spreadsheet: a grid of cells with formulas, linked to statistics lists ([[sheet]]).
+- microSD tools: screenshots, session backup and restore ([[sdtools]]).
+- Geometry: dynamic constructions with live measurements ([[geometry]]).
+- Python: a Python console with the CAS as a library ([[python]], [[python-calc]]).
+- Notebook: pages of text, math, Python and graph cells, kept in the calculator or on the card and opened by Jupyter on a computer ([[notebook]]).
+- Settings, Memory, Help: the MODE settings ([[mode]]), the saved session ([[mem]]) and this help ([[help]]).
+
+The home screen itself ([[home-screen]]) evaluates expressions with the computer algebra system; {CAS}, {math} and {shift} {apps} (the [[catalog|catalog]]) insert its commands. With ENTRY set to RPN in [[mode|settings]] the home screen becomes an RPN stack ([[rpn]]).

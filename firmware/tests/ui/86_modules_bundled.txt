@@ -1,0 +1,123 @@
+# Simulators only: Memory > Modules also lists every module bundled into the emulator
+# (content_library[]: the release library, incl. the casx CAS module, and the extras, Math Quest);
+# installed modules are listed first, as "emulator X.Y.Z"
+# rows installed through the same installer and checks as a card file (app/modules_ui.c).
+# Each one is installed with taps, then one is reverted and one removed; `module bundled
+# install` (the web page's "install all modules") installs the rest.
+requirecfg CONTENT_QSPI
+module format
+module bundled
+# empty store, no card: one row per bundled module, its version below it, the note last
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item Modules
+key ENTER
+expect state menu MODULES
+expect text "animation: not installed"
+expect text "manual: not installed"
+expect text "casx: not installed"
+expect text "mathquest: not installed"
+expect text "geometry: not installed"
+expect text "emulator {ver:animation}: new"
+screenshot modules_bundled.png
+key UP
+expect state menu_item "Emulator: bundled modules"
+key ENTER
+expect screen message
+expect text "emulator"
+key CLEAR
+# animation
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+key DOWN
+expect state menu_item "  emulator {ver:animation}: new"
+key ENTER
+expect text "Install animation {ver:animation} (new)?"
+key F1
+expect text "animation {ver:animation} installed"
+key CLEAR
+# manual
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text "animation {ver:animation} (ok)"
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "  emulator {ver:manual}: new"
+key ENTER
+expect text "Install manual {ver:manual} (new)?"
+key F1
+expect text "manual {ver:manual} installed"
+key CLEAR
+expect state module_manual ok
+manual graph
+expect state help_source module
+key CLEAR
+# mathquest
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text "manual {ver:manual} (ok)"
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "  emulator {ver:mathquest}: new"
+key ENTER
+expect text "Install mathquest {ver:mathquest} (new)?"
+key F1
+expect text "mathquest {ver:mathquest} installed"
+key CLEAR
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text "mathquest {ver:mathquest} (ok)"
+expect text "emulator {ver:mathquest}: reinstall"
+screenshot modules_bundled_installed.png
+key CLEAR
+# the installed modules work
+app mathquest
+expect screen mathquest
+key CLEAR
+expect state modx_mathquest bound
+# reinstall the manual, then revert to the previous copy
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+key DOWN DOWN DOWN ENTER
+expect text "Install manual {ver:manual} (reinstall)?"
+key F1
+expect text "installed"
+key CLEAR
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+key DOWN DOWN ENTER
+expect state menu MODULE
+key DOWN
+expect state menu_item "Revert to {ver:manual}"
+key ENTER
+expect text "previous version"
+key CLEAR
+expect state module_manual ok
+# remove Math Quest with taps; it is offered again
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+key DOWN DOWN DOWN DOWN ENTER
+expect state menu MODULE
+key DOWN DOWN ENTER
+expect text "mathquest: removed."
+key CLEAR
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text "mathquest: not installed"
+key CLEAR
+# everything at once (the web page's "install all modules"), then nothing left to do
+module bundled install
+expect text "installed"
+key CLEAR
+module bundled install
+expect text "Everything is already"
+key CLEAR
+# a reboot keeps them
+reboot
+expect state module_manual ok
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text "animation {ver:animation} (ok)"
+expect text "python {ver:python} (ok)"
+# (Math Quest, installed last, is on the second page)
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect text "mathquest {ver:mathquest} (ok)"
+key CLEAR

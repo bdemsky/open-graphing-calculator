@@ -1,0 +1,111 @@
+# Geometry app: Y= graphs as paths (points on a graph, intersections with
+# a graph), the construction on the GRAPH screen, saving with the session
+# (power off/on, reboot), named files on the microSD card, dark theme.
+# World (x, y) = pixel (160 + 20x, 121 - 20y).
+requirecfg GEOMETRY
+key F1
+type "x^2-2"
+app geometry
+key SHIFT F3
+key 4
+# View menu items come back to the geometry screen
+expect screen geometry
+key SHIFT F3
+expect text "Y= graphs: on"
+key CLEAR
+expect screen geometry
+# a point on the parabola at x = 1, dragged along it
+key F2
+key 1
+touch tap 180 141
+geo expect A "A = (1, -1)"
+touch drag 180 141 200 140 4
+geo expect A "A = (2, 2)"
+# the horizontal line y = 2 and its intersections with the graph
+key F3
+key 1
+touch tap 60 81
+touch tap 260 81
+key F2
+key 3
+touch tap 100 81
+touch tap 120 81
+geo expect D "D = (-2, 2)"
+# a segment from A to the vertex (0, -2): its end point lands on the graph too
+key F3
+key 2
+touch tap 200 81
+touch tap 160 161
+key F5
+key 4
+touch tap 180 121
+geo expect m1 "slope b = 2"
+screenshot geo_graphs.png
+# show the construction on the GRAPH screen too
+key SHIFT F3
+key 5
+app graph
+expect screen graph
+screenshot geo_on_graph.png
+# the session keeps construction, view and options
+app geometry
+key ADD
+geo expect scale 40
+key SUB
+session save
+key SHIFT ON
+key ON
+app geometry
+geo expect count 9
+geo expect A "A = (2, 2)"
+geo expect m1 "slope b = 2"
+geo expect scale 20
+key SHIFT F3
+expect text "Show on GRAPH: on"
+key CLEAR
+# changes after the last save are lost by a reboot (reset without saving)
+session save
+key SHIFT F2
+touch tap 60 81
+geo expect count 6
+reboot
+app geometry
+geo expect count 9
+# files on the microSD card
+fs insert 8
+fs format
+key SHIFT F4
+key 3
+geo expect prompt "Save as:"
+type "PARAB1"
+key ENTER
+geo expect message "Saved"
+fs expect /CALC/GEO/PARAB1.GEO GEO1
+key SHIFT F4
+key 1
+geo expect count 0
+key SHIFT F4
+key 2
+expect text "PARAB1"
+key ENTER
+expect screen geometry
+geo expect count 9
+geo expect D "D = (-2, 2)"
+# console save/load, and a file that is not a construction
+geo save TRI
+fs put /CALC/GEO/BAD.GEO hello
+geo new
+geo load TRI
+geo expect count 9
+key SHIFT F4
+key 2
+expect text "BAD"
+key 3
+expect text "Not a geometry file."
+key ENTER
+fs eject
+# dark theme
+key SHIFT HOME
+setmode THEME Dark
+app geometry
+screenshot geo_dark.png

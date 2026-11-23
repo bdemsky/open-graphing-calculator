@@ -1,0 +1,312 @@
+(kicad_sch
+	(version 20250114)
+	(generator "calcgen")
+	(generator_version "1.0")
+	(uuid "677a242e-a1c3-5d92-ae7b-4698021e742c")
+	(paper "A4")
+	(title_block
+		(title "Graphing Calculator rev A")
+		(company "Graphing Calculator rev A")
+	)
+	(lib_symbols)
+	(sheet
+		(at 25.4 30.48)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "32f34a1a-c472-55c5-8557-9bcd2585f776")
+		(property "Sheetname" "Power"
+			(at 25.4 29.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 25.4 61.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 88.9 30.48)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "75d6cec5-1277-5159-bffd-b7a9a2540fb4")
+		(property "Sheetname" "MCU"
+			(at 88.9 29.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu.kicad_sch"
+			(at 88.9 61.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 152.4 30.48)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "69e40e4c-6b7b-5f01-bd79-cacdc33027f6")
+		(property "Sheetname" "Memory"
+			(at 152.4 29.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "memory.kicad_sch"
+			(at 152.4 61.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 215.9 30.48)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "20ee252a-6b92-5fca-9677-8e3475926557")
+		(property "Sheetname" "Display"
+			(at 215.9 29.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "display.kicad_sch"
+			(at 215.9 61.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 81.28)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "e1d519b0-dc4b-5eb6-aa2d-ec586f999eb8")
+		(property "Sheetname" "USB"
+			(at 25.4 80.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 25.4 112.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 88.9 81.28)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "bf85f3c1-695c-51bd-a1b6-4400e9d3ab39")
+		(property "Sheetname" "Keypad"
+			(at 88.9 80.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "keypad.kicad_sch"
+			(at 88.9 112.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 152.4 81.28)
+		(size 50.8 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "a3d1ea03-0872-5812-886f-fabb8fa0196d")
+		(property "Sheetname" "Debug and test"
+			(at 152.4 80.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "debug.kicad_sch"
+			(at 152.4 112.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

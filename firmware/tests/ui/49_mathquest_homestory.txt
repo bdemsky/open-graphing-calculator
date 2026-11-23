@@ -1,0 +1,115 @@
+# Sparkle Town's dress-up shop and the home story (modules/mathquest/mq_home.c, mq_homestory.c): today's rack in
+# dress-up (a piece up close is tried on, bought at the store's own counter, CLEAR puts the coins back), then a long
+# stay at home: the buddy restless at the window, a friend's card ("later" only closes it), the walk-out at a calm
+# moment, the errand's round in the friend's place, the thank-you, and home again right after
+# (screenshots mathquest_story_*.png). Animations advance with `mq step N`.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+mq engine stop
+mq seed 21
+mq fun off
+mq coins 300
+mq go map
+mq step 2
+key F1
+expect state mq_scene room
+# the store (F1), then dress-up (F1): the rack of the day
+key F1
+expect state mq_scene shop
+key F1
+expect state mq_scene wardrobe
+mq step 2
+expect text New today!
+screenshot mathquest_story_rack.png
+# the first piece up close: her buddy tries it on
+touch tap 154 79
+expect statecontains mq_scene wardrobe
+expect text Trying it on!
+mq step 2
+screenshot mathquest_story_tryon.png
+# paid at the counter (counting coins): the store's counter, in dress-up
+mq pay setup 1 0
+touch tap 174 139
+expect state mq_pay "count pay"
+expect state mq_scene wardrobe
+mq step 4
+screenshot mathquest_story_counter.png
+# CLEAR: the coins back, then the counter closes; nothing bought, she is still dressing up
+mq pay put p
+key CLEAR
+key CLEAR
+expect state mq_pay off
+expect state mq_scene wardrobe
+expect text Trying it on!
+# CLEAR again: the piece's card closes (still dress-up)
+key CLEAR
+expect state mq_scene wardrobe
+expect notext Trying it on!
+# a long stay at home: in dress-up her buddy thinks of outside
+mq story time 370
+mq step 30
+screenshot mathquest_story_thought.png
+# the friend's card at a calm moment; "later" only closes it
+mq story time 400
+mq step 50
+expect text Can you help?
+screenshot mathquest_story_card.png
+touch tap 272 85
+expect state mq_scene wardrobe
+expect notext Can you help?
+# her room: the buddy goes to the window and looks out
+key CLEAR
+expect state mq_scene room
+mq story time 420
+mq step 120
+screenshot mathquest_story_window.png
+# a minute on: the walk-out at a calm moment, then the friend's place and its game
+mq story time 470
+mq step 20
+expect text Come on, let's go!
+screenshot mathquest_story_walkout.png
+mq step 70
+expect statecontains mq_scene play
+mq step 60
+# the errand: a round there (ten orders); the thank-you; home right after
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene done
+expect text Thank you!
+mq step 30
+screenshot mathquest_story_thanks.png
+expect statecontains mq_story "0 0 360 0"

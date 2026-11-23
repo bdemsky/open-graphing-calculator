@@ -1,0 +1,126 @@
+# Integration: a microSD backup with every app holding state, restored after
+# the flash was wiped, then power cycles. Bug: state with no blob in the
+# loaded session (after `session clear`, or a restore) kept what was in RAM
+# (the simulators and a restore restart without clearing statics); session_load
+# now runs every reset() first, so a wiped calculator really starts empty.
+fs insert 8
+fs format
+# home, CAS variables, Y=, settings, theme
+ifcas src type "a:=7\n"
+type "6*7\n"
+key F1
+type "x^2-2"
+key HOME
+setmode ANGLE DEGREE
+setmode DECIMAL 3
+setmode THEME Dark
+# lists and a stat plot
+stat set L1 1,2,3
+stat set L2 2,4,7
+key F1 SHIFT F1 1
+key RIGHT
+expect state statplot1 "on 0 L1 L2 1 0 1"
+key HOME
+# spreadsheet, geometry, 3D graph, base-n, clipboard, solver
+app sheet
+sheet set A1 5
+sheet set A2 =A1*2
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F2
+ifcfg GEOMETRY key 1
+ifcfg GEOMETRY touch tap 180 141
+ifcfg GEOMETRY geo expect count 1
+app graph3d
+key F1
+type "x*y"
+key F5
+expect state g3d_e1_1 x*y
+app basen
+key UP
+expect text "input HEX"
+key HOME
+type "2+3"
+key MENU F3
+key CLEAR
+app solver
+key 1
+type "x^2=9"
+key ENTER
+key HOME
+# RPN with two levels
+setmode ENTRY RPN
+key HOME
+type "5\n6\n"
+expect state rpn_depth 2
+app sdtools
+key 2
+expect text BACKUP.SES
+key CLEAR
+# wipe: an empty flash and a restart give the factory state
+session clear
+reboot
+expect state theme light
+expect state angle rad
+expect state fix -1
+expect state rpn 0
+expect state clip ""
+expect state y1 ""
+expect state history 0
+expect state statplot1 "off 0 L1 L2 1 0 1"
+stat expect L1 ""
+ifcas src expect eval "a" "a"
+app sheet
+sheet expect A2 ""
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY geo expect count 0
+app graph3d
+expect state g3d_e1_1 ""
+app basen
+expect text "input DEC"
+# restore: everything is back
+app sdtools
+key 3
+key ENTER 2
+expect text Session restored
+key CLEAR
+expect screen rpn
+expect state theme dark
+expect state angle deg
+expect state fix 3
+expect state rpn_depth 2
+expect state rpn_1 6
+expect state clip 2+3
+expect state y1 x^2-2
+expect state statplot1 "on 0 L1 L2 1 0 1"
+stat expect L1 1,2,3
+ifcas src expect eval "a" "7"
+app sheet
+sheet value A2 10
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY geo expect A "A = (1, -1)"
+app graph3d
+expect state g3d_e1_1 x*y
+app basen
+expect text "input HEX"
+app solver
+key 1
+expect text x^2=9
+screenshot backup_restored.png
+# power cycles keep all of it (the restore was saved)
+key SHIFT ON
+key ON
+expect screen rpn
+expect state rpn_depth 2
+expect state theme dark
+key SHIFT ON
+key ON
+app sheet
+sheet value A2 10
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY geo expect count 1
+expect state y1 x^2-2
+setmode ENTRY ALGEBRAIC
+key HOME
+ifcas src expect state history 2
+ifcas stub expect state history 1
+setmode THEME Light

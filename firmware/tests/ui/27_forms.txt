@@ -1,0 +1,86 @@
+# Alternate forms browser (app/forms_ui.c, cas/src/forms.c): REWRITE item 1
+# "forms" lists equivalent forms of the result, equally simple ones first;
+# ENTER takes one as a new result ("forms(Ans)" is the input), MENU F3
+# copies it, drag scrolls; Classic and Textbook display, and RPN level 1.
+requirecfg CAS_FORMS
+setmode SIMPLIFY OFF
+setmode DISPLAY CLASSIC
+key HOME
+type "sin(2*x)*(1+tan(x)^2)\n"
+key SHIFT F4
+ifcas src expect text forms
+key 1
+ifcas src expect screen forms
+ifcas src expect state forms_item 2*tan(x)
+ifcas src expect state forms_eq 1
+ifcas src expect text 2*tan(x)
+screenshot forms_classic.png
+# ▼ moves to the next form; CLEAR returns without a change
+key DOWN
+ifcas src expect state forms_sel 1
+key CLEAR
+expect screen home
+ifcas src expect state last_input sin(2*x)*(1+tan(x)^2)
+# ENTER takes the selected form: a new history entry
+key SHIFT F4 1
+ifcas src expect state forms_sel 0
+key ENTER
+expect screen home
+ifcas src expect state last_input forms(Ans)
+ifcas src expect state last_output 2*tan(x)
+# a cancelled common factor carries its condition
+type "(x^2-1)/(x-1)"
+key SHIFT F4 1
+ifcas src expect state forms_item x+1
+ifcas src expect state forms_cond x≠1
+ifcas src expect text if x≠1
+# MENU F3 copies the selected form
+key MENU F3
+ifcas src expect screen forms
+key ENTER
+ifcas src expect state last_input forms((x^2-1)/(x-1))
+ifcas src expect state last_output x+1
+expect state entry ""
+key MENU F4
+ifcas src expect state entry x+1
+key CLEAR
+# a polynomial: factored and expanded forms; drag scrolls the list
+type "x^4-1\n"
+setmode DISPLAY TEXTBOOK
+key HOME
+key SHIFT F4 1
+ifcas src expect screen forms
+ifcas src expect state forms_item x^4-1
+key DOWN
+ifcas src expect state forms_item (x-1)*(x+1)*(x^2+1)
+screenshot forms_textbook.png
+touch drag 160 150 160 40 8
+ifcas src expect screen forms
+key ENTER
+ifcas src expect state last_input forms(Ans)
+key CLEAR CLEAR
+# an expression that is already minimal: just itself
+type "x+1\n"
+key SHIFT F4 1
+ifcas src expect state forms_n 1
+ifcas src expect state forms_item x+1
+key F5
+expect screen home
+# RPN: level 1
+setmode ENTRY RPN
+key HOME
+expect screen rpn
+type "(x^2-1)/(x-1)\n"
+key SHIFT F5 1
+ifcas src expect screen forms
+ifcas src expect state forms_item x+1
+key ENTER
+expect screen rpn
+ifcas src expect state rpn_1 x+1
+# UNDO brings the old level back
+key F5
+ifcas src expect state rpn_1 (x^2-1)/(x-1)
+setmode ENTRY ALGEBRAIC
+setmode SIMPLIFY AUTO
+key HOME
+lcdcheck

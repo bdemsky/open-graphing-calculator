@@ -1,0 +1,57 @@
+%% The Animation module (modules/animation, app/anim_core.c, app/modx.h): playing graphs
+%% over time in 2D and 3D, comet drawings, GIF recording, and code modules in general.
+
+@page animation Animation: graphs that move
+The Animation module plays a variable of a graph over time: a travelling wave `sin(x-t)`, a curve drawn like a comet, sequence terms appearing one by one, a rippling 3D surface. It is a module ([[code-modules]]): if it is not installed, {shift} {F5} (anim) says how to install it, and everything else works as before.
+
+## Playing
+- On GRAPH and 3D GRAPH, {shift} {F5} is anim: it opens the ANIMATION menu; {1} plays. While playing it reads pause ({F5} there is back, to the notebook).
+- Any key or a touch pauses (that key does nothing else); leaving the graph and switching off pause too. After 2 minutes without a key it pauses by itself, to save the batteries.
+- The value is shown at the top right (▶ t=1.25 while playing, two bars when paused). After a pause the value stays where it stopped and is stored in the variable (`t:=1.25`), like a slider.
+- Stop (back to the start) in the menu ends the animation: a comet shows the whole curves again.
+
+## What is animated
+- 2D, every mode: the highlighted [[graph-sliders|slider]], i.e. a free letter of the entries. `Y1=sin(x-t)` gives a slider t; the wave travels. With several sliders {,} chooses which one plays. In PAR mode t is the curve's own variable, so use another letter: `X1T=cos(t)+a`.
+- 2D PAR, POL and SEQ: Comet in the menu switches the comet drawing on: the curves are drawn progressively along t, θ or n with a dot at the head; sequences show their terms one by one (TIME) or the cobweb growing (WEB). See [[animation-comet]].
+- IMPL relations: a free letter such as r in `x^2+y^2=r^2` is a slider like in the other modes.
+- 3D: the free letter of the entries, t if there is one: `z=sin(√(x^2+y^2)-t)` ripples. Parametric surfaces may use it too; space curves already use t, so they use another letter. See [[animation-3d]].
+- TRACE and CALC follow while playing: the trace cursor stays at its x (or t, θ, n) on the moving curve, and a CALC result (zero, minimum, intersection, integral, ...) is computed again for every frame.
+- Graph cells of the home notebook whose functions use t: select one and press {F5} (play), right there in the notebook; each cell keeps its own t range, seconds and mode. See [[graph-cells]] (Animated graph cells).
+
+## Settings
+Settings in the menu (for a 2D slider: {enter} on the graph, the slider's own form) has, besides value, min, max and step:
+
+- start, end: the range played (default: the slider's min and max; 3D: 0 to 2π).
+- seconds: time from start to end (default 4).
+- mode: 0 loop (start again), 1 bounce (back and forth), 2 once (stop at the end). Mode in the menu cycles through them.
+
+The settings are kept per letter and saved with the session.
+
+## Recording and speed
+Record GIF to microSD writes one cycle as an animated GIF ([[animation-gif]]). Up to 25 frames per second are drawn; `state anim_fps` on the console shows the rate.
+
+@page animation-comet Comet drawing
+In PAR, POL and SEQ mode, Comet in the ANIMATION menu ({shift} {F5} on GRAPH) draws the curves progressively: the parameter (t from Tmin, θ from θmin, n from nMin) grows to its maximum over the animation's seconds, and a dot marks the head of each curve.
+
+    X1T=3sin(2t)
+    Y1T=3cos(3t)
+
+draws a Lissajous figure line by line. For sequences the terms appear one after the other (TIME plot), or the cobweb grows step by step (WEB plot). Loop starts again from the beginning, bounce erases backwards, once stops with the whole curve. Comet is a setting of the 2D graph: switch it off in the same menu to animate sliders again.
+
+@page animation-3d Animated 3D graphs
+In the 3D graph a single letter that is not the entry's own variable (x and y for z=, u and v for surfaces, t for curves) and not e or i is the animated variable; t is preferred. Like a slider it starts at the value stored in it (`t:=1`), else at the animation's start (0), so `z=sin(√(x^2+y^2)-t)` is drawn at once; after a pause its value is stored in it.
+
+Every frame evaluates the surfaces again for the new value. When a frame takes longer than about 80 ms, the next ones use a coarser grid (as when you turn the box with a finger), and the grid grows back when frames are fast; a paused or recorded frame is always drawn at the full grid of the 3D window. Rotating and zooming work while paused.
+
+    z=2sin(√(x^2+y^2)-t)                 ripples
+    x(u,v)=cos(u)(2+cos(v+t)) ...        a surface that turns
+
+@page animation-gif Recording an animated GIF
+Record GIF to microSD in the ANIMATION menu plays one cycle (loop: start to end; bounce: there and back; once: to the end) at 10 frames per second, at most 120 frames, and writes it as `/CALC/ANIM001.GIF` (the next free number) on the microSD card. The graph area is recorded, without the play bar; a key press ends the recording early (the file is still complete).
+
+Only the changed part of each frame is stored, so a 2D animation of 40 frames takes 20 to 100 KB. Card errors are reported as for screenshots ([[sdtools]]).
+
+@page code-modules Code modules
+Some features are modules of program code that live in the 16 MB flash chip next to the firmware, like the [[install-content|manual]]: the calculator runs them directly from there. They are Animation ([[animation]]), Geometry ([[geometry]]; installed at the factory), Python ([[python]]; installed at the factory, copied into the SDRAM when it starts) and the advanced CAS. Install them the same way as the manual (Memory, Install content or Memory, Modules, from the `MODULES` folder of the release on a microSD card, or by dropping the file on the CALC drive of a computer, [[usb]]); the advanced firmware has them installed already.
+
+Without the module its feature says how to install it; a module made for another firmware, or a damaged one, is not run; in safe mode no module runs. Memory, About lists the installed modules.

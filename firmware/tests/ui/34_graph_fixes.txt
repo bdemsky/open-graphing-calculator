@@ -1,0 +1,65 @@
+# Regression tests for graphing: x==y relations, the SEQ table opened at the
+# trace, Y= entries over 48 tokens, slider values stepped with + -, shading in
+# dark mode
+#
+# IMPL: "==" is one relation (x==y used to split into (x)-(=y))
+setmode GRAPH IMPL
+key F1
+type "x==y"
+key F5
+expect state graph_error ""
+expect state graph_plotted 1
+# SEQ: TABLE opened at the trace (n = 1 = nMin) starts at nMin, row of n = 1
+setmode GRAPH SEQ
+key F1
+type "n"
+key F5 F4
+expect state trace_t 1
+touch tap 120 216
+expect screen table
+expect state table_start 1
+expect state table_row 0
+key HOME
+# PAR: an edit over 48 tokens is undone and says so until the next key
+setmode GRAPH PAR
+key F1
+type "1+1+1+1+1+1+1+1+1+1+1+1+"
+type "1+1+1+1+1+1+1+1+1+1+1+1+"
+expect state e1_1 1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+
+expect notext "too long"
+key 1
+expect state e1_1 1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+
+expect text "too long"
+key LEFT
+expect notext "too long"
+key CLEAR HOME
+setmode GRAPH FUNC
+# + / - on a slider: the value reaches the CAS before it is read (home
+# evaluation, graph re-entry, power off)
+key F1
+type "a*x"
+key F5 ENTER
+expect state sliders 1
+key + +
+key F1 F5
+key HOME
+type "a\n"
+ifcas src expect state last_output 1.2
+ifcas stub expect state last_output 6/5
+key F1 F5 ENTER -
+key SHIFT ON
+key ON
+type "a\n"
+ifcas src expect state last_output 1.1
+ifcas stub expect state last_output 11/10
+# dark mode: the shading tint is blended with the mapped (dark-mode) colour
+key F1 CLEAR
+type "x"
+key SHIFT LEFT LEFT LEFT LEFT
+key ENTER ENTER ENTER ENTER
+expect state y1_style above
+setmode THEME DARK
+key F5 ENTER
+expect pixel 60 60 0x29aa
+screenshot shading_dark.png
+setmode THEME LIGHT

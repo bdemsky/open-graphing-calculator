@@ -1,0 +1,63 @@
+# Sparkle Town's floating answers (mq_play.c): Bubble Pop's bubbles and Cloud Catch's stars never get
+# stuck at the top. At the slowest game speed (the speed controller's floor) and in the twists, frame
+# after frame no answer waits under the order board with its number hidden (`mq_hidden`), a tap on the
+# order board pops nothing, and the world screen is a few different games, never a row of stops. (Seeds 1-24, 13
+# and 15 among them, every frame and twist: test_mq_invariants.c test_float.)
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 11
+mq fun off
+mq scene off
+mq new Bea 3
+mq grant bosses
+# the slowest speed: the bubbles still rise, and come round from the bottom
+mq speed 0 0
+mq skill 0 1
+mq mech "Bubble Pop"
+expect state mq_mech "Bubble Pop"
+expect state mq_hidden 0
+mq step 100
+expect state mq_hidden 0
+screenshot mq_float_pop_slow.png
+mq step 400
+expect state mq_hidden 0
+expect state mq_moment play
+mq step 300
+expect state mq_hidden 0
+screenshot mq_float_pop_late.png
+# a tap on the order board, above the bubbles: nothing pops
+touch tap 160 40
+expect state mq_moment play
+touch tap 300 30
+expect state mq_moment play
+# gravity flip and giant bubbles: the same
+mq twist 3
+mq step 600
+expect state mq_hidden 0
+expect state mq_moment play
+screenshot mq_float_flip.png
+mq twist 2
+mq step 600
+expect state mq_hidden 0
+screenshot mq_float_giant.png
+mq correct
+expect state mq_moment cheer
+# Cloud Catch at the slowest speed: the stars come into view and wait mid-air
+mq speed 1 0
+mq skill 0 1
+mq mech "Cloud Catch"
+expect state mq_mech "Cloud Catch"
+mq step 400
+expect state mq_hidden 0
+screenshot mq_float_catch.png
+# the world screen: different games to pick, then straight into play
+mq world 2
+expect state mq_scene world
+expect text Pie Shop
+expect text Big finale
+screenshot mq_world_bakery.png

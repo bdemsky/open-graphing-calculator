@@ -1,0 +1,552 @@
+%% CAS help: linear algebra
+@group cas-linalg Matrices and vectors
+Exact linear algebra. A vector is a list such as `[1,2,3]` and a matrix is a list of rows of equal length; `+ - *` and integer powers `^` work on matrices, and entries may be symbolic.
+
+@cmd det
+group: cas-linalg
+summary: Determinant of a square matrix
+syntax: det(matrix)
+example: det([[1,2],[3,4]])
+result: -2
+example: det([[a,b],[c,d]])
+result: a*d-b*c
+see: inv, charpoly, rank
+
+## Refresher
+Multilinear and alternating in the rows; det(AB) = det A det B, det A^T = det A; a row swap changes the sign, scaling a row by c scales det by c, adding a multiple of a row changes nothing.
+- |det A| is the volume factor of x → Ax; A invertible ⇔ det A ≠ 0; det A = product of the eigenvalues.
+- Cramer: x_i = det A_i/det A (A_i: column i replaced by b).
+example: factor(det([[1,a,a^2],[1,b,b^2],[1,c,c^2]]))
+result: -(a-b)*(a-c)*(b-c)
+## Syntax
+Returns the determinant of a square matrix, computed exactly (fraction-free elimination), so symbolic entries are allowed.
+
+@cmd inv
+group: cas-linalg
+summary: Inverse of a matrix
+syntax: inv(matrix)
+syntax: inv(expr)
+example: inv([[1,2],[3,4]])
+result: [[-2,1],[3/2,-1/2]]
+example: inv(4)
+result: 1/4
+see: det, adjoint, linsolve
+
+## Refresher
+A⁻¹ = adj(A)/det A; for 2×2 the inverse of `[[a,b],[c,d]]` is `[[d,-b],[-c,a]]`/(ad − bc). (AB)⁻¹ = B⁻¹A⁻¹, (A^T)⁻¹ = (A⁻¹)^T.
+- To solve Ax = b, [[linsolve]] or [[rref]] is cheaper than forming A⁻¹. Singular or rectangular A: [[pinv]].
+example: inv([[a,b],[c,d]])
+result: [[d/(a*d-b*c),-b/(a*d-b*c)],[-c/(a*d-b*c),a/(a*d-b*c)]]
+## Syntax
+Returns the inverse of a square matrix. Gives an error if the matrix is singular. For a non-matrix argument returns `1/expr`. `matrix^-1` gives the same result.
+
+@cmd transpose
+group: cas-linalg
+summary: Transpose of a matrix
+syntax: transpose(matrix)
+example: transpose([[1,2],[3,4]])
+result: [[1,3],[2,4]]
+example: transpose([[1,2,3]])
+result: [[1],[2],[3]]
+see: trn, adjoint
+
+Swaps rows and columns of a matrix. [[trn]] is the same command.
+
+@cmd trn
+group: cas-linalg
+summary: Same as transpose
+syntax: trn(matrix)
+example: trn([[1,2,3]])
+result: [[1],[2],[3]]
+see: transpose
+
+Same as [[transpose]]: swaps rows and columns.
+
+@cmd rref
+group: cas-linalg
+summary: Reduced row echelon form
+syntax: rref(matrix)
+example: rref([[1,2,3],[4,5,6]])
+result: [[1,0,-1],[0,1,2]]
+see: rank, ker, linsolve
+
+## Refresher
+Gauss-Jordan: row operations (swap, scale, add a multiple) until each pivot is 1 and alone in its column. They keep the row space and the solutions; pivot columns of A form a basis of its column space; rref of [A | I] is [I | A⁻¹].
+example: rref([[1,2,1],[2,4,0]])
+result: [[1,2,0],[0,0,1]]
+## Syntax
+Returns the reduced row echelon form computed by exact Gauss-Jordan elimination. Applied to an augmented matrix it solves a linear system.
+
+@cmd rank
+group: cas-linalg
+summary: Rank of a matrix
+syntax: rank(matrix)
+syntax: rank(matrix, tol)
+example: rank([[1,2],[2,4]])
+result: 1
+example: rank(identity(3))
+result: 3
+example: rank([[1,2],[2,4.001]],0.01)
+result: 1
+see: rref, ker, det, svd
+
+## Refresher
+rank A = dim of the column space = dim of the row space = number of pivots = number of nonzero singular values.
+- Rank-nullity: rank A + dim ker A = number of columns. Ax = b is solvable ⇔ rank A = rank [A | b].
+- Decimal entries: a tolerance decides which singular values count as 0 (rounding noise).
+example: rank([[1,2,3],[2,4,6]])
+result: 1
+
+So ker of this 2×3 matrix has dimension 3 − 1 = 2 ([[ker]]).
+## Syntax
+Returns the number of linearly independent rows of a matrix. An exact matrix is row reduced exactly. A matrix with decimal entries counts its singular values above max(m,n)*2.2e-16 times the largest one (rounding noise does not raise the rank); with `tol` it counts the singular values greater than `tol`. The numeric forms need the advanced CAS module.
+
+@cmd trace
+group: cas-linalg
+summary: Trace of a square matrix
+syntax: trace(matrix)
+example: trace([[1,2],[3,4]])
+result: 5
+see: det, eigenvals
+
+Returns the sum of the diagonal entries of a square matrix.
+
+@cmd identity
+group: cas-linalg
+summary: Identity matrix
+syntax: identity(n)
+example: identity(2)
+result: [[1,0],[0,1]]
+see: idn, zeros, matrix
+
+Returns the n x n identity matrix. [[idn]] is the same command.
+
+@cmd idn
+group: cas-linalg
+summary: Same as identity
+syntax: idn(n)
+example: idn(3)
+result: [[1,0,0],[0,1,0],[0,0,1]]
+see: identity
+
+Same as [[identity]]: the n x n identity matrix.
+
+@cmd zeros
+group: cas-linalg
+summary: Matrix of zeros
+syntax: zeros(n)
+syntax: zeros(rows, cols)
+example: zeros(2,3)
+result: [[0,0,0],[0,0,0]]
+example: zeros(2)
+result: [[0,0],[0,0]]
+see: matrix, identity
+
+Returns a matrix filled with zeros; with one argument the matrix is square.
+
+@cmd matrix
+group: cas-linalg
+summary: Build a matrix
+syntax: matrix(rows, cols)
+syntax: matrix(rows, cols, value)
+syntax: matrix(rows, cols, f)
+example: matrix(2,3,7)
+result: [[7,7,7],[7,7,7]]
+example: f(r,c):=r+c
+result: c+r
+example: matrix(2,2,f)
+result: [[2,3],[3,4]]
+see: zeros, identity, seq
+
+Creates a matrix with the given size. Without a third argument it is filled with zeros; with a value, every entry equals it; with the name of a function of two arguments, entry (r,c) is `f(r,c)`, counting from 1.
+
+@cmd charpoly
+group: cas-linalg
+summary: Characteristic polynomial
+syntax: charpoly(matrix)
+syntax: charpoly(matrix, x)
+example: charpoly([[1,2],[3,4]])
+result: x^2-5*x-2
+example: charpoly([[2,0],[0,3]],t)
+result: t^2-5*t+6
+see: eigenvals, det
+
+## Refresher
+p(λ) = det(λI − A) = λⁿ − (trace A) λⁿ⁻¹ + … + (−1)ⁿ det A; its roots are the eigenvalues. Cayley-Hamilton: p(A) = 0. Similar matrices have the same p.
+example: charpoly([[a,b],[c,d]])
+result: x^2-a*x-d*x+a*d-b*c
+## Syntax
+Returns `det(x*I-A)` as a polynomial in `x` (default `x`).
+
+@cmd eigenvals
+group: cas-linalg
+summary: Eigenvalues of a matrix
+syntax: eigenvals(matrix)
+example: eigenvals([[2,1],[1,2]])
+result: [1,3]
+example: eigenvals([[0,-1],[1,0]])
+result: [i,-i]
+see: eigenvects, charpoly
+
+## Refresher
+λ with Av = λv for some v ≠ 0: the roots of det(λI − A) = 0 ([[charpoly]]), listed with repeats removed.
+- Sum = trace A, product = det A; triangular A: the diagonal; real symmetric A: all real; A^k has λ^k, A⁻¹ has 1/λ; similar matrices share them.
+- Degree 5 and more: generally no formula; decimal matrices are solved numerically.
+example: eigenvals([[4,1],[2,3]])
+result: [2,5]
+## Syntax
+Returns the list of eigenvalues (roots of the characteristic polynomial), including complex ones, exactly when possible.
+
+A matrix with decimal entries is solved numerically in double precision (advanced CAS module): a symmetric one by Jacobi rotations, any other by reduction to Hessenberg form and the shifted QR algorithm. The values are sorted by real part and values that agree to 1e-10 times the size of the matrix are listed once. For an exact matrix use `eigenvals(approx(A))` for numbers.
+
+@cmd eigenvects
+group: cas-linalg
+summary: Eigenvalues and eigenvectors
+syntax: eigenvects(matrix)
+example: eigenvects([[2,1],[1,2]])
+result: [[1,[[-1,1]]],[3,[[1,1]]]]
+see: eigenvals, ker
+
+## Refresher
+Pairs [λ, basis of ker(A − λI)]. Geometric multiplicity (the number of vectors) ≤ algebraic multiplicity; A is diagonalizable ⇔ they are equal for every λ, and then A = P D P⁻¹ with the eigenvectors as the columns of P (they are rows here: transpose).
+example: eigenvects([[1,1],[0,1]])
+result: [[1,[[1,0]]]]
+
+A double eigenvalue with one eigenvector: not diagonalizable ([[jordan]]).
+## Syntax
+Returns a list of `[eigenvalue, [vectors]]` pairs, where the vectors are a basis of the eigenspace.
+
+With decimal entries, or when the eigenvalues are only found numerically (characteristic polynomials of degree 5 and more), the vectors are numeric and have length 1 with their largest entry real and positive (advanced CAS module): orthonormal vectors from Jacobi rotations for a symmetric matrix, one vector per eigenvalue by inverse iteration otherwise.
+
+@cmd ker
+group: cas-linalg
+summary: Kernel (null space) of a matrix
+syntax: ker(matrix)
+example: ker([[1,2],[2,4]])
+result: [[-2,1]]
+see: rref, rank, eigenvects
+
+## Refresher
+ker A, the x with Ax = 0, has dimension n − rank A (rank-nullity); the solutions of Ax = b are one particular solution plus ker A. The rows of A are orthogonal to ker A.
+example: ker([[1,1,1]])
+result: [[-1,1,0],[-1,0,1]]
+## Syntax
+Returns a list of basis vectors of the null space: all vectors `v` with `A*v = 0`. An empty list means the kernel is trivial.
+
+@cmd dot
+group: cas-linalg
+summary: Dot product of two vectors
+syntax: dot(u, v)
+example: dot([1,2,3],[4,5,6])
+result: 32
+see: cross, norm
+
+Returns the sum of the products of corresponding entries of two vectors of equal length.
+
+@cmd cross
+group: cas-linalg
+summary: Cross product of 3D vectors
+syntax: cross(u, v)
+example: cross([1,0,0],[0,1,0])
+result: [0,0,1]
+example: cross([1,2,3],[4,5,6])
+result: [-3,6,-3]
+see: dot, curl
+
+Returns the cross product of two vectors with three components.
+
+@cmd norm
+group: cas-linalg
+summary: Length of a vector or matrix norm
+syntax: norm(v)
+syntax: norm(v, p)
+example: norm([3,4])
+result: 5
+example: norm([[1,2],[3,4]])
+result: sqrt(30)
+example: norm(-5)
+result: 5
+example: norm([[1,-2],[-3,4]],inf)
+result: 7
+example: norm([3,-4],1)
+result: 7
+example: norm([[3,0],[0,4]],2)
+result: 4
+see: dot, abs, singvals, cond
+
+For a vector, returns the Euclidean length. For a matrix, returns the Frobenius norm (square root of the sum of squared entries). For a number, the absolute value.
+
+With p: `inf` is the largest |entry| of a vector and the largest row sum of |entries| of a matrix; 1 is the sum of |entries| of a vector and the largest column sum of a matrix; 2 is the spectral norm of a matrix, its largest singular value (exact when [[singvals]] finds the values exactly; needs the advanced CAS module); another number p gives (sum |v_i|^p)^(1/p) for a vector.
+
+@cmd adjoint
+group: cas-linalg
+summary: Adjugate matrix
+syntax: adjoint(matrix)
+example: adjoint([[1,2],[3,4]])
+result: [[4,-2],[-3,1]]
+see: inv, det
+
+Returns the adjugate (classical adjoint) `det(A)*inv(A)`, the transpose of the cofactor matrix.
+
+@cmd size
+group: cas-linalg
+summary: Number of elements or rows
+syntax: size(list)
+example: size([1,2,3])
+result: 3
+example: size([[1,2],[3,4]])
+result: 2
+see: length
+
+Returns the number of elements of a list, which is the number of rows of a matrix. A non-list counts as 1. [[length]] is the same command.
+
+@cmd length
+group: cas-linalg
+summary: Same as size
+syntax: length(list)
+example: length([1,2,3])
+result: 3
+see: size
+
+Same as [[size]]: number of elements of a list or rows of a matrix.
+
+@cmd lu
+group: cas-linalg
+summary: LU decomposition
+syntax: lu(matrix)
+example: lu([[1,2],[3,4]])
+result: [[[1,0],[3,1]],[[1,2],[0,-2]],[[1,0],[0,1]]]
+see: qr, cholesky, det
+
+## Refresher
+P A = L U by Gaussian elimination with row swaps: about 2n³/3 operations once, then Ax = b by two triangular solves (L y = P b, U x = y). det A = ± the product of U's diagonal (sign of P).
+example: lu([[2,1],[4,3]])
+result: [[[1,0],[2,1]],[[2,1],[0,1]],[[1,0],[0,1]]]
+## Syntax
+Returns `[L, U, P]` with `L` lower triangular with ones on the diagonal, `U` upper triangular and `P` a permutation matrix such that `P*A = L*U`.
+
+@cmd qr
+group: cas-linalg
+summary: QR decomposition
+syntax: qr(matrix)
+example: qr([[3,4],[4,3]])
+result: [[[3/5,4/5],[4/5,-3/5]],[[5,24/5],[0,7/5]]]
+see: lu, cholesky
+
+## Refresher
+A = Q R, Q with orthonormal columns (Gram-Schmidt on the columns of A), R upper triangular. Least squares min ‖Ax − b‖: R x = Q^T b. Repeated A = QR, A ← RQ converges to the eigenvalues (the QR algorithm).
+example: qr([[1,1],[0,1]])
+result: [[[1,0],[0,1]],[[1,1],[0,1]]]
+## Syntax
+Returns `[Q, R]` with `Q` orthogonal and `R` upper triangular such that `A = Q*R` (Gram-Schmidt, exact when possible).
+
+@cmd cholesky
+group: cas-linalg
+summary: Cholesky decomposition
+syntax: cholesky(matrix)
+example: cholesky([[4,2],[2,3]])
+result: [[2,0],[1,sqrt(2)]]
+see: lu, qr
+
+## Refresher
+A = L L^T with L lower triangular and a positive diagonal: exists exactly when A is symmetric positive definite (a test for definiteness); half the work of LU.
+example: cholesky([[1,2],[2,13]])
+result: [[1,0],[2,3]]
+## Syntax
+For a symmetric positive definite matrix `A`, returns the lower triangular matrix `L` with `A = L*transpose(L)`.
+
+@cmd expm
+group: cas-linalg
+summary: Matrix exponential
+syntax: expm(matrix)
+example: expm([[0,1],[0,0]])
+result: [[1,1],[0,1]]
+example: expm([[0,t],[-t,0]])
+result: [[cos(t),sin(t)],[-sin(t),cos(t)]]
+see: sinm, cosm, sqrtm, jordan
+
+## Refresher
+exp(A) = Σ A^k/k!; x' = A x has x(t) = exp(At) x(0). A = P D P⁻¹ ⇒ exp(A) = P exp(D) P⁻¹; exp(A + B) = exp(A) exp(B) only when AB = BA; det exp(A) = exp(trace A).
+example: expm([[1,1],[0,1]])
+result: [[e,e],[0,e]]
+## Syntax
+Returns e^A for an exact square matrix A, so `expm(A*t)` solves the linear system y' = A y (y(t) = expm(A t) y(0)). It interpolates exp on the eigenvalues, with derivatives for repeated ones (exact for any Jordan structure); complex exponentials are rewritten with cos and sin. If the eigenvalues cannot be found exactly the call is returned unevaluated.
+
+@cmd sinm
+group: cas-linalg
+summary: Matrix sine
+syntax: sinm(matrix)
+example: sinm(pi/2*[[2,1,1],[2,3,2],[1,1,2]])
+result: [[1,0,0],[0,1,0],[0,0,1]]
+see: cosm, expm
+
+Returns sin(A) for an exact square matrix, computed like [[expm]].
+
+@cmd cosm
+group: cas-linalg
+summary: Matrix cosine
+syntax: cosm(matrix)
+example: cosm([[0,1],[0,0]])
+result: [[1,0],[0,1]]
+see: sinm, expm
+
+Returns cos(A) for an exact square matrix, computed like [[expm]].
+
+@cmd sqrtm
+group: cas-linalg
+summary: Matrix square root
+syntax: sqrtm(matrix)
+example: sqrtm([[1,1,0],[0,1,0],[0,0,1]])
+result: [[1,1/2,0],[0,1,0],[0,0,1]]
+example: [[4,0],[0,9]]^(1/2)
+result: [[2,0],[0,3]]
+see: expm
+
+Returns the principal square root of an exact square matrix (the one whose eigenvalues are the principal roots). A fractional power `A^(p/q)` is computed the same way. A singular matrix whose root needs a derivative at 0 (a nilpotent block) stays unevaluated.
+
+@cmd jordan
+group: cas-linalg
+summary: Jordan normal form
+syntax: jordan(matrix)
+example: jordan([[2,1],[-1,0]])
+result: [[1,1],[0,1]]
+see: eigenvals, minpoly
+
+Returns the Jordan form J of an exact square matrix: one block per Jordan chain, the eigenvalues on the diagonal and 1 above it within a block. The block sizes come from the ranks of the powers of A - zI for each eigenvalue z. The transformation matrix is not returned.
+
+@cmd minpoly
+group: cas-linalg
+summary: Minimal polynomial of a matrix
+syntax: minpoly(matrix [, x])
+example: minpoly([[2,1],[-1,0]],x)
+result: (x-1)^2
+example: minpoly([[2,0],[0,2]])
+result: x-2
+see: charpoly, jordan
+
+Returns the monic polynomial of least degree with p(A) = 0, factored: the first linear dependence among I, A, A^2, ... It divides the [[charpoly]].
+
+@cmd diag
+group: cas-linalg
+summary: Diagonal of a matrix, or a diagonal matrix
+syntax: diag(matrix [, k])
+syntax: diag(list)
+example: diag([[1,2,3],[4,5,6],[7,8,9]])
+result: [1,5,9]
+example: diag([[1,2,3],[4,5,6],[7,8,9]],1)
+result: [2,6]
+example: diag([1,2])
+result: [[1,0],[0,2]]
+see: blockdiag, trace
+
+With a matrix, returns its diagonal; k > 0 picks the k-th superdiagonal, k < 0 a subdiagonal. With a list, returns the diagonal matrix that has it on the diagonal.
+
+@cmd blockdiag
+group: cas-linalg
+summary: Block diagonal matrix
+syntax: blockdiag(A, B, ...)
+example: blockdiag([[a,1],[0,a]],b)
+result: [[a,1,0],[0,a,0],[0,0,b]]
+see: diag
+
+Places the matrices (a number counts as a 1x1 block) along the diagonal, with zeros elsewhere.
+
+@cmd minor
+group: cas-linalg
+summary: Matrix with one row and one column removed
+syntax: minor(matrix, i, j)
+example: minor([[1,2,3],[4,5,6],[7,8,9]],2,3)
+result: [[1,2],[7,8]]
+see: submatrix, det
+
+Removes row i and column j (1-based). The minor in the determinant sense is `det(minor(A,i,j))`.
+
+@cmd submatrix
+group: cas-linalg
+summary: Block of a matrix
+syntax: submatrix(matrix, r1, r2, c1, c2)
+example: submatrix([[1,2,3],[4,5,6],[7,8,9]],2,3,1,2)
+result: [[4,5],[7,8]]
+see: minor, getElem
+
+Returns rows r1..r2 and columns c1..c2 (1-based, inclusive; negative indices count from the end).
+
+@cmd getElem
+group: cas-linalg
+summary: Element of a list or matrix, L[i]
+syntax: L[i]
+syntax: M[i,j]
+syntax: getElem(L, i [, j])
+example: [5,6,7]=>L
+result: [5,6,7]
+example: L[2]
+result: 6
+example: getElem([[1,2],[3,4]],2,1)
+result: 3
+see: setElem, submatrix, dim
+
+`L[i]` written directly after a variable name (no space) is the i-th element (1-based; -1 is the last). `M[i,j]` and `M[i][j]` give a matrix entry, `M[i]` a row. With a space, `L [2]` is still the product of L and the list [2].
+
+@cmd gramschmidt
+group: cas-linalg
+summary: Orthogonal basis (Gram-Schmidt)
+syntax: gramschmidt([v1, v2, ...])
+example: gramschmidt([[1,1],[1,0]])
+result: [[1,1],[1/2,-1/2]]
+see: qr, rank
+
+Orthogonalizes the vectors (the rows) in order: each one minus its projections on the previous results. Vectors that depend on earlier ones are dropped, so the result is an orthogonal basis of their span. The vectors are not normalized (divide by [[norm]] for unit length).
+
+@cmd svd
+group: cas-linalg
+summary: Singular value decomposition
+syntax: svd(matrix)
+example: svd([[3,0],[0,4],[0,0]])
+result: [[[0.0,1.0],[1.0,0.0],[0.0,0.0]],[[4.0,0.0],[0.0,3.0]],[[0.0,1.0],[1.0,0.0]]]
+see: singvals, pinv, rank, cond
+
+## Refresher
+A = U S V^T: U (m×k) and V (n×k) with orthonormal columns, S = diag(σ₁ ≥ σ₂ ≥ … ≥ 0), k = min(m, n). A v_i = σ_i u_i; the columns of V are eigenvectors of A^T A, those of U of A A^T, σ_i² their eigenvalues.
+- rank = number of σ > 0; ‖A‖₂ = σ₁; cond A = σ₁/σ_k; the sum of the r largest σ_i u_i v_i^T is the best rank-r approximation.
+- Output order here: [U, S, V] (V itself, not V^T), the thin form, in decimals; each column of V has its largest entry positive (singular vectors are only unique up to sign).
+example: svd([[1,1],[0,0]])
+result: [[[1.0,0.0],[0.0,1.0]],[[1.41421356237,0.0],[0.0,0.0]],[[0.707106781187,0.707106781187],[0.707106781187,-0.707106781187]]]
+## Syntax
+Returns `[U, S, V]` with `A = U*S*transpose(V)` for an m x n matrix A: with k = min(m, n), U is m x k and V is n x k with orthonormal columns and S is the k x k diagonal matrix of the singular values, largest first. Computed in double precision by one-sided Jacobi rotations; the largest entry of each column of V is positive. Entries below about 1e-14 (relative to the largest singular value for S) are shown as 0. Needs the advanced CAS module.
+
+@cmd singvals
+group: cas-linalg
+summary: Singular values of a matrix
+syntax: singvals(matrix)
+example: singvals([[1,0],[0,2],[0,0]])
+result: [2,1]
+example: singvals([[1,2],[3,4]])
+result: [sqrt(sqrt(221)+15),sqrt(15-sqrt(221))]
+example: singvals([[1.0,2],[3,4]])
+result: [5.46498570422,0.365966190626]
+see: svd, norm, cond
+
+## Refresher
+σ_i = √(eigenvalues of A^T A), largest first. ‖A‖₂ = σ₁, ‖A‖_F² = Σ σ², |det A| = Π σ (square A); for a symmetric A the σ are the |λ|.
+example: singvals([[3,0],[0,4]])
+result: [4,3]
+## Syntax
+The square roots of the eigenvalues of transpose(A)*A, largest first, with repeats. Exact for an exact matrix when those eigenvalues are found exactly, otherwise numeric (as in [[svd]]). Needs the advanced CAS module.
+
+@cmd pinv
+group: cas-linalg
+summary: Moore-Penrose pseudoinverse
+syntax: pinv(matrix)
+example: pinv([[1,2],[2,4]])
+result: [[1/25,2/25],[2/25,4/25]]
+example: pinv([[1,2],[3,4],[5,6]])
+result: [[-4/3,-1/3,2/3],[13/12,1/3,-5/12]]
+see: inv, svd, linsolve
+
+## Refresher
+A⁺ = V S⁺ U^T (S⁺ inverts the nonzero σ). Independent columns: A⁺ = (A^T A)⁻¹ A^T; independent rows: A^T (A A^T)⁻¹; invertible: A⁻¹.
+- x = A⁺ b minimizes ‖Ax − b‖ and, among all minimizers, ‖x‖ (least squares, normal equations A^T A x = A^T b).
+example: pinv([[1],[1]])
+result: [[1/2,1/2]]
+## Syntax
+The n x m matrix P with A*P*A = A, P*A*P = P and A*P, P*A symmetric; equal to inv(A) for an invertible A. `pinv(A)*b` is the least-squares solution of A x = b with the smallest length. Exact matrices (also symbolic ones) use the rank factorization A = C*F (C the pivot columns, F the nonzero rows of rref(A)): P = F^T (F F^T)^-1 (C^T C)^-1 C^T. With decimal entries P = V diag(1/s_i) U^T from [[svd]], over the singular values above max(m,n)*2.2e-16 times the largest. Needs the advanced CAS module.

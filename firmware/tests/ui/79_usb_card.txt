@@ -1,0 +1,56 @@
+# USB: microSD tools > Connect card to computer (app/usb_app.c): the card becomes the second
+# drive (core/usbdisk.h LUN 1, raw blocks) while a full screen says so; the calculator's own
+# card use is locked out meanwhile; EXIT takes it back (asking first if the computer has not
+# ejected it) and the card is mounted afresh. Without a computer or a card it says why.
+fs insert 8
+fs format
+fs mkdir /CALC
+fs put /HELLO.TXT "hi there"
+# no computer yet
+app sdtools
+key 5
+expect screen message
+expect text "Connect a computer first"
+key ENTER
+usb host on
+# the second unit has no medium until the card is connected
+usb status
+app sdtools
+expect state menu MICROSD
+key 5
+expect screen usbcard
+expect text "Connected to computer"
+expect text "then press EXIT."
+expect state usb_card connected
+screenshot usb_card.png
+# the computer sees the card's files (after the media change)
+wait 2000
+usb ls card
+usb expect HELLO.TXT "hi there" card
+# the calculator's own card use is locked out
+sdtool backup
+expect statecontains sd_msg "connected to the computer"
+# EXIT before the computer ejected it: asks first; No keeps it connected
+key F5
+expect screen menu
+expect text "Not ejected on the computer"
+key ENTER
+expect screen usbcard
+expect state usb_card connected
+# ejected on the computer: EXIT takes it back at once
+usb eject card
+wait 600
+expect text "Ejected: you can press EXIT."
+key F5
+expect state usb_card off
+expect state toast "Card back in the calculator"
+fs expect /HELLO.TXT "hi there"
+sdtool backup
+expect statecontains sd_msg BACKUP.SES
+# no card in the slot
+fs eject
+app sdtools
+key 5
+expect screen message
+expect text "No card in the slot."
+key ENTER

@@ -1,0 +1,89 @@
+# MODE number formats (NORMAL/SCI/ENG, FLOAT/FIX) and complex modes
+key SHIFT HOME
+expect text DECIMAL
+expect text COMPLEX
+# RESULT APPROX
+key DOWN RIGHT ENTER
+key HOME
+type "1/3\n"
+expect state last_output 0.333333333333
+type "10^20\n"
+ifcas src expect state last_output 1.0ᴇ20
+# FIX 2 (DECIMAL row, option "2")
+key SHIFT HOME DOWN DOWN DOWN RIGHT RIGHT RIGHT ENTER
+expect state fix 2
+key HOME
+expect text FIX2
+type "1/3\n"
+expect state last_output 0.33
+type "2/3*100\n"
+expect state last_output 66.67
+type "10^12\n"
+ifcas src expect state last_output 1.00ᴇ12
+# SCI with 2 decimals
+key SHIFT HOME UP RIGHT ENTER
+expect state format sci
+key HOME
+expect text SCI2
+type "12345.678\n"
+expect state last_output 1.23ᴇ4
+# ENG with 2 decimals
+key SHIFT HOME RIGHT ENTER
+key HOME
+type "12345.678\n"
+expect state last_output 12.35ᴇ3
+type "0.000123\n"
+expect state last_output 123.00ᴇ-6
+# ENG FLOAT
+key SHIFT HOME DOWN LEFT LEFT LEFT ENTER
+expect state fix -1
+key HOME
+type "12345.678\n"
+expect state last_output 12.345678ᴇ3
+screenshot format_eng.png
+# back to NORMAL FLOAT and EXACT
+key SHIFT HOME UP LEFT LEFT ENTER
+key UP UP LEFT ENTER
+key HOME
+expect state format normal
+expect state exact 1
+expect notext ENG
+# exact results are never reformatted
+key SHIFT HOME DOWN DOWN DOWN RIGHT RIGHT ENTER
+key HOME
+type "1/3\n"
+expect state last_output 1/3
+key SHIFT HOME LEFT LEFT ENTER
+key HOME
+# complex: a+bi (default), REAL, r∠θ
+expect state complex rect
+key SQRT
+type "~4)\n"
+ifcas src expect state last_output 2*i
+key SHIFT HOME DOWN LEFT ENTER
+expect state complex real
+key HOME
+key SQRT
+type "~4)\n"
+ifcas src expect state last_error 1
+ifcas src expect statecontains last_output NONREAL
+# entering i explicitly is allowed in REAL mode
+key SHIFT DOT
+type "*2\n"
+ifcas src expect state last_error 0
+ifcas src expect state last_output 2*i
+key SHIFT HOME RIGHT RIGHT ENTER
+expect state complex polar
+key HOME
+type "1+"
+key SHIFT DOT ENTER
+ifcas src expect state last_output √(2)∠π/4
+# polar in degrees
+key SHIFT HOME UP UP UP UP UP RIGHT ENTER
+key HOME
+type "1+"
+key SHIFT DOT ENTER
+ifcas src expect state last_output √(2)∠45
+# real results are unaffected
+type "3+4\n"
+expect state last_output 7

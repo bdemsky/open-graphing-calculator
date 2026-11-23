@@ -1,0 +1,49 @@
+%% The browser notebook (web/notebook: CALCULATOR.HTML on the CALC drive, the "webui" module).
+
+@page browser Use the calculator from a computer's browser
+The CALC drive ([[usb]]) holds `CALCULATOR.HTML`: a page, like Jupyter, that shows the calculator's notebook, the one on its home screen ([[home-notebook]]), on the computer's screen and edits it there. The calculator and the page are two views of one notebook: what you change on one shows on the other. Open the page in Chrome or Edge on the computer the calculator is connected to; nothing has to be installed and the page uses no network.
+
+## Connecting
+- Connect the calculator with a USB cable and open `CALCULATOR.HTML` from the CALC drive in Chrome or Edge (or copy it to the computer first and open the copy).
+- Click Connect at the top right and choose the calculator. The dot turns green and shows the firmware version. Next time the page connects by itself.
+- The page shows the notebook of the calculator's home screen at once, named or not ("Unsaved"). The calculator stays where it is: connecting does not change its screen.
+- When the calculator leaves the USB connection for a moment (it refreshes the drive after a module was installed), the page waits, reconnects on its own and reads the notebook again.
+- Not connected, the page shows the notebook as it last saw it, read-only. Safari and Firefox cannot talk to the calculator: they show "Open this file in Chrome or Edge to connect to the calculator", but still open notebook files to read them.
+
+## One notebook, two views
+- Both always have the same notebook: the home screen's. Opening, creating or switching a notebook on either side switches the other ({menu} Open or New on the calculator; Notebooks or New in the page). Notebooks in the page lists the calculator's notebooks: open, rename, delete. Typing a name for an unsaved notebook in the page saves it under that name, as {menu} Save does.
+- Calculations, text and Python cells and graph cells made on the calculator's home screen appear in the page as they are made; cells added, changed or run in the page appear on the home screen. You may use other apps on the calculator meanwhile: the page keeps working on the notebook.
+- A cell being edited on one side cannot be edited on the other: the page says "editing on the calculator" (and shows the typing as it goes), the calculator says "being edited in the browser". The cell is free again when the editing ends, or 30 seconds after the page went quiet.
+- Running a cell, from either side, runs it once on the calculator: Python in its Python, Math with its CAS. The results show on both, the calculator in textbook form and its plot picture, the page typeset and as a graph you can move and zoom (the calculator computes the values).
+- A graph cell is drawn in the page with its functions in its window and in their colours (the calculator computes the values). Change it there too: its functions (one a line in the cell), the range under it, or drag and zoom the graph: the calculator's cell gets the new window when you let go. While the calculator's graph app is open on the cell it is read-only in the page. A cell without a function shows no graph on either side until you type one.
+- 3D graph: z = f(x,y) and its x, y and z ranges; it is a 3D graph cell on the calculator too ({enter} there opens the 3D graph). The page draws the surface from values the calculator computes (a 40 × 40 grid): drag to turn it, wheel or pinch to zoom, double-click to go back to the cell's view (turning it here does not turn the calculator's). Parametric surfaces and curves show the calculator's picture.
+- Animated graph: a function that uses `t` (`sin(x-t)`, `sin(x-t)*cos(y)` in a 3D graph) makes the cell animated, here and on the calculator. The page plays it at once from frames the calculator computes (one batch): play / pause, the slider moves t by hand, the menu at its right sets the speed. Play, pause and speed are the page's own (the calculator plays its cell only when you press {F5} there). The row under the cell has t's range, the seconds a sweep and loop, bounce or once: those belong to the cell and change on both sides. Turning and zooming a 3D one works while it plays. Parametric 3D graphs of t show the calculator's picture.
+- While the page follows the notebook the calculator does not refresh its drive (that would drop the connection); `NOTEBOOK.HTML` catches up when the page has gone.
+
+## Cells
+- Python: runs in the calculator's Python ([[python]], with the [[python-calc]] library). Variables stay until Restart. The value of the last line is shown as the result, typeset when it is a CAS expression; `calc.plot(f, a, b)` draws its graph under the cell.
+- Math: one line of CAS input, such as `solve(x^2-2=0,x)` or `f(x):=x^3`; Enter runs it. It shares the CAS variables and settings of the calculator.
+- Graph: functions of `x`, one a line (Enter starts a new line), and the x and y range under the cell; the graph shows as soon as there is a function. Drag the graph to move it, pinch or (after clicking it) use the wheel to zoom, double-click to go back: the calculator computes the new range and its cell follows.
+- Text: notes in Markdown, with math between dollar signs such as `$x^2$`.
+
+## Earlier results
+- The numbers In [n] and Out[n] are the calculator's: one count for both, the [n] by each result on its home screen. `Out[n]` is the result of cell [n] and `Ans` the latest result, in Math cells (`Out[2]*3`, `Ans+1`; `out[n]` and `ans` work too) and in Python cells (`Out` maps the numbers to the values) alike ([[home-notebook]], [[python]]).
+- Hover over a cell's input or result: "insert text" puts that input or result, "insert Out[n]" the reference to the result, where you are typing (at the cursor), or into a new cell at the end when no cell is being edited.
+- Alt-Up and Alt-Down while typing in a cell bring back the inputs of the cells above of the same kind, nearest first, in place of the text (Alt-Down past the nearest gives back what you had typed), like {shift} {enter} on the calculator.
+
+## Keys
+As in Jupyter: in a cell you type (edit mode, green bar); Esc leaves the cell (command mode, blue bar) and Enter goes back in.
+- Shift-Enter runs the cell and goes to the next one; Ctrl-Enter runs it and stays; Alt-Enter runs it and inserts a cell below.
+- In command mode: A and B insert a cell above or below, D D deletes it (Z brings it back), X C V cut, copy and paste, Y T G M make it a Python, Math, Graph or Text cell, Shift-G a 3D graph, arrows or K and J move between cells, Shift-K and Shift-J move the cell.
+- I I (or the Interrupt button) stops a running cell with `KeyboardInterrupt`, as {on} does on the calculator; 0 0 (or Restart) starts Python afresh.
+- H shows all keys; Ctrl-S (Cmd-S on macOS) saves a copy on the computer.
+
+## Saving and files
+- The calculator keeps the notebook: it saves it when it is switched off (also when the battery runs low), when you open another notebook, before it exports it, and two minutes after the last change. Until then a dot after the name (on the page) and a star before the name in the title bar (on the calculator) show there are unsaved changes. An unsaved notebook is kept by the calculator like its calculations always were.
+- Open takes a notebook file (`.ipynb`) from the computer, or drop it on the page: it goes into the calculator, under the file's name (a notebook of that name is replaced, its previous version kept), and opens on both.
+- Save writes the calculator's notebook to a file on the computer, Download saves a copy: Jupyter opens it, with the outputs and the plots as pictures.
+
+## If something does not work
+- The calculator is not offered: try another cable (some only charge); close other programs that use its serial port.
+- `CALCULATOR.HTML` is missing from the drive: install the notebook page module (`WEBUI010.MOD` from the `MODULES` folder of the release) by dropping it on the CALC drive ([[code-modules]]).
+- The page says the calculator has no Notebook: install the Python module the same way.

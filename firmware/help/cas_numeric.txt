@@ -1,0 +1,83 @@
+%% CAS help: numerical methods (the advanced CAS module, cas/ext/applied)
+@group cas-numeric Numerical methods
+Discrete Fourier transforms, splines and linear programming. For numeric linear algebra see [[svd]], [[pinv]] and [[eigenvals]]; for interpolating polynomials [[lagrange]].
+
+@cmd fft
+group: cas-numeric
+summary: Discrete Fourier transform
+syntax: fft(list)
+example: fft([1,2,3,4])
+result: [10.0,2.0*i-2.0,-2.0,-2.0-2.0*i]
+example: fft([1,0,0])
+result: [1.0,1.0,1.0]
+see: ifft, fourier
+
+## Refresher
+X_k = Σ x_j exp(−2πi jk/N), j, k = 0 … N−1, without a factor (the numeric-library convention); [[ifft]] divides by N.
+- X_0 = Σ x_j; real x gives X_(N−k) = conj X_k; bin k is the frequency k/(N Δt), k > N/2 the negative ones.
+- Circular convolution becomes the pointwise product; Parseval: Σ |x_j|² = (1/N) Σ |X_k|².
+example: fft([1,1,1,1])
+result: [4.0,0.0,0.0,0.0]
+## Syntax
+X_k = sum of x_j exp(-2 pi i j k/N) for k = 0..N-1 (the convention of most numeric libraries), in double precision. Any length up to 16384: powers of 2 by the radix-2 algorithm, other lengths by Bluestein's algorithm. Entries may be complex; parts below 1.4e-14 times the largest value are shown as 0. Needs the advanced CAS module.
+
+@cmd ifft
+group: cas-numeric
+summary: Inverse discrete Fourier transform
+syntax: ifft(list)
+example: ifft([10,-2+2*i,-2,-2-2*i])
+result: [1.0,2.0,3.0,4.0]
+see: fft
+
+## Refresher
+x_j = (1/N) Σ X_k exp(2πi jk/N): [[fft]] with the opposite sign and the factor 1/N, so ifft(fft(x)) = x up to rounding.
+example: ifft(fft([1,2,3]))
+result: [1.0,2.0,3.0]
+## Syntax
+x_j = 1/N times the sum of X_k exp(2 pi i j k/N): the inverse of [[fft]]. Needs the advanced CAS module.
+
+@cmd spline
+group: cas-numeric
+summary: Natural cubic spline through points
+syntax: spline(xlist, ylist)
+syntax: spline(xlist, ylist, x)
+example: spline([0,1,2],[0,1,0],x)
+result: piecewise(x<1,-x^3/2+3*x/2,x^3/2-3*x^2+9*x/2-1)
+example: spline([0,1,2,3],[0,1,8,27],3/2)
+result: 63/20
+see: lagrange, piecewise
+
+## Refresher
+Natural cubic spline: a cubic on each interval, S, S' and S'' continuous at the knots, S'' = 0 at both ends; among all smooth interpolants it minimizes ∫ S''² (least bending). Other software often defaults to not-a-knot or clamped end conditions, which give different end pieces.
+example: spline([0,1,2],[1,3,2],x)
+result: piecewise(x<1,-3*x^3/4+11*x/4+1,3*x^3/4-9*x^2/2+29*x/4-1/2)
+## Syntax
+The natural cubic spline through the points (x_i, y_i) (x_i increasing, at most 200 points): a cubic on each interval, with continuous first and second derivatives and second derivative 0 at both ends. Returned as a [[piecewise]] in `x` (default `x`); the end pieces continue beyond the data. Exact data give exact coefficients. A number or an expression in place of `x` is substituted. The result can be graphed (store it, e.g. `s:=spline(...)`, and plot `s`). Needs the advanced CAS module.
+
+@cmd linprog
+group: cas-numeric
+summary: Linear programming (simplex method)
+syntax: linprog(f, constraints, vars)
+syntax: linprog(c, A, b)
+syntax: linprog(c, A, b, Aeq, beq)
+example: linprog(-x-2*y,[x+y<=4,x-y<=2,x>=0,y>=0],[x,y])
+result: [-8,[x=0,y=4]]
+example: linprog([-1,-2],[[1,1],[1,-1]],[4,2])
+result: [-8,[0,4]]
+example: linprog(x+y,[x+y>=2,x+y<=1],[x,y])
+result: [inf,[]]
+see: minimize, maximize
+
+## Refresher
+min c·x subject to linear constraints. The feasible set is a polyhedron; if a finite optimum exists, one is at a vertex (the simplex method walks along the vertices). Dual of min c·x, Ax ≥ b, x ≥ 0: max b·y, A^T y ≤ c, y ≥ 0 with the same optimum (strong duality).
+- Here: the list form has free variables unless `x>=0` is listed; `linprog(c,A,b)` means A x ≤ b, x ≥ 0. An unbounded problem gives `[-inf,[]]`, an infeasible one `[inf,[]]`. To maximize f minimize −f or use [[maximize]]. More: [[ref-optim]].
+example: linprog(-3*x-2*y,[x+y<=4,x+3*y<=6,x>=0,y>=0],[x,y])
+result: [-12,[x=4,y=0]]
+## Syntax
+Minimizes a linear objective subject to linear constraints and returns `[value, point]`.
+
+- `linprog(f, constraints, vars)`: relations <=, >=, = (< and > count as <= and >=); a variable is free unless a constraint `x>=0` bounds it. The point is a list of equations.
+- `linprog(c, A, b, Aeq, beq)`: minimizes dot(c, x) with A x <= b, Aeq x = beq and x >= 0 (use `[]` for no rows). The point is a list.
+- An unbounded objective gives `[-inf,[]]`; constraints that no point satisfies give `[inf,[]]` (the least value over an empty set is inf).
+
+Two-phase simplex method with Bland's rule (it cannot cycle) in exact rational arithmetic; decimal coefficients are made exact and the answer is given in decimals. For a maximum use [[maximize]] or minimize -f. At most 60 constraints. Needs the advanced CAS module.

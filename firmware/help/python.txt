@@ -1,0 +1,56 @@
+%% Python (modules/python: MicroPython, the calc library; app/py_core.c the screen's core side)
+
+@page python Python
+{apps} > Python is a Python console (MicroPython 1.29) with the calculator's computer algebra system as the library `calc` ([[python-calc]]). Type a line and press {enter}: the result is shown under it, as at the Python prompt `>>>`.
+
+- A line ending in `:` (`for`, `if`, `def`, `while`, `class`) starts a block: the next line is indented by itself (four spaces more), `...` is shown instead of `>>>`, and an empty line runs the block. {F1} run runs the block at once (the line too); a block run this way may hold several statements, and the value of the last one is shown.
+- {F2} tab indents the line by four spaces, {shift} {F1} removes four. {F3} chars offers what the keyboard lacks (`'` `#` `%` `!` `&` `|` `;` `\` and words such as `def`, `range(`, `print(`): arrows and {enter} insert one, {clear} closes it. Letters, space (`0`), `:` (`.`), `"` (`+`) and `_` (`3`) are on {alpha}; `=` `<` `>` on {shift} `5` `4` `6`, `[` `]` on {shift} `(` `)`, `{` `}` on {shift} `8` `9`.
+- {F4} break forgets the block being typed, {F5} clear clears the output. {▲} and {▼} recall earlier lines. {clear} clears the line, then the block, then leaves; the interpreter keeps its variables until the calculator is switched off.
+- {on} stops a running program with `KeyboardInterrupt`, also inside `time.sleep` and a long CAS computation. While a program runs its output appears as it is printed.
+- Errors print the traceback in red, as Python does: `ZeroDivisionError: divide by zero`. Very deep recursion raises `RuntimeError: maximum recursion depth exceeded`.
+- The calculator's keys type their own text, which is turned into Python before the line runs: `√(` is `sqrt(`, `π` is `pi`, `x²` is `**2`, `^` is `**`, `(−)` is `-`, `≤ ≥ ≠` are `<= >= !=`, `→` is `=`. In Python `log` is the natural logarithm and `log10` the common one; {ln} types `ln(`, which is not defined.
+- The CAS and MATH menus and the catalog insert into the line; touch: drag the output to scroll it.
+
+The console starts with `from math import *`, `from calc import *` and the symbols `x`, `y`, `z`, `t`, so `sqrt(2)`, `solve(x^2-2,x)` and `integrate(sin(x),x)` work at once; the modules `math`, `cmath`, `random`, `time`, `re`, `json`, `heapq`, `collections`, `struct`, `array` and `io` can be imported. There are no files yet (`open` raises an error) and `input()` is not available.
+
+```
+>>> for k in range(1, 4):
+...     print(k, k**2)
+...
+1 1
+2 4
+3 9
+>>> solve(x^2-2, x)
+[-sqrt(2), sqrt(2)]
+```
+
+## Python cells of a notebook: Ans and Out
+In a Python cell of the home notebook ([[home-notebook]]) or of the browser page, `Ans` is the notebook's latest result and `Out` holds every result by its number: `Out[3]` is the result of the cell marked [3] (In [3] in the browser). The result of a calculation (a math cell) is a `calc.Expr`; a Python cell's is the value itself. `Out` works like a dictionary that cannot be changed: `3 in Out`, `Out.get(3)`, `len(Out)`, `Out.keys()`, `Out.items()`; a number without a result raises `KeyError: Out[7]: no such result`. `Ans` is `None` while there is no result.
+
+After the notebook is opened again (or the calculator restarted) Python starts afresh: results of calculations, `calc.Expr` values and plain values (numbers, strings, lists, tuples, dictionaries, `True`, `False`, `None`) come back from the stored text; any other value (an object of a class, a function) is only there for cells run since Python started, and `Out[n]` of one says to run that cell again.
+
+Python is a module of program code ([[code-modules]]): without it APPS > Python says how to install it. The firmware has a 2 MB Python heap; `import gc; gc.mem_free()` shows what is left.
+
+@page python-calc Python: the calc library
+The `calc` library gives Python the calculator's computer algebra system ([[python]]). Its values are CAS expressions, `calc.Expr`, shown in the CAS's linear form:
+
+```
+>>> from calc import x, y
+>>> (x + 1)**2
+(x+1)^2
+>>> expand((x + 1)**2)
+x^2+2*x+1
+```
+
+- Symbols: `calc.sym('a')`, `calc.syms('a b c')`, or `from calc import x, y, t` (any single letter, a letter with digits, or a Greek letter's name such as `theta`; `calc.pi` is π).
+- Arithmetic: `+ - * / **` between expressions and Python numbers make new expressions, simplified by the CAS. Python integers of any size and fractions (`numerator` / `denominator`) are exact: `Expr(1)/3` is `1/3`; floats stay decimal. `==` is true when the difference simplifies to 0; `<` and the like compare the numeric values.
+- Back to Python: `float(e)`, `int(e)`, `complex(e)` when the value is a number; `approx(e)` is a float or a complex number when it can be one, `approx(e, 30)` an expression with 30 digits. A result that is a list (`solve`) can be indexed and iterated.
+- `calc.eval('...')` evaluates any CAS input, as on the home screen (the home screen's `ans` is not changed).
+- `solve(eq, x)` gives a Python list of solutions; `eq(a, b)` is the equation a = b (`solve(eq(x^2, 4), x)` is `[-2, 2]`).
+- `integrate(f, x)`, `integrate(f, x, a, b)`, `diff(f, x)`, `diff(f, x, n)`, `limit(f, x, a)`, `limit(f, x, a, 1)` (from the right), `factor`, `expand`, `simplify`, `exact` (decimals to fractions), `subs(e, x, value)`; the same as methods: `e.expand()`, `e.subs(x, 2)`.
+- `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sinh`, `cosh`, `tanh`, `exp`, `log`, `sqrt`: exact for an expression (`sin(calc.pi/6)` is `1/2`), math's floats for a number (`sin(0.5)`).
+- `latex(e)` and `e.latex()`: the expression as LaTeX (`\frac{\sqrt{x}}{2}`).
+- `plot(e, xmin, xmax)`: graphs an expression in `x` on the [[graph]] screen (FUNC mode, in a free Y= function, the y range fitted) and shows it when the line has run. A Python function cannot be graphed yet: write it as an expression.
+- Errors of the CAS raise `calc.CASError` (`calc.eval('1/0')`: division by zero); {on} interrupts a CAS computation with `KeyboardInterrupt`.
+
+`from calc import *` brings everything above except `eval` (Python's own stays).

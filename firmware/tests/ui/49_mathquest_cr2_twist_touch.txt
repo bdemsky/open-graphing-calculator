@@ -1,0 +1,64 @@
+# Sparkle Town, CODE_REVIEW_2.md CR2-22 and CR2-08 (the touch where it is drawn, the flick where it began):
+# - under the mirror twist the lightbulb's buttons (drawn unmirrored) take a tap where they are drawn, not at the
+#   mirrored spot;
+# - a flick on a game widget is looked up where the finger began: on the Heist's wheel a flick up from its middle
+#   rolls the drag's 3 and the flick's 3 (it was looked up where the finger ended, above the wheel: 3 only).
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 2
+mq engine stop
+mq skill 1 1
+mq mech "Bubble Pop"
+mq step 30
+# the trick's button on the bulb, no twist
+key F1
+mq step 3
+expect state mq_bulb 1
+touch tap 264 130
+mq step 2
+expect state mq_bulb 0
+expect statecontains mq_strat "19 1 0"
+mq strat back
+mq step 2
+expect state mq_strat ""
+# the mirror twist: the same button, where it is drawn
+mq twist 4
+mq step 20
+expect state mq_mod "Mirror world!"
+key F1
+mq step 3
+expect state mq_bulb 1
+screenshot mathquest_cr2_mirror_bulb.png
+touch tap 264 130
+mq step 2
+expect state mq_bulb 0
+expect statecontains mq_strat "19 1"
+mq strat back
+mq step 2
+# the mirrored spot is no button: the bulb only closes
+key F1
+mq step 3
+touch tap 59 130
+mq step 2
+expect state mq_bulb 0
+expect state mq_strat ""
+# the Heist's wheel: a flick up from its middle
+mq seed 4
+mq new Noa 3
+mq engine stop
+mq notebook 2
+mq skill 16 0
+mq mech "Treasure Heist"
+mq step 30
+expect state mq_lock 0
+touch swipe 160 152 U 48
+mq step 2
+expect state mq_lock 6

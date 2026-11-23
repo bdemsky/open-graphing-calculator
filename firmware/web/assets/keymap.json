@@ -1,0 +1,698 @@
+{
+ "image": {
+  "width": 414,
+  "height": 900,
+  "scale_px_per_mm": 4.55005,
+  "files": {
+   "1x": "calc_1x.webp",
+   "2x": "calc_2x.webp"
+  }
+ },
+ "note": "rects are [x, y, w, h] in 1x image pixels (top-left origin); 2x = double",
+ "case_mm": [
+  87.0,
+  193.8
+ ],
+ "display": {
+  "rect": [
+   73.0,
+   94.28,
+   294.84,
+   221.13
+  ],
+  "pixels": [
+   320,
+   240
+  ],
+  "viewing_area": [
+   69.36,
+   92.91,
+   300.08,
+   223.86
+  ],
+  "active_mm": [
+   2.95,
+   53.88,
+   64.8,
+   48.6
+  ],
+  "viewing_mm": [
+   2.725,
+   53.88,
+   65.95,
+   49.2
+  ]
+ },
+ "keys": [
+  {
+   "name": "F1",
+   "group": "fn",
+   "rect": [
+    43.2,
+    380.11,
+    54.6,
+    27.3
+   ],
+   "legend": "F1",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "F2",
+   "group": "fn",
+   "rect": [
+    111.45,
+    380.11,
+    54.6,
+    27.3
+   ],
+   "legend": "F2",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "F3",
+   "group": "fn",
+   "rect": [
+    179.7,
+    380.11,
+    54.6,
+    27.3
+   ],
+   "legend": "F3",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "F4",
+   "group": "fn",
+   "rect": [
+    247.95,
+    380.11,
+    54.6,
+    27.3
+   ],
+   "legend": "F4",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "F5",
+   "group": "fn",
+   "rect": [
+    316.2,
+    380.11,
+    54.6,
+    27.3
+   ],
+   "legend": "F5",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "SHIFT",
+   "group": "accent",
+   "rect": [
+    41.83,
+    421.97,
+    57.33,
+    34.58
+   ],
+   "legend": "shift",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "ALPHA",
+   "group": "alpha",
+   "rect": [
+    110.08,
+    421.97,
+    57.33,
+    34.58
+   ],
+   "legend": "alpha",
+   "shift": "A-lock",
+   "alpha": ""
+  },
+  {
+   "name": "DEL",
+   "group": "fn",
+   "rect": [
+    178.33,
+    421.97,
+    57.33,
+    34.58
+   ],
+   "legend": "⌫",
+   "shift": "ins",
+   "alpha": ""
+  },
+  {
+   "name": "HOME",
+   "group": "fn",
+   "rect": [
+    41.83,
+    467.47,
+    57.33,
+    34.58
+   ],
+   "legend": "home",
+   "shift": "settings",
+   "alpha": ""
+  },
+  {
+   "name": "APPS",
+   "group": "fn",
+   "rect": [
+    110.08,
+    467.47,
+    57.33,
+    34.58
+   ],
+   "legend": "apps",
+   "shift": "catalog",
+   "alpha": ""
+  },
+  {
+   "name": "MENU",
+   "group": "fn",
+   "rect": [
+    178.33,
+    467.47,
+    57.33,
+    34.58
+   ],
+   "legend": "menu",
+   "shift": "help",
+   "alpha": ""
+  },
+  {
+   "name": "UP",
+   "group": "fn",
+   "rect": [
+    291.18,
+    418.79,
+    36.4,
+    22.75
+   ],
+   "legend": "▲",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "DOWN",
+   "group": "fn",
+   "rect": [
+    291.18,
+    482.49,
+    36.4,
+    22.75
+   ],
+   "legend": "▼",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "LEFT",
+   "group": "fn",
+   "rect": [
+    259.33,
+    446.09,
+    22.75,
+    31.85
+   ],
+   "legend": "◀",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "RIGHT",
+   "group": "fn",
+   "rect": [
+    336.68,
+    446.09,
+    22.75,
+    31.85
+   ],
+   "legend": "▶",
+   "shift": "",
+   "alpha": ""
+  },
+  {
+   "name": "CAS",
+   "group": "fn",
+   "rect": [
+    41.83,
+    516.61,
+    57.33,
+    34.58
+   ],
+   "legend": "CAS",
+   "shift": "const",
+   "alpha": "a"
+  },
+  {
+   "name": "MATH",
+   "group": "fn",
+   "rect": [
+    110.08,
+    516.61,
+    57.33,
+    34.58
+   ],
+   "legend": "math",
+   "shift": "matrix",
+   "alpha": "b"
+  },
+  {
+   "name": "VARS",
+   "group": "fn",
+   "rect": [
+    178.33,
+    516.61,
+    57.33,
+    34.58
+   ],
+   "legend": "vars",
+   "shift": "units",
+   "alpha": "c"
+  },
+  {
+   "name": "X",
+   "group": "fn",
+   "rect": [
+    246.59,
+    516.61,
+    57.33,
+    34.58
+   ],
+   "legend": "x",
+   "shift": "π",
+   "alpha": "d"
+  },
+  {
+   "name": "CLEAR",
+   "group": "fn",
+   "rect": [
+    314.84,
+    516.61,
+    57.33,
+    34.58
+   ],
+   "legend": "clear",
+   "shift": "clear all",
+   "alpha": ""
+  },
+  {
+   "name": "SIN",
+   "group": "fn",
+   "rect": [
+    41.83,
+    567.35,
+    57.33,
+    34.58
+   ],
+   "legend": "sin",
+   "shift": "sin⁻¹",
+   "alpha": "e"
+  },
+  {
+   "name": "COS",
+   "group": "fn",
+   "rect": [
+    110.08,
+    567.35,
+    57.33,
+    34.58
+   ],
+   "legend": "cos",
+   "shift": "cos⁻¹",
+   "alpha": "f"
+  },
+  {
+   "name": "TAN",
+   "group": "fn",
+   "rect": [
+    178.33,
+    567.35,
+    57.33,
+    34.58
+   ],
+   "legend": "tan",
+   "shift": "tan⁻¹",
+   "alpha": "g"
+  },
+  {
+   "name": "LN",
+   "group": "fn",
+   "rect": [
+    246.59,
+    567.35,
+    57.33,
+    34.58
+   ],
+   "legend": "ln",
+   "shift": "eˣ",
+   "alpha": "h"
+  },
+  {
+   "name": "LOG",
+   "group": "fn",
+   "rect": [
+    314.84,
+    567.35,
+    57.33,
+    34.58
+   ],
+   "legend": "log",
+   "shift": "10ˣ",
+   "alpha": "i"
+  },
+  {
+   "name": "SQR",
+   "group": "fn",
+   "rect": [
+    41.83,
+    618.08,
+    57.33,
+    34.58
+   ],
+   "legend": "x²",
+   "shift": "x³",
+   "alpha": "j"
+  },
+  {
+   "name": "POW",
+   "group": "fn",
+   "rect": [
+    110.08,
+    618.08,
+    57.33,
+    34.58
+   ],
+   "legend": "xʸ",
+   "shift": "ʸ√x",
+   "alpha": "k"
+  },
+  {
+   "name": "LPAREN",
+   "group": "fn",
+   "rect": [
+    178.33,
+    618.08,
+    57.33,
+    34.58
+   ],
+   "legend": "(",
+   "shift": "[",
+   "alpha": "l"
+  },
+  {
+   "name": "RPAREN",
+   "group": "fn",
+   "rect": [
+    246.59,
+    618.08,
+    57.33,
+    34.58
+   ],
+   "legend": ")",
+   "shift": "]",
+   "alpha": "m"
+  },
+  {
+   "name": "DIV",
+   "group": "accent",
+   "rect": [
+    314.84,
+    618.08,
+    57.33,
+    34.58
+   ],
+   "legend": "÷",
+   "shift": "x⁻¹",
+   "alpha": "n"
+  },
+  {
+   "name": "SQRT",
+   "group": "fn",
+   "rect": [
+    41.83,
+    668.81,
+    57.33,
+    34.58
+   ],
+   "legend": "√",
+   "shift": "∛",
+   "alpha": "o"
+  },
+  {
+   "name": "7",
+   "group": "num",
+   "rect": [
+    110.08,
+    668.81,
+    57.33,
+    34.58
+   ],
+   "legend": "7",
+   "shift": "e",
+   "alpha": "p"
+  },
+  {
+   "name": "8",
+   "group": "num",
+   "rect": [
+    178.33,
+    668.81,
+    57.33,
+    34.58
+   ],
+   "legend": "8",
+   "shift": "{",
+   "alpha": "q"
+  },
+  {
+   "name": "9",
+   "group": "num",
+   "rect": [
+    246.59,
+    668.81,
+    57.33,
+    34.58
+   ],
+   "legend": "9",
+   "shift": "}",
+   "alpha": "r"
+  },
+  {
+   "name": "MUL",
+   "group": "accent",
+   "rect": [
+    314.84,
+    668.81,
+    57.33,
+    34.58
+   ],
+   "legend": "×",
+   "shift": "×10ⁿ",
+   "alpha": "s"
+  },
+  {
+   "name": "COMMA",
+   "group": "fn",
+   "rect": [
+    41.83,
+    719.54,
+    57.33,
+    34.58
+   ],
+   "legend": ",",
+   "shift": "angle",
+   "alpha": "t"
+  },
+  {
+   "name": "4",
+   "group": "num",
+   "rect": [
+    110.08,
+    719.54,
+    57.33,
+    34.58
+   ],
+   "legend": "4",
+   "shift": "<",
+   "alpha": "u"
+  },
+  {
+   "name": "5",
+   "group": "num",
+   "rect": [
+    178.33,
+    719.54,
+    57.33,
+    34.58
+   ],
+   "legend": "5",
+   "shift": "=",
+   "alpha": "v"
+  },
+  {
+   "name": "6",
+   "group": "num",
+   "rect": [
+    246.59,
+    719.54,
+    57.33,
+    34.58
+   ],
+   "legend": "6",
+   "shift": ">",
+   "alpha": "w"
+  },
+  {
+   "name": "SUB",
+   "group": "accent",
+   "rect": [
+    314.84,
+    719.54,
+    57.33,
+    34.58
+   ],
+   "legend": "−",
+   "shift": "|x|",
+   "alpha": "x"
+  },
+  {
+   "name": "ASSIGN",
+   "group": "fn",
+   "rect": [
+    41.83,
+    770.28,
+    57.33,
+    34.58
+   ],
+   "legend": "→",
+   "shift": ":=",
+   "alpha": "y"
+  },
+  {
+   "name": "1",
+   "group": "num",
+   "rect": [
+    110.08,
+    770.28,
+    57.33,
+    34.58
+   ],
+   "legend": "1",
+   "shift": "≤",
+   "alpha": "z"
+  },
+  {
+   "name": "2",
+   "group": "num",
+   "rect": [
+    178.33,
+    770.28,
+    57.33,
+    34.58
+   ],
+   "legend": "2",
+   "shift": "≠",
+   "alpha": "θ"
+  },
+  {
+   "name": "3",
+   "group": "num",
+   "rect": [
+    246.59,
+    770.28,
+    57.33,
+    34.58
+   ],
+   "legend": "3",
+   "shift": "≥",
+   "alpha": "_"
+  },
+  {
+   "name": "ADD",
+   "group": "accent",
+   "rect": [
+    314.84,
+    770.28,
+    57.33,
+    34.58
+   ],
+   "legend": "+",
+   "shift": "Σ",
+   "alpha": "\""
+  },
+  {
+   "name": "ON",
+   "group": "fn",
+   "rect": [
+    41.83,
+    821.01,
+    57.33,
+    34.58
+   ],
+   "legend": "on",
+   "shift": "off",
+   "alpha": ""
+  },
+  {
+   "name": "0",
+   "group": "num",
+   "rect": [
+    110.08,
+    821.01,
+    57.33,
+    34.58
+   ],
+   "legend": "0",
+   "shift": "∞",
+   "alpha": " "
+  },
+  {
+   "name": "DOT",
+   "group": "num",
+   "rect": [
+    178.33,
+    821.01,
+    57.33,
+    34.58
+   ],
+   "legend": ".",
+   "shift": "i",
+   "alpha": ":"
+  },
+  {
+   "name": "NEG",
+   "group": "num",
+   "rect": [
+    246.59,
+    821.01,
+    57.33,
+    34.58
+   ],
+   "legend": "(−)",
+   "shift": "ans",
+   "alpha": ""
+  },
+  {
+   "name": "ENTER",
+   "group": "accent",
+   "rect": [
+    314.84,
+    821.01,
+    57.33,
+    34.58
+   ],
+   "legend": "enter",
+   "shift": "entry",
+   "alpha": ""
+  }
+ ]
+}

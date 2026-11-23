@@ -1,0 +1,77 @@
+# Live preview: dimmed result under the entry line after a pause; no side effects
+expect state preview_on 1
+type "6*7\n"
+expect state last_output 42
+type "2+3"
+# nothing until the line has been idle for a moment
+expect state preview ""
+wait 400
+expect state preview 5
+expect text 5
+screenshot preview.png
+# typing replaces it (stale previews are never shown)
+type "*4"
+expect state preview ""
+wait 400
+expect state preview 14
+# unfinished parentheses are closed for the preview
+type "*(1+1"
+wait 400
+expect state preview 26
+# the preview did not touch Ans or the history
+key CLEAR
+key SHIFT NEG ENTER
+expect state last_output 42
+expect state history 2
+# no preview for assignments, stores and commands with side effects
+type "a:=5"
+wait 400
+expect state preview ""
+key CLEAR
+type "5"
+key ASSIGN
+type "b"
+wait 400
+expect state preview ""
+key CLEAR
+ifcas src type "solve(x^2=4,x)"
+wait 400
+expect state preview ""
+key CLEAR
+# a preview equal to the entry is not shown
+type "7"
+wait 400
+expect state preview ""
+key CLEAR
+# exact and symbolic results; Textbook entry
+key F2 ENTER 1 DOWN 3
+key RIGHT
+type "+1/6"
+wait 400
+ifcas src expect state preview 1/2
+ifcas src type "+x"
+wait 400
+ifcas src expect state preview x+1/2
+key CLEAR
+# errors show nothing
+type "1/0"
+wait 400
+expect state preview ""
+key CLEAR
+# PREVIEW OFF
+key SHIFT HOME DOWN DOWN DOWN DOWN DOWN DOWN DOWN RIGHT ENTER
+expect state preview_on 0
+key HOME
+type "20+3"
+wait 400
+expect state preview ""
+expect notext 23
+key SHIFT HOME LEFT ENTER
+key HOME
+wait 400
+expect state preview 23
+# the setting survives power off
+key SHIFT HOME RIGHT ENTER
+key SHIFT ON
+key ON
+expect state preview_on 0

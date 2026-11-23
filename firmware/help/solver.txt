@@ -1,0 +1,35 @@
+%% Solver app: equation solver, polynomial roots, linear systems (app/solver.c)
+
+@page solver Solver
+{apps} > Solver offers three numeric solvers (they work in decimals; for exact answers use [[solve]], [[roots]] and [[linsolve]]):
+
+- Equation solver (below).
+- [[polyroot|Polynomial roots]].
+- [[linsys|Linear system]].
+
+## Equation solver
+Type an equation such as `x^2+y=7` on the `eq:` line and press {enter}: every variable of the equation gets a line. Fill in the known values, move to the unknown and press {F5} (solve; also {alpha} {enter}) to solve for it. An expression without `=` is solved for `expression=0`. The footer says what the selected line is for.
+
+- With only one variable, {F5} also solves from the `eq:` line: `x^3-2x=1` {enter} {F5}.
+- The current value of the unknown is the starting guess: the solver returns the solution nearest to it.
+- `bound lo` and `bound hi` limit the search (default -1E99 to 1E99).
+- `root1`, `root2`, ... list every solution found by scanning the bounds (sign changes), so equations with several solutions show all of them. {F5} on a root line makes it the value of the unknown; changing the guess and solving again also picks another one.
+- The footer shows `left-right`, the difference of the two sides at the solution (0 when exact).
+- If no root is found, try another guess or wider bounds.
+- The variables of the CAS are not changed; units and constants (`_m`, `_c`) are not variables.
+- The equation, the values and the bounds are kept when the calculator is switched off.
+
+@page polyroot Polynomial roots
+{apps} > Solver > Polynomial roots ({F2} poly in the solvers). Enter the degree (1 to 10) and the coefficients from the highest power down to the constant term; the footer shows the polynomial they make (`p(x)=x^3-2x-1`). The roots appear below, complex ones as `a+bi`. They are recomputed after every change (Aberth iteration in double precision).
+
+Example: degree 3 with coefficients 1, 0, 0, -8 gives `-1-1.732050808i`, `-1+1.732050808i` and `2`.
+
+@page linsys Linear system
+{apps} > Solver > Linear system ({F3} linear in the solvers) solves `A x = b` for up to 6 equations and 6 unknowns. The grid is the augmented matrix: one row per equation, the coefficients of x1, x2, ... and the right-hand side in the last column (the column names are shown above the cells). {▲} from the first row reaches the size line (rows = equations, columns = unknowns + 1; the size is also shown in words, e.g. 3 equations, 3 unknowns): type the number of rows, {▶}, the number of columns, as in the [[matrix-edit|matrix editor]].
+
+Press {F5} (solve) to solve. The result is either the unique solution, "no solution" for an inconsistent system, or a family of solutions with parameters `t1`, `t2`, ...:
+
+    x+2y+3z=6, 2x+4y+6z=12
+    ▶ x1=6-2t1-3t2, x2=t1, x3=t2
+
+{clear} returns to the coefficients. For exact or symbolic systems use [[linsolve]] or [[rref]].

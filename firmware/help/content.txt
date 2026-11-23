@@ -1,0 +1,36 @@
+%% Installed content (the full manual as a module in the QSPI flash) and safe mode. These pages
+%% are @essentials: they stay in the firmware so they can be read before anything is installed.
+
+@essentials index getting-started keys help mem install-content safe-mode power errors
+
+@page install-content Installing the manual
+The full manual is a separate module, stored in the calculator's 16 MB flash memory chip next to the firmware. The firmware works without it: until it is installed, help shows only a few essential pages (this one, the [[index|index]], [[keys]], [[getting-started]], [[help]], [[mem]], [[power]], [[errors]] and [[safe-mode]]), and every other page says "Manual not installed".
+
+## From a microSD card
+- Copy the folder `MODULES` of the firmware release (the module files and `INDEX.TXT`) into the folder `CALC` on a FAT-formatted microSD card. Each file name carries its version: `MANUA010.MOD` is the manual 0.1.0, `MANUA020.MOD` the manual 0.2.0, so several versions sit side by side; copying a newer release adds its files next to the older ones.
+- Insert the card, then {apps} Memory, Install content. For every module on the card the calculator takes the newest version that suits its firmware, writes it (a few seconds, with a progress bar) and verifies it.
+- When the calculator starts without a working manual and finds a usable manual module on the card, it offers to install it.
+
+## Managing modules
+{apps} Memory, Modules lists every module with its installed version and state, and right under it every version of it on the microSD card with what installing that version would do: new, upgrade, downgrade, reinstall, or incompatible (made for another firmware). Choose a card version to install exactly that one (an older one too). Choose the module itself to verify it, to go back to the version installed before it (Revert), or to remove it. The last row reads the card again after you changed it.
+
+## Without a card
+- With a computer and a USB cable: drag the module file onto the calculator's CALC drive ([[usb]]).
+- From a computer's console: `calcctl.py --upload-module MANUA010.MOD` sends a module over the USB connection (or the debug cable).
+- With a debug probe: OpenOCD writes the release's `calc_qspi.bin` (all modules) to the flash chip directly.
+
+## Good to know
+- Installing one module never touches the others, and a power cut while installing is harmless: the version that was in use stays in use, and the new one counts only once it has been written and checked completely. Install again.
+- A module states which firmware versions it works with. After a firmware update the installed modules keep working unless the update changed what they rely on; then help says the module is for an incompatible firmware: install the modules of the new release.
+- Memory, About shows which modules are installed and how the flash chip and the microSD card answered.
+- Memory, Remove content removes every module (your saved work is not touched).
+- Besides the manual there are modules of program code, such as Animation: see [[code-modules]].
+
+@page safe-mode Safe mode
+Safe mode starts the calculator without the installed modules and without your saved session, so that a damaged module or saved session cannot stop it from starting. Your saved session is not deleted: it comes back at the next normal start.
+
+- Hold {clear}, press {on}, and keep both held together (at least half a second) until the home screen appears with SAFE MODE in the status bar. Pressing {on} alone, or {clear} after the calculator has started, never starts safe mode.
+- The calculator also starts in safe mode by itself after three starts in a row that did not finish: a crash during start-up, or a hang, which the watchdog ends after about 2 seconds by restarting the calculator.
+- In safe mode help shows only the essential pages; calculations, graphing and the apps work as usual. Nothing is saved when you switch off.
+- To leave safe mode, switch off ({shift} {on}) and on again.
+- Memory, About shows why safe mode is on, and why the calculator last restarted (for example "Last reset: watchdog"); its "Last events" list keeps the crashes, watchdog resets and safe-mode starts of earlier starts too.

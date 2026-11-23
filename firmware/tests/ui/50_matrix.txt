@@ -1,0 +1,66 @@
+# MATRIX menu (SHIFT math), matrix editor, NAMES/MATH, VARS > Matrix, saved matrices
+key SHIFT MATH
+expect screen menu
+expect state menu MATRIX
+expect text NAMES
+expect text EDIT
+screenshot matrix_menu.png
+key CLEAR
+expect screen home
+# the editor needs the real CAS (matrices are CAS variables)
+ifcas src key SHIFT MATH 3
+ifcas src expect state menu EDIT
+ifcas src key ENTER
+ifcas src expect screen matedit
+ifcas src expect text [A]
+# a new matrix is 3x3 zeros; set the size to 2x2
+ifcas src key UP
+ifcas src type "2\n2\n"
+ifcas src type "1\n2\n3\n4\n"
+ifcas src expect text "2,2="
+ifcas src screenshot matrix_edit.png
+# a cell accepts expressions and shows the evaluated value
+ifcas src key UP
+ifcas src type "1/2+1/3\n"
+ifcas src expect text 5/6
+ifcas src key CLEAR
+ifcas src expect screen home
+# NAMES inserts [A]; MATH templates
+ifcas src key SHIFT MATH 1
+ifcas src expect text "[A] 2×2"
+ifcas src key ENTER
+ifcas src expect state entry [A]
+ifcas src key ENTER
+ifcas src expect state last_output [[1,5/6],[3,4]]
+ifcas src key SHIFT MATH 2 1
+ifcas src key SHIFT MATH 1 ENTER
+ifcas src key ENTER
+ifcas src expect state last_output 3/2
+ifcas src type "[[1,2],[3,4]]"
+ifcas src key ASSIGN
+ifcas src key SHIFT MATH 1 DOWN ENTER
+ifcas src key ENTER
+ifcas src key SHIFT MATH 2
+ifcas src key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+ifcas src expect state menu_item "ref(  row echelon"
+ifcas src key ENTER
+ifcas src key SHIFT MATH 1 DOWN ENTER
+ifcas src key ENTER
+ifcas src expect state last_output [[1,2],[0,1]]
+ifcas src key VARS
+ifcas src expect text Matrix
+ifcas src key CLEAR
+# matrices survive power off/on (CAS session)
+ifcas src key SHIFT ON
+ifcas src key ON
+ifcas src key SHIFT MATH 1
+ifcas src key DOWN ENTER
+ifcas src key ENTER
+ifcas src expect state last_output [[1,2],[3,4]]
+# errors in a cell keep the editor open
+ifcas src key SHIFT MATH 3 ENTER
+ifcas src key DOWN
+ifcas src type "1/0\n"
+ifcas src expect text ERR
+ifcas src key CLEAR CLEAR CLEAR
+ifcas src expect screen home

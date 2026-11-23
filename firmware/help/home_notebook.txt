@@ -1,0 +1,69 @@
+%% The home screen as a notebook (app/home.c, app/nbdoc.h, app/gcell.c): its cells, graph cells, the notebook menu.
+
+@page home-notebook The home screen is a notebook
+Everything on the [[home-screen]] is a notebook: each calculation is a math cell (its input on the left, the result on the right), graphing from here puts the graph into the notebook as a graph cell ([[graph-cells]]), and {menu} adds text and Python cells. The title bar says which notebook it is: "Notebook: Unsaved" until it has a name, "Notebook: Lab 1" once saved, with a star ("Notebook: *Lab 1") while it has changes not yet stored; the ▼ after it says that {menu} (or a tap on the title) opens the notebook menu. Without a name the notebook is kept like the history always was (it survives switching off, a reboot and a firmware update); {menu} Save gives it a name and stores it with the other notebooks, which Jupyter on a computer can read ([[notebook-files]]).
+
+- Typing and {enter} work as they always did: results, `Ans`, {shift} {enter} (entry), the CAS and MATH menus, {shift} {F3} simplify and {shift} {F4} rewrite.
+- {▲} selects an earlier cell (an input or a result), {enter} copies it down to the entry line (calculator style). To change the cell itself and compute it again use {menu} Edit in place.
+- On a selected Python cell {enter} opens it in the editor of several lines ([[notebook]]); {F5} done comes back here. On a text cell of one line {enter} edits it on the entry line.
+- On a selected graph cell {enter} opens the graph app on it ([[graph-cells]]).
+- {clear} on an empty line starts a new unsaved notebook ({menu} {F1} right after brings the cells back). A notebook with a name is never cleared this way: use {menu} New.
+- {menu} is the notebook menu: [[notebook-menu]].
+- Connected to a computer, the CALC drive has `NOTEBOOK.HTML`: this notebook as a page any phone or computer shows ([[usb]]), and `CALCULATOR.HTML` shows and edits it live ([[browser]]).
+- The 2D (Textbook) view draws the notebook as soon as it has a cell other than a calculation; drag to scroll it.
+
+## Earlier results: Ans and Out[n]
+Every result has a number, the small grey [n] at its left: the cell's execution count, the same number the browser page shows as In [n] and Out[n] ([[browser]]). Numbers go up by one with every calculation and every cell that runs, here or in the browser; a cell computed again gets a new number.
+- `Ans` is the latest result of the notebook (the ANS key types it; an operator first, as in `+2`, uses it). A Python cell's value counts too; errors and cells without a value do not.
+- `Out[n]` is the result of cell [n]: `Out[3]*2`, `solve(Out[5]=0,x)`. `out[n]` works too. A number that has no result says so: `ERR:UNDEFINED Out[7]: no such result`.
+- Both work in calculations and in Python cells ([[python]]), and after the notebook is switched off or opened again: the results are kept with it.
+- On a selected calculation the soft keys put it on the entry line at the cursor: {F1} input (the same as {enter} on the input), {F2} result, {F3} Out[n] (the key shows the cell's number), {F4} edit (edit in place), {F5} ≈ as before. On a selected Python cell: {F1} edit, {F2} result, {F3} Out[n]. {shift} {enter} on a selected cell puts its result on the entry line.
+
+@page notebook-menu The notebook menu
+{menu} on the home screen (or a tap on the title bar's "Notebook: ..." ▼) opens the NOTEBOOK menu (its title is the notebook's name, with a star while it has changes not yet stored). Choose with {▲} {▼} and {enter}, a digit, or a tap. The soft keys keep the edit actions: {F1} undo, {F2} redo, {F3} copy, {F4} paste, {F5} history.
+
+- 1 Save: stores the notebook now; a notebook without a name asks for one first.
+- 2 Save as: stores it under another name (the one before stays as it was).
+- 3 Open: the list of stored notebooks ([[notebook]]); the one you open is shown here. Calculations without a name are stored first as "Notebook 1" (2, 3, ...), never lost.
+- 4 New: an empty notebook without a name (a named one is stored first; unsaved calculations are cleared after you say yes).
+- 5 Rename: a new name for the open notebook.
+- 6 Export to the card: a copy as a Jupyter file in `CALC/NOTEBOOKS` on the microSD card. Stored notebooks are also in the NOTEBOOKS folder of the CALC drive when the calculator is connected to a computer ([[usb]]).
+- 7 Insert text cell: the entry line becomes a text line (marked "text"); {enter} adds it as a text cell. Text cells use Markdown ([[notebook-cells]]).
+- 8 Insert Python cell: the entry line becomes a line of Python (marked "python"); {enter} adds the cell and runs it ({enter} on it later edits it with several lines). Needs the Python module ([[python]]).
+- 9 Run all: computes every calculation again, in order (after changing a value, the cells below follow), and runs the Python cells.
+- 0 Edit in place: the selected cell (or the last one) goes to the entry line, marked "edit"; {enter} puts it back changed and computes it; {clear} on the empty line gives up. On a graph cell it opens the graph app, on a Python cell the editor of several lines.
+- Re-run: computes the selected cell again. Delete cell: removes the selected cell (or the last one). Insert 3D graph: a [[graph-cells|3D graph cell]] of the 3D graph's surfaces.
+
+Saving, opening, renaming, exporting and Python cells need the Python module; without it the menu says so and everything else works. A notebook with a name is stored when the calculator is switched off, when the battery runs low, two minutes after the last change, when you open another one and before an export.
+
+@page graph-cells Graph cells
+Graphing that starts on the [[home-screen]] ends in its notebook: the graph is a graph cell, a plot right there among the calculations, with its own copy of the functions, the window and the style (later changes of Y= do not change it). Add as many as you like and scroll through them with the notebook.
+
+A line above the plot says what it graphs: "y1=x²  y2=sin(x)", each function in the colour of its curve (a function switched off in grey), cut with three dots when the line is full (a 3D cell: "z1=..."). A graph cell without a function (one made in the browser page and not filled yet) shows just "graph: enter a function", no plot. The picture is drawn again when something it depends on changes: its functions and window, the MODE settings (degrees or radians) and the variables its functions use (y1=a·x after a:=3).
+
+- {F1} (graph) opens the graph editor, 2D first: the functions y1 to y6 ([[yeq|Y=]], with its modes). The switch at its top right, "2D 3D", changes to the 3D entries z1 to z6 ([[graph3d-eq]]) and back: tap "3D" (or "2D"), or press {F1} (it reads 3D in the 2D editor, 2D in the 3D one). Type or change the functions, then {F5} (graph) adds a 2D or 3D graph cell of them and comes back with it selected. A ZOOM ({F3}), the WINDOW's {F5} and the TABLE's {F5} do the same. {home} without graphing adds nothing.
+- {shift} {F5} (plot) adds a graph cell of the Y= functions at once ({F1} graph opens the editor first). If Y= is empty, Y= opens for the new cell: type the function, {F5} or {home} comes back with the plot. (The graph and the 3D graph are not in {apps}: this key and the graph cells open them.)
+- {F4} (trace) or {shift} {F4} (calc) on Y= make the cell and open the graph app on it for tracing, zeros and the other CALC operations.
+- {▲} {▼} select a graph cell like any cell (a blue frame).
+- {◀} {▶} move the plot sideways; {+} and {−} zoom in and out about the middle. After one of these the frame turns orange and all four arrows move the plot; {clear} goes back to selecting cells.
+- Touch: drag the selected cell to move the plot (it follows the finger and is drawn again when you lift it), pinch any graph cell to zoom it, drag the short bar at the bottom of the selected cell to make it taller or shorter.
+- {enter} (or a tap on the selected cell) opens the full graph app on this cell: trace, zeros and the other CALC operations, the Y= functions, the window; there {F1} (y=) and {F5} (graph) stay in the app. {home} comes back and the cell keeps what was changed there (its functions, window and style).
+- {menu} Delete cell removes it.
+
+Graphs started elsewhere (a stat plot, another app) open the graph app as before.
+
+## 3D graph cells
+{F1} (graph), then 3D ({F1} or a tap on "3D"), the surfaces and {F5} (graph) adds a 3D graph cell (so does {menu} Insert 3D graph): the surfaces and curves of the [[graph3d|3D graph]] with its window and view, kept in the cell. With {menu} Insert 3D graph and no surface yet, the 3D editor opens for the new cell; {F5} (graph) or {home} comes back with the picture.
+- Selected: {◀} {▶} turn it about the vertical axis (15°), {▲} {▼} tilt it (10°) once it is active (orange), {+} {−} zoom; drag to turn it, pinch to zoom, the bottom edge changes its height.
+- {enter} opens the 3D graph on the cell (trace, window, view, the entries); {home} writes the view and entries back.
+
+## Animated graph cells
+A graph cell whose functions use `t` moves: y1=sin(x−t), z1=sin(√(x²+y²)−t). Its caption ends with "anim", and it shows the picture at the start of t's range until you play it (the calculator never plays a cell by itself: that would use the battery). Each cell keeps its own settings: t from 0 to 2π, 4 seconds a sweep, loop (or bounce, or once).
+- Select the cell: {F5} (play) plays it; the caption shows ▶ and the value of t. Any key or a touch pauses it ({F5} then reads play again).
+- Paused, {◀} {▶} step t back and forward (a fiftieth of its range; in loop mode round from one end to the other). After {+} or {−} the arrows move the plot as on any cell; {clear} goes back to stepping.
+- {enter} opens the full graph on the cell with its animation ready: its t slider at the cell's value, and {shift} {F5} (anim) plays it with the cell's settings ([[animation]]); the settings form (anim, Settings) changes them, and {home} brings them back to the cell.
+- Playing needs the Animation module ([[code-modules]]). Without it the cell shows its first picture and says so ("still frame: animation needs the Animation module"), and {F5} (play) says how to get the module.
+- In the browser page an animated cell plays by itself, with play / pause, a slider for t and the speed; its t range, seconds and mode can be changed there too ([[browser]]). In a Jupyter file it is a graph cell with one picture and its settings; `NOTEBOOK.HTML` shows that picture and "animated (t from a to b)".
+
+Graph cells draw functions y = f(x) (FUNC mode); in the other graph modes (the Y= header: PAR, POL, SEQ, IMPL, DE) graphing opens the graph app.
+ In a notebook stored as a Jupyter file a graph cell is a `calc.plot(...)` cell with the calculator's picture of it (PNG) and its functions and window in the cell's metadata ([[notebook-files]]). The browser page ([[browser]]) shows every graph cell, drawn from values the calculator computes, and changes them too: their functions, their window, moving and zooming; a 3D graph made there is a 3D graph cell here. While the graph app is open on a cell, the page cannot change that cell, and a cell being changed in the page does not open here ("This cell is being edited in the browser").

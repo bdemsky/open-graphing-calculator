@@ -1,0 +1,141 @@
+# Math Quest's fun beats (modules/mathquest/mq_fun.c): the invisible budget fills while playing
+# the maths; a streak brings a short beat (no label, no meter) and the run carries on after it;
+# every kind of beat (pet, bubbles, catch, dance, story, squishy, the squishy maker); a room she
+# opened herself moves on when the budget is used up. `mq fun MS` sets the budget for the test.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+# (the stops ask their own skills here; the engine and the placement: 49_mathquest_free.txt)
+mq engine stop
+mq seed 4
+# a streak of five with budget: a beat, then the run goes on (a stop of six orders: Bubble Pop's are five)
+mq level 0 1
+mq fun 30000
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene fun
+mq step 4
+screenshot mathquest_fun_beat.png
+# (a beat ends by itself; Catch the Stars when left alone a while)
+mq step 800
+expect state mq_scene play
+expect state mq_run 5/10
+key F5
+key F5
+# every beat
+mq fun 36000
+mq fun beat squishy
+expect state mq_beat squishy
+expect state mq_squishies 1
+mq step 4
+touch 160 128 down
+mq step 3
+screenshot mathquest_fun_squish.png
+touch 160 128 up
+mq step 6
+screenshot mathquest_fun_squish_rise.png
+# it rises all the way, wobbles and sparkles, with a happy face
+mq step 16
+screenshot mathquest_fun_squish_settled.png
+mq fun beat bubbles
+mq step 40
+screenshot mathquest_fun_bubbles.png
+key 5
+mq fun beat catch
+mq step 30
+key LEFT
+screenshot mathquest_fun_catch.png
+mq fun beat dance
+mq step 9
+touch tap 160 120
+screenshot mathquest_fun_dance.png
+mq grant bosses
+mq world 2
+mq fun beat story
+mq step 40
+screenshot mathquest_fun_story.png
+mq fun dough 2
+mq fun beat maker
+mq step 2
+touch tap 250 155
+touch tap 225 194
+touch tap 288 194
+expect state mq_squishies 2
+mq step 6
+screenshot mathquest_fun_maker.png
+# the squishy shelf in the room
+mq go room
+mq place Squishy_shelf 13 1
+mq sel -1
+mq step 6
+screenshot mathquest_fun_shelf.png
+# the budget used up in the room: a friend's gentle word (a toast, once a play day); she stays where she is
+mq fun 1000
+mq step 40
+screenshot mathquest_fun_hook.png
+mq step 240
+expect state mq_scene room
+# the shop with no budget: the shop, nothing over it
+mq coins 300
+mq go shop
+mq step 240
+expect state mq_scene shop
+mq go map
+# the first five minutes: a new player plays at once (no tutorial: her first game is the placement's
+# eight orders) and the first win brings a squishy
+mq engine on
+mq go title
+touch tap 235 130
+expect state mq_scene name
+key ENTER
+expect state mq_scene map
+mq level 0 0
+expect state mq_scene play
+expect state mq_placing 1
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene done
+mq step 30
+screenshot mathquest_first_win.png
+mq next
+expect state mq_beat squishy

@@ -1,0 +1,130 @@
+# The browser page following the home notebook (modules/python/nb_sync.c; docs/NOTEBOOK.md "The
+# browser page"), the page's commands sent as the page sends them: following leaves the calculator
+# where it is; the unsaved home notebook is the page's notebook; the page's insertions, edits and
+# runs are cells of the home screen; a notebook the page opens or creates is the home screen's, and
+# one the calculator opens is the page's; a cell the page edits cannot be edited on the calculator
+# and the calculator's edit is locked for the page; the page's lock ends with `nb unlock` or 30 s
+# without a word; the CALC drive is not generated again while the page follows (after it is);
+# when a named notebook is saved (idle, export, switching, power-off).
+requirecfg MOD_PYTHON
+nb store wipe
+type "1+1\n"
+# the page follows: the calculator stays on the home screen, its unsaved notebook is the page's
+nb sync on
+expect screen home
+expect state nb_sync 1
+expect state nb_open ""
+expect state nb_cells 1
+nb expect 1 val 2
+nb head
+nb doc
+# the page adds a Python cell, types it and runs it: a cell of the home screen, run once, here
+nb insert 1 python
+expect state history 2
+nb set 2 "print('page')"
+nb run 2
+nb expect 2 out page
+expect screen home
+expect state home_kind python
+expect text page
+# a calculation on the calculator is a cell for the page
+type "6*7\n"
+expect state nb_cells 3
+nb expect 3 val 42
+# a graph cell made on the calculator (y=, graph): its spec, its function sampled for the page
+key F1
+type "x^2"
+key F5
+expect screen home
+expect state nb_cells 4
+nb expect 4 spec "f 1 "
+nb expect 4 plot "x^"
+nb sample 4 5 -2 2
+nb sample 4 5 -2 2 1
+nb png 4
+# the page edits cell 2 (its lock): ENTER on it here is refused
+nb lock 2
+key UP UP UP UP
+expect state home_kind python
+key ENTER
+expect screen message
+expect text "This cell is being edited"
+key CLEAR
+nb set 2 "print('page 2')"
+nb unlock
+# now the calculator edits it: its editor holds the cell
+key UP UP UP UP UP
+key ENTER
+expect screen notebook
+expect state nb_view edit
+expect statecontains nb_calc_lock ""
+type "1"
+key F5
+expect screen home
+nb expect 2 src "print('page 2')1"
+expect state nb_calc_lock ""
+# the CALC drive is not generated again while the page follows (its serial link would drop)
+usb host on
+type "3*3\n"
+wait 12000
+usb lacks NOTEBOOK.HTML "3*3"
+nb sync off
+wait 12000
+usb expect NOTEBOOK.HTML "3*3"
+usb host off
+nb sync on
+# the page creates a notebook: the home screen shows it (the unsaved calculations are stored first)
+nb new "Second"
+expect screen home
+expect state home_nb Second
+expect state history 1
+expect state toast "saved as Notebook 1"
+# the page opens one: the home screen shows it
+nb open "Notebook 1"
+expect state home_nb "Notebook 1"
+expect state history 5
+expect state home_title "Notebook: Notebook 1"
+# the calculator opens one (MENU 3 Open): the page's notebook too
+key MENU 3
+expect screen notebook
+expect state nb_view list
+key DOWN
+expect state nb_list_sel Second
+key ENTER
+expect screen home
+expect state nb_open Second
+expect state home_nb Second
+# saving a named notebook: not at each change; after the idle time (two minutes; shortened here)
+nb set 1 "7*7"
+expect state nb_dirty 1
+nb idle 200
+wait 500
+expect state nb_dirty 0
+nb idle 0
+# an export saves first
+nb set 1 "8*8"
+expect state nb_dirty 1
+nb json
+expect state nb_dirty 0
+# switching notebooks saves the one left
+nb set 1 "9*9"
+nb open "Notebook 1"
+nb open "Second"
+nb expect 1 src "9*9"
+# the page's lock ends after 30 s without a word from the page (and the page is no longer followed)
+nb lock 1
+wait 31000
+expect state nb_page_lock ""
+expect state nb_sync 0
+# power-off saves
+nb set 1 "10*10"
+expect state nb_dirty 1
+key SHIFT
+key ON
+key ON
+nb head
+expect state nb_dirty 0
+nb close
+expect state home_nb ""
+nb open "Second"
+nb expect 1 src "10*10"

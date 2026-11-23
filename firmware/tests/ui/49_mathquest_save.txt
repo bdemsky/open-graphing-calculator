@@ -1,0 +1,20 @@
+# Sparkle Town keeps her progress through a crash or a battery pull (the playtest bot's 9): progress worth
+# keeping (a placement, a purchase, a round won, something new) asks the core to write the session at the
+# next quiet moment (debounced), so play is not lost when she never idles for a minute.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Kid 2
+mq coins 9000
+mq buy Star_lamp
+mq go room
+mq place Star_lamp 13 4
+wait 2500
+expect state session_dirty 0
+reboot crash
+app mathquest
+expect state mq_player Kid

@@ -1,0 +1,125 @@
+# RPN mode (MODE > ENTRY: RPN): stack arithmetic, stack keys, words, errors
+expect state rpn 0
+key SHIFT HOME
+setmode ENTRY RPN
+expect state rpn 1
+key HOME
+expect screen rpn
+expect text RPN
+# 2 ENTER 3 ÷ (the 3 being typed is pushed by the operator)
+type "2\n3"
+expect state rpn_line 3
+key DIV
+expect state rpn_depth 1
+expect state rpn_1 2/3
+key CLEAR
+expect state rpn_depth 0
+# 8 ENTER 3 - : level 2 minus level 1
+type "8\n3"
+key SUB
+expect state rpn_1 5
+# ENTER on an empty line: DUP; * squares
+key ENTER
+expect state rpn_depth 2
+key MUL
+expect state rpn_1 25
+# x² and x⁻¹, √ and (-) on the stack
+key SQR
+expect state rpn_1 625
+key SQRT
+expect state rpn_1 25
+key SHIFT DIV
+ifcas src expect state rpn_1 1/25
+key SHIFT DIV
+key NEG
+expect state rpn_1 -25
+key NEG
+expect state rpn_1 25
+# (-) while typing a number changes its sign
+type "7"
+key NEG
+expect state rpn_line ⁻7
+key NEG
+expect state rpn_line 7
+key NEG ENTER
+expect state rpn_1 -7
+expect state rpn_2 25
+# ) SWAP, DEL DROP, LASTARG, UNDO / redo
+key RPAREN
+expect state rpn_1 25
+expect state rpn_2 -7
+key ADD
+expect state rpn_1 18
+key SHIFT NEG
+expect state rpn_depth 3
+expect state rpn_1 25
+expect state rpn_2 -7
+expect state rpn_3 18
+key DEL
+expect state rpn_depth 2
+expect state rpn_1 -7
+key SHIFT ENTER
+expect state rpn_depth 3
+key SHIFT ENTER
+expect state rpn_depth 2
+# CLEAR on an empty line clears the stack, UNDO brings it back
+key CLEAR
+expect state rpn_depth 0
+key SHIFT ENTER
+expect state rpn_depth 2
+# operators act at once while the line holds numbers (as usual in RPN): 2 3 + 4 *
+key CLEAR
+type "2 3 + 4 *"
+expect state rpn_depth 1
+expect state rpn_1 20
+key CLEAR
+# words on one line run left to right
+type "1 2 3 swap\n"
+expect state rpn_1 2
+expect state rpn_2 3
+type "rot\n"
+expect state rpn_1 1
+type "depth\n"
+expect state rpn_1 3
+# an algebraic expression on the command line is evaluated and pushed
+key CLEAR CLEAR
+type "(2+3)*4\n"
+expect state rpn_1 20
+# errors keep the stack and show a message
+type "0"
+key DIV
+expect statecontains rpn_error DOMAIN
+expect text ERR:DOMAIN
+expect state rpn_depth 2
+key DEL
+expect state rpn_error
+expect state rpn_depth 1
+key CLEAR
+key ADD
+expect state rpn_error "Too few arguments"
+# the STACK menu ({,} on an empty line)
+type "1\n2\n3\n"
+key COMMA
+expect screen menu
+expect state menu STACK
+expect text OVER
+key 4
+expect screen rpn
+expect state rpn_1 2
+expect state rpn_depth 4
+screenshot rpn_basic.png
+# help: the RPN page from the stack, the command page from the STACK menu
+key SHIFT MENU
+expect state help_topic rpn
+key CLEAR
+expect screen rpn
+key COMMA SHIFT MENU
+expect state help_topic rpn-stack
+key CLEAR
+key HOME
+expect screen rpn
+# back to algebraic entry: the normal home screen
+setmode ENTRY ALGEBRAIC
+expect state rpn 0
+key HOME
+expect screen home

@@ -1,0 +1,308 @@
+# RPN levels are CAS values (hidden variables _rpnN), not printed text:
+# uncertainty sources stay correlated, floats keep the digits the display
+# rounds away, exact values stay exact; stack operations, LASTARG, UNDO, a
+# power cycle and a backup keep the values; dropped levels leave no hidden
+# CAS variables behind.
+setmode ENTRY RPN
+key HOME
+# x ENTER - of a value with an uncertainty is 0±0 (both levels are one value)
+ifcas src type "2 0.1 pm\n"
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src key ENTER SUB
+ifcas src expect state rpn_1 0±0
+# x ENTER × is correlated like x*x (σ = 2|x|s), not like two measurements
+ifcas src type "3 0.2 pm\n"
+ifcas src key ENTER MUL
+ifcas src expect state rpn_1 9.0±1.2
+ifcas src expect eval "(3±0.2)*(3±0.2)" "9.0±0.8"
+ifcas src expect eval "x:=3±0.2" "3.0±0.2"
+ifcas src expect eval "x*x" "9.0±1.2"
+ifcas src expect eval "purge(x)" "true"
+# units: (2.0±0.1)_m ENTER (0.50±0.02)_s ÷ as in algebraic entry
+ifcas src key SHIFT CLEAR
+ifcas src type "pm(2.0,0.1)_m\n"
+ifcas src type "pm(0.50,0.02)_s\n"
+ifcas src key DIV
+ifcas src expect state rpn_1 (4.0±0.3)_m/s
+ifcas src expect eval "(2.0±0.1)_m/(0.50±0.02)_s" "(4.0±0.3)_m/s"
+# nominal / uncert / pm / ucov on correlated levels: ucov(x, x) is the
+# variance; pm(nominal(x), uncert(x)) is a new, independent measurement
+ifcas src key SHIFT CLEAR
+ifcas src type "2 0.1 pm\n"
+ifcas src key ENTER
+ifcas src type "ucov\n"
+ifcas src expect state rpn_1 0.01
+ifcas src type "5 0.3 pm\n"
+ifcas src key ENTER ENTER
+ifcas src type "uncert\n"
+ifcas src expect state rpn_1 0.3
+ifcas src key RPAREN
+ifcas src type "nominal\n"
+ifcas src expect state rpn_1 5.0
+ifcas src key RPAREN
+ifcas src type "pm\n"
+ifcas src expect state rpn_1 5.0±0.3
+ifcas src key SUB
+ifcas src expect state rpn_1 0.0±0.4
+# SWAP, ROLL, PICK, OVER, ROT, LASTARG and UNDO move the values themselves
+ifcas src key SHIFT CLEAR
+ifcas src type "2 0.1 pm\n7\n9\n"
+ifcas src type "3 pick\n"
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src type "4 roll\n"
+ifcas src expect state rpn_depth 4
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+ifcas src key SHIFT NEG
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src expect state rpn_2 2.00±0.10
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+ifcas src key SHIFT ENTER
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+ifcas src key SHIFT CLEAR
+ifcas src type "2 0.1 pm\n9\n"
+ifcas src key SHIFT F2 RPAREN
+ifcas src expect state rpn_1 9
+ifcas src key DEL SUB
+ifcas src expect state rpn_1 0±0
+ifcas src type "2 0.1 pm\n5\n6\n"
+ifcas src key SHIFT F3
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src type "3 rolld 3 pick 4 roll\n"
+ifcas src expect state rpn_depth 5
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+# the interactive stack: PICK level 3, then - with the original
+ifcas src key SHIFT CLEAR
+ifcas src type "1 0.1 pm\n4\n5\n"
+ifcas src key UP UP UP F2
+ifcas src expect state rpn_1 1.00±0.10
+ifcas src key UP UP UP UP F3
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+# → stores the value itself: y and the level it came from are correlated
+ifcas src key SHIFT CLEAR
+ifcas src type "4 0.2 pm\n"
+ifcas src key ENTER
+ifcas src type "y"
+ifcas src key ASSIGN
+ifcas src type "y\n"
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+# expression→name on the command line pushes the variable's value itself
+ifcas src type "pm(2,0.1)"
+ifcas src key ASSIGN
+ifcas src type "z\n"
+ifcas src expect state rpn_1 2.00±0.10
+ifcas src type "z\n"
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+ifcas src expect eval "purge(z)" "true"
+# exact fractions stay exact (a 2^70/3 level times 3 is 2^70 again)
+key SHIFT CLEAR
+type "1\n3"
+key DIV
+ifcas src expect state rpn_1 1/3
+type "3"
+key MUL
+expect state rpn_1 1
+ifcas src type "2 70 ^ 3 / 3 *\n"
+ifcas src expect state rpn_1 1180591620717411303424
+# a float with more digits than displayed keeps them: the level shows
+# 1.23456789012 (or 1.23 with DECIMAL 2) but holds all of 1.23456789012345
+key SHIFT CLEAR
+type "1.23456789012345\n"
+ifcas src expect state rpn_1 1.23456789012
+setmode DECIMAL 2
+expect state rpn_1 1.23
+type "1.23456789012"
+key SUB
+ifcas src expect state rpn_1 3.45ᴇ-12
+setmode DECIMAL FLOAT
+# editing a level without changing it keeps its value; a changed text is a
+# new value
+key SHIFT CLEAR
+type "1.23456789012345\n"
+key DOWN ENTER
+type "1.23456789012"
+key SUB
+ifcas src expect state rpn_1 3.45012907133ᴇ-12
+# copy / paste: a level is copied as it is shown and pasted as a new value
+ifcas src key SHIFT CLEAR
+ifcas src type "pm(2.0,0.1)_m\n"
+ifcas src key MENU F3
+ifcas src expect state clip (2.00±0.10)_m
+ifcas src key MENU F4
+ifcas src expect state rpn_line (2.00±0.10)_m
+ifcas src key ENTER
+ifcas src expect state rpn_1 (2.00±0.10)_m
+ifcas src key SUB
+ifcas src expect state rpn_1 (0.00±0.14)_m
+# DEG mode: a symbolic angle is converted once, as on the home screen
+ifcas src key SHIFT CLEAR
+ifcas src setmode ANGLE DEGREE
+ifcas src type "x\n"
+ifcas src key SIN
+ifcas src expect state rpn_1 sin(π*x/180)
+ifcas src type "1"
+ifcas src key ADD
+ifcas src expect state rpn_1 sin(π*x/180)+1
+ifcas src setmode ANGLE RADIAN
+# matrices and lists are values too
+key SHIFT CLEAR
+ifcas src type "[[1,2],[3,4]]\n"
+ifcas src key ENTER MUL
+ifcas src expect state rpn_1 [[7,10],[15,22]]
+ifcas src type "[1,2,3] sum\n"
+ifcas src expect state rpn_1 6
+# a power cycle keeps the values: correlations (also with the variable y,
+# whose source is in the CAS session) and full float precision
+ifcas src key SHIFT CLEAR
+ifcas src type "2 0.1 pm\n"
+ifcas src key ENTER
+ifcas src type "1.23456789012345\n"
+ifcas src type "y\n"
+ifcas src key SHIFT ON
+ifcas src key ON
+ifcas src expect screen rpn
+ifcas src expect state rpn_depth 4
+ifcas src type "y\n"
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+ifcas src key DEL
+ifcas src type "1.23456789012"
+ifcas src key SUB
+ifcas src expect state rpn_1 3.45012907133ᴇ-12
+ifcas src key DEL SUB
+ifcas src expect state rpn_1 0±0
+# backup and restore of the session keep them too
+ifcas src key SHIFT CLEAR
+ifcas src type "3 0.1 pm\n"
+ifcas src key ENTER
+fs insert 8
+fs format
+ifcas src app sdtools
+ifcas src key 2
+ifcas src key CLEAR
+ifcas src session clear
+ifcas src reboot
+ifcas src setmode ENTRY RPN
+ifcas src key HOME
+ifcas src expect state rpn_depth 0
+ifcas src app sdtools
+ifcas src key 3
+ifcas src key ENTER 2
+ifcas src expect text Session restored
+ifcas src key CLEAR
+ifcas src expect screen rpn
+ifcas src expect state rpn_depth 2
+ifcas src key SUB
+ifcas src expect state rpn_1 0±0
+# MEM > Clear CAS variables: the levels are kept (rebuilt from their text)
+ifcas src type "6 0.5 pm\n"
+ifcas src casreset
+ifcas src key ENTER
+ifcas src expect state rpn_1 6.0±0.5
+ifcas src key SUB
+ifcas src expect state rpn_1 0.0±0
+# no hidden variables leak: after many operations only the values on the
+# stack, in UNDO and in LASTARG have variables
+key SHIFT CLEAR
+type "1 2 + 3 * 4 - 5 / 6 + 7 8 swap drop dup * 9 0.5 pm + 2 *\n"
+type "1 2 3 4 5 6 7 8 9 drop drop drop + + + + +\n"
+type "11 roll 12 13 14 15 3 dropn depth\n"
+key ENTER
+key SHIFT CLEAR
+type "5\n"
+key DEL
+expect state rpn_depth 0
+expect state rpn_vars 1
+expect state rpn_cas_vars 1
+type "6\n"
+expect state rpn_cas_vars 2
+key DEL
+expect state rpn_cas_vars 1
+# at most 1024 different values (copies share theirs): then "Stack full"
+# (1023 levels: LASTARG still holds the 6); the UNDO snapshot is given up
+# to make room when it holds the others
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src type "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n"
+ifcas src expect state rpn_depth 1023
+ifcas src expect state rpn_error "Stack full"
+ifcas src expect state rpn_cas_vars 1024
+ifcas src key CLEAR ENTER
+ifcas src expect state rpn_depth 1024
+ifcas src key SHIFT CLEAR
+ifcas src type "2\n"
+ifcas src expect state rpn_depth 1
+ifcas src expect state rpn_cas_vars 2
+setmode ENTRY ALGEBRAIC

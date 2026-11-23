@@ -1,0 +1,617 @@
+%% CAS help: algebra commands
+@group cas-algebra Algebra
+Commands that rewrite expressions: simplifying, expanding, factoring, working with fractions and polynomials, and switching between exact and decimal values.
+
+@cmd simplify
+group: cas-algebra
+summary: Simplify an expression
+syntax: simplify(expr)
+example: simplify(sin(x)^2+cos(x)^2)
+result: 1
+example: simplify((x^2-1)/(x-1))
+result: x+1
+example: simplify(exp(2*ln(x)))
+result: x^2
+see: normal, trigsimp, expand, factor
+
+Tries several rewriting strategies (rational normal form, trig identities, logarithm and exponential rules, radical merging) and returns the simplest result found. If nothing simpler is found, the expression is returned as it is. For a predictable rewrite use a specific command such as [[normal]], [[expand]] or [[trigsimp]].
+
+@cmd autosimplify
+group: cas-algebra
+summary: Quick simplification that keeps the form
+syntax: autosimplify(expr)
+example: autosimplify(cos(x)^2+sin(x)^2)
+result: 1
+example: autosimplify((x^2-1)/(x-1))
+result: x+1
+example: autosimplify(x*(x+1)-x^2)
+result: x
+example: autosimplify((x-1)*(x+1))
+result: (x-1)*(x+1)
+example: autosimplify((e^(i*x)+e^(-i*x))/2)
+result: cos(x)
+example: autosimplify(e^(i*x))
+result: exp(i*x)
+see: simplify, normal, trigsimp, exp2trig, mode-simplify
+
+The quick pass that SIMPLIFY AUTO ([[mode-simplify]]) applies to every result on the home screen: the Pythagorean identities (sin² + cos² = 1, sec² − tan² = 1), the rational normal form when it is clearly simpler (like terms across products, common factors of a fraction, a sum of fractions over one denominator), Euler's formula when exponentials and trig functions of the same argument meet (`e^(i*x)` with `e^(-i*x)` or with sin/cos of x, `e^x` with `e^-x` or sinh/cosh of x: [[exp2trig]] or [[trig2exp]], taken only when the result is smaller, so `e^(i*x)-(cos(x)+i*sin(x))` is 0 and `(e^x+e^-x)/2` is cosh(x); not in DEGREE mode for sin/cos), and nothing else. A lone `e^(i*x)` or `cos(x)+i*sin(x)` stays as written. A factored or expanded polynomial, angle multiples such as `2*sin(x)*cos(x)`, decimals, units and uncertainties are kept as they are. Lists, matrices and equations are simplified element by element. [[simplify]] tries much more (factoring, trig and log rules, radicals).
+
+@cmd forms
+group: cas-algebra
+summary: Alternate forms of an expression
+syntax: forms(expr), forms(expr, 1)
+example: forms(x^2-2*x+1)
+result: [(x-1)^2,x^2-2*x+1]
+example: forms((x+2)*(x-3))
+result: [(x-3)*(x+2),x^2-x-6]
+example: forms(1/(x-1)-1/(x+1))
+result: [2/(x^2-1),2/((x-1)*(x+1)),1/(x-1)-1/(x+1)]
+example: forms((x^2-1)/(x-1),1)
+result: [[x+1,3,1,"x≠1"],[(x^2-1)/(x-1),11,0,""],[x^2/(x-1)-1/(x-1),17,0,""]]
+example: forms(ln(x*y),1)
+result: [[ln(x*y),6,1,""],[ln(x)+ln(y),9,0,"x>0, y>0"]]
+see: simplify, factor, expand, partfrac, forms-browser
+
+Lists different ways to write `expr`, the simplest first, like the "alternate forms" of a computer algebra website. It applies the rewriting commands ([[simplify]], [[normal]], [[factor]], [[expand]], [[partfrac]] and [[collect]] in each variable, [[texpand]], [[tlin]], [[trigsimp]], [[trig2exp]], [[exp2trig]], [[lnexpand]], [[lncollect]], [[expexpand]], rationalising a denominator) to `expr` and once more to each result, drops repeats, and checks every candidate numerically against `expr` at random real and complex points, so a wrong rewriting never shows up. The forms are sorted by size; those within 20 % of the smallest ("equally simple") come first. The input itself is always one of them, so an expression that is already as simple as it gets returns just itself.
+
+`forms(expr, 1)` gives a row per form: [form, size, equally simple (1 or 0), condition]. The condition says where a form equals `expr` only on part of the domain: `"x≠1"` when a common factor was cancelled (the original is undefined there), `"x>0"` when it holds only for positive values (logarithm rules), `"x real"` when it fails for complex values. An empty condition means equal wherever both are defined.
+
+The search has a time limit (about a second on the calculator; `forms(expr, d, n)` sets the work budget n, 800 by default) and a memory limit; when one runs out you get the forms found so far. On the home screen and in RPN the [[forms-browser|forms browser]] ({shift} {F4} {1}) shows the list in textbook form and lets you pick one.
+
+@cmd expand
+group: cas-algebra
+summary: Multiply out products and powers
+syntax: expand(expr)
+example: expand((x+1)^3)
+result: x^3+3*x^2+3*x+1
+example: expand((a+b)*(a-b))
+result: a^2-b^2
+see: factor, collect, texpand, powexpand
+
+Distributes products over sums and expands integer powers of sums, in any number of variables. Fractions are expanded term by term in the numerator. Use [[texpand]] to expand trig functions of sums.
+
+@cmd factor
+group: cas-algebra
+summary: Factor a polynomial over the rationals
+syntax: factor(expr)
+example: factor(x^2-1)
+result: (x-1)*(x+1)
+example: factor(x^4+4)
+result: (x^2-2*x+2)*(x^2+2*x+2)
+example: factor(x^2*y-y^3)
+result: y*(x+y)*(x-y)
+see: expand, cfactor, sqrfree, factors, ifactor
+
+Factors a polynomial (in any number of variables) into irreducible factors with rational coefficients. A rational function is factored in numerator and denominator. Use [[cfactor]] to split quadratic factors over the complex numbers and [[ifactor]] for integers.
+
+@cmd cfactor
+group: cas-algebra
+summary: Factor over the complex numbers
+syntax: cfactor(expr)
+example: cfactor(x^2+1)
+result: (x-i)*(x+i)
+example: cfactor(x^4-1)
+result: (x-1)*(x+1)*(x-i)*(x+i)
+see: factor, csolve
+
+Like [[factor]], but quadratic factors are further split into linear factors, which may have complex or irrational coefficients. Irreducible factors of degree 3 or more are kept.
+
+@cmd sqrfree
+group: cas-algebra
+summary: Square-free factorization
+syntax: sqrfree(expr)
+example: sqrfree(x^3-x^2-x+1)
+result: (x-1)^2*(x+1)
+see: factor, factors
+
+Writes a polynomial as a product of powers of square-free factors that are pairwise coprime. Cheaper than [[factor]]; the factors need not be irreducible.
+
+@cmd factors
+group: cas-algebra
+summary: List of factors with multiplicities
+syntax: factors(expr)
+example: factors(x^3-x)
+result: [[x,1],[x-1,1],[x+1,1]]
+example: factors(x^2-2*x+1)
+result: [[x-1,2]]
+see: factor, roots
+
+Returns the irreducible factors of a polynomial as a list of `[factor, multiplicity]` pairs. A constant content factor is not included.
+
+@cmd collect
+group: cas-algebra
+summary: Group terms by powers of a variable
+syntax: collect(expr)
+syntax: collect(expr, x)
+example: collect(a*x+b*x+c,x)
+result: (a+b)*x+c
+example: collect(x*y+x+y^2*x)
+result: (y^2+y+1)*x
+see: expand, coeffs
+
+Rewrites a polynomial as a sum of powers of `x` whose coefficients are collected together. Without `x`, the main variable of the expression is used.
+
+@cmd normal
+group: cas-algebra
+summary: Rational normal form
+syntax: normal(expr)
+example: normal(1/x+1/(x+1))
+result: (2*x+1)/(x^2+x)
+example: normal(x/(x^2-x))
+result: 1/(x-1)
+see: ratsimp, together, simplify, partfrac
+
+Combines everything over a common denominator and cancels the greatest common divisor of numerator and denominator. [[ratsimp]] and [[together]] are the same command.
+
+@cmd ratsimp
+group: cas-algebra
+summary: Same as normal
+syntax: ratsimp(expr)
+example: ratsimp((x^2-1)/(x+1))
+result: x-1
+see: normal, together
+
+Same as [[normal]]: puts a rational expression over a common denominator and cancels common factors.
+
+@cmd together
+group: cas-algebra
+summary: Combine fractions over a common denominator
+syntax: together(expr)
+example: together(1/a+1/b)
+result: (a+b)/(a*b)
+see: normal, partfrac
+
+Same as [[normal]]: adds fractions over a common denominator and cancels common factors. The inverse operation is [[partfrac]].
+
+@cmd partfrac
+group: cas-algebra
+summary: Partial fraction decomposition
+syntax: partfrac(expr)
+syntax: partfrac(expr, x)
+example: partfrac(1/(x^2-1))
+result: 1/(2*(x-1))-1/(2*(x+1))
+example: partfrac((x^3+1)/(x^2+x-2))
+result: x+2/(3*(x-1))+7/(3*(x+2))-1
+see: apart, together, propfrac
+
+## Refresher
+P/Q with deg P < deg Q and Q factored: a linear factor (x − a)^m gives A₁/(x − a) + … + A_m/(x − a)^m, an irreducible quadratic (Bx + C)/(x² + px + q) per power. A₁ for a simple root: P(a)/Q'(a) (cover-up). Used for integrals and inverse Laplace transforms.
+example: partfrac(1/(x^2*(x+1)))
+result: 1/(x+1)-1/x+1/x^2
+## Syntax
+Splits a rational function of `x` into a polynomial part plus a sum of simple fractions, using factors over the rationals. Without `x`, the main variable is used. [[apart]] is the same command.
+
+@cmd apart
+group: cas-algebra
+summary: Same as partfrac
+syntax: apart(expr)
+syntax: apart(expr, x)
+example: apart((2*x+1)/(x^2+x))
+result: 1/(x+1)+1/x
+see: partfrac
+
+Same as [[partfrac]]: partial fraction decomposition of a rational function.
+
+@cmd subst
+group: cas-algebra
+summary: Substitute a value for a variable
+syntax: subst(expr, x=a)
+syntax: subst(expr, x, a)
+syntax: subst(expr, [x=a, y=b])
+example: subst(x^2+1,x=2)
+result: 5
+example: subst(x^2+y,x,3)
+result: y+9
+example: subst(x+y,[x=1,y=2])
+result: 3
+see: subs, horner, when
+
+Replaces every occurrence of `x` in `expr` by `a` and simplifies the result. A list of equations substitutes several variables at once (simultaneously). [[subs]] is the same command.
+
+@cmd subs
+group: cas-algebra
+summary: Same as subst
+syntax: subs(expr, x=a)
+syntax: subs(expr, [x=a, y=b])
+example: subs(x+y,[x=1,y=2])
+result: 3
+see: subst
+
+Same as [[subst]]: replaces variables by values.
+
+@cmd numer
+group: cas-algebra
+summary: Numerator of a fraction
+syntax: numer(expr)
+example: numer(3/4)
+result: 3
+example: numer((x+1)/(x-1))
+result: x+1
+see: denom, normal
+
+Returns the numerator of a number or of the rational form of an expression.
+
+@cmd denom
+group: cas-algebra
+summary: Denominator of a fraction
+syntax: denom(expr)
+example: denom(3/4)
+result: 4
+example: denom((x+1)/(x-1))
+result: x-1
+see: numer, normal
+
+Returns the denominator of a number or of the rational form of an expression.
+
+@cmd quo
+group: cas-algebra
+summary: Quotient of polynomial division
+syntax: quo(p, q)
+syntax: quo(p, q, x)
+example: quo(x^3+1,x+1)
+result: x^2-x+1
+example: quo(17,5)
+result: 3
+example: quo(-17,5)
+result: -4
+see: rem, divide, iquo, propfrac
+
+Returns the quotient of the Euclidean division of polynomial `p` by `q` in the variable `x` (default: the main variable). For two integers it returns the floor of `p/q`, so `quo(-17,5)` is -4; see [[iquo]] for truncated division.
+
+@cmd rem
+group: cas-algebra
+summary: Remainder of polynomial division
+syntax: rem(p, q)
+syntax: rem(p, q, x)
+example: rem(x^3+2,x+1)
+result: 1
+example: rem(17,5)
+result: 2
+example: rem(-17,5)
+result: 3
+example: rem(17,-5)
+result: -3
+see: quo, divide, irem, mod
+
+Returns the remainder of the Euclidean division of polynomial `p` by `q` in `x` (default: the main variable). Its degree is lower than the degree of `q`. For integers the remainder has the sign of `q`, like [[mod]].
+
+@cmd divide
+group: cas-algebra
+summary: Quotient and remainder as a list
+syntax: divide(p, q)
+syntax: divide(p, q, x)
+example: divide(x^3+2,x+1)
+result: [x^2-x+1,1]
+example: divide(17,5)
+result: [3,2]
+see: quo, rem
+
+Returns `[quotient, remainder]` of the division of `p` by `q`, so that `p = quotient*q + remainder`.
+
+@cmd gcd
+group: cas-algebra
+summary: Greatest common divisor
+syntax: gcd(a, b, ...)
+syntax: gcd(list)
+example: gcd(12,18)
+result: 6
+example: gcd(x^2-1,x^2+2*x+1)
+result: x+1
+example: gcd(12,18,8)
+result: 2
+see: lcm, iegcd, content
+
+Greatest common divisor of integers or polynomials (in any number of variables). Accepts two or more arguments, or a single list.
+
+@cmd lcm
+group: cas-algebra
+summary: Least common multiple
+syntax: lcm(a, b, ...)
+syntax: lcm(list)
+example: lcm(4,6)
+result: 12
+example: lcm(x^2-1,x+1)
+result: x^2-1
+see: gcd
+
+Least common multiple of integers or polynomials. Accepts two or more arguments, or a single list.
+
+@cmd degree
+group: cas-algebra
+summary: Degree of a polynomial
+syntax: degree(p)
+syntax: degree(p, x)
+example: degree(x^3+2*x)
+result: 3
+example: degree(x^2*y^3,y)
+result: 3
+see: coeff, lcoeff, coeffs
+
+Returns the degree of polynomial `p` in `x` (default: the main variable). Gives an error if `p` is not a polynomial in `x`.
+
+@cmd coeff
+group: cas-algebra
+summary: Coefficient of a power of x
+syntax: coeff(p, n)
+syntax: coeff(p, x, n)
+example: coeff(3*x^2+5*x+7,2)
+result: 3
+example: coeff(a*x^2+b*x*y,y,1)
+result: b*x
+see: coeffs, lcoeff, degree
+
+Returns the coefficient of `x^n` in polynomial `p`. Without `x`, the main variable is used. Other variables are treated as constants.
+
+@cmd coeffs
+group: cas-algebra
+summary: List of coefficients
+syntax: coeffs(p)
+syntax: coeffs(p, x)
+example: coeffs(3*x^2+5*x+7)
+result: [3,5,7]
+example: coeffs(x^3-1)
+result: [1,0,0,-1]
+see: coeff, proot, lcoeff
+
+Returns the list of all coefficients of `p` in `x`, from the highest power down to the constant term (including zeros).
+
+@cmd lcoeff
+group: cas-algebra
+summary: Leading coefficient
+syntax: lcoeff(p)
+syntax: lcoeff(p, x)
+example: lcoeff(3*x^2+5*x+7)
+result: 3
+example: lcoeff(a*x^2+b,x)
+result: a
+see: coeff, degree
+
+Returns the coefficient of the highest power of `x` in `p`.
+
+@cmd content
+group: cas-algebra
+summary: GCD of the coefficients
+syntax: content(p)
+syntax: content(p, x)
+example: content(6*x^2+4*x)
+result: 2
+see: primpart, gcd
+
+Returns the greatest common divisor of the coefficients of `p` in `x`. `p` equals `content(p)*primpart(p)`.
+
+@cmd primpart
+group: cas-algebra
+summary: Primitive part of a polynomial
+syntax: primpart(p)
+syntax: primpart(p, x)
+example: primpart(6*x^2+4*x)
+result: 3*x^2+2*x
+see: content
+
+Divides `p` by its [[content]], leaving a polynomial whose coefficients have no common factor.
+
+@cmd resultant
+group: cas-algebra
+summary: Resultant of two polynomials
+syntax: resultant(p, q)
+syntax: resultant(p, q, x)
+example: resultant(x^2-2,x-1)
+result: -1
+example: resultant(x^2+y,x-y,x)
+result: y^2+y
+see: discriminant, gbasis
+
+Computes the resultant of `p` and `q` with respect to `x`. It is zero exactly when `p` and `q` have a common root; with other variables present it eliminates `x`.
+
+@cmd discriminant
+group: cas-algebra
+summary: Discriminant of a polynomial
+syntax: discriminant(p)
+syntax: discriminant(p, x)
+example: discriminant(a*x^2+b*x+c,x)
+result: b^2-4*a*c
+example: discriminant(x^2-5*x+6)
+result: 1
+see: resultant, solve
+
+Returns the discriminant of `p` in `x`. It is zero exactly when `p` has a repeated root.
+
+@cmd horner
+group: cas-algebra
+summary: Evaluate a polynomial at a point
+syntax: horner(p, a)
+syntax: horner(p, a, x)
+example: horner(x^3+2*x+1,2)
+result: 13
+see: subst
+
+Evaluates the polynomial `p` at `x = a` (default variable: the main variable of `p`).
+
+@cmd lagrange
+group: cas-algebra
+summary: Interpolating polynomial through points
+syntax: lagrange(xlist, ylist)
+syntax: lagrange(xlist, ylist, x)
+example: lagrange([1,2,3],[1,4,9])
+result: x^2
+example: lagrange([0,1],[1,3],t)
+result: 2*t+1
+see: seq
+
+Returns the polynomial of lowest degree that takes the values `ylist` at the points `xlist`, as an expanded polynomial in `x` (default `x`).
+
+@cmd texpand
+group: cas-algebra
+summary: Expand trig functions of sums
+syntax: texpand(expr)
+example: texpand(sin(2*x))
+result: 2*cos(x)*sin(x)
+example: texpand(cos(x+y))
+result: cos(x)*cos(y)-sin(x)*sin(y)
+see: tlin, tcollect, expand
+
+Uses addition and multiple-angle formulas to rewrite trig functions of sums and integer multiples in terms of trig functions of single variables.
+
+@cmd tlin
+group: cas-algebra
+summary: Linearize products of trig functions
+syntax: tlin(expr)
+example: tlin(sin(x)^2)
+result: 1/2-cos(2*x)/2
+example: tlin(sin(x)*cos(x))
+result: sin(2*x)/2
+see: tcollect, texpand
+
+Replaces products and powers of sines and cosines by sums of sines and cosines of multiple angles. Useful before integrating.
+
+@cmd tcollect
+group: cas-algebra
+summary: Collect trig terms into multiple angles
+syntax: tcollect(expr)
+example: tcollect(sin(x)*cos(x))
+result: sin(2*x)/2
+see: tlin, texpand
+
+Linearizes products of trig functions (like [[tlin]]) and then combines terms with the same angle.
+
+@cmd trigsimp
+group: cas-algebra
+summary: Simplify trigonometric expressions
+syntax: trigsimp(expr)
+example: trigsimp(sin(x)^2+cos(x)^2)
+result: 1
+example: trigsimp(tan(x)*cos(x))
+result: sin(x)
+example: trigsimp(1-cos(x)^2)
+result: sin(x)^2
+see: simplify, tlin, texpand
+
+Simplifies using trig identities such as `sin(x)^2+cos(x)^2=1` and `tan(x)=sin(x)/cos(x)`.
+
+@cmd trig2exp
+group: cas-algebra
+summary: Rewrite trig functions as exponentials
+syntax: trig2exp(expr)
+example: trig2exp(cos(x))
+result: exp(i*x)/2+exp(-i*x)/2
+see: exp2trig
+
+Rewrites sin, cos, tan and the other trig functions in terms of `exp(i*x)`.
+
+@cmd exp2trig
+group: cas-algebra
+summary: Rewrite complex exponentials as trig
+syntax: exp2trig(expr)
+example: exp2trig(exp(i*x))
+result: cos(x)+i*sin(x)
+example: exp2trig(exp(i*x)+exp(-i*x))
+result: 2*cos(x)
+see: trig2exp
+
+Rewrites exponentials with imaginary arguments using Euler's formula `exp(i*x)=cos(x)+i*sin(x)`.
+
+@cmd lnexpand
+group: cas-algebra
+summary: Expand logarithms of products
+syntax: lnexpand(expr)
+example: lnexpand(ln(x^2*y))
+result: 2*ln(x)+ln(y)
+see: lncollect
+
+Splits logarithms of products, quotients and powers into sums of logarithms: `ln(a*b)` becomes `ln(a)+ln(b)` and `ln(a^n)` becomes `n*ln(a)`. The rules assume positive arguments.
+
+@cmd lncollect
+group: cas-algebra
+summary: Combine sums of logarithms
+syntax: lncollect(expr)
+example: lncollect(ln(x)+ln(y))
+result: ln(x*y)
+see: lnexpand
+
+Combines sums and multiples of logarithms into a single logarithm, the inverse of [[lnexpand]].
+
+@cmd expexpand
+group: cas-algebra
+summary: Expand exponentials
+syntax: expexpand(expr)
+example: expexpand((exp(x)+1)^2)
+result: 2*exp(x)+exp(2*x)+1
+example: expexpand(exp(x+y))
+result: exp(x)*exp(y)
+see: powexpand, expand
+
+Expands like [[expand]] and then splits exponentials of sums, `exp(a+b) = exp(a)*exp(b)`. The split product is kept as it is; a later calculation with it merges the exponentials again.
+
+@cmd powexpand
+group: cas-algebra
+summary: Expand powers
+syntax: powexpand(expr)
+example: powexpand(2^(x+1))
+result: 2*2^x
+example: powexpand((x*y)^3)
+result: x^3*y^3
+see: expand, expexpand
+
+Same as [[expand]]: splits powers of products and powers with sums in the exponent, and multiplies out.
+
+@cmd exact
+group: cas-algebra
+summary: Convert decimals to exact fractions
+syntax: exact(expr)
+example: exact(0.25)
+result: 1/4
+example: exact(1.5*x)
+result: 3*x/2
+see: approx, evalf
+
+Replaces each decimal number in `expr` by a nearby fraction, turning an approximate result into an exact one.
+
+@cmd approx
+group: cas-algebra
+summary: Numeric value of an expression
+syntax: approx(expr)
+syntax: approx(expr, n)
+example: approx(pi)
+result: 3.14159265359
+example: approx(sqrt(2),30)
+result: 1.41421356237309504880168872421
+see: evalf, float, exact, mode
+
+Evaluates `expr` numerically. With `n`, uses `n` significant digits (up to 5000, arbitrary precision for constants); otherwise the current display digits setting. Symbols without a value stay symbolic. [[evalf]] and [[float]] are the same command.
+
+@cmd evalf
+group: cas-algebra
+summary: Same as approx
+syntax: evalf(expr)
+syntax: evalf(expr, n)
+example: evalf(e)
+result: 2.71828182846
+example: evalf(pi,20)
+result: 3.1415926535897932385
+see: approx, float
+
+Same as [[approx]]: numeric evaluation, optionally with `n` significant digits.
+
+@cmd float
+group: cas-algebra
+summary: Same as approx
+syntax: float(expr)
+syntax: float(expr, n)
+example: float(2/3)
+result: 0.666666666667
+see: approx, evalf
+
+Same as [[approx]]: numeric evaluation, optionally with `n` significant digits.
+
+@cmd propfrac
+group: cas-algebra
+summary: Proper fraction form
+syntax: propfrac(a/b)
+syntax: propfrac(p/q, x)
+example: propfrac(17/5)
+result: 2/5+3
+example: propfrac((x^2+1)/(x-1))
+result: x+2/(x-1)+1
+see: partfrac, quo
+
+Writes a fraction as an integer plus a proper fraction, or a rational function as a polynomial plus a fraction whose numerator has lower degree than the denominator.

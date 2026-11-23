@@ -1,0 +1,79 @@
+# Geometry app: build a triangle with touch, measure it, drag a vertex
+# (touch and D-pad) and watch the measurements follow, undo.
+# Standard view: world (x, y) is pixel (160 + 20x, 121 - 20y), snap on.
+requirecfg GEOMETRY
+app geometry
+expect screen geometry
+geo expect tool move
+expect text "Move: drag a point or ENTER on it"
+# polygon tool: three taps, then the first vertex again
+key F3
+key 4
+geo expect tool polygon
+touch tap 160 121
+touch tap 240 121
+touch tap 200 61
+geo expect nsel 3
+touch tap 161 122
+geo expect count 4
+geo expect a "a = 6"
+geo expect A "A = (0, 0)"
+geo expect C "C = (2, 3)"
+# area, perimeter (length of a polygon), angle at A
+key F5
+key 3
+touch tap 200 121
+geo expect m1 "area a = 6"
+key F5
+key 1
+touch tap 220 91
+geo expect m2 "perim a = 11.2111"
+key F5
+key 2
+touch tap 240 121
+touch tap 160 121
+touch tap 200 61
+geo expect m3 "∠BAC = 56.3099°"
+expect text "area a = 6"
+expect text "∠BAC = 56.3099°"
+# segment AB and its slope / equation of a line BC
+key F3
+key 3
+touch tap 240 121
+touch tap 200 61
+key F5
+key 5
+touch tap 230 106
+geo expect m4 "b: y = -1.5x + 6"
+screenshot geo_triangle.png
+# drag C by touch to (3, 4): measurements follow
+touch drag 200 61 220 41 6
+geo expect C "C = (3, 4)"
+geo expect m1 "area a = 8"
+geo expect m4 "b: y = -4x + 16"
+geo expect m3 "∠BAC = 53.1301°"
+screenshot geo_drag.png
+# a whole drag is one undo step
+key SHIFT F1
+geo expect C "C = (2, 3)"
+geo expect m1 "area a = 6"
+# D-pad: move tool, cursor to B, ENTER picks it up, arrows move it by one grid unit
+key F1
+geo cursor 4 0
+geo expect hover B
+key ENTER
+geo expect grab B
+expect text "Moving B: arrows, ENTER drops"
+key RIGHT RIGHT DOWN
+geo expect B "B = (6, -1)"
+key ENTER
+geo expect grab ""
+geo expect m4 "b: y = -x + 5"
+key SHIFT F1
+geo expect B "B = (4, 0)"
+# CLEAR leaves the app from the move tool; the construction stays
+key CLEAR
+expect screen home
+app geometry
+geo expect count 9
+geo expect m1 "area a = 6"

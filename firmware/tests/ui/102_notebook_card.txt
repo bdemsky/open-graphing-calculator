@@ -1,0 +1,81 @@
+# Notebooks on the microSD card (CALC/NOTEBOOKS/NAME.ipynb, long names written by core/fat.c;
+# modules/python/nb_doc.c): copied there from the calculator and back, listed with "card", opened,
+# changed and saved there, a new one made there, deleted; the list without a card; a damaged file.
+requirecfg MOD_PYTHON
+nb store wipe
+nb new "Field Trip"
+nb set 1 "2+3"
+nb add python "print('on the card')"
+nb runall
+nb close
+# no card: only the calculator's notebooks
+nb list
+app notebook
+expect state nb_items 1
+key CLEAR
+fs insert 8
+fs format
+# F5 more, Copy to the card
+app notebook
+key F5
+expect state nb_view menu
+key 4
+expect state toast "Copied to the card"
+expect state nb_items 2
+expect text "card"
+screenshot notebook_card_list.png
+fs ls /CALC/NOTEBOOKS
+fs expect "/CALC/NOTEBOOKS/Field Trip.ipynb" "\"nbformat\": 4"
+fs expect "/CALC/NOTEBOOKS/Field Trip.ipynb" "on the card"
+# open the card's copy: it is saved on the card
+key DOWN
+expect state nb_list_sel "Field Trip"
+key ENTER
+expect screen home
+expect state nb_where card
+expect state home_title "Notebook: Field Trip"
+nb expect 1 val 5
+# changed on the home screen (MENU 0 Edit in place) and saved: on the card
+key UP UP UP UP
+expect state home_sel 0
+key MENU 0
+type "6"
+key ENTER
+nb expect 1 src "2+36"
+nb expect 1 val 38
+nb flush
+fs expect "/CALC/NOTEBOOKS/Field Trip.ipynb" "2+36"
+nb open "Field Trip"
+nb expect 1 src "2+3"
+nb open "Field Trip" card
+nb expect 1 src "2+36"
+# a new notebook on the card
+nb new "Card Only" card
+nb set 1 "7*6"
+nb run 1
+nb close
+fs expect "/CALC/NOTEBOOKS/Card Only.ipynb" "\"text/plain\": "
+nb open "Card Only" card
+nb expect 1 val 42
+nb close
+# a damaged file on the card: the reason
+fs put "/CALC/NOTEBOOKS/Bad.ipynb" "{\"cells\": [ oops"
+app notebook
+key DOWN DOWN
+expect state nb_list_sel Bad
+key ENTER
+expect screen message
+expect text "NOT OPENED"
+expect text "bad JSON (line 1)"
+key CLEAR
+expect state nb_view list
+key CLEAR
+# delete from the card
+nb delete "Card Only" card
+app notebook
+expect state nb_items 3
+key CLEAR
+fs eject
+app notebook
+expect state nb_items 1
+key CLEAR

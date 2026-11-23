@@ -1,0 +1,34 @@
+# series/taylor results: ascending order, coefficient in front, +O() order term; a long series
+# breaks into lines at + and − in Textbook (other wide results still scroll); Classic shows the same text
+requirecfg CAS_SRC
+expect state textbook 1
+type "series(exp(x)/(1-x),x,0,5)\n"
+expect state last_output 1+2*x+5/2*x^2+8/3*x^3+65/24*x^4+O(x^5)
+type "series(cos(x),x=pi,4)\n"
+expect state last_output -1+1/2*(x-π)^2+O((x-π)^4)
+type "taylor(ln(1+x),x,0,6)\n"
+type "series(sin(x),x,0,12)\n"
+expect state last_output x-1/6*x^3+1/120*x^5-1/5040*x^7+1/362880*x^9-1/39916800*x^11+O(x^12)
+screenshot series_textbook.png
+# the long series is not a wide (scrolling) entry: it fits on its lines
+key UP
+expect state home_sel 7
+key RIGHT
+expect state hscroll 0
+key CLEAR
+# the value is the polynomial: ans has no order term
+type "ans*1\n"
+expect state last_output -x^11/39916800+x^9/362880-x^7/5040+x^5/120-x^3/6+x
+key CLEAR CLEAR
+# Classic: the same linear text, wrapped
+key SHIFT HOME
+key DOWN DOWN DOWN DOWN DOWN DOWN RIGHT ENTER
+expect state textbook 0
+key HOME
+type "series(exp(x)/(1-x),x,0,5)\n"
+type "series(sin(x),x,0,12)\n"
+expect text O(x^5)
+screenshot series_classic.png
+key SHIFT HOME LEFT ENTER
+key HOME
+expect state textbook 1

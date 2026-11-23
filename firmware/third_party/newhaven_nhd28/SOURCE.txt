@@ -1,0 +1,6 @@
+Source: https://github.com/newhavendisplay/NHD-2.8-240320AF-CSXP-F_Example
+Commit: f2e2d81b54e0748de01cb0e56ade39c738ef256f (2021-01-12)
+License: BSD-3-Clause (see LICENSE)
+Used for: factory-tuned ST7789VI init values (porch, gate, VCOM, power, gamma, inversion)
+in platform/stm32h743/ (adapted from 8-bit bit-banged AVR to 16-bit 8080 on the FMC,
+COLMOD 0x55 = 65K colours, 16 bpp, one bus write per pixel).

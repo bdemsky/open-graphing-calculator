@@ -1,0 +1,82 @@
+%% Uncertainty propagation (cas/src/unc.c). Format: see app/EXTENDING.md ("Help pages").
+
+@group cas-unc Uncertainty
+Measured values with an uncertainty, written `9.81±0.02`. See [[uncertainty]] for how it works.
+
+@page uncertainty Measurements with uncertainty
+Type a value, then `±` and its uncertainty: `9.81±0.02`. The `±` is the first item of the UNITS menu ({shift} {vars} {1}; [[nominal]], [[uncert]] and [[ucov]] are at its end) and in the catalog ({shift} {apps}, type `pm`); `pm(9.81,0.02)` is the same. Every calculation then carries the uncertainty along:
+
+    x:=9.81±0.02
+    ▶ 9.81±0.02
+    x*x
+    ▶ 96.2±0.4
+    x-x
+    ▶ 0.0±0
+    (2.0±0.1)_m/(0.50±0.02)_s
+    ▶ (4.0±0.3)_m/s
+
+## How it works
+- Each `±` creates an independent error source. A result is linearised in its sources (first-order propagation: the uncertainty of f(x) is |f'(x)|·s) and the sources combine as a root sum of squares.
+- The same quantity used twice is the same source, so correlations are exact: `x-x` is `0±0`, `x*x` has twice the relative uncertainty of `x`, and `x+y` with independent `y` adds in quadrature.
+- Variables, `ans`, lists, functions (`sin`, `sqrt`, `exp`, ...), units and the [[sheet|spreadsheet]] all keep the sources. Saved sessions keep them too.
+- The uncertainty is shown with one significant figure (two when it starts with 1) and the value is rounded to the same decimal place. The MODE number format does not change these two numbers.
+- Re-typing a printed result makes a new, independent measurement. So does the [[rpn|RPN]] stack, which keeps values as printed.
+- [[stat|Statistics lists]] hold plain numbers: a value with an uncertainty stored into a list (from the list editor, with →, or from a linked spreadsheet column) keeps only its value.
+- Exact inputs stay exact: [[nominal]] and [[uncert]] give the value and the uncertainty as expressions.
+
+## Commands
+- [[pm]]: a value with an uncertainty
+- [[nominal]]: the value without the uncertainty
+- [[uncert]]: the uncertainty (standard deviation)
+- [[ucov]]: covariance of two results
+
+@cmd pm
+group: cas-unc
+summary: A value with an uncertainty (also written v±s)
+syntax: pm(value, uncertainty)
+syntax: value±uncertainty
+insert: ±
+label: ± (pm)
+example: pm(9.81,0.02)
+result: 9.81±0.02
+example: 2±1/10
+result: 2.00±0.10
+example: pm([1,2],0.5)
+result: [1.0±0.5,2.0±0.5]
+see: uncertainty, nominal, uncert
+
+`±` binds like `+`: `x+1±0.1` is `(x+1)±0.1`. A negative uncertainty is taken as its absolute value. Use parentheses for a quantity with units: `(2.0±0.1)_m`.
+
+@cmd nominal
+group: cas-unc
+summary: Value of an uncertain quantity without its uncertainty
+syntax: nominal(x)
+example: nominal((2±1/10)^2)
+result: 4
+see: uncert, pm
+
+@cmd uncert
+group: cas-unc
+summary: Uncertainty (standard deviation) of a result
+syntax: uncert(x)
+example: uncert(3*(2±1/10))
+result: 3/10
+example: uncert((2±0.1)_m*3)
+result: 0.3_m
+see: nominal, ucov, pm
+
+First-order propagation: the square root of the sum over the sources of (∂x/∂source)². 0 for an exact value.
+
+@cmd ucov
+group: cas-unc
+summary: Covariance of two uncertain results
+syntax: ucov(x, y)
+example: a:=1±0.1
+result: 1.00±0.10
+example: ucov(a,2*a)
+result: 0.02
+example: ucov(a,1±0.1)
+result: 0
+see: uncert
+
+`ucov(x,x)` is `uncert(x)^2`. Results that share no source have covariance 0.

@@ -1,0 +1,75 @@
+# Integration: spreadsheet columns linked to statistics lists, a stat plot of
+# them on GRAPH (following sheet edits), a regression from the lists, and the
+# geometry construction drawn on the same GRAPH screen.
+app sheet
+sheet set A1 1
+sheet set A2 2
+sheet set A3 3
+sheet set A4 4
+sheet set B1 =A1^2
+sheet fill B1 4
+sheet link A L1
+sheet link B L2
+stat expect L1 1,2,3,4
+stat expect L2 1,4,9,16
+redraw
+expect text A>L1
+# Plot1: scatter L1, L2; ZoomStat
+key HOME F1 SHIFT F1 1
+key RIGHT
+expect state statplot1 "on 0 L1 L2 1 0 1"
+key UP UP ENTER
+expect screen graph
+expect state xmin 0.7
+expect state xmax 4.3
+expect state ymin -0.5
+expect state ymax 17.5
+expect color 0xD8E3 20
+screenshot sheet_statplot.png
+# a sheet edit reaches the plot: (4, 16) becomes (4, 12)
+app sheet
+sheet set B4 12
+stat expect L2 1,4,9,12
+key SHIFT F5
+expect screen graph
+screenshot sheet_statplot_edit.png
+# the linked lists in a home calculation
+key HOME
+type "mean(L2)\n"
+ifcas src expect state last_output 13/2
+# geometry: a segment from (0, 0) to (2, 8) shown on GRAPH with the plot
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 2
+ifcfg GEOMETRY geo cursor 0 0
+ifcfg GEOMETRY key ENTER
+ifcfg GEOMETRY geo cursor 2 8
+ifcfg GEOMETRY key ENTER
+ifcfg GEOMETRY geo expect count 3
+ifcfg GEOMETRY key SHIFT F3
+ifcfg GEOMETRY key 5
+ifcfg GEOMETRY app graph
+ifcfg GEOMETRY expect screen graph
+ifcfg GEOMETRY expect color 0xD8E3 20
+ifcfg GEOMETRY screenshot geo_statplot.png
+# TRACE walks the geometry points (stat plots are drawn, not traced)
+ifcfg GEOMETRY key F4
+ifcfg GEOMETRY expect state graph_mode trace
+ifcfg GEOMETRY expect state trace_x 0
+ifcfg GEOMETRY expect state trace_y 0
+ifcfg GEOMETRY key RIGHT
+ifcfg GEOMETRY expect state trace_x 2
+ifcfg GEOMETRY expect state trace_y 8
+ifcfg GEOMETRY key CLEAR
+# both survive a power cycle
+key SHIFT ON
+key ON
+app graph
+expect color 0xD8E3 20
+expect state statplot1 "on 0 L1 L2 1 0 1"
+stat expect L2 1,4,9,12
+# the same in the dark theme
+setmode THEME Dark
+app graph
+screenshot geo_statplot_dark.png
+setmode THEME Light

@@ -1,0 +1,129 @@
+%% CAS help: constants
+@group cas-constants Constants
+Built-in constants. They are kept exact in results; use [[approx]] for a decimal value.
+
+@cmd pi
+group: cas-constants
+summary: The circle constant pi (3.14159)
+syntax: pi
+insert: π
+label: π
+example: sin(pi/2)
+result: 1
+example: approx(pi)
+result: 3.14159265359
+example: approx(pi,30)
+result: 3.14159265358979323846264338328
+see: e, approx, sin
+
+The ratio of a circle's circumference to its diameter. Type it as `pi` or `π`.
+
+@cmd e
+group: cas-constants
+summary: Euler's number e (2.71828)
+syntax: e
+insert: e
+example: ln(e)
+result: 1
+example: approx(e)
+result: 2.71828182846
+example: limit((1+1/n)^n,n,inf)
+result: e
+see: exp, ln, pi
+
+The base of the natural logarithm. `e^x` is the same as `exp(x)`. The letter `e` always means this constant and cannot be used as a variable.
+
+@cmd i
+group: cas-constants
+summary: Imaginary unit, i^2 = -1
+syntax: i
+insert: i
+example: i^2
+result: -1
+example: (1+2*i)*(3-i)
+result: 5+5*i
+example: sqrt(-9)
+result: 3*i
+see: re, im, conj, abs, csolve
+
+The imaginary unit. Complex numbers are written `a+b*i`; arithmetic with them is exact.
+
+@cmd inf
+group: cas-constants
+summary: Infinity
+syntax: inf
+syntax: -inf
+insert: inf
+example: 1/inf
+result: 0
+example: limit(exp(x),x,inf)
+result: inf
+example: integrate(exp(-x),x,0,inf)
+result: 1
+see: undef, limit, integrate, sum
+
+Positive infinity, also typed `∞`. Used as a limit point, an integration bound or a summation bound, and returned by limits that diverge. `-inf` is negative infinity.
+
+@cmd undef
+group: cas-constants
+summary: Undefined value
+syntax: undef
+insert: undef
+example: inf-inf
+result: undef
+example: limit(abs(x)/x,x,0)
+result: undef
+see: inf, limit
+
+The result of an undefined operation such as `inf-inf`, or of a two-sided limit that does not exist.
+
+@cmd euler_gamma
+group: cas-constants
+summary: Euler-Mascheroni constant (0.57722)
+syntax: euler_gamma
+insert: euler_gamma
+example: approx(euler_gamma)
+result: 0.577215664902
+see: gamma, euler, e
+
+The Euler-Mascheroni constant, the limit of `1+1/2+...+1/n-ln(n)`. Not to be confused with the totient function [[euler]] or Euler's number [[e]].
+
+@cmd ans
+group: cas-constants
+summary: The previous result
+syntax: ans
+insert: Ans
+label: Ans
+example: 2+3
+result: 5
+example: ans*2
+result: 10
+see: vars, home-screen
+
+Holds the result of the last calculation, so it can be used in the next one.
+
+@cmd true
+group: cas-constants
+summary: Logical value true
+syntax: true
+catalog: no
+example: 3>2
+result: true
+example: isprime(7)
+result: true
+see: false, when
+
+The result of a comparison or test that holds. Conditions in [[when]] use it.
+
+@cmd false
+group: cas-constants
+summary: Logical value false
+syntax: false
+catalog: no
+example: 2>3
+result: false
+example: has(x+1,y)
+result: false
+see: true, when
+
+The result of a comparison or test that does not hold.

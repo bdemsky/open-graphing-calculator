@@ -1,0 +1,98 @@
+# Sparkle Town's grown-ups' gate (the user: "the grown-up gate is not going to keep 3rd graders out"): one
+# problem just past the top of the curriculum, its answer typed on the pad (no choices to guess); a wrong one
+# shows nothing, a new problem comes after a pause; F5 again or CLEAR closes it; taps and holds never open it
+# (the old hold gate's CR2: a short tap left a finger "holding" and it opened 2 s later). `mq gate seed N`
+# fixes the problems for this test; `mq gate` is the Mac's corner menu "Grown-ups...".
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+mq fun off
+mq engine stop
+mq go map
+mq step 4
+# the soft key shows it; F5 again puts it away
+mq gate seed 11
+key F5
+mq step 2
+expect state mq_scene map
+expect state mq_gate up
+expect state mq_gate_text "If 5n + 17 = 57, what is n?"
+expect text "Grown-ups only"
+screenshot mathquest_gate.png
+key F5
+expect state mq_gate off
+# taps, a finger held down (no UP after a short tap), drags: nothing opens
+key F5
+touch 160 130 down
+touch 160 130 up
+touch tap 60 80
+touch 250 100 down
+wait 2300
+mq step 5
+expect state mq_scene map
+touch 250 100 up
+# the soft-key bar held: nothing but its key
+touch 300 230 down
+wait 2300
+mq step 5
+expect state mq_scene map
+touch 300 230 up
+# a wrong answer typed: not opened, nothing of the answer, a pause and a new problem
+mq gate seed 11
+expect state mq_gate up
+type "9"
+key ENTER
+expect state mq_scene map
+expect state mq_gate wait
+expect text "Not quite."
+screenshot mathquest_gate_wait.png
+mq step 60
+expect state mq_gate up
+# the right answer by touch: the pad's 8, then OK (seed 11's problem again)
+mq gate seed 11
+expect state mq_gate_text "If 5n + 17 = 57, what is n?"
+touch tap 254 113
+mq step 2
+expect state mq_scene map
+touch tap 250 181
+mq step 2
+expect state mq_scene parent
+key CLEAR
+expect state mq_scene map
+# the right answer by the keys, DEL to take a slip back
+mq gate seed 23
+key F5
+expect state mq_gate_text "If 6n - 29 = 25, what is n?"
+type "4"
+key DEL
+type "9"
+key ENTER
+expect state mq_scene parent
+key F5
+expect state mq_scene map
+# a negative answer: the minus key (the Mac's -) or (-), typed before or after the digits
+mq gate seed 40
+key F5
+expect state mq_gate_text "What is 2 to the power 5, minus 37?"
+type "5"
+key SUB
+key ENTER
+expect state mq_scene parent
+key F5
+mq gate seed 40
+key F5
+key NEG
+type "5"
+key ENTER
+expect state mq_scene parent
+key F5
+# a tap of "close" puts it away
+key F5
+touch tap 51 201
+expect state mq_gate off
+expect state mq_scene map

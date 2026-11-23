@@ -1,0 +1,15 @@
+# Initial conditions of dsolve in a notebook math cell (NBIO_TO_CAS -> app/editor.c ed_cas): y(0)
+# stays a call because the line also has y' (the unknown function); x(x+1) stays a product.
+requirecfg MOD_PYTHON
+nb store wipe
+nb new "ODE IC"
+nb set 1 "dsolve([y'=2*y,y(0)=3],y,x)"
+nb run 1
+ifcas src nb expect 1 val 3*exp(2*x)
+nb add math "dsolve([y''+y=0,y(0)=1,y'(0)=0],y,x)"
+nb run 2
+ifcas src nb expect 2 val cos(x)
+nb add math "x(x+1)"
+nb run 3
+ifcas src nb expect 3 val x*(x+1)
+nb close

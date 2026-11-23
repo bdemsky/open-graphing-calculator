@@ -1,0 +1,5 @@
+# Standard tier (default): core CAS in internal flash, full manual as a QSPI module
+# (docs/QSPI_CONTENT.md).
+CONFIG_CONTENT_QSPI=y
+CONFIG_MANUAL_FULL=y
+CONFIG_CAS_SRC=y

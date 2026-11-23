@@ -1,0 +1,64 @@
+# Sparkle Town's notebook (modules/mathquest/mq_cols.c): column work like on paper in the friend's
+# notebook, ones first, every step told while it is new. An addition with carries in Treasure Heist (the
+# treasure scroll), a slip in a take-away across a zero (the zero that lends: its why, said), long division
+# with a leftover, and the receipt pad of the till; on her own the notebook waits for its button.
+# Screenshots mq_notebook_*.png.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 2
+mq fun off
+mq scene off
+mq new Noa 2
+mq engine stop
+mq notebook 0
+# adding with carries: every step told ("8 + 5 is 13: write the 3!"), the carry in its little box
+mq skill 16 4
+mq mech "Treasure Heist"
+mq notebook 0
+expect state mq_notebook "1 0 0/4"
+screenshot mq_notebook_add.png
+mq step 2
+mq correct
+expect state mq_moment cheer
+mq step 80
+expect state mq_moment play
+# taking away across zeros (600 - 285): the zeros lend, every step told
+mq seed 3
+mq skill 16 6
+mq mech "Treasure Heist"
+mq notebook 0
+expect state mq_notebook "2 0 0/5"
+mq step 2
+screenshot mq_notebook_sub.png
+mq correct
+mq step 80
+expect state mq_moment play
+# long division with a leftover, with prompts (the help fading)
+mq seed 3
+mq skill 23 3
+mq mech "Treasure Heist"
+mq notebook 1
+expect state mq_notebook "4 1 0/13"
+mq step 2
+screenshot mq_notebook_div.png
+key 0
+mq step 2
+screenshot mq_notebook_slip.png
+mq correct
+mq step 80
+expect state mq_moment play
+# the till's change on the receipt pad, on her own: the notebook button
+mq seed 6
+mq skill 45 3
+mq mech "Shop Till"
+mq notebook 2
+expect state mq_notebook "2 2 0/6"
+mq step 2
+screenshot mq_notebook_till.png
+mq correct
+expect state mq_moment cheer

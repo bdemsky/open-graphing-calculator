@@ -1,0 +1,46 @@
+# The core / rollback tier (configs/core_defconfig, make TIER=core): the CAS and the essential help
+# pages in internal flash, no content modules; it must not care whether the QSPI works.
+requirecfg CONTENT_INTERNAL
+manual graph
+expect state help_missing 1
+expect text not in this build
+key HOME
+app mem
+key ENTER
+expect text core tier
+expect text built into the firmware
+key HOME
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect text essential help pages built in
+key HOME
+# a dead QSPI changes nothing for help
+fault qspi absent
+reboot
+manual stat-plots
+expect state help_missing 1
+key HOME
+fault qspi ok
+reboot
+# no code modules in the core tier: GRAPH (a graph cell, ENTER: the graph app) keeps F5 "graph", APPS > Animation says why
+key HOME F1
+type "sin(x-t)"
+key F5 ENTER
+expect screen graph
+expect state sliders 1
+expect notext anim
+expect state anim_module "core tier"
+app animation
+expect text ANIMATION NOT INSTALLED
+expect text not part of this firmware (core tier)
+key CLEAR
+key HOME
+# cas/ext/applied is not in the core tier's flash: its commands say what is missing
+type "svd([[1,2],[3,4]])\n"
+expect state last_error 1
+expect text needs the advanced CAS module
+key CLEAR
+type "fft([1,2])\n"
+expect state last_error 1
+expect text needs the advanced CAS module
+key CLEAR

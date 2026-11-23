@@ -1,0 +1,28 @@
+Calculator firmware release (2026-11-23 15:25, CAS=src)
+source revision: e8b11a39 (plus uncommitted changes, if any)
+calc.bin   452848 bytes  load 0x08000000-0x0806e8ef (86.4 % of flash bank 1)
+calc_bank2.bin  460348 bytes  load 0x08100000-0x0817063b (87.8 % of flash bank 2: CAS library, help manual)
+    vectors: SP=0x20020000 Reset_Handler=0x08049131  hex start record 0x8049131  hex/bin gap bytes=12
+calc_core: core-tier rollback firmware (everything in internal flash, no QSPI content)
+calc_core.bin   444308 bytes  load 0x08000000-0x0806c793 (84.7 % of flash bank 1)
+calc_core_bank2.bin  466024 bytes  load 0x08100000-0x08171c67 (88.9 % of flash bank 2: CAS library, help manual)
+    vectors: SP=0x20020000 Reset_Handler=0x08047919  hex start record 0x8047919  hex/bin gap bytes=12
+bringup.bin    88652 bytes  load 0x08000000-0x08015a4b (16.9 % of flash bank 1)
+bringup: nothing in flash bank 2
+    vectors: SP=0x20020000 Reset_Handler=0x08008ee9  hex start record 0x8008ee9  hex/bin gap bytes=12
+calc_qspi.bin: 1306624 bytes, QSPI module store image for 0x90000000 (OpenOCD) (docs/QSPI_CONTENT.md)
+checks: PASS
+version firmware 0.2.15 630dc02e329a8b67db40e7f8a9f40c3c1fe9804d0f9e746d1b3f652bd6f75a9d
+version manual 0.2.15 7b77b179ebe1042c9ffaade3a1c479f70d1e2d55d4607d8fc1dc0953ac10c39f
+version animation 0.2.15 8646050f9b3dec0e7a3cdae7458f6bb69413cfaf78531950a02332ea0fe1030e
+version casx 0.2.15 f1b5a54ea88c45bc066b88f4fbe6659e3c2864b4131ab70713adca10e98101d5
+version geometry 0.2.15 c5c5c790c9a82a62a7a79fa179af6b8875408c23047e7c569f1a0319453fd865
+version python 0.2.15 de256c830b3842929a6829ae6491c6d3854340a4a22f6c4dd7b2b8ea2bc6b098
+version webui 0.2.15 9277a0e0a8be56804562c65370f1118af1729483c3035f92343ebef5f170fc7e
+version mathquest 0.2.15 758f04a39ad78e812017348d4b09c64aefa0d70a9ae74b5dd1adffaf2f9ef51a
+release/MODULES/ANIMA02F.MOD@0x000000: animation 0.2.15 iface modx ABI 1-1 tier 2 kconfig MOD_ANIMATION payload 6484 B crc ok uncommitted built with '0.2.15'
+release/MODULES/CASX02F.MOD@0x000000: casx 0.2.15 iface modx ABI 1-1 tier 2 kconfig MOD_CASX payload 215476 B crc ok uncommitted built with '0.2.15'
+release/MODULES/GEOME02F.MOD@0x000000: geometry 0.2.15 iface modx ABI 1-1 tier 1 kconfig MOD_GEOMETRY payload 32532 B crc ok uncommitted built with '0.2.15'
+release/MODULES/MANUA02F.MOD@0x000000: manual 0.2.15 iface help ABI 1-1 tier 1 kconfig MANUAL_FULL payload 224880 B crc ok uncommitted built with '0.2.15'
+release/MODULES/PYTHO02F.MOD@0x000000: python 0.2.15 iface modx ABI 1-1 tier 1 kconfig MOD_PYTHON payload 328116 B crc ok uncommitted built with '0.2.15'
+release/MODULES/WEBUI02F.MOD@0x000000: webui 0.2.15 iface webui ABI 1-1 tier 1 kconfig MOD_WEBUI payload 697179 B crc ok uncommitted built with '0.2.15'

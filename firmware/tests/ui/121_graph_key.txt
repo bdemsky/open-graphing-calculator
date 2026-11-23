@@ -1,0 +1,79 @@
+# The graph key (app/home.c F1 "graph"; help pages "graph-cells", "yeq", "graph3d-eq"): F1 on the
+# home screen opens the graph editor, 2D (Y=) first; the 2D/3D switch at the top (a tap on the
+# header's "3D" / "2D", F1 "3D" / F1 "2D") changes to the 3D entries (Z=) and back; the graph key
+# there adds a 2D or a 3D graph cell; ENTER on a cell opens the 2D or the 3D graph app on it; the
+# editor of a cell stays of its kind; APPS no longer lists Graph and 3D graph (CATALOG and the
+# console's `app` still open them). Every tier.
+type "2+2\n"
+expect state softkeys "graph|frac|func|mtrx|≈"
+key F1
+expect screen yeq
+expect text 2D
+expect text 3D
+expect state softkeys "3D|window|zoom|trace|graph"
+type "x^2/4"
+screenshot graph_key_2d.png
+# F1: the 3D entries; F1 there: back to the 2D ones, the functions kept
+key F1
+expect screen graph3d_eq
+expect state softkeys "2D|window|view|trace|graph"
+expect text 2D
+screenshot graph_key_3d.png
+key F1
+expect screen yeq
+expect state y1 x^2/4
+# the switch by touch: the header's "3D", then the 3D header's "2D"
+touch tap 305 29
+expect screen graph3d_eq
+touch tap 280 29
+expect screen yeq
+# graph (F5): a 2D graph cell
+key F5
+expect screen home
+expect state history 2
+expect state home_kind graph
+expect state gcell_fn x^2/4
+# the graph key, 3D, a surface, graph: a 3D graph cell
+key CLEAR
+key F1
+expect screen yeq
+key F1
+type "sin(x)*cos(y)"
+key F5
+expect screen home
+expect state history 3
+expect state home_sel 4
+expect state gcell_fn sin(x)*cos(y)
+expect state gcell_view "-60 25 1"
+expect text z1=sin(x)·cos(y)
+# ENTER on a cell: the 3D graph app on the 3D cell, the 2D one on the 2D cell
+key ENTER
+expect screen graph3d
+key HOME
+expect screen home
+expect state home_sel 4
+key UP
+expect state home_sel 2
+key ENTER
+expect screen graph
+# the editor of a 2D cell stays 2D (F1 "3D" says so; the cell is graphed first)
+key F1
+expect screen yeq
+key F1
+expect screen yeq
+key HOME
+expect screen home
+expect state history 3
+# APPS: no Graph, no 3D graph; the console (as CATALOG) still opens them
+key CLEAR
+key APPS
+expect state menu_item Table
+expect notext "3D graph"
+key CLEAR
+app settings
+app graph
+expect screen graph
+app graph3d
+expect screen graph3d
+key HOME
+expect state history 3

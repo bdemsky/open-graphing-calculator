@@ -1,0 +1,25 @@
+# Sparkle Town (CR-06 of the code review): a tap on the right bubble picks it as the finger lands; the release
+# that follows is not "on with the next order" -- the cheer is seen
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 2
+mq engine stop
+mq skill 24 0
+mq step 30
+expect state mq_answer 1/4
+touch 149 198 down
+mq step 1
+expect state mq_moment cheer
+touch 149 198 up
+mq step 1
+expect state mq_moment cheer
+mq step 5
+expect state mq_moment cheer

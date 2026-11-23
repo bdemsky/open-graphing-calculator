@@ -1,0 +1,57 @@
+# Sparkle Town's name field: the calculator's ALPHA letters type into it (ALPHA lower case, ALPHA
+# ALPHA upper case, the first letter a capital), DEL deletes, ENTER confirms, CLEAR cancels; a computer
+# keyboard's characters (console `kbd`: the web page's printable keys, MODX_EV_TEXT) with space, - and ';
+# names up to 16 characters, which fit wherever they are drawn.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+expect state mq_scene title
+# CLEAR on the name screen: back to the title, nobody made
+touch tap 85 130
+expect state mq_scene name
+type "ab"
+expect text Ab_
+key CLEAR
+expect state mq_scene title
+expect notext Ab
+# ALPHA typing: "mia" -> Mia; SHIFT case kept ("MIa"); DEL takes the last letter back
+touch tap 85 130
+expect state mq_scene name
+type "miA"
+expect text MiA_
+key DEL
+expect text Mi_
+type "a"
+expect text Mia_
+# a buddy by touch, then ENTER confirms
+touch tap 23 58
+key ENTER
+expect state mq_player Mia
+key F5
+key CLEAR
+expect state mq_scene map
+expect text Mia's town
+# the second player from a computer keyboard: 16 characters with a hyphen and an apostrophe; the 17th is refused
+app mathquest
+expect state mq_scene title
+expect text Mia
+touch tap 235 130
+expect state mq_scene name
+kbd Zoe-Mae_O'Brien
+expect text Zoe-Mae O'Brien_
+kbd XY
+expect text Zoe-Mae O'BrienX_
+key DEL
+expect text Zoe-Mae O'Brien_
+key ENTER
+expect state mq_player "Zoe-Mae O'Brien"
+key F5
+key CLEAR
+expect state mq_scene map
+expect text Zoe-Mae O'Brien's
+app mathquest
+expect text Zoe-Mae O'Brien

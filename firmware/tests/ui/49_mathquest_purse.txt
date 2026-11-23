@@ -1,0 +1,154 @@
+# Sparkle Town's purse and the shop's counter (modules/mathquest/mq_purse.c): before she counts coins a tap
+# buys; then she pays with coins -- tapped onto the counter, "pay!"; "help me pay" rings a working set and
+# slides wrong coins back; paying over with a dollar and typing the change; the picky cashier's bonus and
+# grumble with a swap. Screenshots mathquest_purse_*.png.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+expect text installed and verified
+key CLEAR
+app mathquest
+expect state mq_scene title
+mq new Mia 2
+mq engine stop
+mq seed 21
+mq fun off
+mq fun 36000
+mq coins 300
+expect state mq_coins 300
+expect state mq_purse_shown $3.00
+# the town's top bar: her purse
+mq go map
+mq step 2
+screenshot mathquest_purse_town.png
+# below the coins level a tap buys: the heart bed's card, then "buy!"
+key F1
+expect state mq_scene room
+key F1
+expect state mq_scene shop
+touch tap 40 95
+mq step 2
+touch tap 188 153
+expect state mq_pay off
+expect state mq_coins 270
+key CLEAR
+# counting coins (dimes and pennies): the counter opens on "buy!"
+mq pay setup 0 0
+mq pay open Heart_chair
+expect state mq_pay "count pay"
+expect state mq_pay_price "12 0 0"
+mq step 2
+screenshot mathquest_purse_counter.png
+# a tap on the dime pile, then twice on the pennies: onto the counter (no total shown: she counts)
+touch tap 187 160
+touch tap 289 160
+touch tap 289 160
+expect state mq_pay_counter "2 0 1 0 0 0"
+mq step 2
+screenshot mathquest_purse_coins.png
+# "pay!"
+touch tap 270 206
+expect state mq_pay "count thanks"
+expect state mq_coins 258
+mq step 2
+screenshot mathquest_purse_thanks.png
+touch tap 270 206
+expect state mq_pay off
+# a wrong payment, then "help me pay": the wrong coins slide back, the ringed ones make the price
+mq pay open Star_lamp
+mq pay put p
+mq pay put p
+mq pay put p
+mq pay go
+expect state mq_pay "count pay"
+touch tap 68 206
+mq step 4
+screenshot mathquest_purse_help.png
+expect state mq_pay_counter "0 0 0 0 0 0"
+expect state mq_pay_help "0 0 2 0 0 0"
+mq pay put d
+mq pay put d
+mq pay go
+expect state mq_pay "count thanks"
+expect state mq_coins 238
+mq pay done
+# paying over with a dollar and typing the change (making change, from $1)
+mq pay setup 2 0 0
+mq pay open Bookshelf
+expect state mq_pay "change pay"
+mq pay put 1
+mq pay go
+expect state mq_pay "change change"
+key 7
+key 5
+mq step 2
+screenshot mathquest_purse_change.png
+key ENTER
+expect state mq_pay "change thanks"
+expect state mq_pay_price "25 100 75"
+expect state mq_coins 213
+mq step 2
+screenshot mathquest_purse_changed.png
+mq pay done
+# the picky cashier: the fewest coins earn a bonus sparkle
+mq pay setup 3 5 -1 1
+mq pay open Bean_bag
+expect state mq_pay "picky pay"
+mq step 2
+screenshot mathquest_purse_picky.png
+expect state mq_pay_price "14 0 0"
+mq pay put d
+mq pay put p
+mq pay put p
+mq pay put p
+mq pay put p
+mq pay go
+expect state mq_pay "picky thanks"
+mq step 2
+screenshot mathquest_purse_bonus.png
+mq pay done
+# ... too many coins: a grumble, the swap, and it is hers anyway
+mq coins 300
+mq pay setup 3 5 -1 1
+mq pay open Little_desk
+expect state mq_pay "picky pay"
+expect state mq_pay_price "16 0 0"
+mq pay put n
+mq pay put n
+mq pay put n
+mq pay put p
+mq pay go
+expect state mq_pay "picky swap"
+mq step 2
+screenshot mathquest_purse_grumpy.png
+mq pay swap
+expect state mq_pay "picky thanks"
+expect state mq_coins 284
+mq pay done
+expect state mq_pay off
+# dear things ($1 to $10): the canopy bed ($4.50) counted out in dollar bills and coins; the pink piano
+# ($3.75) paid over with a $5 bill, the change typed ($1.25)
+mq coins 2000
+mq pay setup 3 0 -1 1
+mq pay open Canopy_bed
+expect state mq_pay "count pay"
+mq step 2
+screenshot mathquest_purse_dear.png
+mq pay done
+mq pay setup 3 0 3 0
+mq pay open Pink_piano
+expect state mq_pay "change pay"
+mq pay put 5
+mq pay go
+expect state mq_pay "change change"
+key 1
+key 2
+key 5
+mq step 2
+screenshot mathquest_purse_dear_change.png
+key ENTER
+expect state mq_pay "change thanks"
+mq pay done
+

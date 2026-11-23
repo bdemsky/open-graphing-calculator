@@ -1,0 +1,74 @@
+%% Geometry app (app/geo_ui.c screen and tools, app/geo_kernel.c constructions, app/geo_io.c files)
+
+@page geometry Geometry
+{apps} > Geometry is dynamic geometry: build points, lines, circles and polygons from each other, then drag a point and everything built from it follows, measurements included.
+
+- The red cross is the cursor: move it with {▲} {▼} {◀} {▶}, press {enter} to use the current tool there. A tap does the same at the tapped spot.
+- The bar at the top names the tool and what it needs next; tools with several steps add the step and what is picked so far (`Angle: vertex (step 2/3, picked B)`). What the tool would take is drawn in orange, and its value (coordinates, equation, length) is shown at the bottom left; the cursor position is at the bottom right.
+- Soft keys: {F1} move, {F2} points, {F3} draw, {F4} constr, {F5} measure (the tool menus, see [[geometry-tools]], [[geometry-transform]], [[geometry-measure]]); {shift}: undo, delete, view, file, hide.
+- Moving: with the move tool press {enter} on a free point (blue) or a point on a path, move it with the arrows and press {enter} again to drop it. With touch, drag any blue point in any tool; drag elsewhere to pan, pinch to zoom. `+` and `−` zoom about the cursor.
+- Every step can be undone ({shift} {F1}); a whole drag is one step. {⌫} deletes the object under the cursor and everything built from it.
+- {clear} closes the number prompt, drops a half-made selection, goes back to the move tool, and finally leaves the app. The construction, view and options are kept when the calculator is switched off.
+
+## View menu ({shift} {F3})
+- Axes, grid and snap to grid (on at first): with snap, free points land on the grid lines.
+- Y= graphs: draws the enabled functions of [[yeq|Y=]]. Points can be put on a graph and graphs can be intersected with lines, circles and each other.
+- Show on GRAPH: draws the construction on the [[graph]] screen too (trace visits its points).
+- Zoom in, zoom out, standard view (origin in the middle, 20 pixels per unit), show hidden objects.
+
+## Names and values
+Points are named A, B, C ..., other figures a, b, c ..., measurements m1, m2 .... Images of transformations get a prime: A'. An object whose construction has no solution (parallel lines do not meet, a tangent from inside a circle) is undefined and disappears until it has a solution again.
+
+See [[geometry-files]] for saving constructions on the microSD card.
+
+@page geometry-tools Geometry: construction tools
+Steps that need a point take an existing point, or make one: at the intersection of two curves under the cursor, on a line, circle, polygon or graph under the cursor (the point then stays on it), else a free point.
+
+## {F2} points
+- Point: a free point, a point on an object or an intersection, as above.
+- Point on object: a point that can only move along the chosen path.
+- Intersection: two curves; the intersection nearest the cursor, or all of them if none is near.
+- Midpoint: a segment, or two points.
+
+## {F3} draw
+- Line, segment, ray: two points (a ray starts at the first).
+- Polygon: the vertices in order, then the first vertex again (up to 12).
+- Regular polygon: two vertices, then the number of sides (3 to 12); the polygon lies to the left of the first edge.
+- Circle: centre and a point on it; circle through three points.
+
+## {F4} constr
+- Perpendicular line, parallel line: a line, then the point it passes through.
+- Perpendicular bisector: a segment or two points. Angle bisector: point, vertex, point.
+- Tangents: a point, then a circle: the two tangents from the point (one if it lies on the circle).
+- Transformations and loci: see [[geometry-transform]].
+
+@page geometry-transform Geometry: transformations and loci
+In {F4} constr. The image of an object depends on the object and on the transformation's parts, so it moves with both. A polygon's image is the polygon of its vertices' images.
+
+- Reflect: the object, then a mirror line (or a point: point reflection).
+- Rotate: the object, the centre, then the angle in degrees (counterclockwise; any expression such as `360/7`).
+- Translate: the object, then the start and end of the translation vector.
+- Dilate: the object, the centre, then the factor (negative factors go through the centre).
+- Locus: a point, then a point on a path that it depends on. The curve the first point traces while the second runs along its path is drawn in magenta and follows later changes (e.g. the midpoint of a fixed point and a point on a circle traces a circle).
+
+@page geometry-measure Geometry: measurements
+{F5} measure. Measurements are listed at the top left and update while points are dragged.
+
+- Length / distance: a segment (its length), circle (circumference), polygon (perimeter), or two points (their distance).
+- Angle: point, vertex, point: 0 to 180 degrees.
+- Area: a polygon or a circle.
+- Slope: a line, segment or ray (undefined when vertical).
+- Equation: a line (`y = mx + b`, or `x = c` when vertical) or a circle (`(x - h)² + (y - k)² = r²`).
+- Coordinates: a point.
+
+To remove a measurement, use the delete tool ({shift} {F2}) and tap it in the list (or put the cursor on its row and press {enter}).
+
+{menu} {F3} copies a measurement's value (the one whose row is under the cursor, else the newest) to paste it elsewhere, for example into the [[sheet|spreadsheet]]; see [[clipboard]].
+
+@page geometry-files Geometry: files
+{shift} {F4} file:
+- New construction: deletes everything (undo brings it back).
+- Save to microSD: type a name (letters and digits, up to 8; {alpha} for letters) and press {enter}. The file is /CALC/GEO/NAME.GEO.
+- Open from microSD: lists the saved constructions; choosing one replaces the current construction and view.
+
+The current construction is also saved with the session, so it survives switching off without a card.

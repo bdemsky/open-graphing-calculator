@@ -1,0 +1,15 @@
+# Math Quest when its code module is not there (app/mquest_core.c): APPS > Math
+# Quest says how to get it and nothing else changes. The module is never part of
+# the release or the factory content (MOD_MATHQUEST is off in every tier); the
+# core tier has no modules at all.
+ifcfg CONTENT_QSPI modx off mathquest
+app mathquest
+expect screen message
+expect text MATH QUEST NOT INSTALLED
+ifcfg CONTENT_QSPI expect text Install the Math Quest module (Memory > Modules).
+ifcfg !CONTENT_QSPI expect text not part of this firmware
+key CLEAR
+expect screen home
+ifcfg CONTENT_QSPI expect state mq_module "Install the Math Quest module (Memory > Modules)."
+ifcfg !CONTENT_QSPI expect state mq_module "core tier"
+ifcfg CONTENT_QSPI modx on mathquest

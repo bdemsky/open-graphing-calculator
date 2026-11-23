@@ -1,0 +1,166 @@
+# Content modules (docs/QSPI_CONTENT.md): the full manual is the "manual" module in the QSPI
+# module store. Valid, empty, incompatible ("stale") and damaged content; the help fallback
+# screens; installing from the microSD module library (Memory > Install content, the boot
+# offer, Memory > Modules); a power cut in the middle of an install.
+requirecfg CONTENT_QSPI
+# valid: the simulator starts with the factory content
+expect state module_manual ok
+manual graph
+expect state help_source module
+expect state help_missing 0
+expect text GRAPH
+key CLEAR
+# a library copy on the card (release name: version in the 8.3 name, MANUA010.MOD = manual
+# 0.1.0, tools/mkmodule.py filename), then an empty store
+fs insert 64
+fs format
+module export manual /CALC/MODULES/{mod:manual}
+fs ls /CALC/MODULES
+module format
+reboot
+# empty: the boot offers the card's manual; say no
+expect state menu "Install the manual from microSD?"
+screenshot modules_boot_offer.png
+key CLEAR
+expect screen home
+expect state module_manual absent
+manual graph
+expect state help_missing 1
+expect state help_topic graph
+expect text Manual not installed: see Memory > Install
+expect text Built-in pages
+screenshot help_not_installed.png
+# the built-in pages still work, links included
+key RIGHT ENTER
+expect state help_missing 0
+expect state help_source builtin
+key CLEAR
+manual index
+expect state help_source builtin
+key CLEAR
+# About says so
+app mem
+key ENTER
+expect text not installed
+key F2
+expect text Devices
+key CLEAR
+# Memory > Install content: the newest compatible version from the card
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "Install content"
+key ENTER
+expect screen message
+expect text installed and verified
+screenshot modules_installed.png
+key CLEAR
+expect state module_manual ok
+expect state module_manual_version {ver:manual}
+manual graph
+expect state help_source module
+key CLEAR
+# again: nothing to do
+module installall
+expect text already installed
+key CLEAR
+# a power cut in the middle of reinstalling it: the version in use stays in use
+module fail 40
+module install /CALC/MODULES/{mod:manual}
+expect text INSTALL FAILED
+key CLEAR
+module fail -1
+reboot
+expect state module_manual ok
+manual graph
+expect state help_source module
+key CLEAR
+# a complete reinstall keeps the previous copy; damage the active one: the other takes over
+module install /CALC/MODULES/{mod:manual}
+key CLEAR
+module list
+module corrupt manual
+reboot
+manual graph
+expect state help_source module
+key CLEAR
+expect state module_manual ok
+# damage that one too: help falls back and says why
+module corrupt manual
+reboot
+manual graph
+expect state help_missing 1
+key CLEAR
+expect state module_manual corrupt
+manual graph
+expect text damaged
+screenshot help_manual_damaged.png
+key CLEAR
+# Memory > Modules: every version on the card is listed under the installed one; pick one
+module install /CALC/MODULES/{mod:manual}
+key CLEAR
+module export manual /CALC/MODULES/MANUA999.MOD 9.9.9
+fs ls /CALC/MODULES
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item Modules
+key ENTER
+expect state menu MODULES
+expect text "manual {ver:manual} (ok)"
+expect text "card 9.9.9: upgrade"
+expect text "card {ver:manual}: reinstall"
+screenshot modules_menu.png
+key DOWN ENTER
+expect text "Install manual 9.9.9 (upgrade)?"
+key F1
+expect text installed and verified
+key CLEAR
+expect state module_manual ok
+expect state module_manual_version 9.9.9
+# remove it (the module's own row), then install the older version from the card
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state menu MODULES
+expect text "card {ver:manual}: downgrade"
+key ENTER
+expect state menu MODULE
+key DOWN DOWN ENTER
+expect text removed
+key CLEAR
+expect state module_manual absent
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state menu MODULES
+expect text "manual: not installed"
+expect text "card {ver:manual}: new"
+screenshot modules_card.png
+key DOWN DOWN ENTER
+key F1
+expect text installed and verified
+key CLEAR
+expect state module_manual ok
+expect state module_manual_version {ver:manual}
+# Install content takes the newest compatible version on the card
+module installall
+expect text installed and verified
+key CLEAR
+expect state module_manual_version 9.9.9
+module revert manual
+expect state module_manual_version {ver:manual}
+# stale: a firmware whose help interface changed rejects the module (and help falls back)
+module coreabi help 2
+expect state module_manual abi
+manual graph
+expect state help_missing 1
+expect text incompatible firmware
+screenshot help_manual_incompatible.png
+key CLEAR
+module coreabi help 1
+expect state module_manual ok
+# Remove content
+app mem
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state menu_item "Remove content"
+key ENTER F1
+expect text All content modules were removed.
+key CLEAR
+expect state module_manual absent

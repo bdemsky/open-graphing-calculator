@@ -1,0 +1,33 @@
+# Python
+.venv/
+__pycache__/
+
+# Large third-party tools/data (re-fetchable; see README)
+tools/pico-sdk/
+tools/jlcdb/
+tools/STM32_open_pin_data/
+tools/freerouting.jar
+tools/emsdk/
+tools/giac/
+
+# KiCad transient files
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.lck
+\#auto_saved_files\#
+_autosave-*
+
+# OS
+.DS_Store
+
+# Generated build outputs
+hardware/build/
+enclosure/out/
+firmware/build/
+.history/
+.claude/
+firmware/cas/build/
+
+# Third-party panel datasheets (EastRising, Sitronix, FocalTech): kept local, not published
+hardware/datasheets/panel/

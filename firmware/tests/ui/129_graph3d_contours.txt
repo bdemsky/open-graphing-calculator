@@ -1,0 +1,190 @@
+# 3D graphing: contours (help page graph3d-contours). VIEW menu "Contours" draws the level curves on
+# the z = f(x,y) surfaces in the 3D view; "Contour map" shows them flat in the x-y plane, filled
+# with the height colours (shaded style) or as lines (wireframe), with a key of the level values;
+# the number of levels is the 3D window's "levels"; parametric surfaces and space curves get none;
+# the settings survive a power cycle and travel with a 3D graph cell. Started away from the home
+# screen, like tests/ui/35_graph3d.txt.
+app settings
+app graph3d
+expect state g3d_contours 0
+expect state g3d_map 0
+expect state g3d_levels 9
+key F1
+type "x^2+y^2"
+key F5
+expect screen graph3d
+expect state g3d_contour_segs 0
+# VIEW menu: Contours on (item 6); zfit gives z 0..50: nine circles
+key F3
+expect screen menu
+expect state menu "3D VIEW"
+key 6
+expect screen graph3d
+expect state g3d_contours 1
+key SHIFT F4
+expect state g3d_window -5,5,-5,5,0,50
+expect state g3d_contour_segs 798
+screenshot g3d_contours_bowl.png
+# colour by height, wireframe: the curves alone in the height colours
+key SHIFT F3 SHIFT F2
+expect state g3d_style wire
+expect state g3d_contour_segs 798
+screenshot g3d_contours_wire.png
+key SHIFT F2 SHIFT F3
+# the contour map (item 5): filled bands, frame values, the key of the levels
+key F3 5
+expect state g3d_map 1
+expect state g3d_contour_segs 476
+expect text "z"
+expect text "45"
+screenshot g3d_contour_map_bowl.png
+# trace works in the map; an arrow then moves the cursor, not the view
+key F4
+expect state g3d_trace "Z1 x=0 y=0 z=0"
+key RIGHT RIGHT RIGHT
+expect state g3d_trace "Z1 x=1.25 y=0 z=1.5625"
+expect state g3d_map 1
+screenshot g3d_contour_map_trace.png
+key CLEAR
+# turning leaves the map: back to the 3D view, turned from where it was
+key RIGHT
+expect state g3d_map 0
+expect state g3d_azim -45
+key F3 1
+expect state g3d_azim -60
+# the number of levels: the 3D window's last field (UP from the first field wraps to it)
+key F2
+expect screen graph3d_win
+key UP
+type "40"
+key ENTER
+expect text "ERR: levels must be 1 to 30"
+key CLEAR
+type "4"
+key ENTER
+expect state g3d_levels 4
+key F5
+expect screen graph3d
+expect state g3d_contour_segs 360
+key F2 UP
+type "9"
+key ENTER
+# a saddle: hyperbolas, filled map and wireframe map
+key F1
+key CLEAR
+type "(x^2-y^2)/5"
+key F5
+key SHIFT F4
+expect state g3d_window -5,5,-5,5,-5,5
+screenshot g3d_contours_saddle.png
+key F3 5
+screenshot g3d_contour_map_saddle.png
+key SHIFT F2
+screenshot g3d_contour_map_saddle_wire.png
+key SHIFT F2
+# sin(x)*cos(y): the map of its hills and valleys
+key F1
+key CLEAR
+type "sin(x)*cos(y)"
+key F5
+key SHIFT F4
+screenshot g3d_contour_map_sincos.png
+key F3 1
+screenshot g3d_contours_sincos.png
+# a hemisphere over the unit disc in a -1..1 window: circles out to the rim
+key F2
+type "-1"
+key ENTER
+type "1"
+key ENTER
+type "-1"
+key ENTER
+type "1"
+key ENTER
+type "-1"
+key ENTER
+type "1"
+key ENTER
+expect state g3d_window -1,1,-1,1,-1,1
+key F1
+key CLEAR
+type "sqrt(1-x^2-y^2)"
+key F5
+key SHIFT F3
+screenshot g3d_contours_hemisphere.png
+key SHIFT F3
+key F3 5
+screenshot g3d_contour_map_hemisphere.png
+# a parametric surface gets no contours: listed dimmed in the map, skipped by trace
+key F1
+key DOWN
+key SHIFT F1
+expect state g3d_e2_kind surf
+type "cos(u)*sin(v)/2"
+key DOWN
+type "sin(u)*sin(v)/2"
+key DOWN
+type "cos(v)/2"
+key F5
+expect state g3d_drawn 2
+expect state g3d_map 1
+expect text Z2
+screenshot g3d_contour_map_psurf.png
+key F4 F4
+expect statecontains g3d_trace "Z1 x="
+key CLEAR
+key F3 1
+key F3 6
+expect state g3d_contours 0
+expect state g3d_contour_segs 0
+key F3 6
+expect state g3d_contours 1
+screenshot g3d_contours_psurf.png
+# the settings survive a power cycle (saved state "graph3d")
+key F3 5
+key F2
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state g3d_win_sel levels=
+type "7"
+key ENTER
+key F5
+key SHIFT ON
+key ON
+app settings
+app graph3d
+expect state g3d_contours 1
+expect state g3d_map 1
+expect state g3d_levels 7
+expect state g3d_e1_1 sqrt(1-x^2-y^2)
+screenshot g3d_contour_map_restored.png
+# dark theme
+key SHIFT F3
+setmode THEME Dark
+app graph3d
+screenshot g3d_contour_map_dark.png
+setmode THEME Light
+app graph3d
+key SHIFT F3
+# a 3D graph cell keeps them: Insert 3D graph on the home screen makes a cell of the 3D graph,
+# contour map included (its spec's "c" line)
+key HOME
+type "1+1\n"
+key MENU
+key UP
+expect state menu_item "Insert 3D graph"
+key ENTER
+expect screen home
+expect state home_kind graph
+expect state gcell_fn sqrt(1-x^2-y^2)
+expect state gcell_contours "1 1 7"
+screenshot g3d_contour_map_cell.png
+# turning the cell (an arrow) brings back its 3D view, contours still on
+key RIGHT
+expect state gcell_contours "1 0 7"
+expect state gcell_view "-45 25 1"
+screenshot g3d_contours_cell.png
+key SHIFT ON
+key ON
+expect state home_kind graph
+expect state gcell_contours "1 0 7"
+expect state gcell_view "-45 25 1"

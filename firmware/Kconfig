@@ -1,0 +1,407 @@
+# Build configuration of the Open Graphing Calculator firmware (Kconfig syntax,
+# processed by the vendored kconfiglib: tools/kconfig.py).
+#
+#   make menuconfig            interactive menu for $(BUILD)/.config
+#   make defconfig TIER=x      $(BUILD)/.config from configs/x_defconfig
+#   make savedefconfig         minimal defconfig of the current .config -> $(BUILD)/defconfig
+#   make fw TIER=core|standard|advanced    shorthand: build with that defconfig
+#
+# The resulting .config is included by the Makefile (CONFIG_x variables) and
+# turned into $(BUILD)/gen/autoconf.h (#define CONFIG_x) for the C code. Where
+# things are placed (internal flash or the QSPI module store) follows from the
+# options; the build checks each region against FLASH_BUDGET_PCT.
+# Design: docs/QSPI_CONTENT.md.
+
+mainmenu "Open Graphing Calculator firmware configuration"
+
+menu "Content tier"
+
+choice
+	prompt "Where large content lives"
+	default CONTENT_QSPI
+
+config CONTENT_INTERNAL
+	bool "Internal flash only (core / rollback tier)"
+	help
+	  Everything the firmware uses is in the two internal flash banks:
+	  the CAS and the manual (full or essentials, see "Manual"). No
+	  QSPI modules are used, so this build works with a dead QSPI chip
+	  and can be flashed with USB DFU alone. The rollback build.
+
+config CONTENT_QSPI
+	bool "QSPI module store (standard and advanced tiers)"
+	help
+	  The full manual (and, in the advanced tier, CAS extension
+	  modules) are separate modules installed into the QSPI flash
+	  (core/modstore.h). The firmware boots and works without them;
+	  each installed and compatible module enables its feature.
+
+endchoice
+
+config MODULE_SD_OFFER
+	bool "Offer to install missing modules from microSD at start-up"
+	depends on CONTENT_QSPI
+	default y
+
+config CONSOLE_MODULE_UPLOAD
+	bool "Console commands to upload and manage modules (module ...)"
+	depends on CONTENT_QSPI
+	default y
+	help
+	  `module begin/put/end` installs a module sent over the debug
+	  console (tools/calcctl.py --upload-module): the path that works
+	  when the microSD card does not.
+
+menu "Code modules"
+	depends on CONTENT_QSPI
+
+config MOD_ANIMATION
+	bool "Animation module in the factory content (advanced tier)"
+	help
+	  The Animation code module (modules/animation, app/modx.h,
+	  docs/QSPI_CONTENT.md section 12): play / pause slider variables
+	  and comet drawings on the 2D graph, time-varying 3D surfaces,
+	  GIF recording. Its code runs in place from the QSPI; internal
+	  flash only holds the API table and the graph hooks. Every QSPI
+	  tier builds the module file (ANIMAnnn.MOD, make release puts it
+	  in MODULES/) and can install it from the microSD card; this
+	  option also puts it into the store image calc_qspi.bin (the
+	  simulators' factory content), so the calculator ships with it.
+
+config MOD_CASX
+	bool "Advanced CAS module in the factory content (advanced tier)"
+	depends on CAS_SRC
+	help
+	  The advanced CAS extension (cas/ext/adv, modules/casx,
+	  cas/src/casx.h, docs/QSPI_CONTENT.md 12.6): number theory,
+	  combinatorics and list statistics (factorial2, pochhammer,
+	  bernoulli, fibonacci, stirling1/2, partition, primroot,
+	  contfrac, quartile1/3, mode, stddevp, variancep, linreg,
+	  factormod, msolve, union, intersect, setdiff, gramschmidt) and
+	  matrix functions (expm, sinm, cosm, sqrtm, jordan, minpoly) and
+	  rsolve. Its code runs in place from the QSPI and registers the
+	  commands with the CAS when one is first used; without it they
+	  report "needs the advanced CAS module (Memory > Modules)". Every
+	  QSPI tier builds the module file (CASXnnn.MOD, in MODULES/ of the
+	  release) and can install it from the microSD card; this option
+	  also puts it into the store image. The core tier links the same
+	  code into flash bank 2 instead.
+
+config CASX_CORE_SCI
+	bool "Science extension commands in the core tier's flash"
+	depends on CONTENT_INTERNAL && CAS_SRC
+	help
+	  The core tier links the advanced CAS extension into flash bank 2.
+	  Its science part (cas/ext/sci: grad/divergence/curl/laplacian in
+	  curvilinear coordinates, potential, vpotential, lineint, surfint,
+	  flux, pdesolve, pdenum, gridval) and algebra part (cas/ext/alg:
+	  modular multivariate gcd, multivariate factorisation by Hensel
+	  lifting) are left out by default to keep bank 2 under 78 %; those
+	  commands then report "needs the advanced CAS module" and gcd /
+	  factor use the core's own methods. The QSPI tiers always have them
+	  in the casx module.
+
+config MOD_MATHQUEST
+	bool "Math Quest module in the factory content"
+	help
+	  Math Quest (modules/mathquest, app/mquest_core.c,
+	  docs/MATHQUEST.md): math games for grades 3 and 4 (every
+	  Common Core standard of both grades, fact fluency with
+	  spaced repetition, worked examples, theme packs). It is kept
+	  out of the release: `make mathquest-module` builds
+	  MATHQnnn.MOD, which is installed from the microSD card
+	  (Memory > Modules). Every QSPI tier has the small core side
+	  (APPS > Math Quest, which says how to install it when it is
+	  missing). This option also puts the module into the store
+	  image (the simulators' factory content). Off in every tier.
+
+config MOD_GEOMETRY
+	bool "Geometry module in the factory content"
+	default y
+	help
+	  The Geometry app (modules/geometry, app/geo_core.h,
+	  docs/QSPI_CONTENT.md 12.7): interactive constructions, measurements,
+	  transformations, loci, constructions on GRAPH and on the microSD
+	  card. Its code (about 30 KB) runs in place from the QSPI;
+	  internal flash keeps the screen, menus, saved construction and
+	  GRAPH overlay objects, which forward to it. Every QSPI tier builds
+	  the module file (GEOMEnnn.MOD, in MODULES/ of the release); this
+	  option also puts it into the store image calc_qspi.bin, so the
+	  calculator ships with it. Without the module APPS > Geometry says
+	  how to install it.
+
+config MOD_PYTHON
+	bool "Python module in the factory content"
+	default y
+	help
+	  Python (modules/python, app/py_core.h, docs/QSPI_CONTENT.md
+	  12.8): MicroPython with the `calc` library (the CAS from
+	  Python: expressions, solve, integrate, plot) and the Python
+	  console (APPS > Python, console `py` / `pyexec`). The first
+	  code-load module: its image is copied into an executable SDRAM
+	  area (MODX_CODE_KB) and relocated when it binds, so MicroPython
+	  keeps its static data. Every QSPI tier builds the module file
+	  (PYTHOnnn.MOD, in MODULES/ of the release); this option also
+	  puts it into the store image, so the calculator ships with it.
+
+config MOD_WEBUI
+	bool "Browser notebook page in the factory content"
+	default y
+	help
+	  The browser notebook (web/notebook, README.md "Browser
+	  notebook"): one self-contained HTML page that runs Python, CAS
+	  and graph cells on the calculator over the USB serial port
+	  (Chrome or Edge) and shows its screen. A data module ("webui",
+	  interface webui ABI 1): the CALC drive serves its payload as
+	  CALCULATOR.HTML, read from the QSPI as the computer reads it.
+	  Every QSPI tier builds the module file (WEBUnnn.MOD, in MODULES/
+	  of the release; dropping it on the CALC drive installs it); this
+	  option also puts it into the store image. Internal flash only
+	  holds the drive entry.
+
+config PYTHON_HEAP_KB
+	int "Python heap (KB of SDRAM)"
+	default 2048
+	range 256 16384
+	help
+	  The MicroPython garbage-collected heap: the Python module's RW
+	  block, taken from the arena at boot (the CAS has that much
+	  less) in every QSPI tier, whether the module is installed or
+	  not.
+
+config PYTHON_STACK_KB
+	int "C stack Python may use (KB of the 96 KB main stack)"
+	default 40
+	range 16 64
+	help
+	  Deeper recursion raises RuntimeError ("maximum recursion depth
+	  exceeded") instead of overflowing the main stack. A CAS call made
+	  from Python gets the CAS's usual limit minus what Python used.
+
+config MODX_CODE_KB
+	int "SDRAM for the code of code-load modules (KB, a power of two)"
+	default 1024
+	help
+	  The last part of the SDRAM arena, aligned to its size and made
+	  executable by one MPU region, into which code-load modules
+	  (Python) are copied when they bind.
+
+endmenu
+
+config GEOMETRY_BUILTIN
+	bool "Geometry app linked into the firmware (core tier)"
+	depends on CONTENT_INTERNAL
+	help
+	  The core tier has no module store: with this option the geometry
+	  module's sources are linked into flash bank 2 and bind from there
+	  (app/modx.c), the same code and tables as the QSPI module. Off by
+	  default: the app (about 38 KB) and USB do not both fit in the
+	  rollback image, and USB (console, firmware update, the drives) is
+	  what a rollback needs; turn USB off to make room. Without it APPS >
+	  Geometry says it is not part of this firmware (the saved
+	  construction is kept).
+
+config GEOMETRY
+	def_bool MOD_GEOMETRY || GEOMETRY_BUILTIN
+	help
+	  The Geometry app is available (tests: ifcfg GEOMETRY).
+
+config PYTHON
+	def_bool CONTENT_QSPI
+	help
+	  The firmware can run the Python module (every QSPI tier: the
+	  heap, the code area, APPS > Python). Tests: ifcfg PYTHON.
+
+endmenu
+
+menu "Manual"
+
+choice
+	prompt "Help manual"
+	default MANUAL_FULL
+
+config MANUAL_FULL
+	bool "Full manual"
+	help
+	  With CONTENT_INTERNAL the whole compressed manual is in flash
+	  bank 2 (~110 KB); with CONTENT_QSPI it is the "manual" module
+	  (MANUA010.MOD for 0.1.0) and only the essential pages stay in flash.
+
+config MANUAL_ESSENTIALS
+	bool "Essential pages only"
+	help
+	  Only the @essentials pages (help/content.txt) are built in and no
+	  manual module is produced. For an internal-only build that has to
+	  shrink; a QSPI build still uses a manual module if one is
+	  installed.
+
+endchoice
+
+endmenu
+
+menu "CAS"
+
+choice
+	prompt "CAS implementation"
+	default CAS_SRC
+
+config CAS_SRC
+	bool "Real CAS library from cas/src"
+
+config CAS_STUB
+	bool "Numeric stand-in (cas_stub)"
+
+config CAS_LIB
+	bool "Prebuilt libcas.a (CAS_LIB_HOST / CAS_LIB_FW)"
+
+endchoice
+
+config CAS_FORMS
+	bool "Alternate forms (forms command, REWRITE > forms browser)"
+	depends on CAS_SRC
+	default y
+	help
+	  The forms() command (cas/src/forms.c, about 4 KB in flash bank 2)
+	  lists equivalent forms of an expression, and the REWRITE menu's
+	  first item opens the forms browser (app/forms_ui.c). Without it the
+	  menu's first item is simplify and forms() reports that it is not
+	  in this build. Off in the core tier, whose bank 2 is full.
+
+config CAS_EXT
+	bool "CAS extension modules (advanced tier)"
+	depends on CONTENT_QSPI && CAS_SRC
+	help
+	  The "cas" module interface (phase 2, docs/QSPI_CONTENT.md):
+	  extension modules in the QSPI register functions and rewrite rules
+	  through a versioned table; a command whose module is not installed
+	  reports "needs advanced content". Selecting this marks the build as
+	  the advanced tier; the modules below are placeholders.
+
+menu "Extension modules (phase 2: not implemented yet)"
+	depends on CAS_EXT
+
+config CASX_SPECIAL
+	bool "Special functions (Bessel, elliptic, hypergeometric, polylog, ...)"
+	help
+	  Placeholder. Selecting a module that has no sources yet stops the
+	  build with an error.
+
+config CASX_INTEGRATE
+	bool "Extended integration (rule base as data, Rubi-style)"
+	help
+	  Placeholder.
+
+config CASX_SUMS
+	bool "Sums, products and recurrences"
+	help
+	  Placeholder.
+
+config CASX_NUMTHEORY
+	bool "Number theory and combinatorics (more than the casx module)"
+	help
+	  Placeholder. The first commands of this kind are in the advanced
+	  CAS module (MOD_CASX).
+
+config CASX_ASSUME
+	bool "Assumption system"
+	help
+	  Placeholder.
+
+config CASX_SPARSEPOLY
+	bool "Sparse multivariate polynomials, Groebner bases"
+	help
+	  Placeholder.
+
+config CASX_LINALG
+	bool "Extended linear algebra (decompositions, exact eigenproblems)"
+	help
+	  Placeholder.
+
+config CASX_STATS
+	bool "Statistics and distributions"
+	help
+	  Placeholder.
+
+config CASX_TRANSFORMS
+	bool "Integral transforms (Laplace, Fourier, Z)"
+	help
+	  Placeholder.
+
+config CASX_UNITSDB
+	bool "Large units and physical constants database (data module)"
+	help
+	  Placeholder.
+
+endmenu
+
+endmenu
+
+menu "Recovery"
+
+config SAFEMODE_CRASHES
+	int "Unfinished boots in a row that start safe mode"
+	range 2 10
+	default 3
+	help
+	  core/safemode.h. Holding ON and CLEAR together at power-on (for
+	  0.5 s) always starts safe mode. Crashes and watchdog resets both
+	  count as unfinished boots.
+
+config WATCHDOG
+	bool "Independent watchdog (IWDG1, ~2 s): a hang resets the MCU"
+	default y
+	help
+	  The firmware feeds the watchdog from the main loop, the CAS poll
+	  hook and long operations (QSPI erase, microSD install, session
+	  save). A hang resets the calculator, and the reset counts towards
+	  safe mode like a crash. On hardware it is started only when the
+	  option bytes freeze it in Standby (and Stop); see
+	  platform/stm32h743/iwdg.c and the bring-up checklist (`optbytes
+	  iwdg-freeze`). A debugger halting the core freezes it anyway. The
+	  simulators model it on their virtual clock.
+
+config SESSION_SD_FALLBACK
+	bool "Save the session on the microSD card when the QSPI is unusable"
+	default y
+	help
+	  When the QSPI flash does not answer, the session is written to
+	  /CALC/AUTOSAVE.SES on power-off and read back at start-up.
+
+endmenu
+
+menu "Hardware"
+
+config USB
+	bool "USB device: console, CALC drive, card reader, firmware update"
+	default y
+	help
+	  The USB-C port as a device (platform/stm32h743/usb.c, TinyUSB in
+	  third_party/tinyusb; README.md "USB"): a serial port carrying the
+	  debug console next to the UART (tools/calcctl.py finds it), the
+	  CALC drive (modules dropped on it are installed; INFO.TXT,
+	  SCREEN.BMP, ...), the microSD card as a second drive on request,
+	  and the console `dfu` that restarts into the ROM bootloader for
+	  `calcctl flash`. About 20 KB of flash (bank 2) and 4 KB of DTCM;
+	  2 MB of SDRAM for the drive's staging buffer. Off: the port only
+	  charges, and the ROM bootloader is entered with the BOOT button.
+
+config QSPI_100MHZ
+	bool "QSPI flash at 100 MHz (default 66.7 MHz)"
+	help
+	  QUADSPI prescaler /2 instead of /3 (kernel clock 200 MHz). The
+	  W25Q128JV allows 133 MHz, but the board's signal quality decides:
+	  enable this only after the bring-up checklist step "QSPI clock"
+	  passed on the board (measure CLK and IO0-IO3, then `qspi clock 100`
+	  and `qspi stress` on the console). Faster module reads (about 35 %
+	  less time per cache-line miss), which matters for phase-2 XIP code.
+
+endmenu
+
+menu "Build checks"
+
+config FLASH_BUDGET_PCT
+	int "Fail when an internal flash bank is fuller than (percent)"
+	range 50 100
+	default 90
+
+endmenu

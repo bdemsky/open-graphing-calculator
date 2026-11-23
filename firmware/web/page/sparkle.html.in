@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Sparkle Town</title>
+<meta name="description" content="Sparkle Town: math games, full window, with sound.">
+<style>
+  :root { --ink: #5a3d5c; --card: #fffaf4; --pill: #ffd2e6; --accent: #ff7aa2; --bg: #fdeef6; }
+  html, body { margin: 0; height: 100%; overflow: hidden; overscroll-behavior: none; background: var(--bg); color: var(--ink);
+    font-family: "SF Pro Rounded", ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  #view { position: fixed; inset: 0; display: block; touch-action: none; cursor: pointer; }
+  #status { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 28px; font-weight: 800;
+    background: var(--card); padding: 18px 28px; border-radius: 22px; box-shadow: 0 6px 30px rgba(90,61,92,.18); }
+  #menubtn { position: fixed; top: 14px; right: 14px; width: 46px; height: 46px; border-radius: 50%; border: 0;
+    background: rgba(255,255,255,.85); box-shadow: 0 3px 12px rgba(90,61,92,.2); font-size: 22px; cursor: pointer; z-index: 3; }
+  #menu { position: fixed; top: 68px; right: 14px; background: var(--card); border-radius: 18px; padding: 14px;
+    box-shadow: 0 6px 30px rgba(90,61,92,.25); display: grid; gap: 10px; min-width: 200px; z-index: 3; font-size: 16px; font-weight: 700; }
+  #menu[hidden], #help[hidden], #status[hidden] { display: none; }
+  #menu button { font: inherit; border: 0; border-radius: 12px; padding: 10px 14px; background: var(--pill); color: var(--ink); cursor: pointer; }
+  #menu label { display: grid; gap: 6px; }
+  #menu input[type=range] { width: 100%; accent-color: var(--accent); }
+  #help { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(90,61,92,.35); z-index: 4; }
+  #help .card { background: var(--card); border-radius: 26px; padding: 26px 34px; max-width: min(560px, 90vw);
+    box-shadow: 0 10px 40px rgba(90,61,92,.3); font-size: 18px; }
+  #help h1 { margin: 0 0 12px; font-size: 28px; color: var(--accent); }
+  #help table { border-collapse: separate; border-spacing: 0 8px; }
+  #help td { padding-right: 16px; vertical-align: middle; }
+  #help kbd { display: inline-block; min-width: 1.6em; text-align: center; padding: 3px 8px; border-radius: 9px;
+    background: #fff; border: 2px solid #f0c6dc; border-bottom-width: 4px; font: inherit; font-weight: 800; }
+  #help .go { margin-top: 12px; text-align: center; color: var(--accent); font-weight: 800; }
+</style>
+</head>
+<body>
+<canvas id="view" aria-label="Sparkle Town"></canvas>
+<div id="status">Loading Sparkle Town…</div>
+<button id="menubtn" type="button" aria-label="Sound and settings">🔊</button>
+<div id="menu" hidden>
+  <button id="mute" type="button">Sound on</button>
+  <label>Volume <input id="volume" type="range" min="0" max="100" value="70"></label>
+  <button id="keys" type="button">Keys</button>
+  <button id="grownups" type="button">Grown-ups…</button>
+  <button id="fullscreen" type="button">Full screen</button>
+</div>
+<div id="help" hidden>
+  <div class="card">
+    <h1>How to play</h1>
+    <table>
+      <tr><td>🖱️ Click, drag</td><td>tap and drag, like a finger</td></tr>
+      <tr><td>🤏 Pinch the trackpad</td><td>pinch (zoom, squish)</td></tr>
+      <tr><td><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd></td><td>move</td></tr>
+      <tr><td><kbd>0</kbd>–<kbd>9</kbd></td><td>numbers (answers, drums)</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>OK, go</td></tr>
+      <tr><td><kbd>⌫</kbd></td><td>undo a digit</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>back</td></tr>
+      <tr><td><kbd>F1</kbd>–<kbd>F5</kbd></td><td>the buttons at the bottom</td></tr>
+      <tr><td><kbd>?</kbd></td><td>this card again</td></tr>
+    </table>
+    <div class="go">Click anywhere to play!</div>
+  </div>
+</div>
+<!--SPARKLE_EXTRA-->
+<script>
+window.SPARKLE_ART = {json: {{ART_JSON}}, uri: "{{ART_URI}}"};
+window.SPARKLE_VECTOR = {{VECTOR_JSON}};
+</script>
+<script>
+{{CALC_MODULE_JS}}
+</script>
+<script>
+{{CALC_API_JS}}
+</script>
+<script>
+{{SPARKLE_AUDIO_JS}}
+</script>
+<script>
+{{SPARKLE_VOICE_JS}}
+</script>
+<script>
+{{SPARKLE_VECTOR_JS}}
+</script>
+<script>
+{{SPARKLE_RIGS_JS}}
+</script>
+<script>
+{{SPARKLE_PAGE_JS}}
+</script>
+</body>
+</html>

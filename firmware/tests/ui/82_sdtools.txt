@@ -1,0 +1,71 @@
+# microSD tools: PNG screenshots (menu, ALPHA MENU hot key, console) and
+# session backup / restore
+# no card: a message, nothing else happens
+type "6*7\n"
+key ALPHA MENU
+expect screen message
+expect text no card
+key CLEAR
+fs insert 8
+fs format
+# hot key on the home screen
+key ALPHA MENU
+expect screen message
+expect text Saved /CALC/SHOT001.PNG.
+key CLEAR
+fs ls /CALC
+fs expect /CALC/SHOT001.PNG PNG
+# from the APPS menu: captures the screen it was opened from
+app sheet
+sheet set A1 42
+app sdtools
+expect state menu MICROSD
+screenshot sdtools_menu.png
+key 1
+expect screen message
+expect text SHOT002.PNG
+expect state sd_last /CALC/SHOT002.PNG
+key CLEAR
+sdtool shot
+expect state sd_last /CALC/SHOT003.PNG
+# backup, change things, restore
+key HOME
+type "a:=5\n"
+setmode ANGLE DEGREE
+app sdtools
+key 2
+expect screen message
+expect text BACKUP.SES
+key CLEAR
+fs expect /CALC/BACKUP.SES CALCBAK1
+key HOME
+type "a:=99\n"
+sheet set A1 7
+setmode ANGLE RADIAN
+expect state angle rad
+app sdtools
+key 3
+expect screen menu
+expect text BACKUP.SES
+key ENTER
+# restoring replaces everything: No/Yes first (No keeps the session)
+expect screen menu
+expect state menu "Restore BACKUP.SES?"
+screenshot sdtools_restore_confirm.png
+key 1
+expect screen home
+expect state angle rad
+app sdtools
+key 3 ENTER 2
+expect screen message
+expect text Session restored
+key CLEAR
+expect state angle deg
+ifcas src expect eval "a" "5"
+app sheet
+sheet value A1 42
+# a damaged backup is refused and changes nothing
+fs put /CALC/BAD.SES "CALCBAK1 not really a backup"
+sdtool restore /CALC/BAD.SES
+expect statecontains sd_msg not a session backup
+expect eval "a" "5"

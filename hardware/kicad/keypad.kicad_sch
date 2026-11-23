@@ -1,0 +1,10768 @@
+(kicad_sch
+	(version 20250114)
+	(generator "calcgen")
+	(generator_version "1.0")
+	(uuid "bf85f3c1-695c-51bd-a1b6-4400e9d3ab39")
+	(paper "A3")
+	(title_block
+		(title "Keypad")
+		(company "Graphing Calculator rev A")
+	)
+	(lib_symbols
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "calc:TS-1187A-B-A-B"
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "SW"
+				(at 0 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TS-1187A-B-A-B"
+				(at 0 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+				(at 0 -12.70 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+				(at 0 -15.24 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "Manufacturer" "XKB Connection(中国星坤)"
+				(at 0 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "MPN" "TS-1187A-B-A-B"
+				(at 0 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "LCSC Part" "C318884"
+				(at 0 -22.86 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_keywords" "Tactile Switches"
+				(at 0 -25.40 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(symbol "TS-1187A-B-A-B_0_1"
+				(circle
+					(center 0.00 0.51)
+					(radius 0.32)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0.00 -2.79)
+					(radius 0.32)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -5.08)
+						(xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 2.54)
+						(xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.00 0.76)
+						(xy 0.00 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.00 -3.30)
+						(xy 0.00 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.51 0.76)
+						(xy -1.27 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -5.08 180)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3a8f674f-b673-5770-bdf1-2be006396ec0")
+		(property "Reference" "SW3"
+			(at 43.18 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "YEQ"
+			(at 43.18 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ca8e9f6d-fa30-565c-b406-9c7cfc0c66ea")
+		)
+		(pin "1"
+			(uuid "3196d53e-9a6e-5528-a218-9e92604863d0")
+		)
+		(pin "4"
+			(uuid "f0368073-2d27-526c-970c-539f0bef1258")
+		)
+		(pin "3"
+			(uuid "14d15a3a-f154-5fcb-ab8c-505fe62aa43a")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 25.4)
+			(xy 50.8 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "894342c2-3c27-5dee-8f3f-4a15b7f21473")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 50.8 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7b0d6c75-9fd7-5265-a446-2f13411f0321")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 25.4)
+			(xy 35.56 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e297338-a872-5ecd-b87f-7927b6cd9676")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 35.56 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5dd66cf0-50c2-54bf-b3f2-556d0c443f34")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 33.02)
+			(xy 50.8 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d0e73b8-1f29-55ee-8475-22b8b42e38fb")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 50.8 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "63d040e4-0b5e-5df1-9f62-b9e02a053160")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 33.02)
+			(xy 35.56 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac9036ec-194a-5ef5-8499-39194844ff43")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 35.56 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "91e42154-37d2-53eb-86b2-c774b1c23937")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1eb19871-966d-5514-8e1c-8d3eac8fd46f")
+		(property "Reference" "SW4"
+			(at 86.36 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WINDOW"
+			(at 86.36 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9ca26778-70c9-52fc-aee4-649d7369ea1f")
+		)
+		(pin "1"
+			(uuid "0ff34508-774e-5d5f-9fd9-77dfe2d57b7c")
+		)
+		(pin "4"
+			(uuid "0cf6d2c6-9f8c-5d5d-8272-13dfdbbf888a")
+		)
+		(pin "3"
+			(uuid "ead5f603-44b4-51b6-82ba-57a1311ca07d")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 25.4)
+			(xy 93.98 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e20436b0-217e-5458-bce7-b4f50ee33deb")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 93.98 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0b8de806-4de3-5c9d-9af0-07c0a198d238")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 25.4)
+			(xy 78.74 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4443074-1143-5f89-a9f0-282cf89ea1f4")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 78.74 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "53573c48-36cf-5bcf-95a1-a2a9119b868b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 33.02)
+			(xy 93.98 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d8ae0bf-324f-5aff-bb43-3094db2af9a5")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 93.98 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5fb2ef49-e984-5852-85b5-ca50a67da7b0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 33.02)
+			(xy 78.74 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1cd1ab2-43cc-5229-abf1-b0d02c27ca06")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 78.74 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f13b6b2e-a83d-524f-af95-2bc4a667e205")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "87653373-b408-5e38-a62c-7a74fa15b476")
+		(property "Reference" "SW5"
+			(at 132.08 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ZOOM"
+			(at 132.08 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "79275d1e-74d2-58c0-a6e9-a94fa7cb62e2")
+		)
+		(pin "1"
+			(uuid "790860b1-c831-57df-8510-1c0c10478f4d")
+		)
+		(pin "4"
+			(uuid "3b77c914-213a-5ecf-bfe7-bd52e35a994c")
+		)
+		(pin "3"
+			(uuid "17555696-e15b-5adf-af71-5d816297c79d")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 25.4)
+			(xy 139.7 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1e42b7e5-ae2b-50a7-9aeb-5e04cc349ab7")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 139.7 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "67106442-0192-521f-a818-9c357ec7402e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 25.4)
+			(xy 124.46 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b5cceb26-60fa-5252-b2dc-a6a197f40959")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 124.46 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "67edd536-c03f-5ac4-b509-7fe55f5c3687")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 33.02)
+			(xy 139.7 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df067fff-2712-5d6e-92a0-767545d344e7")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 139.7 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a7912dde-039e-54b1-8be2-f7f1784b88c4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 33.02)
+			(xy 124.46 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e68afe7f-52f5-5f4a-a1ba-f6ea57d28248")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 124.46 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dd268abc-19b3-5d7d-9c69-92d62714ccc4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "77444e80-e51e-5bb0-a623-57abb832caa3")
+		(property "Reference" "SW6"
+			(at 177.8 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TRACE"
+			(at 177.8 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1f7b7124-9189-54dc-9f2b-7a8f4365281c")
+		)
+		(pin "1"
+			(uuid "68437a4c-3a5f-50da-b007-b6c5f2730372")
+		)
+		(pin "4"
+			(uuid "63601793-e013-5dc8-b321-d59870621416")
+		)
+		(pin "3"
+			(uuid "1dc428f0-7caa-5603-a944-6e36511a529c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 25.4)
+			(xy 185.42 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a84dea3b-cd05-53c5-8afd-24ecb6489d79")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 185.42 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ae1bb9fc-64f1-5d61-b579-e7768cf3a970")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 25.4)
+			(xy 170.18 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1bbc6c0e-eb2b-55ca-9c3a-9404f81c33b4")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 170.18 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fd5e85fe-6678-560a-9317-ba1f7ecb1875")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 33.02)
+			(xy 185.42 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9bd08ca9-9b57-50ff-9db3-43ac6805f5f8")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 185.42 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6d3eadb8-a814-5666-a99a-6d35605c2125")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 33.02)
+			(xy 170.18 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18383b10-71f0-5728-8ae8-5edae29c12ff")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 170.18 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "29076d5c-882e-55e3-831d-eb23508c2aba")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1bbcf93f-6c67-5f68-a82e-40ab36763663")
+		(property "Reference" "SW7"
+			(at 220.98 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GRAPH"
+			(at 220.98 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5839d294-41e7-5f79-9d42-607a0b3717d3")
+		)
+		(pin "1"
+			(uuid "96ef2efd-c107-5116-9553-e0577444c37f")
+		)
+		(pin "4"
+			(uuid "c15b0147-407f-54a0-bff0-127a792e9b57")
+		)
+		(pin "3"
+			(uuid "549f49e7-6981-5e2d-af56-82f7abe7f979")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 25.4)
+			(xy 228.6 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9cbd2c70-9323-5abc-8a52-fe58f5ab4d0e")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 228.6 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "929f2383-1baf-5ad3-87ed-a4de30fb8c8c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 25.4)
+			(xy 213.36 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6da9ff1e-b1ff-564a-83f2-f7a889d3d79b")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 213.36 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "816059f1-4bd4-5900-843c-250864cfdf1f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 33.02)
+			(xy 228.6 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cac192b2-5323-515e-8675-a01b97090d7e")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 228.6 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "828ccaec-43ce-5d4b-ae0f-4f5a24c16d55")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 33.02)
+			(xy 213.36 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86d0c746-6d38-5081-ba37-2dfc78498f5e")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 213.36 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "554e37b4-fc86-5b6b-ae08-2b67c020e8bd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e9de0e7e-b69a-50bc-a50e-2d8b01614073")
+		(property "Reference" "SW8"
+			(at 266.7 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SECOND"
+			(at 266.7 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9b81153b-2516-59c8-9c3b-a663b2fa19f9")
+		)
+		(pin "1"
+			(uuid "bb15a792-e687-52ed-9d2a-21b39a9b88ad")
+		)
+		(pin "4"
+			(uuid "d126d6ba-5c8a-5f2c-b9c2-d84fba0a91c3")
+		)
+		(pin "3"
+			(uuid "07b7bd4a-b81b-50c1-bd3e-23ee039d6be6")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 25.4)
+			(xy 274.32 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4c34e19-4e74-5ad5-b3bd-2b7cb93c6255")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 274.32 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5071a396-84dc-5db3-a3d4-a059e76cc403")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 25.4)
+			(xy 259.08 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e586184f-34c3-5e04-8736-ef774dbb7189")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 259.08 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "12375208-b6f5-57b2-96b7-55ea56534768")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 33.02)
+			(xy 274.32 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35a597e5-5ef7-5319-9fb7-8bb629dce221")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 274.32 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "53f841f4-a8dc-55c4-b751-124849b6217d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 33.02)
+			(xy 259.08 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "280caef8-514c-539b-ad97-3e0c8a8df605")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 259.08 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fc3fff58-5a77-5c93-a269-e1618fa01604")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f31531c1-66eb-5e79-8f06-0c66f71e5202")
+		(property "Reference" "SW9"
+			(at 312.42 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MODE"
+			(at 312.42 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1e1dc356-911b-55f7-b3eb-c8fdd788f980")
+		)
+		(pin "1"
+			(uuid "04af7076-168f-575a-b2c0-aa5bb58f59aa")
+		)
+		(pin "4"
+			(uuid "f101e572-a87c-5b33-ad04-364fa349b981")
+		)
+		(pin "3"
+			(uuid "e90ef23c-30a1-5519-86d3-751f27447f2a")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 25.4)
+			(xy 320.04 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9fd90cc-bb60-5ae7-842c-9672a49a9e70")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 320.04 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "793ef959-bc70-5c87-bdd8-d88723bac574")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 25.4)
+			(xy 304.8 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4519ca6e-d230-56ea-84dd-82c71d586fd0")
+	)
+	(global_label "KEY_ROW0"
+		(shape bidirectional)
+		(at 304.8 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2255c9c8-87c1-5cb0-bffe-1c0116547c83")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 33.02)
+			(xy 320.04 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd7d50d7-8c1d-5f9a-ab79-a94659949c7a")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 320.04 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8cf6964e-9332-57a6-8591-fe39aeaa3885")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 33.02)
+			(xy 304.8 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2134410-409a-5a31-aed3-a249d0fc7de6")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 304.8 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e389e3c8-42cf-57b2-b315-0c771f2c5a23")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7ae8395b-7273-588e-8c70-7c0e15062918")
+		(property "Reference" "SW10"
+			(at 355.6 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DEL"
+			(at 355.6 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1ead8fcb-d15d-5e0f-a072-1915606dd6ea")
+		)
+		(pin "1"
+			(uuid "9de9d1b0-8b44-5989-85ed-2a8e471c2792")
+		)
+		(pin "4"
+			(uuid "bc8be917-8dba-5e40-b7bd-2314683045e3")
+		)
+		(pin "3"
+			(uuid "b9e0739e-3633-536c-8e5c-f697f060ddef")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 25.4)
+			(xy 363.22 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8e6e329-1949-5765-9701-63fc91b85fd4")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 363.22 25.4 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "05de7042-ec4e-59a4-a80e-63fbc554a2a6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 25.4)
+			(xy 347.98 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7344031f-fdd5-545d-b21c-4fca39fc06ab")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 347.98 25.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6a2bdc4d-8764-5fce-9e94-08f67d63b30f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 33.02)
+			(xy 363.22 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b724f3f0-f808-5473-951d-5753fdcf70c0")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 363.22 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e95ae51c-4ce9-5e78-b890-6630d1cc178b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 33.02)
+			(xy 347.98 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ff93212-c36c-54fe-8bb9-24530730e5fe")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 347.98 33.02 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d94e7e03-d616-5fbb-a768-241e91055e9d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "50ebcd39-7d5b-5e04-aea9-5c832264e821")
+		(property "Reference" "SW11"
+			(at 43.18 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ALPHA"
+			(at 43.18 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "dee37e99-68bf-53db-baaa-4442c1933cd9")
+		)
+		(pin "1"
+			(uuid "9ac11c5a-5ede-55b1-8c3c-fb9f69bdc0e5")
+		)
+		(pin "4"
+			(uuid "100dd1ef-f11a-56f5-81a6-10ad6c0ac8e6")
+		)
+		(pin "3"
+			(uuid "b2ce9e0d-b0eb-5a8b-b1d7-8b0622e42b99")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 43.18)
+			(xy 50.8 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed19b19b-5b00-59f0-be1a-c7045b5eb58b")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 50.8 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a31c1761-455f-5ed2-a44a-09aa59adb60e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 43.18)
+			(xy 35.56 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44e8ffd2-4818-538d-8583-30124f77120c")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 35.56 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3e9750dc-a1a8-566e-a2b6-569793fd7c76")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 50.8)
+			(xy 50.8 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69670757-4415-5cb1-b918-fbaa5d36bd3a")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 50.8 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0ecd29ee-9c8f-5a66-89b3-1690d54c5b47")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 50.8)
+			(xy 35.56 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6115e8fa-addc-5911-aacd-3ca17fd2881d")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 35.56 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "28fc56ff-1e48-52a9-ba9b-9a918c6ddeeb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9a938278-6452-5007-8040-ffd63353f536")
+		(property "Reference" "SW12"
+			(at 86.36 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "XTTN"
+			(at 86.36 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c77fe3be-c41c-54da-b44d-3faa80bf60a4")
+		)
+		(pin "1"
+			(uuid "7e75ca5d-83fa-5f9d-8e81-6107a5ab4b47")
+		)
+		(pin "4"
+			(uuid "284528b9-0297-5256-9197-d633e41dbb25")
+		)
+		(pin "3"
+			(uuid "f1bb9647-83ed-5327-badb-bbee01b5c275")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 43.18)
+			(xy 93.98 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a472a84-ccd3-5c1a-842e-9eb95ad725ec")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 93.98 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c520663a-4998-50f6-8ae9-33fe2e059736")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 43.18)
+			(xy 78.74 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "003328f8-4109-58e4-98e2-af94f2e24dbf")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 78.74 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ff79e88b-829c-5ea3-92ac-340fd4ce18ee")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 50.8)
+			(xy 93.98 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee62c873-ee09-5625-9bca-7a162144d59c")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 93.98 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1e81bddc-ff4c-5435-bec7-033e1743f9fa")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 50.8)
+			(xy 78.74 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c6d184f-8719-51a8-b459-4a0fdf98e130")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 78.74 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dbbb969b-433b-571b-9fcb-6f5c05acc95d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5dfefde1-2af0-5284-80ab-221dff8bdc18")
+		(property "Reference" "SW13"
+			(at 132.08 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "STAT"
+			(at 132.08 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7677f1bb-df1c-53b5-99fb-69de2b57b1c7")
+		)
+		(pin "1"
+			(uuid "5702b9ef-7be4-59a2-befb-39dace2d4b13")
+		)
+		(pin "4"
+			(uuid "1fe9dc7a-c1b8-5b96-bee4-8c93a486d51d")
+		)
+		(pin "3"
+			(uuid "11d748d9-83fa-5c07-b929-e78737e0e618")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 43.18)
+			(xy 139.7 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1e6128e-a010-53f8-bedb-dc3b1ba45264")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 139.7 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ab8060ca-4593-5246-b3e8-730c0f63226f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 43.18)
+			(xy 124.46 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f9a2aab-821d-5d37-a8ab-d838ecf27c4b")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 124.46 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b9aa2083-048c-524d-8fad-46ab6c2ca9ff")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 50.8)
+			(xy 139.7 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd5bb5f1-b214-5395-9dd9-5e8e61714ad4")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 139.7 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5bc92056-8649-5f25-ab4b-8573ba06dc33")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 50.8)
+			(xy 124.46 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b143d952-00e1-5abd-84c8-54b0738c7dd1")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 124.46 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c5f838e0-94aa-5b7f-97ef-486966769610")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "674cfa6a-3ce3-52cc-b977-dfe3d5d749d1")
+		(property "Reference" "SW14"
+			(at 177.8 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UP"
+			(at 177.8 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8431e767-07d1-57c2-bce7-94f52376a4ab")
+		)
+		(pin "1"
+			(uuid "08e92f5d-69c0-570b-aeaa-60b3cfa559c3")
+		)
+		(pin "4"
+			(uuid "7bfd4b11-a9bb-5433-9ceb-a5f54166ad25")
+		)
+		(pin "3"
+			(uuid "72ed6fc1-f4dc-52a3-b67b-3e46faeaa79e")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 43.18)
+			(xy 185.42 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1461ca37-b46a-5366-8cb9-59bf468b78e0")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 185.42 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ef783dcd-be64-5c8c-81e5-6cc53b3e2f09")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 43.18)
+			(xy 170.18 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20c737be-2e52-511d-9576-7a4f6d4f6603")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 170.18 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a5472e2a-989e-5397-abaf-68192a451601")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 50.8)
+			(xy 185.42 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "54a4935f-5df4-580e-91f4-45148ef79feb")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 185.42 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "582ad088-6527-5e7e-bd40-f3394a1e1004")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 50.8)
+			(xy 170.18 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba28a983-766d-5a70-a124-16a6653849ed")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 170.18 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5da47dd9-947e-5d0c-8c25-0d78bebbc062")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "91d35d92-e205-5943-8c82-25ed2c237635")
+		(property "Reference" "SW15"
+			(at 220.98 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LEFT"
+			(at 220.98 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "77ff87b3-40ee-5094-bbf8-aa2b329b2672")
+		)
+		(pin "1"
+			(uuid "27753ce9-a1a1-51da-ad21-bc5139b4e8c5")
+		)
+		(pin "4"
+			(uuid "cd8f11ab-7189-51d5-9ba5-c626ef988d3e")
+		)
+		(pin "3"
+			(uuid "9352c171-1da4-5c67-b768-f320b0b96261")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 43.18)
+			(xy 228.6 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a47ffdf-9ca5-53ab-a438-6b13e8903ed2")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 228.6 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "14bedefb-7de6-50d6-bbe9-db8cca0a2d58")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 43.18)
+			(xy 213.36 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b8af9bf-3d4b-5c1c-859a-d6324f8dde29")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 213.36 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b127f1c7-cd63-537e-9aaf-8d7b38fa26a6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 50.8)
+			(xy 228.6 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7662da2b-05e2-5ac2-a789-ebc8054926af")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 228.6 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8a1b300b-1b8c-5f25-bf0a-e25af8e5a06f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 50.8)
+			(xy 213.36 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d3bd12e5-3ab7-5e1d-bd5f-8ab992d11de3")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 213.36 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f9126bda-2f72-5ec0-b36b-86f511e00775")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4f930df1-73f3-5cdb-bb6a-dc9ee698fe2f")
+		(property "Reference" "SW16"
+			(at 266.7 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RIGHT"
+			(at 266.7 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "62fb01a9-8fbe-5484-ba0a-d238898c542d")
+		)
+		(pin "1"
+			(uuid "3edd5cfe-e109-5c02-ad4e-2a7453c6403c")
+		)
+		(pin "4"
+			(uuid "de8e2963-2667-5fef-a04f-e88142ae412e")
+		)
+		(pin "3"
+			(uuid "1adf6965-2f6a-558e-9cf8-917598ce105c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 43.18)
+			(xy 274.32 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d47f9400-83b7-54b0-9c73-5eca29f3a106")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 274.32 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e5906cc2-4b2f-53b6-84dd-0e56ace17b5f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 43.18)
+			(xy 259.08 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4aaebde9-26b4-58af-bf2a-191b841d4791")
+	)
+	(global_label "KEY_ROW1"
+		(shape bidirectional)
+		(at 259.08 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "db05b1db-fd76-570e-b6b4-983554a08c0a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 50.8)
+			(xy 274.32 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "845039d3-ee42-5572-b9f9-d6a6b1e20978")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 274.32 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e3904653-a321-5404-a1ef-c42042c84344")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 50.8)
+			(xy 259.08 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1f8f085-f921-5bf0-a1d3-045b46a0f6ab")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 259.08 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "51916930-bfb2-5fc1-b7ef-35053460257b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f797c45a-78ba-5b1a-875b-330760d08ae3")
+		(property "Reference" "SW17"
+			(at 312.42 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DOWN"
+			(at 312.42 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "89031953-f6f0-5394-9d50-138a2f28beed")
+		)
+		(pin "1"
+			(uuid "110b5dac-6db8-59a2-b5d9-81b0705b07ca")
+		)
+		(pin "4"
+			(uuid "148a9de9-5087-5516-bdb2-0119d198cbd4")
+		)
+		(pin "3"
+			(uuid "d7a1d7d7-98f9-5146-8083-b6f9d0becc1a")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 43.18)
+			(xy 320.04 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cfb94a02-8107-5211-870c-b8ca87aa5fb4")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 320.04 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2db62983-d62c-5fe1-8e67-4b0f6e27c6d5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 43.18)
+			(xy 304.8 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a0933e6d-d630-5a92-ab78-cdd6dce84b36")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 304.8 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6750c4a6-5895-5892-bca1-7e3487987644")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 50.8)
+			(xy 320.04 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcfda47b-b238-5554-af70-f37909dc86e0")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 320.04 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d701d97b-3041-57ca-bfc5-7f28d31490a7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 50.8)
+			(xy 304.8 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "beb9c409-6709-5116-b58e-4ec50c5d8342")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 304.8 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5eb70b81-f39b-5407-8fa0-6499c4889bc7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4d7b1b83-655f-515e-b608-fb8434558de9")
+		(property "Reference" "SW18"
+			(at 355.6 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MATH"
+			(at 355.6 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "763a3d80-beff-5f92-a4ef-613fda2f7385")
+		)
+		(pin "1"
+			(uuid "73c6c58d-3b62-58f5-b35f-49f81fb781d1")
+		)
+		(pin "4"
+			(uuid "2384962a-d3aa-5ee8-8e26-9ec6a56793b1")
+		)
+		(pin "3"
+			(uuid "37cbf70a-588f-5bfe-ad4a-9b87cfedd841")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 43.18)
+			(xy 363.22 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7281d5a8-c126-574c-b4f1-f548e0859ff3")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 363.22 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "99cff54c-6cf7-5b5a-bfa5-44654c483d35")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 43.18)
+			(xy 347.98 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa77d966-5320-5ede-a05d-1e365ea2909c")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 347.98 43.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "05c69841-d532-5112-89d1-a66fa83c104d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 50.8)
+			(xy 363.22 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af70269d-2f1c-5485-a0d6-763b0e17bcd9")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 363.22 50.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8830a04b-e5d4-5c89-934b-1e3aac4169bb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 50.8)
+			(xy 347.98 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81814fac-4259-5633-a926-683fe1544de9")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 347.98 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d830e45a-20fd-52b8-88db-4c06b958d897")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fec3da59-59cd-5684-aaa1-f3e69b1018f8")
+		(property "Reference" "SW19"
+			(at 43.18 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "APPS"
+			(at 43.18 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3eb30b94-56ed-5a55-8d3a-03dcb0080334")
+		)
+		(pin "1"
+			(uuid "cfc65e2a-7f18-5bc2-8bdf-065052e876f1")
+		)
+		(pin "4"
+			(uuid "f97d7325-f0e4-5202-a9dd-39fb87d23f70")
+		)
+		(pin "3"
+			(uuid "7580d59c-a265-5077-8a87-82b17b6f0580")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 60.96)
+			(xy 50.8 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11038053-c6d2-56b4-ae30-bd91cb44027a")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 50.8 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e8b6b078-0e78-5413-9b32-70ab1a6c5e79")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 60.96)
+			(xy 35.56 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78528905-c636-5c2d-b407-6ee6ed7b76b7")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 35.56 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cec5310a-66e3-529f-8df1-fa7e07efc19d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 68.58)
+			(xy 50.8 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea34f40d-3e09-5318-957a-08b1d2c424f7")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 50.8 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2637632b-f718-5e2a-806e-612385f56f23")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 68.58)
+			(xy 35.56 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e65bf4e-dc35-5911-974b-7b8e5209dc87")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 35.56 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "efb8fab1-44a6-5c75-92e3-4e8d3c18f597")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7d672614-27ae-510f-b509-777b676f4d73")
+		(property "Reference" "SW22"
+			(at 86.36 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAS"
+			(at 86.36 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cf277ee3-d344-5b7c-a0ec-07f14c08d641")
+		)
+		(pin "1"
+			(uuid "0bfce1ba-c28e-5f80-abe6-807cd904cf85")
+		)
+		(pin "4"
+			(uuid "23013e1f-8a05-52b6-a38c-1c4db281d5e7")
+		)
+		(pin "3"
+			(uuid "73dd1baa-0caf-5035-8a90-a4625c6b891f")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 60.96)
+			(xy 93.98 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac58046f-4f3d-587a-9c3f-b96cfe896c2d")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 93.98 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0e67eeed-d5a2-54f1-bf05-e5ec526d8cb5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 60.96)
+			(xy 78.74 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "beffadd3-056e-543b-889e-a5be127f9f97")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 78.74 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8dac09e2-39ea-5429-b1a0-b2ca4ad13db8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 68.58)
+			(xy 93.98 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e78ef5f5-1bdd-5d27-bc1c-81bed948e835")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 93.98 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2ae5bd6b-bcf3-5b3a-8af6-f51b25fd5c46")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 68.58)
+			(xy 78.74 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aee9ba81-4b73-50f8-a107-e6bf4e2aeb7f")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 78.74 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "acfe6cf0-4ac1-5080-b0bc-02909bceba3a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b92c9864-ae10-50aa-a5cd-02b2cd2e2d7a")
+		(property "Reference" "SW20"
+			(at 132.08 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VARS"
+			(at 132.08 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7b73718d-d92e-5a4f-a957-fee214a8146d")
+		)
+		(pin "1"
+			(uuid "29692636-3188-513a-bd3b-154d91ff9123")
+		)
+		(pin "4"
+			(uuid "caf143bc-d888-5cf9-aba3-b058698c313d")
+		)
+		(pin "3"
+			(uuid "417fc260-bea0-5ee1-9e73-93046e9e7378")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 60.96)
+			(xy 139.7 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e354daa0-3a55-51ce-9940-1720097989ad")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 139.7 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d9364585-0861-5283-b6a2-7b333cca3ba8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 60.96)
+			(xy 124.46 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64e56c22-a819-59cc-88ad-d76f9c0dc687")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 124.46 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a7a70f86-230c-526e-bdad-905210f78ab8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 68.58)
+			(xy 139.7 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f08defe7-4b6d-58fa-a3de-3278e1ebae39")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 139.7 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7ba043fb-d1e3-5280-86ed-4708b0fa9772")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 68.58)
+			(xy 124.46 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60d0f67a-e02a-5e07-976e-d1332070808b")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 124.46 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "11591cb5-7aef-5b48-91af-db92fb84caf4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1bd4e480-c9d9-54c5-baea-b57d1ab61fa4")
+		(property "Reference" "SW21"
+			(at 177.8 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CLEAR"
+			(at 177.8 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "be697764-9003-5050-b9e0-85cfb653526e")
+		)
+		(pin "1"
+			(uuid "7fcc4b2d-b264-553d-b2db-1a0e99b32284")
+		)
+		(pin "4"
+			(uuid "f8b26c52-9b49-590c-878b-62e5573ee6a6")
+		)
+		(pin "3"
+			(uuid "c6df1036-93be-5191-9e20-7149b2b9c201")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 60.96)
+			(xy 185.42 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcd11308-edde-5339-a292-bda6b682a0b4")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 185.42 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5bc8dedf-278f-5dc0-abfa-6a98ab206306")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 60.96)
+			(xy 170.18 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "340b5210-5b19-5813-8698-2e742a423bc1")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 170.18 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c3019663-fffc-55f2-bb02-b5d32499ae03")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 68.58)
+			(xy 185.42 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d91cb55-7dec-532a-a02c-2097512e93d0")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 185.42 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "36791832-6705-524d-bf6b-db2570a2fbc4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 68.58)
+			(xy 170.18 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9919a999-6930-58a1-a935-ac67f5655d24")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 170.18 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e4479289-0ba2-5f0b-9728-214250f0d0eb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "65973705-1b62-5d67-8506-a38993d1aea7")
+		(property "Reference" "SW23"
+			(at 220.98 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INV"
+			(at 220.98 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e80f8b32-2cd5-56b5-8f14-c815d0644f0f")
+		)
+		(pin "1"
+			(uuid "5052d4a0-f1fd-51de-b104-b851c4fbb76d")
+		)
+		(pin "4"
+			(uuid "22cff798-c961-5ef4-965f-90b94719362e")
+		)
+		(pin "3"
+			(uuid "804a9ce0-c0f8-57ed-9a6e-b810d77ce7ac")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 60.96)
+			(xy 228.6 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f82e9560-b85a-59d4-8e25-738dcdc1e852")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 228.6 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8acb517a-70d9-5475-ad12-2749dbbaa2fd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 60.96)
+			(xy 213.36 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ce0469d-5588-5605-85bc-f9a08718c702")
+	)
+	(global_label "KEY_ROW2"
+		(shape bidirectional)
+		(at 213.36 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b30f462f-465c-5da4-9c9c-d2e2538cfa19")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 68.58)
+			(xy 228.6 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29ec1d86-8974-5a79-99c7-48bd3f5a00ca")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 228.6 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "46350c43-de23-5e4e-8e4c-24e3f98d3d51")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 68.58)
+			(xy 213.36 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab64bc58-2dc8-5fb6-9151-2a56925d4c71")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 213.36 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2ce7d625-f570-536d-8725-5f4cf2efe074")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "14a27582-1756-573b-82b8-3f8c2300a675")
+		(property "Reference" "SW24"
+			(at 266.7 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SIN"
+			(at 266.7 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0b0408d6-93be-5ff2-8e52-ac7d41cc5faf")
+		)
+		(pin "1"
+			(uuid "556ccd6c-459b-54bb-a999-705cf31a3dc0")
+		)
+		(pin "4"
+			(uuid "e2867981-9afb-5d4a-b45b-0f86b4a98a7e")
+		)
+		(pin "3"
+			(uuid "61c64724-3866-51c3-9045-2f7572041d91")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 60.96)
+			(xy 274.32 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df07ef5a-1cda-5e20-9e59-20d6c194d201")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 274.32 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a114b5bd-d182-52ef-b9e2-55f414ff2c85")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 60.96)
+			(xy 259.08 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f91bba42-d04e-5a02-b9c5-919644050cc1")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 259.08 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "440bd92f-3eeb-59f2-b47e-73e6e79918b2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 68.58)
+			(xy 274.32 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7d9811a3-7d94-5830-ad4f-517dbf2d1839")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 274.32 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6f1e8242-611f-5ee3-958e-5bf74bfc585e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 68.58)
+			(xy 259.08 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c1a72b0-126a-551c-9354-eb8eaa475af8")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 259.08 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ead54b98-2689-5072-a1de-cbc89f9aaec3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e9921957-6f27-5339-97b1-840526996550")
+		(property "Reference" "SW25"
+			(at 312.42 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COS"
+			(at 312.42 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5e9688c2-e6fd-5726-8049-8faf0c517c1a")
+		)
+		(pin "1"
+			(uuid "a98d7a3f-ff1d-555a-adb0-ff0c3919be02")
+		)
+		(pin "4"
+			(uuid "0eb0487f-78a1-56c6-8e9e-54c29d8c25a7")
+		)
+		(pin "3"
+			(uuid "b5285c0a-a926-57ac-9829-27fa95aebe0b")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 60.96)
+			(xy 320.04 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d62bed2-d966-5003-bf36-9c2f65550ef7")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 320.04 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9037dfff-a93c-5086-bb3b-62b70d04b88e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 60.96)
+			(xy 304.8 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "619d1d92-3bd1-55b5-b867-635cfcd5bdea")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 304.8 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a8791a05-44f9-5f41-af97-4c8a4cc3af3a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 68.58)
+			(xy 320.04 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0e9fd627-de26-5509-ab53-ef5a6b54e5cb")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 320.04 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ac2f3cee-421c-5ac1-b70b-5b7594a87d03")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 68.58)
+			(xy 304.8 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a3ebadcf-0e62-578f-b83f-beaf2051cec6")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 304.8 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "07d82575-1267-53f0-8a9d-8112459e3bf4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7ed2fbce-ec7e-5af9-930a-7b7dd4da35c3")
+		(property "Reference" "SW26"
+			(at 355.6 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TAN"
+			(at 355.6 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5c2cea5d-6145-5456-ab59-49ffafc8c576")
+		)
+		(pin "1"
+			(uuid "88e653ec-f2e3-540c-a749-2ca09d6f7144")
+		)
+		(pin "4"
+			(uuid "26c58415-7fab-56d6-a44e-46a2773462dd")
+		)
+		(pin "3"
+			(uuid "3eedd8f6-2e3f-5c5e-a752-d723b35ae044")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 60.96)
+			(xy 363.22 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34977f6d-0ae4-56aa-97f6-2600564771a6")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 363.22 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b9db4e94-050e-583c-98eb-374a68f69f21")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 60.96)
+			(xy 347.98 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "108a05fb-f5a1-5643-8519-9988b15884f0")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 347.98 60.96 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "597ddf5d-7801-544a-baa0-bb576237d583")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 68.58)
+			(xy 363.22 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e83f05d-2200-59ca-804d-421784d139df")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 363.22 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a1f496a0-f351-590d-a4b1-610e57329e69")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 68.58)
+			(xy 347.98 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0a53c709-6946-59ce-b0ad-2fb716eda008")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 347.98 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2d4d7165-4a52-5989-842b-7e57d6287807")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "38565a97-d97e-58bc-9a28-a22f3f6304cb")
+		(property "Reference" "SW27"
+			(at 43.18 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "POW"
+			(at 43.18 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ce24ab2f-d8df-53cb-9b7a-cbf610df3f1d")
+		)
+		(pin "1"
+			(uuid "5f179e10-1d0a-5aa0-86fe-cf314482f981")
+		)
+		(pin "4"
+			(uuid "339e40a0-65f2-5aa2-9282-01786d3a28a7")
+		)
+		(pin "3"
+			(uuid "1145fff6-725b-5893-b53f-7219fa8128c9")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 78.74)
+			(xy 50.8 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "36ba6b0c-6b21-5d82-8229-44d03bd70640")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 50.8 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "636138c8-cbd3-541c-a272-46e8f7e0dde1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 78.74)
+			(xy 35.56 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "485b6c26-1d99-5b27-961d-23dc95fabbd0")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 35.56 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "51ba5b6c-59d9-5789-b92e-70a1f98922de")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 86.36)
+			(xy 50.8 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0aada98c-a1c3-5421-b439-5c43dab6c57d")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 50.8 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b18bd029-ff86-576c-95e1-164f2df0cd6f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 86.36)
+			(xy 35.56 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f15e8a4-9970-5620-b6a4-87df1100eca2")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 35.56 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b38a032f-ea0e-5194-a6b1-fca2c185ace8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "50b9c6e8-34f4-5abd-bc29-b947f58f5eab")
+		(property "Reference" "SW28"
+			(at 86.36 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SQR"
+			(at 86.36 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cbe8f164-7bf7-5dd6-b93e-38f43e2a23e6")
+		)
+		(pin "1"
+			(uuid "cf7b9167-0c82-5412-8d4d-6d71d305b821")
+		)
+		(pin "4"
+			(uuid "92b89913-af64-5917-9f6d-731622d69547")
+		)
+		(pin "3"
+			(uuid "1b0785df-c350-5b59-bdbb-2f5509838f5f")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 78.74)
+			(xy 93.98 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2c49c59-8bf2-53b3-9acd-ee2851e59c92")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 93.98 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "51d4303f-0d2e-57b9-8de6-8edb38dc51f9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 78.74)
+			(xy 78.74 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e8e78fd-697c-5400-8296-c4a64dea540a")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 78.74 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7b3d6600-c216-5681-a158-f6a619cecf43")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 86.36)
+			(xy 93.98 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e49a5f5e-dc4f-5730-b29a-1541ceeaf752")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 93.98 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "762ff442-22bf-5d4c-a1e3-dcfdb4d01ae3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 86.36)
+			(xy 78.74 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a38250c7-0eb9-561d-a6fb-531c40ca4f89")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 78.74 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8ec55193-d169-5a82-8a4c-9dd61a2b7946")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f78278c4-18f3-5453-9dd3-f834b92e018f")
+		(property "Reference" "SW29"
+			(at 132.08 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COMMA"
+			(at 132.08 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e11649f5-4421-5535-9957-3151c28ff2e6")
+		)
+		(pin "1"
+			(uuid "bde8e595-e287-51b8-b231-d1ae885765d2")
+		)
+		(pin "4"
+			(uuid "3e850fa0-ad21-5c79-8b79-254f2950084d")
+		)
+		(pin "3"
+			(uuid "4822541a-5564-507b-be6d-8ea5d8f1508c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 78.74)
+			(xy 139.7 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f965775a-941f-5d17-a2c2-07203b6247ce")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 139.7 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b25e88f6-58aa-5034-b3cf-928d438d4a3c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 78.74)
+			(xy 124.46 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "027c77f2-f4a0-5db0-944c-0d2e404f69fc")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 124.46 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "da274985-0e0e-572b-bac4-7a7631631d07")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 86.36)
+			(xy 139.7 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0bb251e1-db78-5d6c-9da2-ce2405f8f128")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 139.7 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a328e8cc-3b43-5b87-8f26-5857da2fdf69")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 86.36)
+			(xy 124.46 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a653462-3db3-5c1e-92ab-7bdde90273c1")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 124.46 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f78c1c1e-7433-5cad-8eaa-dbfcd7aabb42")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8cbee953-c34a-5120-96d0-4564e1a62598")
+		(property "Reference" "SW30"
+			(at 177.8 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LPAREN"
+			(at 177.8 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "991415ef-a0f7-55c9-881c-1f6d025490d8")
+		)
+		(pin "1"
+			(uuid "421d064c-36b2-5098-bee3-19bdf0d0e809")
+		)
+		(pin "4"
+			(uuid "da670da1-0d5e-5052-a1e6-5a9d7a7f9519")
+		)
+		(pin "3"
+			(uuid "bbd2a5b4-5c2b-5899-8979-0251b1313d37")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 78.74)
+			(xy 185.42 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97606cda-e89c-5a3b-bd2e-fa222eeb4397")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 185.42 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "43a0409e-77e4-566a-9529-699421dfddc5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 78.74)
+			(xy 170.18 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ca844cb-f923-5e57-90bb-057600a61715")
+	)
+	(global_label "KEY_ROW3"
+		(shape bidirectional)
+		(at 170.18 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3f238b76-e604-5b76-b9e1-6a2b3579a6c7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 86.36)
+			(xy 185.42 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9cb2a10c-0bd1-516e-95c9-551605183c43")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 185.42 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d4033d2a-ab95-5346-a3d2-3232db0aa3b3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 86.36)
+			(xy 170.18 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cf29e32-5598-5b68-8fb2-42a319589e28")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 170.18 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d3e65f6c-1453-52ea-bc5c-ab502d3e1996")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "da5640e6-f5d8-5220-9de1-f8855a4581d0")
+		(property "Reference" "SW31"
+			(at 220.98 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RPAREN"
+			(at 220.98 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "21b273cd-2d81-540c-8760-f3428854cf25")
+		)
+		(pin "1"
+			(uuid "c7b772e4-8759-505d-80b0-1a5c90bc05b4")
+		)
+		(pin "4"
+			(uuid "a37c9215-c74e-5215-b6aa-a8c10fcfabea")
+		)
+		(pin "3"
+			(uuid "d8dbcee9-c7f3-5542-a7d2-a8b35eb5568a")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 78.74)
+			(xy 228.6 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42b9ad06-6fb2-5ca2-8104-8955ac708890")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 228.6 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "649919ff-c843-5de8-99f2-78d935f87a84")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 78.74)
+			(xy 213.36 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ca9a3e5-83f9-594e-944b-d4016a60277a")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 213.36 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7415e09e-e0f3-59db-92e0-d3b98008b9a6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 86.36)
+			(xy 228.6 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "17b9b1e7-4b8a-50a0-a0ff-a6857bbecb7d")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 228.6 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1624e2bf-e450-542d-bfdd-7da0cba996f8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 86.36)
+			(xy 213.36 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "31eb2d00-61b6-5fa4-9fec-0e9cb7fe5b71")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 213.36 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4698389d-b90b-5705-8e72-74cbb3c4ef04")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7c19b878-8d26-5d9e-8ac2-62f52bba7aa9")
+		(property "Reference" "SW32"
+			(at 266.7 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DIV"
+			(at 266.7 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "63cd986e-09e3-5542-88f2-83ec32a4b634")
+		)
+		(pin "1"
+			(uuid "29ec74b3-7d1f-5a14-a18c-406e36f29056")
+		)
+		(pin "4"
+			(uuid "f7858b19-06c0-5c12-b57f-0b63085d9665")
+		)
+		(pin "3"
+			(uuid "c7f1e038-3160-5707-a154-b2f7d9cb52fa")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 78.74)
+			(xy 274.32 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "55400d4c-5733-540b-8e8a-8f00f7c5fb2f")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 274.32 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "df832f0a-28ad-56c7-abf8-7124fdccf551")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 78.74)
+			(xy 259.08 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59d4c351-f7cf-5848-849e-1fea78d39834")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 259.08 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4092648d-07de-5daa-97fc-3202ac14746c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 86.36)
+			(xy 274.32 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1dab8653-92ae-522e-8750-1a77c9f15722")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 274.32 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8a1370aa-96eb-543c-825f-ab21bfcf7fba")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 86.36)
+			(xy 259.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e29f927d-1fc6-5407-8c04-bd39382fc283")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 259.08 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b4dbcf0e-4143-5c1b-aa63-ca7100d915ce")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c33f7439-6400-5b5e-90ee-5eeb8a960b9b")
+		(property "Reference" "SW33"
+			(at 312.42 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LOG"
+			(at 312.42 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "84d43ac5-63f5-5e62-b0bf-877284a5f132")
+		)
+		(pin "1"
+			(uuid "16fe40e3-51fa-5079-ae9f-5cb2219e3eea")
+		)
+		(pin "4"
+			(uuid "f60720ca-b5ad-5880-bd5e-db2a676e8d95")
+		)
+		(pin "3"
+			(uuid "ae1f2fa7-a650-53dc-a2e2-5ce68325a425")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 78.74)
+			(xy 320.04 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3150e923-7f1a-5b50-965d-35722dc4037d")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 320.04 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "72369048-372c-51b1-96d3-3590a07b9010")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 78.74)
+			(xy 304.8 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd0a2f5b-89fb-5192-b4b2-cc21f1027a69")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 304.8 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3a706a1f-fe6a-5f26-a3ec-34a32a809f56")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 86.36)
+			(xy 320.04 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3ed940d-88d9-5460-87d8-b563b92cf45e")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 320.04 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5562f809-709a-51ad-ac1c-2218bb46c189")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 86.36)
+			(xy 304.8 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c33e5846-6d29-5feb-877d-361db5fff52f")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 304.8 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a7387229-206a-5c00-ac76-da45df75e826")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "446947bf-2924-572d-abab-fa833e1d4e12")
+		(property "Reference" "SW34"
+			(at 355.6 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "7"
+			(at 355.6 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ba8713c7-4f27-5917-890b-56266d3c4959")
+		)
+		(pin "1"
+			(uuid "30923845-4dd5-5d62-8a22-eb914b76a0a6")
+		)
+		(pin "4"
+			(uuid "82bfc0e8-ed25-5a37-a44d-7363fe854c02")
+		)
+		(pin "3"
+			(uuid "4f861f28-8e1d-5ef6-880b-eec0306d462c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 78.74)
+			(xy 363.22 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0defcfcd-8a5a-5e74-b353-6dab993288dd")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 363.22 78.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dbf4308e-18d7-5247-9cc5-cca044489700")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 78.74)
+			(xy 347.98 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "798b6368-21f9-5358-9a5b-a6f2056a647a")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 347.98 78.74 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1cc87b5c-5151-5069-9984-a1e94c9e8157")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 86.36)
+			(xy 363.22 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "662569d3-b1fe-5c30-ac4d-706d4c23bee1")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 363.22 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3739241e-0675-53e9-be17-daff2640a234")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 86.36)
+			(xy 347.98 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9ab9d1c-d8b5-51d9-85ae-f69fb884f0b1")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 347.98 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9db1a853-6616-5bed-88e4-c8a7404c24e6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a719e86f-41a9-5c3d-a626-fbba8e40d3d7")
+		(property "Reference" "SW35"
+			(at 43.18 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "8"
+			(at 43.18 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "68468a32-16cb-5366-8c04-2c9980df534c")
+		)
+		(pin "1"
+			(uuid "16610c6c-f146-57c1-af08-6b0bf2253f26")
+		)
+		(pin "4"
+			(uuid "19713636-0c3b-5494-8d9e-216ee21fea21")
+		)
+		(pin "3"
+			(uuid "9ba4d601-bbc4-512e-83eb-144226cf231c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 96.52)
+			(xy 50.8 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9955bfd3-85d2-5b16-991f-f7816a33c713")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 50.8 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ae978ab6-03a3-5faf-8db6-8078985f9d9b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 96.52)
+			(xy 35.56 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "628eed51-0629-518c-950b-919987596666")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 35.56 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8d65ff0b-1536-5c00-9157-63a49f5670c0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 104.14)
+			(xy 50.8 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0dbee32-83d2-50e4-a81c-0e5b80cc2365")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 50.8 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c16608e4-0083-559a-aa52-be9b5bf00e74")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 104.14)
+			(xy 35.56 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "703bea1b-74cf-55ab-a04a-786db2e810aa")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 35.56 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "13881fe5-dddd-5013-885b-c57eb5c7b12b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "738c025a-ff71-5cc8-a70b-2f5fee1db76d")
+		(property "Reference" "SW36"
+			(at 86.36 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9"
+			(at 86.36 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0da04335-95bd-51f9-8a03-96d58a7fbad3")
+		)
+		(pin "1"
+			(uuid "84a3b0ac-d18b-586a-8fa6-85350d49aa3c")
+		)
+		(pin "4"
+			(uuid "5de4ca38-5b44-504e-a9ea-fd212ee19293")
+		)
+		(pin "3"
+			(uuid "6b1cd277-21ad-5902-a068-ae8ec6f85d8b")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 96.52)
+			(xy 93.98 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08f43df4-ae55-5228-b66b-1bbc95f15ef6")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 93.98 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "61134046-2371-59fb-9854-b81dd06eaef6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 96.52)
+			(xy 78.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fab1672f-8603-500c-a3ac-656d6b26c597")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 78.74 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d917e4b9-431d-5972-a355-d724145a904d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 104.14)
+			(xy 93.98 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0aba3f8c-39aa-58b9-bb99-2be049d9deb1")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 93.98 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f047b8a2-e103-5607-b02d-6a4b25b21258")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 104.14)
+			(xy 78.74 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "944efb62-7d48-52de-a86c-26248d0f1c7c")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 78.74 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dbfd8298-99fa-5b3a-9292-f1a17007b032")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fca45565-43ca-5244-bb28-eb9fae85a951")
+		(property "Reference" "SW37"
+			(at 132.08 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MUL"
+			(at 132.08 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e424e948-0906-5323-aa71-5383ebf82572")
+		)
+		(pin "1"
+			(uuid "f7adbe4b-5470-531f-ab2f-8390b090f8a8")
+		)
+		(pin "4"
+			(uuid "0c0a8735-f572-5c4b-aaf3-cec8807309e4")
+		)
+		(pin "3"
+			(uuid "f10e8680-7575-56ee-adf1-ac1b2689424b")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 96.52)
+			(xy 139.7 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6d6654e-61cf-5bec-9cd9-8561a9b929b0")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 139.7 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e5287a61-4371-560e-9094-a7a7752c0da5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 96.52)
+			(xy 124.46 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff58fea0-3647-5a10-afeb-581bdd0972f3")
+	)
+	(global_label "KEY_ROW4"
+		(shape bidirectional)
+		(at 124.46 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ab59ab03-109e-5a1d-9fa2-a5829ad528cf")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 104.14)
+			(xy 139.7 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bad5394-6ed6-59e8-b74a-5c0eff788009")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 139.7 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "80364dfe-189f-58c5-94f7-ce2d379b72ad")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 104.14)
+			(xy 124.46 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed3acd07-442a-5e33-b7c7-750191f2837e")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 124.46 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7004a017-9ef3-5299-8644-d14580f64212")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4b45ff30-b79f-5e10-a2fd-8e2a802ff542")
+		(property "Reference" "SW38"
+			(at 177.8 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LN"
+			(at 177.8 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8c3c1535-cfb1-55b8-9da5-431f6e85aeed")
+		)
+		(pin "1"
+			(uuid "e36f8d0c-150c-518c-b21b-6d72882f9701")
+		)
+		(pin "4"
+			(uuid "17867fc5-632a-58c8-8264-96450e8ba91e")
+		)
+		(pin "3"
+			(uuid "3b32e611-5a28-522b-86d1-14dfe8de6b9a")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 96.52)
+			(xy 185.42 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3bef09a-2a63-5f1d-91d2-8288f5373133")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 185.42 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "76958fbc-80fe-5f8a-bd90-ab3db4ae2a20")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 96.52)
+			(xy 170.18 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38efb50b-6ae0-5078-8bf5-e37ba666d260")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 170.18 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "14e607ec-be27-59c1-b64e-0416c2b9784c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 104.14)
+			(xy 185.42 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "256a720f-5aa9-52dc-93e3-87a76ec356d5")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 185.42 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4846e3a2-9ad6-5b71-a1c5-1fe6e6e2c27b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 104.14)
+			(xy 170.18 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aeacbd15-b596-58ce-b593-da2f9c1ce29b")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 170.18 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1adab2c9-35b6-5211-bb6c-e3b9c7f849a7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f345e34c-7ef6-5f4b-8563-99b65b9dfeab")
+		(property "Reference" "SW39"
+			(at 220.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4"
+			(at 220.98 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fb69ff2a-1db2-5b7b-b5a7-4ddb392e3ef6")
+		)
+		(pin "1"
+			(uuid "35873800-2bfe-5a57-83cb-6b165a26abc6")
+		)
+		(pin "4"
+			(uuid "a1f522f0-d840-5dc2-82c1-c6c6bff697ac")
+		)
+		(pin "3"
+			(uuid "78adcb96-21f8-523e-8f06-9a750a3b5233")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW39")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 96.52)
+			(xy 228.6 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e09ed2c6-06a7-508d-84a7-e4252b525842")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 228.6 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "26683986-b0ea-5988-b14e-2ca760dbe612")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 96.52)
+			(xy 213.36 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "941463b1-67c1-5f47-950f-68b6791e1139")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 213.36 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "991b68f5-1d9c-538d-bd4b-bcb294326a6b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 104.14)
+			(xy 228.6 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7812c72e-f37c-549a-81b5-18c7265ef451")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 228.6 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ca0932e6-246a-5bc8-823b-b1b64d9d1331")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 104.14)
+			(xy 213.36 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99a4be98-38e2-5cf0-a27f-b69260602fb1")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 213.36 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "66300fdf-1e50-5259-9893-ec1af9598986")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9230b8e0-4964-566e-8ee8-b2875ec028fa")
+		(property "Reference" "SW40"
+			(at 266.7 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "5"
+			(at 266.7 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "487cdc29-8876-5763-b88b-daa4911748c5")
+		)
+		(pin "1"
+			(uuid "571da1a2-9634-5823-beb6-67fb5772c86b")
+		)
+		(pin "4"
+			(uuid "e0e7052f-6915-5c89-8484-afe6c28d741c")
+		)
+		(pin "3"
+			(uuid "29dd0114-ff6f-5f60-a3e3-ddef8f8fc79d")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW40")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 96.52)
+			(xy 274.32 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c45ce5d5-c5c1-5c08-af7f-e45de0269598")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 274.32 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9f5eb32a-57cd-531d-bfb1-212c9c21bfd8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 96.52)
+			(xy 259.08 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94a45ca6-030b-5618-8648-ca78281e0881")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 259.08 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a461c71b-b4f2-56fd-a4c0-7328ac3d9fec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 104.14)
+			(xy 274.32 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9211b462-0c6f-5377-bc0c-b0f21e79c6c0")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 274.32 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e45ef475-bce3-598c-ab82-526fe065e984")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 104.14)
+			(xy 259.08 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f530eea6-31ec-5026-9db3-9ed24b63e131")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 259.08 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3ebd9a9f-c167-5b52-912a-ebac804eba60")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3535bc48-6a07-57b8-ae71-947b57802417")
+		(property "Reference" "SW41"
+			(at 312.42 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "6"
+			(at 312.42 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8b703bcb-7448-5824-be3f-dbe0e2bd7639")
+		)
+		(pin "1"
+			(uuid "ddeffa27-7450-5316-84a9-4e45fc460690")
+		)
+		(pin "4"
+			(uuid "9d88415b-9bca-5574-a725-6e66109ddf2b")
+		)
+		(pin "3"
+			(uuid "6c3fd0a5-9b91-5ecd-b22a-d56470302e61")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW41")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 96.52)
+			(xy 320.04 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2dd265cf-06e6-53b5-a21b-b7ffac886b51")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 320.04 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0f7af53a-029c-5d5d-83da-f9bda0872661")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 96.52)
+			(xy 304.8 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75b0e346-23b1-5fbf-a178-c71544cf3ef8")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 304.8 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5c802aa8-e066-5f58-88d0-1ad99d63d04f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 104.14)
+			(xy 320.04 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "90b92f76-9d73-5d1b-8768-376e08b50912")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 320.04 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0757f608-2692-5ab3-b0b3-beea1feee76f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 104.14)
+			(xy 304.8 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b12d126f-e409-5e66-a698-45789d9c86f9")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 304.8 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6c7ef8c0-c955-5f54-9361-32aace4a8647")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "91967a84-e276-55dc-93e6-2ff6d7fe6326")
+		(property "Reference" "SW42"
+			(at 355.6 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SUB"
+			(at 355.6 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e6bb6552-0f16-554d-b5ad-e202cd40ac47")
+		)
+		(pin "1"
+			(uuid "c561f574-c5dd-5e72-8c23-068716171cf2")
+		)
+		(pin "4"
+			(uuid "36801a18-a01e-56a8-9275-6276f656544e")
+		)
+		(pin "3"
+			(uuid "68534845-feb5-5fbb-a80e-8bfb5d13c03c")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW42")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 96.52)
+			(xy 363.22 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6342eeaf-b54e-517c-9a63-c789140b0863")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 363.22 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f3231082-f6fd-5aab-9e88-dff5aad43ecd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 96.52)
+			(xy 347.98 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c626b82b-d700-5264-855b-ff10bb7830c2")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 347.98 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "87c8b560-63f3-5ca2-99b3-2f917a7b9d34")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 104.14)
+			(xy 363.22 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b134155-a07a-54a8-85cc-825a92257997")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 363.22 104.14 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2ed25d99-cd40-5f13-9ee7-b8bd5cb0d688")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 104.14)
+			(xy 347.98 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70a30482-3b0f-55c6-b33a-6372d444b01f")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 347.98 104.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "221bdcda-c37c-54fb-9d30-3faa8252e76c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "35f59710-caa6-58fb-a7a1-e82f426a1b61")
+		(property "Reference" "SW43"
+			(at 43.18 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "STO"
+			(at 43.18 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cbeb78ea-370e-557d-93aa-466ba9ef7a8f")
+		)
+		(pin "1"
+			(uuid "9667347f-105c-5f9c-aa61-9acbe7efd073")
+		)
+		(pin "4"
+			(uuid "9962fc4e-8a98-5921-8f4d-bcd18544c4c9")
+		)
+		(pin "3"
+			(uuid "afb658c6-7081-5d61-9094-3d87524c13c7")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW43")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 114.3)
+			(xy 50.8 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e02bdb3-8e8b-5f4a-af14-967a8ea504fb")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 50.8 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1895e683-dda1-5cb4-a315-84202c14091f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 114.3)
+			(xy 35.56 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "02bb5c85-f472-52e8-8967-8dd57aedae36")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 35.56 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7f6b7e44-8dda-5cf9-9a6e-2e6a3c4942e5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 121.92)
+			(xy 50.8 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "db8de49d-6d7f-5d25-b25f-c83362413e2c")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 50.8 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "94696ecb-1898-5943-a286-f3c566076878")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 121.92)
+			(xy 35.56 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cef15f63-6e7c-54ba-9177-3583b974af83")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 35.56 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2aadf2ad-614a-53a6-b17a-b1d1f95fbe63")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b9cf9ba0-1ad5-5b09-a94c-96e408cb5f1d")
+		(property "Reference" "SW44"
+			(at 86.36 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1"
+			(at 86.36 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "50a71be3-866c-5286-a68b-0cac881b6ec3")
+		)
+		(pin "1"
+			(uuid "8674a357-87bc-584e-8054-d0f544e175d1")
+		)
+		(pin "4"
+			(uuid "9cbf784f-05b6-5b51-9c56-14ce0280c932")
+		)
+		(pin "3"
+			(uuid "001800d9-768a-5457-a592-cd8c7f241f59")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 114.3)
+			(xy 93.98 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0dc2fd8c-8d58-5b74-89f5-e27f08fffa84")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 93.98 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "41962143-563d-5d4d-b753-833c9f8663f0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 114.3)
+			(xy 78.74 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "acb2f34e-1a4a-53a7-b046-18a61a51bac2")
+	)
+	(global_label "KEY_ROW5"
+		(shape bidirectional)
+		(at 78.74 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e8256daa-be33-5584-9031-4e14b69e5dda")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 121.92)
+			(xy 93.98 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bba265d-8d67-53ee-8e09-d250df68aea5")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 93.98 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dd4502fa-714c-5d18-84dd-1155c789e1fa")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 121.92)
+			(xy 78.74 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1da0b17a-1f32-5059-baba-31ad6c85f24f")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 78.74 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "76cb09d8-be8a-5832-b743-219c30ff44d2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 132.08 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2d8fb6fa-524c-5dfd-919c-ef1a453fec80")
+		(property "Reference" "SW45"
+			(at 132.08 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "2"
+			(at 132.08 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 132.08 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 132.08 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 132.08 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f2319aa4-8c81-5bb3-a7a8-3c2a9dedd681")
+		)
+		(pin "1"
+			(uuid "87479013-d678-54fa-8d9b-6b30e79eac10")
+		)
+		(pin "4"
+			(uuid "842c6623-3745-5914-a1d6-791cf829f14a")
+		)
+		(pin "3"
+			(uuid "6bed90d0-d0b6-589f-8f98-c6129823cfcb")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW45")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 114.3)
+			(xy 139.7 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f54d6abf-fb1c-5ddd-9af7-45190c2364d4")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 139.7 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f3ee4311-05df-57ff-9fcc-7f834d6b2847")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 114.3)
+			(xy 124.46 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f929421-4ec5-5195-b15b-6db428811360")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 124.46 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1db50548-5848-5c9d-b37d-ab641a95386f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 137.16 121.92)
+			(xy 139.7 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99f63397-aa92-50cc-863b-919686905972")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 139.7 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6b74e793-50e1-5d64-92d6-3cc4e1a023ef")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 124.46 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1a90d9c-0ab6-5270-bc91-be7ed8c55a9c")
+	)
+	(global_label "KEY_COL0"
+		(shape bidirectional)
+		(at 124.46 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "df151c82-43f7-5f92-9e77-f6f08d475c18")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 177.8 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7f673d5c-7115-5e22-bcd8-88ebf26ae295")
+		(property "Reference" "SW46"
+			(at 177.8 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3"
+			(at 177.8 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 177.8 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 177.8 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 177.8 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cb15e455-9ea3-5087-9a76-39debe4b0f33")
+		)
+		(pin "1"
+			(uuid "1330b7e1-13a5-53b8-954e-54099460944a")
+		)
+		(pin "4"
+			(uuid "e474854f-102d-557f-afb2-ce03acaffe10")
+		)
+		(pin "3"
+			(uuid "29ae5e40-294c-592e-9da8-7246b1789666")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW46")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 114.3)
+			(xy 185.42 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "635ab679-d4ca-598e-8119-5c278412097d")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 185.42 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a1cbdad2-b233-538c-8707-39adc014247b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 114.3)
+			(xy 170.18 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c3930c4-0bcc-551f-980a-b8003631b431")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 170.18 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0f0c84a1-6bc5-55c4-9551-a5c5d87b6cdc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 121.92)
+			(xy 185.42 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a325ea9c-c707-569c-baf4-0e1b89a20802")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 185.42 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3e5aec01-eec3-5ede-8acd-0e19018d7510")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 172.72 121.92)
+			(xy 170.18 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f48a27fb-504d-5bd1-a863-d19401a406d6")
+	)
+	(global_label "KEY_COL1"
+		(shape bidirectional)
+		(at 170.18 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "423e4c70-4a9d-5b7f-b5e7-d9ea300579c8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.18 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 220.98 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d20dc046-d8e0-57a5-b86c-af45300e9763")
+		(property "Reference" "SW47"
+			(at 220.98 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ADD"
+			(at 220.98 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 220.98 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 220.98 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 220.98 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fc6e29d3-6f8c-535c-9303-6e570d258553")
+		)
+		(pin "1"
+			(uuid "8b4ccc5a-2e64-5dc1-b508-f752754bbc16")
+		)
+		(pin "4"
+			(uuid "19ac1d86-2dc8-5129-ad9a-cec3e39fa6ea")
+		)
+		(pin "3"
+			(uuid "937e7c69-e508-5068-abb6-8fe8e3cefbe6")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW47")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 114.3)
+			(xy 228.6 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b931f92-7ce8-5302-94df-540d0ea11b63")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 228.6 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ba094871-1812-51f5-bf6c-790b2e360735")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 114.3)
+			(xy 213.36 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce614b5f-78c2-5a04-9660-17ab79790f69")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 213.36 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "13d5910c-e352-5886-ae8a-d9977084d2b0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 226.06 121.92)
+			(xy 228.6 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "292ddbf1-140d-510d-9dd8-d702e87db82d")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 228.6 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4f97481e-4129-584b-9ba0-d3432287575b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 228.6 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 215.9 121.92)
+			(xy 213.36 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "287374b4-0891-5317-b93f-bd8611feb487")
+	)
+	(global_label "KEY_COL2"
+		(shape bidirectional)
+		(at 213.36 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7a2c0878-19c5-55bf-be89-5bbaf1769a33")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 213.36 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 266.7 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "300bf74e-e024-55d0-888a-9bfcce67612b")
+		(property "Reference" "SW48"
+			(at 266.7 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 266.7 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 266.7 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 266.7 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 266.7 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "389fb1e4-9a9c-5b07-b996-d16a3d8849b4")
+		)
+		(pin "1"
+			(uuid "d10e9a97-68f1-5617-a39e-6f4e52b68f11")
+		)
+		(pin "4"
+			(uuid "d37fcaf3-7be1-521c-b727-0d6ceaf17490")
+		)
+		(pin "3"
+			(uuid "513615ef-2fa3-55c1-b995-ec894ff40bed")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW48")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 114.3)
+			(xy 274.32 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "80786c07-36b8-551a-b127-c2763198a010")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 274.32 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0cfcdf66-0e0b-591f-9c6f-819687ddbce9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 114.3)
+			(xy 259.08 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78b0809b-7e0b-56f3-bb58-aadfb4aa26d2")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 259.08 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fa3c9d23-9648-5e04-814f-038479dca61e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 271.78 121.92)
+			(xy 274.32 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "126560aa-47f8-541e-b380-6f9cc078e49e")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 274.32 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fc877b4b-04df-571f-a7db-89087e2907b7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 261.62 121.92)
+			(xy 259.08 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "47c5172b-0a3a-5ea4-abad-c943f11cba16")
+	)
+	(global_label "KEY_COL3"
+		(shape bidirectional)
+		(at 259.08 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3c1c7691-ef5e-5df7-a83e-e3f8649a9a69")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 259.08 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 312.42 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "39bd1ad4-14ba-5464-8b85-1ed6e7979af1")
+		(property "Reference" "SW49"
+			(at 312.42 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DOT"
+			(at 312.42 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 312.42 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 312.42 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 312.42 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "bbbe52e2-f189-5319-90bc-acbe4eae29bf")
+		)
+		(pin "1"
+			(uuid "d860b1aa-8560-5177-b702-a79f8ae736ba")
+		)
+		(pin "4"
+			(uuid "e6ad0b7b-dd93-5c0b-b1b6-b4ec0d3ee102")
+		)
+		(pin "3"
+			(uuid "ff9ef437-908a-5cfa-9eee-c0ca616f51b8")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 114.3)
+			(xy 320.04 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc3d60db-b286-56b6-894b-a4474eac67a4")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 320.04 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b95d177c-4ea1-56d3-87af-9a312a6ec484")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 114.3)
+			(xy 304.8 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d007b500-8fb5-5cbd-92c8-e6238c4bd45f")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 304.8 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "39fc0cc1-c5ac-5f92-ab35-b3c358010712")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 317.5 121.92)
+			(xy 320.04 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f99750e-4976-5c4a-9a7e-e32888a5b4bf")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 320.04 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "764f9f16-cf4f-56dd-8f9f-7d561e070d80")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 320.04 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 307.34 121.92)
+			(xy 304.8 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1aa2a5a-c3f7-556f-a481-0ffcaee8a9ff")
+	)
+	(global_label "KEY_COL4"
+		(shape bidirectional)
+		(at 304.8 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "89613bbe-22ea-5b53-bd37-4dc452049b3e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 304.8 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 355.6 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5dec99d3-fc5a-5fa2-bbd9-49179a86b629")
+		(property "Reference" "SW50"
+			(at 355.6 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "NEG"
+			(at 355.6 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 355.6 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 355.6 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 355.6 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f2b63bb4-c70b-5812-ae2d-6d0bf8ee2375")
+		)
+		(pin "1"
+			(uuid "53a64424-0739-5657-b284-58d23054996a")
+		)
+		(pin "4"
+			(uuid "7391f7c8-d091-5358-af06-8aa2f87aa7ca")
+		)
+		(pin "3"
+			(uuid "9865c21a-6e09-54db-a049-34f833999dd1")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW50")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 114.3)
+			(xy 363.22 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0603fcfb-3604-5475-91cb-7f79f292414d")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 363.22 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "63cf23d1-7a67-57c9-ab54-572b2df24165")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 114.3)
+			(xy 347.98 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e15720e2-9cd7-5a68-93c4-2552923550e2")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 347.98 114.3 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "31e9f178-8bd9-59f4-8bb1-5ea7399ae91c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 360.68 121.92)
+			(xy 363.22 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39f7da80-b08b-57b1-ba55-6378f4e82f41")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 363.22 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8fee4b7d-538b-5c28-beae-f64538109803")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 363.22 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 350.52 121.92)
+			(xy 347.98 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3f9dc60-3e45-581e-839e-1344d1ba31df")
+	)
+	(global_label "KEY_COL5"
+		(shape bidirectional)
+		(at 347.98 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c86eb0b6-9d70-5534-8599-d1ad8d350837")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 347.98 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 43.18 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c86e5e36-8a27-5a0a-a8b2-6db69b6419f0")
+		(property "Reference" "SW51"
+			(at 43.18 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ENTER"
+			(at 43.18 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 43.18 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 43.18 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 43.18 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ad2330ef-4261-52b8-936c-b78c6a7a1f53")
+		)
+		(pin "1"
+			(uuid "03851a96-6cf0-57c0-8383-e1112b513794")
+		)
+		(pin "4"
+			(uuid "39b8080e-c08f-56b8-9537-4c20520e15d9")
+		)
+		(pin "3"
+			(uuid "9889415d-b593-5441-80c5-263f5c42f615")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 132.08)
+			(xy 50.8 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b42bfde-e1c2-53ad-a4b8-de723911f673")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 50.8 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "521d5f62-6c27-54b2-bef7-5158e51f4501")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 132.08)
+			(xy 35.56 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c52bbb3d-afcf-5104-8824-f295c96fa50c")
+	)
+	(global_label "KEY_ROW6"
+		(shape bidirectional)
+		(at 35.56 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9711e051-569b-5c3e-ae7a-265c019721ad")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 48.26 139.7)
+			(xy 50.8 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b0c7371-f7f4-5a37-aee0-668753347422")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 50.8 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "da5292ef-4750-599c-96c7-4e66d277e007")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 38.1 139.7)
+			(xy 35.56 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99ac1b71-e31f-5066-a32a-f030d91c3e93")
+	)
+	(global_label "KEY_COL6"
+		(shape bidirectional)
+		(at 35.56 139.7 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "55c26ddf-143a-5a46-b9e7-13f8153c9a36")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 35.56 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "calc:TS-1187A-B-A-B")
+		(at 86.36 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "076d31b9-4a2d-59bb-a8d5-5ceb96406131")
+		(property "Reference" "SW61"
+			(at 86.36 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ON"
+			(at 86.36 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "calc:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9b2d0174-20ef-53ec-b661-857acda7bf13")
+		)
+		(pin "1"
+			(uuid "fa995f5e-3fc8-5946-9a8a-96401389f5c1")
+		)
+		(pin "4"
+			(uuid "c18826a5-db08-5a7a-b88a-d329c7e88cd2")
+		)
+		(pin "3"
+			(uuid "de83d533-13b5-521c-9940-dd9861869d3f")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "SW61")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 132.08)
+			(xy 93.98 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f82521b-90fa-5d06-b993-6cad25c95f65")
+	)
+	(global_label "KEY_ON"
+		(shape bidirectional)
+		(at 93.98 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4da0fde8-b828-5143-9af7-1086ff3a3abc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 132.08)
+			(xy 78.74 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ea11e6e-5c6e-58fe-b1c8-4f9b87405bc5")
+	)
+	(global_label "KEY_ON"
+		(shape bidirectional)
+		(at 78.74 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bf3287ca-73f2-5458-b01f-e13dbad42c16")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 91.44 139.7)
+			(xy 93.98 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f7a26b0-f366-5595-a297-02cd7e978d46")
+	)
+	(global_label "3V3"
+		(shape bidirectional)
+		(at 93.98 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fb11caf9-2291-5b96-92d4-03750a1da421")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 93.98 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 81.28 139.7)
+			(xy 78.74 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d8d3031-2385-54b9-a8d0-fec07db58684")
+	)
+	(global_label "3V3"
+		(shape bidirectional)
+		(at 78.74 139.7 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "35c1ee49-7d6f-58a7-b21d-77f60fccaccd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 78.74 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 109.22 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0b6dafd6-ae57-5c45-83b7-fced2c5e0485")
+		(property "Reference" "R53"
+			(at 113.03 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 113.03 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 109.22 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25741"
+			(at 109.22 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eac9bbe8-a841-583a-9bd8-51aed83ea6e8")
+		)
+		(pin "2"
+			(uuid "c913b10a-983b-5107-96e2-f74fefb933a6")
+		)
+		(instances
+			(project "calc"
+				(path "/677a242e-a1c3-5d92-ae7b-4698021e742c/bf85f3c1-695c-51bd-a1b6-4400e9d3ab39"
+					(reference "R53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 109.22 140.97)
+			(xy 109.22 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b724285-474a-5a57-b5cb-78c3fc110481")
+	)
+	(global_label "KEY_ON"
+		(shape bidirectional)
+		(at 109.22 138.43 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7bbe6794-7aa3-5b05-96da-9d4cde0ecb05")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 109.22 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 109.22 148.59)
+			(xy 109.22 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e1f0932-adcf-5ab6-a255-ce9393a1e46a")
+	)
+	(global_label "GND"
+		(shape bidirectional)
+		(at 109.22 151.13 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "235b900f-7a56-5d87-b49c-f9ba01fc0c5f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 109.22 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(embedded_fonts no)
+)

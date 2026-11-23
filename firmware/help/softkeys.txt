@@ -1,0 +1,47 @@
+%% Soft keys: the F1..F5 labels of every screen (app/softkeys.c, the screens' softkeys_t).
+
+@page softkeys Soft keys
+The top row of keys, {F1} .. {F5}, has no fixed job: the bar at the bottom of the screen shows what each key does on the current screen. After {shift} the bar shows the second row of labels (in amber), for {shift} {F1} .. {shift} {F5}; a small amber corner on a label means that key has such a second function. A highlighted label is the screen you are on. Tap a label to press its key. {menu} lists every soft key of the screen (on screens with an entry line after the [[edit-bar|edit keys]]), and {shift} {menu} opens help.
+
+The same places on every screen: on lists, menus and help {F1} {F2} page, {F4} is help where there is room, and {F5} goes back (back, done, ok). {shift} {menu} is help everywhere, {home} goes to the home screen and {clear} leaves the current menu or screen.
+
+## Home screen
+- {F1} graph (the graph editor: [[yeq|2D functions]], or [[graph3d-eq|3D]] with its switch), {F2} frac, {F3} func, {F4} mtrx ([[textbook-templates|templates]]), {F5} ≈ evaluates the line as a decimal.
+- {shift}: table, solve, simplify (the last result, the selected one or the line), rewrite (menu: alternate forms, factor, expand, ≈ / exact, partfrac, trig forms, collect; see [[result-actions]]), graph.
+- With a calculation selected ({▲}): {F1} input, {F2} result, {F3} Out[n] (put on the entry line), {F4} edit, {F5} ≈; with a Python cell selected: {F1} edit, {F2} result, {F3} Out[n] ([[home-notebook]]); with an animated graph cell selected: {F5} play (pause while it plays; [[graph-cells]]).
+
+## Graph screens (Y=, window, graph, table, table setup, sliders)
+- {F1} y=, {F2} window, {F3} zoom, {F4} trace, {F5} graph (on GRAPH itself: back, to the notebook; {shift} {F5} there is anim, the [[animation|ANIMATION]] menu, pause while playing).
+- {shift}: plots ([[stat-plots|stat plots]]), tblset, format (the settings screen at GRID and AXES), calc ([[graph-calc|graph analysis]]), table.
+- On Y= {F1} is 3D (the 3D entries: the 2D/3D switch of the graph editor), and {menu} lists the options of the highlighted entry and the graph modes instead ([[yeq]]).
+
+## 3D graphing
+- Graph: {F1} z=, {F2} window, {F3} view, {F4} trace (next while tracing), {F5} back (to the notebook); {shift}: reset, style, color, zfit, anim ([[animation]]; pause while playing). See [[graph3d]].
+- Entries (z=): the same keys, but {F1} is 2D (back to the 2D functions); {shift}: type, on/off, color.
+
+
+## Alternate forms (forms)
+- {F1} {F2} page, {F3} use (take the chosen form), {F4} help, {F5} back; {shift} {F3} copy. See [[forms-browser]].
+
+## RPN
+- {F1} .. {F5}: swap, drop, roll, pick, undo; {shift}: dup, over, rot, simplify (level 1), rewrite (the [[result-actions|REWRITE]] menu for level 1). LASTARG is {shift} {(−)}, the STACK menu {,}.
+- With a level selected ({▲}): echo, pick, roll, rolld, dropn; {shift} {F1} edit. See [[rpn]].
+
+## Apps
+- List editor: stat, calc, tests, plots, graph; {shift}: sortA, sortD, clrlist, csv, distr.
+- Statistics forms: {F5} calc (or draw, sort, export, zoomstat), {F4} draw on the tests, graph on the plot settings; results: {F1} draw (tests), {F2} plot (regressions), {F5} back.
+- Spreadsheet: $, :, fill↓, copy, paste; {shift}: link, sheet, plot, stat, graph. See [[sheet]].
+- Matrix editor: names, math, edit, {F5} →home (the matrix name on the home screen).
+- Solver: equation, poly, linear (switch solver), {F5} solve.
+- Finance: tvm, amort, cashflow, interest, {F5} solve; {shift} {F1} days.
+- Base-n: hex, dec, oct, bin (input base), {F5} bits (word size).
+- Geometry: move, points, draw, constr, measure (tools); {shift}: undo, delete, view, file, hide ([[geometry]]).
+- Python: run, tab, chars, break, clear; {shift}: dedent, calc, vars, help ([[python]]).
+- Notebook: the list: open, new, rename, delete, more; a page: run, edit, +cell, cell, file, {shift}: run all, +above; editing: run, tab, chars, cancel, done, {shift}: dedent, calc. ([[notebook]]).
+- Math Quest (candy buttons with icons): map: home, book, arcade, players, grown-up (its gate); a round: trick, power (when one is held), back; parent screen: skills, facts, time, setup, done ([[mathquest]]).
+- Settings: about, help, done. Help: page up, page down, index, exit, back.
+- Menus: page up, page down, help, back. Messages: ok.
+- The {menu} menu on a screen with an entry line: undo, redo, copy, paste, history; {shift}: cut, clips, help, back ([[edit-bar]]).
+- Catalog: page up, page down, categ, help, back. History search: page up, page down, result, copy, back; {shift} {F4} copy res.
+
+Apps written later declare their own soft keys (app/EXTENDING.md).

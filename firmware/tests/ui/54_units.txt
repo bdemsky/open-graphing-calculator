@@ -1,0 +1,73 @@
+# UNITS menu (SHIFT vars), units and constants on the home screen
+key SHIFT VARS
+expect screen menu
+expect state menu UNITS
+expect state menu_item "± (uncertainty)"
+expect text Length
+screenshot units_menu.png
+key DOWN DOWN ENTER
+expect state menu Length
+key DOWN DOWN DOWN
+expect state menu_item km
+key ENTER
+expect screen home
+expect state entry _km
+key CLEAR
+# item 1 of the UNITS menu types ± (a value with an uncertainty)
+key 2 DOT 5 SHIFT VARS 1
+expect screen home
+expect state entry 2.5±
+ifcas src type "0.3\n"
+ifcas src expect state last_output 2.5±0.3
+key CLEAR
+# ALPHA X,T,θ,n types the underscore
+key ALPHA 3
+expect state entry _
+key CLEAR
+ifcas src type "9.8_m/s^2*3_s\n"
+ifcas src expect state last_output 29.4_m/s
+ifcas src type "convert(5_ft,"
+ifcas src type "_m)\n"
+ifcas src expect state last_output 1.524_m
+ifcas src type "2_m+30_cm\n"
+ifcas src expect state last_output 2.3_m
+ifcas src type "1_m+2_s\n"
+ifcas src expect statecontains last_output "incompatible units"
+# temperature: absolute with convert
+ifcas src type "convert(20_degC,"
+ifcas src type "_degF)\n"
+ifcas src expect state last_output 68_degF
+# constants from the menu
+key SHIFT VARS
+key UP
+key UP
+key UP
+key UP
+key UP
+key UP
+key UP
+key UP
+expect state menu_item Constants
+key ENTER
+expect state menu Constants
+expect state menu_item "c       speed of light"
+key ENTER
+expect state entry _c
+ifcas src type "*2_s\n"
+ifcas src expect state last_output 2*_c*_s
+ifcas src type "convert(_c,"
+ifcas src type "_km/h)\n"
+ifcas src expect state last_output 1079252848.8_km/h
+# the conversion commands are in the menu too
+key CLEAR
+# convert( is item 2, right after ±
+key SHIFT VARS DOWN
+expect state menu_item "convert( value_unit,_unit)"
+key ENTER
+expect state entry convert()
+key CLEAR
+# APPROX mode replaces constants by their values
+key SHIFT HOME DOWN RIGHT ENTER
+key HOME
+ifcas src type "_c\n"
+ifcas src expect state last_output 299792458.0_m/s

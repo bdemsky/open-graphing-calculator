@@ -1,0 +1,62 @@
+# Power cycles (SHIFT ON, ON: save, then restart from the session) in the
+# middle of work in the Phase 2 apps, menus and help: the calculator comes
+# back on the home screen with the saved state. Lines being typed in a
+# spreadsheet cell or the list editor are dropped, entries typed into
+# editors that hold them (3D z=, home, RPN command line) are kept.
+app sheet
+sheet set A1 2
+type "=A1*3"
+key SHIFT ON
+key ON
+expect screen home
+app sheet
+expect state sheet_mode browse
+sheet expect A2 ""
+sheet value A1 2
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY key F3
+ifcfg GEOMETRY key 2
+ifcfg GEOMETRY touch tap 160 121
+ifcfg GEOMETRY key SHIFT ON
+ifcfg GEOMETRY key ON
+ifcfg GEOMETRY app geometry
+ifcfg GEOMETRY geo expect count 1
+ifcfg GEOMETRY geo expect tool move
+app graph3d
+key F1
+type "x+y"
+key SHIFT ON
+key ON
+expect screen home
+app graph3d
+expect state g3d_e1_1 x+y
+key SHIFT APPS
+key SHIFT ON
+key ON
+expect screen home
+app stat
+key 1
+type "5"
+key SHIFT ON
+key ON
+stat expect L1 ""
+setmode ENTRY RPN
+key HOME
+type "12"
+key SHIFT ON
+key ON
+expect state rpn_line 12
+expect state rpn_depth 0
+key MENU
+key SHIFT ON
+key ON
+expect screen rpn
+key MENU F5
+key SHIFT ON
+key ON
+expect screen rpn
+manual sheet
+key SHIFT ON
+key ON
+expect screen rpn
+setmode ENTRY ALGEBRAIC

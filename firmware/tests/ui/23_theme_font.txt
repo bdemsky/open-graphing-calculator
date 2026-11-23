@@ -1,0 +1,69 @@
+# Dark theme and large font: every screen follows the theme; settings survive power off
+expect state theme light
+expect pixel 160 120 0xffff
+type "1/3+x\n"
+key SHIFT HOME
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN RIGHT ENTER
+expect state theme dark
+# the MODE screen redraws in the dark palette (status bar kept)
+expect pixel 300 215 0x1082
+key HOME
+expect pixel 160 120 0x1082
+expect text 1/3+x
+screenshot dark_home.png
+# other screens: menu (selection stays blue), Y=, graph, help
+key MATH
+expect pixel 300 50 0x02d9
+expect pixel 300 120 0x1082
+screenshot dark_menu.png
+key CLEAR
+key F1
+type "x^2"
+key F5 ENTER
+expect screen graph
+expect color 0x1082 20000
+screenshot dark_graph.png
+key SHIFT MENU
+expect screen help
+screenshot dark_help.png
+key CLEAR
+# (the graph cell F5 made: deleted, so the home screen is as before)
+key HOME MENU UP UP
+expect state menu_item "Delete cell"
+key ENTER
+expect state history 1
+# large font: home and menus use 14x28
+key SHIFT HOME DOWN RIGHT ENTER
+expect state font large
+key HOME
+screenshot dark_large_home.png
+key CAS
+screenshot dark_large_menu.png
+key DOWN DOWN ENTER
+expect state entry simplify()
+key CLEAR
+# saved with the session
+key SHIFT ON
+key ON
+expect state theme dark
+expect state font large
+expect pixel 160 120 0x1082
+# back to light and normal: pixel-identical light palette
+key SHIFT HOME LEFT ENTER UP LEFT ENTER
+expect state theme light
+expect state font normal
+key HOME
+expect pixel 160 120 0xffff
+key MATH
+expect pixel 300 120 0xffff
+key CLEAR
+key SHIFT HOME RIGHT ENTER
+expect state theme dark
+key HOME
+# MEM > Reset all restores the light theme
+app mem
+key 6 2
+expect screen message
+key ENTER
+expect state theme light
+expect pixel 160 120 0xffff

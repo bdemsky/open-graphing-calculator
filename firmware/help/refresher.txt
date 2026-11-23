@@ -1,0 +1,395 @@
+%% Refresher: compact formula sheets for readers who learned this math once and want a reminder
+%% (not a course). Every example: / result: pair is checked by make help-test. Code lines are at
+%% most 43 characters (one screen line in the help viewer).
+
+@page refresher Refresher
+Formula sheets for a quick reminder: definitions, the facts that go with them, the conventions this calculator uses where systems differ, and short examples you can type (the line after ▶ is the result).
+
+- [[ref-calculus]]: derivatives, integrals, techniques
+- [[ref-series]]: Taylor series, convergence tests
+- [[ref-vector]]: grad, div, curl; integral theorems
+- [[ref-linalg]]: rank, eigenvalues, decompositions
+- [[ref-ode]]: ODE types, methods, what dsolve does
+- [[ref-transforms]]: Laplace, Fourier, z, DFT
+- [[ref-prob]]: distributions, intervals, tests
+- [[ref-complex]]: complex numbers and branches
+- [[ref-numtheory]]: divisibility and congruences
+- [[ref-boolean]]: Boolean algebra laws
+- [[ref-optim]]: extrema, Lagrange, linear programs
+
+## Conventions of this calculator
+- `ln` is the natural log; `log(x)` is base 10, `log(x,b)` base b.
+- Angles are radians unless ANGLE is set to degrees ([[mode-angle]]).
+- Indefinite integrals have no +C; dsolve names its constants c1, c2, ...; solve writes integer families with n_1, n_2, ... (any integer).
+- Complex functions use principal branches; odd roots of negative numbers follow COMPLEX in [[mode]]: REAL gives `(-8)^(1/3)` = -2, the complex settings the principal root (see [[ref-complex]]).
+- Vectors are lists `[1,2,3]`, matrices lists of rows; logic results are 1/0 in truth tables, `true`/`false` elsewhere.
+- Commands marked "advanced CAS module" in their help need that module (standard and advanced tiers).
+- Notebook examples: {menu} Open on the home screen lists worked notebooks (Diagonalize a matrix, ...); see [[notebook]].
+
+@page ref-calculus Calculus refresher
+## Derivatives
+    (fg)' = f'g + fg'
+    (f/g)' = (f'g − fg')/g²
+    (f∘g)' = f'(g(x))·g'(x)
+    (f⁻¹)'(y) = 1/f'(f⁻¹(y))
+    (aˣ)' = aˣ·ln a      (ln|x|)' = 1/x
+    (tan x)' = 1 + tan² x = sec² x
+    (asin x)' = 1/√(1 − x²)
+    (atan x)' = 1/(1 + x²)
+    (sinh x)' = cosh x   (cosh x)' = sinh x
+- Implicit F(x,y) = 0: dy/dx = −F_x/F_y ([[implicitdiff]]).
+- Mixed partials commute when continuous: f_xy = f_yx.
+- Chain rule in several variables: d/dt f(r(t)) = ∇f·r'(t).
+- Limits 0/0 or ∞/∞: lim f/g = lim f'/g' (L'Hopital).
+example: diff(x^x,x)
+result: (ln(x)+1)*x^x
+example: limit((1-cos(x))/x^2,x,0)
+result: 1/2
+
+## Antiderivatives (no +C shown)
+    ∫ xⁿ dx = xⁿ⁺¹/(n+1)   (n ≠ −1)
+    ∫ dx/x = ln|x|
+    ∫ dx/(a² + x²) = atan(x/a)/a
+    ∫ dx/√(a² − x²) = asin(x/a)
+    ∫ sec x dx = ln|sec x + tan x|
+    ∫ ln x dx = x ln x − x
+    ∫ sin² x dx = x/2 − sin(2x)/4
+    ∫ exp(−x²) dx over ℝ = √π
+## Techniques
+- Parts: ∫ u dv = uv − ∫ v du (u: log, inverse trig, algebraic, trig, exp: in that order of preference).
+- Substitution: ∫ f(g(x)) g'(x) dx = ∫ f(u) du.
+- Trig substitution: √(a²−x²): x = a sin θ; √(a²+x²): x = a tan θ; √(x²−a²): x = a sec θ.
+- t = tan(x/2): sin x = 2t/(1+t²), cos x = (1−t²)/(1+t²), dx = 2 dt/(1+t²).
+- Rational functions: partial fractions ([[partfrac]]).
+- FTC: d/dx ∫ f(t) dt from a to x = f(x). Differentiation under the integral: d/dx ∫ f(x,t) dt (a to b) = ∫ ∂f/∂x dt.
+- Change of variables: dx dy = |∂(x,y)/∂(u,v)| du dv ([[jacobian]]); polar r dr dθ; spherical ρ² sin φ dρ dθ dφ.
+- Pitfall: the calculator writes ∫ dx/x as ln(x) (valid for x > 0; ln|x| on both sides).
+example: integrate(x*ln(x),x)
+result: ln(x)*x^2/2-x^2/4
+example: integrate(1/(x^2-1),x)
+result: ln(x-1)/2-ln(x+1)/2
+example: integrate(exp(-x^2),x,-inf,inf)
+result: sqrt(pi)
+example: diff(integrate(exp(t^2),t,0,x),x)
+result: exp(x^2)
+
+See [[diff]], [[integrate]], [[limit]], [[nint]], [[ref-series]].
+
+@page ref-series Series refresher
+## Maclaurin series
+    exp x = 1 + x + x²/2! + x³/3! + …  (all x)
+    sin x = x − x³/3! + x⁵/5! − …      (all x)
+    cos x = 1 − x²/2! + x⁴/4! − …      (all x)
+    1/(1−x) = 1 + x + x² + x³ + …   (|x| < 1)
+    ln(1+x) = x − x²/2 + x³/3 − … (−1<x≤1)
+    atan x = x − x³/3 + x⁵/5 − …    (|x| ≤ 1)
+    (1+x)^a = Σ C(a,k) x^k          (|x| < 1)
+    tan x = x + x³/3 + 2x⁵/15 + …   (|x| < π/2)
+    sinh x = x + x³/3! + x⁵/5! + …   (all x)
+    cosh x = 1 + x²/2! + x⁴/4! + …   (all x)
+- Taylor: f(x) = Σ f⁽ⁿ⁾(a) (x−a)ⁿ/n!; remainder f⁽ⁿ⁺¹⁾(c) (x−a)ⁿ⁺¹/(n+1)! for some c between a and x.
+- Power series Σ c_n (x−a)ⁿ: radius R = 1/limsup |c_n|^(1/n); differentiate and integrate term by term inside.
+example: series(tan(x),x,0,6)
+result: x+1/3*x^3+2/15*x^5+O(x^6)
+example: series(sqrt(1+x),x,0,4)
+result: 1+1/2*x-1/8*x^2+1/16*x^3+O(x^4)
+
+## Convergence of Σ a_n
+- Terms: a_n not → 0 ⇒ divergent (the converse fails: Σ 1/n diverges).
+- Geometric Σ rⁿ: converges ⇔ |r| < 1, sum 1/(1−r) from n = 0.
+- p-series Σ 1/n^p: converges ⇔ p > 1.
+- Ratio: L = lim |a_(n+1)/a_n|; root: L = lim |a_n|^(1/n). L < 1 converges absolutely, L > 1 diverges, L = 1 no information.
+- Comparison and limit comparison with a known series; integral test for positive decreasing terms.
+- Alternating Σ (−1)ⁿ b_n with b_n ↓ 0 converges; the error is at most the first term left out.
+- Absolute convergence ⇒ convergence; a conditionally convergent series can be rearranged to any sum.
+example: limit(((n+1)^2/2^(n+1))/(n^2/2^n),n,inf)
+result: 1/2
+example: sum((-1)^(k+1)/k,k,1,inf)
+result: ln(2)
+example: sum(x^k/k!,k,0,inf)
+result: exp(x)
+
+[[series]] shows the order term O(xⁿ) (its value is the polynomial); n counts the terms of degree below n. See [[sum]], [[taylor]], [[pade]].
+
+@page ref-vector Vector calculus refresher
+F = (P, Q, R) a field, f a function; Cartesian coordinates. ∇f = grad(f), ∇·F = divergence(F), ∇×F = curl(F), ∇²f = laplacian(f), each with the list of variables.
+    ∇f  = (f_x, f_y, f_z)
+    ∇·F = P_x + Q_y + R_z
+    ∇×F = (R_y − Q_z, P_z − R_x, Q_x − P_y)
+    ∇²f = f_xx + f_yy + f_zz
+- ∇f points uphill, |∇f| is the steepest slope, ∇f is normal to the level set; D_u f = ∇f·u for a unit vector u.
+- Plane field (P, Q): scalar curl Q_x − P_y.
+## Identities
+    ∇×(∇f) = 0          ∇·(∇×F) = 0
+    ∇·(fF) = ∇f·F + f ∇·F
+    ∇×(fF) = ∇f×F + f ∇×F
+    ∇·(F×G) = G·(∇×F) − F·(∇×G)
+    ∇×(∇×F) = ∇(∇·F) − ∇²F
+example: curl(grad(x^2*y*z,[x,y,z]),[x,y,z])
+result: [0,0,0]
+example: divergence(curl([x*y,y*z,z*x],[x,y,z]),[x,y,z])
+result: 0
+
+## Integral theorems
+- Gradient theorem: ∫ ∇f·dr along C = f(end) − f(start). On a simply connected region: F conservative ⇔ ∇×F = 0 ⇔ F = ∇f ([[potential]]).
+- Green (C the boundary of D, counter-clockwise): ∮ P dx + Q dy = ∫∫ (Q_x − P_y) dA; area = ½ ∮ (x dy − y dx).
+- Stokes (boundary of S oriented by the right-hand rule with the normal n): ∮ F·dr = ∫∫ (∇×F)·n dS.
+- Divergence (n the outward normal of the closed surface ∂V): ∫∫ F·n dS = ∫∫∫ ∇·F dV.
+## Conventions here
+- [[lineint]] of a list F: ∫ F(r(t))·r'(t) dt; of a scalar f: ∫ f |r'(t)| dt (arc length).
+- [[flux]] uses the normal r_u × r_v (swap u and v to reverse it); a plane curve gives the outward flux of a counter-clockwise curve. [[surfint]]: ∫∫ f |r_u × r_v| du dv, u inner.
+- Spherical coordinates [r,t,p]: t from the z axis, p the azimuth.
+example: lineint([-y,x],[x,y],[cos(t),sin(t)],t,0,2*pi)
+result: 2*pi
+example: flux([x,y,z],[x,y,z],[sin(u)*cos(v),sin(u)*sin(v),cos(u)],u,0,pi,v,0,2*pi)
+result: 4*pi
+
+Green: the scalar curl of (−y, x) is 2 and the unit disk has area π, so 2π. Divergence theorem: ∇·(x,y,z) = 3 times the volume 4π/3 of the ball is 4π.
+
+@page ref-linalg Linear algebra refresher
+A is m×n. Vectors are lists, matrices lists of rows; `A*v` multiplies, `transpose(A)` is A^T.
+- Rank-nullity: rank A + dim ker A = n. Ax = b is solvable ⇔ rank A = rank [A | b]; then x = particular + ker A.
+- det(AB) = det A det B, det A^T = det A, det A⁻¹ = 1/det A; A invertible ⇔ det A ≠ 0 ⇔ ker A = 0.
+- Eigen: Av = λv, roots of det(λI − A) ([[charpoly]]); det A = product of the λ, trace A = sum of the λ (with multiplicity).
+- Diagonalizable ⇔ n independent eigenvectors ⇔ the minimal polynomial has simple roots; then A = P D P⁻¹, eigenvectors as the columns of P. Otherwise [[jordan]].
+- Cayley-Hamilton: p(A) = 0 for p = charpoly(A).
+- Symmetric real A: real λ, orthonormal eigenvectors, A = Q D Q^T. Positive definite ⇔ all λ > 0 ⇔ [[cholesky]] exists.
+- Orthogonal Q: Q^T Q = I, |det Q| = 1, preserves lengths.
+example: eigenvects([[2,1],[1,2]])
+result: [[1,[[-1,1]]],[3,[[1,1]]]]
+example: ker([[1,2,3],[2,4,6]])
+result: [[-2,1,0],[-3,0,1]]
+
+Rank 1 + nullity 2 = 3 columns.
+
+## Decompositions
+    lu(A)       [L,U,P]   P·A = L·U
+    qr(A)       [Q,R]     A = Q·R
+    cholesky(A) L         A = L·L^T
+    svd(A)      [U,S,V]   A = U·S·V^T
+    jordan(A)   J         A = P·J·P⁻¹ (J only)
+    pinv(A)     A⁺ = V·S⁺·U^T
+- SVD: σ = √(eigenvalues of A^T A), largest first; ‖A‖₂ = σ₁, cond A = σ₁/σ_min, rank = number of σ > 0; keeping the k largest gives the best rank-k approximation.
+- svd returns V, not V^T, in the thin form (k = min(m, n)), in decimals.
+- Least squares min ‖Ax − b‖: x = A⁺b; with independent columns also x = (A^T A)⁻¹ A^T b (normal equations).
+example: pinv([[1,0],[1,1],[1,2]])*[1,2,4]
+result: [5/6,3/2]
+example: singvals([[3,0],[0,4]])
+result: [4,3]
+
+The first result is the least-squares line y = 5/6 + 3x/2 through (0,1), (1,2), (2,4). See [[svd]], [[pinv]], [[rank]], [[eigenvals]], [[expm]].
+
+@page ref-ode ODE refresher
+## First order y' = f(x,y)
+- Separable y' = g(x) h(y): ∫ dy/h(y) = ∫ g(x) dx.
+- Linear y' + p y = q: μ = exp(∫p dx), y = (∫ μ q dx + C)/μ.
+- Exact M dx + N dy = 0 with M_y = N_x: F(x,y) = C where ∇F = (M, N) ([[potential]]).
+- Bernoulli y' + p y = q yⁿ: v = y^(1−n) is linear.
+- Homogeneous y' = f(y/x): v = y/x is separable.
+- Riccati y' = a y² + b y + c: y = −u'/(a u) gives a linear 2nd-order equation for u.
+- Existence and uniqueness: f and ∂f/∂y continuous near (x₀, y₀) ⇒ exactly one solution near x₀. Only f continuous: a solution exists, maybe not unique (y' = 3 y^(2/3), y(0) = 0 has y = 0 and y = x³). Solutions can blow up in finite x.
+example: dsolve([y'=y^2,y(0)=1],y,x)
+result: -1/(x-1)
+
+## Linear, order n
+- Constant coefficients: roots r of the characteristic polynomial; a root of multiplicity m gives exp(rx), x exp(rx), ..., x^(m−1) exp(rx); α ± iβ gives exp(αx) cos βx, exp(αx) sin βx.
+- General = homogeneous + particular. Particular: undetermined coefficients (multiply by x^s when the forcing solves the homogeneous equation: resonance) or variation of parameters: y_p = −y₁ ∫ y₂ g/W dx + y₂ ∫ y₁ g/W dx.
+- Wronskian W = det of the derivatives ([[wronskian]]): W ≠ 0 ⇔ independent solutions; Abel: W = C exp(−∫ p dx) for y'' + p y' + q y = 0.
+- Euler equation x² y'' + a x y' + b y = 0: try y = x^r.
+- Laplace: L(y') = sY − y(0), L(y'') = s²Y − s y(0) − y'(0) ([[ref-transforms]]).
+- Systems x' = A x: x(t) = exp(At) x(0) ([[expm]]).
+- Series: about an ordinary point, a power series; about a regular singular point, x^r times a series (Frobenius), with a log when the indicial roots differ by an integer. Bessel x²y'' + xy' + (x² − ν²) y = 0: J_ν, Y_ν.
+example: dsolve(y''-3*y'+2*y=0)
+result: c1*exp(x)+c2*exp(2*x)
+example: dsolve(y''+y=sin(x))
+result: c1*cos(x)-cos(x)*x/2+c2*sin(x)
+example: dsolve(x^2*y''-2*x*y'+2*y=0,y,x)
+result: c2*x^2+c1*x
+
+## What dsolve solves
+Separable, linear first order, Bernoulli and homogeneous equations; linear equations with constant coefficients of any order; Euler equations; Riccati and Bessel equations and series solutions (advanced CAS module); linear constant-coefficient systems. Conditions go in a list with the equation. Numeric: [[odesolve]]; recurrences: [[rsolve]]; PDEs: [[pdesolve]]. See [[dsolve]].
+
+@page ref-transforms Transforms refresher
+## Laplace: F(s) = ∫ f(t) exp(−st) dt, t from 0 to ∞
+    f(t)               F(s)
+    1, tⁿ              1/s, n!/sⁿ⁺¹
+    exp(at)            1/(s − a)
+    sin ωt, cos ωt     ω/(s²+ω²), s/(s²+ω²)
+    exp(at) f(t)       F(s − a)
+    t f(t)             −F'(s)
+    f'(t)              sF − f(0)
+    f''(t)             s²F − s f(0) − f'(0)
+    ∫ f, 0 to t        F(s)/s
+    u(t−a) f(t−a)      exp(−as) F(s)
+    δ(t − a)           exp(−as)
+    (f*g)(t)           F(s) G(s)
+- f(0⁺) = lim sF(s) as s → ∞; f(∞) = lim sF(s) as s → 0 when the poles of sF are in Re s < 0.
+- u is `heaviside`, δ is `dirac`; the default variables are t and s.
+example: laplace(exp(a*t)*sin(b*t))
+result: b/(b^2+(s-a)^2)
+example: ilaplace(1/(s^2+2*s+5))
+result: exp(-t)*sin(2*t)/2
+
+## Fourier: unitary, angular frequency
+    F(ω) = (1/√(2π)) ∫ f(x) exp(−iωx) dx
+    f(x) = (1/√(2π)) ∫ F(ω) exp(iωx) dω
+- f(x−a) → exp(−iaω) F;  exp(iax) f → F(ω−a);  f(ax) → F(ω/a)/|a|;  f' → iω F;  x f → i F'.
+- Convolution: f*g → √(2π) F G. Parseval: ∫ |f|² dx = ∫ |F|² dω.
+- exp(−x²/2) is its own transform. Ordinary frequency (exp(−2πikx), no factor) is √(2π) F(2πk).
+example: fourier(exp(-x^2/2),x,w)
+result: exp(-w^2/2)
+example: fourier(heaviside(x+1)-heaviside(x-1),x,w)
+result: sqrt(2)*sin(w)/(sqrt(pi)*w)
+
+## z-transform (one-sided): X(z) = Σ x(n) z⁻ⁿ, n ≥ 0
+    δ(n), 1             1, z/(z − 1)
+    aⁿ, n aⁿ            z/(z − a), az/(z − a)²
+    x(n − k), x(n<0)=0  z^(−k) X(z)
+    x(n + 1)            z X(z) − z x(0)
+    convolution         X(z) Y(z)
+- Final value: x(∞) = lim (z − 1) X(z) as z → 1 (when it exists).
+example: ztrans(n*3^n,n,z)
+result: 3*z/(z-3)^2
+
+## DFT (fft): X_k = Σ x_j exp(−2πijk/N)
+j, k = 0 … N−1, no factor; [[ifft]] divides by N. X_k for k > N/2 are the negative frequencies; real x gives X_(N−k) = conj X_k.
+example: fft([0,1,0,-1])
+result: [0.0,-2.0*i,0.0,2.0*i]
+
+See [[laplace]], [[fourier]], [[ztrans]], [[fft]].
+
+@page ref-prob Probability and statistics refresher
+## Distributions
+- Binomial(n, p): P(k) = C(n,k) p^k (1−p)^(n−k); mean np, variance np(1−p). `binompdf(n,p,k)`, `binomcdf(n,p,k)` = P(X ≤ k).
+- Poisson(λ): P(k) = exp(−λ) λ^k/k!; mean λ, variance λ. `poissonpdf(λ,k)`.
+- Geometric(p), trials to the first success k = 1, 2, …: P(k) = (1−p)^(k−1) p; mean 1/p, variance (1−p)/p². `geometpdf(p,k)`.
+- Uniform(a, b): density 1/(b−a); mean (a+b)/2, variance (b−a)²/12.
+- Exponential(λ): density λ exp(−λx), x ≥ 0; mean 1/λ, variance 1/λ²; memoryless.
+- Normal(μ, σ): density exp(−(x−μ)²/(2σ²))/(σ√(2π)); `normalpdf(x,μ,σ)`, `normalcdf(a,b,μ,σ)` = P(a < X < b), `invNorm(area,μ,σ)` (left area).
+- χ² with k degrees of freedom: mean k, variance 2k; t with ν: mean 0, variance ν/(ν−2) (ν > 2); F(d₁, d₂). Their cdf commands take an interval: `tcdf(a,b,ν)`.
+- 68-95-99.7: P(|Z| < 1, 2, 3).
+example: normalcdf(-1,1)
+result: 0.682689492137
+example: invNorm(0.975)
+result: 1.95996398454
+example: binompdf(10,0.5,5)
+result: 0.24609375
+
+## Rules
+- E(aX + b) = a E(X) + b; Var(aX + b) = a² Var X; Var X = E(X²) − E(X)².
+- Independent X, Y: Var(X + Y) = Var X + Var Y. Always: E(X + Y) = E X + E Y.
+- Bayes: P(A|B) = P(B|A) P(A)/P(B).
+- Central limit: the mean of n independent samples is about Normal(μ, σ/√n).
+## Intervals and tests
+- z interval: m ± z·σ/√n, z = invNorm(1 − α/2); t interval: m ± t·s/√n, t = invT(1 − α/2, n−1).
+- One-sample t: t = (m − μ₀)/(s/√n), n−1 degrees of freedom; two-sided p = 2 P(T > |t|).
+- Proportion P of n: z = (P − p₀)/√(p₀(1−p₀)/n).
+- χ² goodness of fit: Σ (O − E)²/E, k−1 degrees of freedom; independence in an r×c table: (r−1)(c−1).
+- The Statistics app runs these ([[stat-tests]], [[stat-intervals]]).
+## Sample or population
+`variance` and `stddev` divide by n (population); `variancep` and `stddevp` divide by n−1 (sample). The Statistics app shows both, Sx (n−1) and σx (n).
+example: stddevp([1,2,3,4,5])
+result: sqrt(10)/2
+
+@page ref-complex Complex numbers refresher
+    z = x + iy = r exp(iθ) = r(cos θ + i sin θ)
+    |z| = √(x² + y²)    z·conj(z) = |z|²
+    exp(iθ) = cos θ + i sin θ
+    (r exp(iθ))ⁿ = rⁿ exp(inθ)
+- n-th roots of w = r exp(iθ): r^(1/n) exp(i(θ + 2πk)/n), k = 0 … n−1.
+- Principal branches here: arg z in (−π, π]; ln z = ln|z| + i arg z; z^w = exp(w ln z); √z has Re ≥ 0. With COMPLEX set to a+bi or r∠θ, `(-8)^(1/3)` is the principal root 2·(−1)^(1/3) = 1 + i√3; REAL gives the real root −2 ([[nth-roots]]); graphs use the real root.
+- ln(zw) ≠ ln z + ln w and (z^a)^b ≠ z^(ab) in general (branches).
+- Analytic f = u + iv: u_x = v_y, u_y = −v_x (Cauchy-Riemann); u and v are harmonic.
+- Residue theorem: ∮ f dz = 2πi Σ residues inside (counter-clockwise). Simple pole: Res = lim (z−a) f(z); for g/h with h(a) = 0, h'(a) ≠ 0: g(a)/h'(a).
+- exp(qπi) for a rational q with denominator 1, 2, 3, 4 or 6 is evaluated (exp(iπ) = −1); other exponents stay as written: [[exp2trig]] gives cos + i sin.
+example: exp(i*pi)
+result: -1
+example: exp(i*pi/3)
+result: sqrt(3)*i/2+1/2
+example: ln(-1)
+result: i*pi
+example: arg(1+i)
+result: pi/4
+example: csolve(z^4=1,z)
+result: [-1,1,i,-i]
+example: exp2trig(exp(i*x))
+result: cos(x)+i*sin(x)
+example: residue(1/(z^2+1),z,i)
+result: -i/2
+
+COMPLEX in [[mode]] sets how results are shown (a+bi or polar); [[csolve]] finds complex roots, [[solve]] only real ones. See [[re]], [[im]], [[conj]], [[abs]], [[arg]].
+
+@page ref-numtheory Number theory refresher
+- Division: a = q b + r with 0 ≤ r < |b| ([[iquo]], [[irem]], [[mod]]).
+- gcd(a,b) = gcd(b, a mod b); gcd·lcm = |ab|.
+- Bezout: a u + b v = gcd(a,b); [[iegcd]] returns [u, v, gcd].
+- a has an inverse mod n ⇔ gcd(a, n) = 1 ([[invmod]]).
+- Fermat: a^(p−1) ≡ 1 (mod p) for a prime p not dividing a.
+- Euler: a^φ(n) ≡ 1 (mod n) when gcd(a,n) = 1; φ(n) = n Π (1 − 1/p) over the primes p | n ([[euler]]).
+- Wilson: (p−1)! ≡ −1 (mod p) ⇔ p prime.
+- Chinese remainders: x ≡ a_i (mod m_i), m_i pairwise coprime, has one solution mod Π m_i ([[ichinrem]] returns [x, Π m_i]).
+- Every n > 1 is a product of primes in one way; the number of divisors of Π p^e is Π (e+1).
+- Linear congruence a x ≡ b (mod n): solvable ⇔ gcd(a,n) | b, with gcd(a,n) solutions mod n ([[msolve]]).
+example: iegcd(240,46)
+result: [-9,47,2]
+example: invmod(3,7)
+result: 5
+example: powmod(2,100,7)
+result: 2
+example: euler(36)
+result: 12
+example: ichinrem([2,3],[3,5])
+result: [8,15]
+
+240·(−9) + 46·47 = 2; 2¹⁰⁰ = 2·(2³)³³ ≡ 2 (mod 7). See [[ifactor]], [[isprime]], [[divisors]], [[powmod]].
+
+@page ref-boolean Boolean algebra refresher
+∧ and, ∨ or, ¬ not, ⊕ xor, ⇒ implies, ⇔ iff; on the calculator type the words ([[logic-ops]]). 1 and 0 stand for true and false.
+    p ∧ 1 = p          p ∨ 0 = p
+    p ∧ 0 = 0          p ∨ 1 = 1
+    p ∧ p = p          p ∨ p = p
+    p ∧ ¬p = 0         p ∨ ¬p = 1
+    ¬¬p = p
+    p ∧ (p ∨ q) = p    p ∨ (p ∧ q) = p
+    p ∧ (q ∨ r) = (p ∧ q) ∨ (p ∧ r)
+    p ∨ (q ∧ r) = (p ∨ q) ∧ (p ∨ r)
+    ¬(p ∧ q) = ¬p ∨ ¬q
+    ¬(p ∨ q) = ¬p ∧ ¬q
+    p ⇒ q = ¬p ∨ q = ¬q ⇒ ¬p
+    p ⇔ q = (p ⇒ q) ∧ (q ⇒ p)
+    p ⊕ q = (p ∧ ¬q) ∨ (¬p ∧ q) = ¬(p ⇔ q)
+    (p∧q) ∨ (¬p∧r) ∨ (q∧r) = (p∧q) ∨ (¬p∧r)
+- The lines are absorption, distributivity, De Morgan, contraposition and (last) consensus.
+- DNF: an or of and-terms (sum of minterms); CNF: an and of or-clauses. Every formula has both; minimal forms are what a Karnaugh map gives ([[dnf]], [[cnf]]).
+- Tautology: true for every row (boolsimplify gives `true`); satisfiable: true for some row ([[satisfiable]]).
+- and, or, not are complete; so is nand alone.
+example: truthtable(p implies q)
+result: [[p,q,implies(p,q)],[0,0,1],[0,1,1],[1,0,0],[1,1,1]]
+example: boolsimplify(not (p and q))
+result: not(p) or not(q)
+example: boolsimplify((p and q) or (not p and r) or (q and r))
+result: (p and q) or (not(p) and r)
+example: satisfiable(p xor q)
+result: [p=false,q=true]
+
+Truth tables list 1/0, the first variable changing slowest; satisfiable answers with `true`/`false`.
+
+@page ref-optim Optimization refresher
+- One variable: f'(c) = 0 and f''(c) > 0 ⇒ local minimum (< 0: maximum); also check the ends and where f' does not exist.
+- Several variables: ∇f = 0; the Hessian ([[hessian]]) positive definite ⇒ local minimum, negative definite ⇒ maximum, indefinite ⇒ saddle. In 2D: D = f_xx f_yy − f_xy²; D > 0 and f_xx > 0: minimum; D < 0: saddle.
+- Convex f on a convex set: every local minimum is global.
+- Equality constraints g = 0: ∇f = λ ∇g (Lagrange multipliers).
+- Inequalities g_i ≤ 0 (KKT): ∇f + Σ μ_i ∇g_i = 0, μ_i ≥ 0, μ_i g_i = 0; sufficient for a convex problem.
+example: minimize(x^2+y^2,[x+2*y=5],[x,y])
+result: [5,[x=1,y=2]]
+example: maximize(x*y,[x+y=10],[x,y])
+result: [25,[x=5,y=5]]
+
+## Linear programs
+min c·x subject to A x ≤ b, x ≥ 0: if an optimum exists, one is at a vertex of the feasible polyhedron. Dual: max −b·y subject to A^T y ≥ −c, y ≥ 0; equal optima (strong duality); complementary slackness: y_i (b − A x)_i = 0.
+- [[linprog]] minimizes; in the list form a variable is free unless `x>=0` is in the list; in the matrix form `linprog(c,A,b)` x ≥ 0 is implied.
+- Results: `[value, point]`; unbounded `[-inf,[]]`; infeasible `[inf,[]]` (the least value of an empty set). [[maximize]] swaps the signs.
+example: linprog([1,1],[[-1,-2],[-3,-1]],[-4,-6])
+result: [14/5,[8/5,6/5]]
+
+That is min x + y with x + 2y ≥ 4, 3x + y ≥ 6, x, y ≥ 0. [[minimize]] without constraints compares the critical values with the limits at ±∞ and gives the infimum (maybe −∞).

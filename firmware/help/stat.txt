@@ -1,0 +1,550 @@
+%% Statistics app: lists, CALC, TESTS, DISTR, stat plots, CSV on microSD (app/stat_*.c)
+
+@page stat Statistics app
+{apps} > Statistics opens the STAT menu, {apps} > Distributions the [[stat-distr|DISTR]] menu and {apps} > Stat plots (also {shift} {F1} on the graph screens) the [[stat-plots|STAT PLOTS]]. In the list editor the soft keys reach all of them: stat, calc, tests, plots, graph; {shift}: sortA, sortD, clrlist, csv, distr.
+
+- Edit lists...: the [[stat-edit|list editor]] (L1..L6 and named lists)
+- CALC: [[stat-calc|1-Var and 2-Var statistics]], [[stat-regression|regressions]]
+- TESTS: [[stat-tests|hypothesis tests]] and [[stat-intervals|confidence intervals]]
+- SortA, SortD, ClrList, SetUpEditor: see [[stat-edit]]
+- Stat plots, CSV on microSD: [[stat-plots]], [[stat-csv]]
+
+A typical session: enter data in the list editor, {F2} calc > 1-Var Stats, {F5} (calc). For a fit, calc > LinReg(ax+b), {F5}, then {F2} (plot) on the result shows the points and the fitted line on the graph.
+
+Lists are also CAS variables: see [[stat-lists]]. Results of the last computation are in {vars} > Statistics ([[stat-results]]). The distribution functions are listed in [[stat-cmds]].
+
+@page stat-lists Lists
+The lists L1 to L6 always exist; RESID receives the residuals of the last regression; up to 13 more named lists (1 to 7 letters and digits, e.g. `DATA`) can be created in the [[stat-edit|list editor]] or by a CSV import. A list holds up to 999 numbers and is saved when the calculator is switched off.
+
+On the home screen a list name is a CAS variable:
+
+    mean(L1)
+    L1*2→L3
+    {1,2,3}→L2
+    sort(L2)→L2
+    normalcdf(L1,L1+1)
+
+Storing into a list name (`→` or `:=`) updates the list editor. Lists can be inserted from {vars} > Lists.
+
+@page stat-edit List editor
+STAT > Edit lists... shows the lists in columns; the line at the bottom edits the highlighted cell.
+
+- Arrows move; typing a number or expression and {enter} stores it and moves down; below the last element adds one. When nothing is selected for display, the bottom line says in grey what the highlighted place takes.
+- {⌫} deletes the element, {shift} {⌫} (ins) inserts a 0.
+- On a list name (top row), {enter} shows the whole list `{1,2,3}`. Type an expression such as `L1*2` and {enter} to fill the list once, or the expression in quotes, `"L1*2"`, to attach a column formula: the list then recomputes whenever another list changes (a `*` after the name marks it). {clear} {enter} on the name clears the list. {⌫} on a name removes the column from the editor (the list is kept).
+- The column `+ new` after the last list takes the name of a new named list.
+- SortA / SortD sort the highlighted list (from elsewhere: a form, with lists to carry along). ClrList empties the highlighted list after a No/Yes question (from elsewhere: a form naming the lists); SetUpEditor restores the columns L1..L6.
+
+@page stat-calc 1-Var and 2-Var statistics
+STAT > CALC > 1-Var Stats asks for a list and an optional frequency list (`1` = none) and shows xbar (mean), Σx, Σx², Sx (sample standard deviation), sigmax (population standard deviation), n, minX, Q1, Med, Q3, maxX and the mode (the value with the largest frequency; `-` when all values are equally frequent). Each result line says in grey what the value is.
+
+Quartiles are the medians of the lower and upper halves (the usual calculator convention).
+
+2-Var Stats takes an X and a Y list and adds ybar, Σy, Σy², Sy, sigmay, Σxy, minY, maxY.
+
+@page stat-regression Regressions
+STAT > CALC: LinReg(ax+b), LinReg(a+bx), QuadReg, CubicReg, QuartReg, LnReg (a+b ln x), ExpReg (a*b^x), PwrReg (a*x^b), Logistic (c/(1+a*e^(-bx))), SinReg (a*sin(bx+c)+d) and Med-Med.
+
+The form takes the X and Y lists, a frequency list (`1` = none) and RegEQ->, a Y= function to receive the equation (for graphing it with a [[stat-plots|scatter plot]]). The result shows the coefficients, r² or R² and r where defined; the residuals y - f(x) are stored in RESID and the equation is in {vars} > Statistics > RegEQ.
+
+{F2} (plot) on the result graphs the fit in one step: the equation goes to the RegEQ function, or, when none was chosen, to the first empty Y= function (a function in use is never overwritten); a stat plot shows Xlist against Ylist as a scatter plot (the plot already doing so, else the first plot that is off, else Plot1); ZoomStat fits the window.
+
+LnReg, ExpReg and PwrReg fit a line to the logarithms (the usual calculator convention); Logistic and SinReg are nonlinear least squares fits.
+
+@page stat-tests Hypothesis tests
+STAT > TESTS: Z-Test, T-Test, 2-SampZTest, 2-SampTTest, 1-PropZTest, 2-PropZTest, chi² GOF-Test, chi²-Test, 2-SampFTest, LinRegTTest, ANOVA.
+
+- Input: Data takes lists, Stats takes xbar, Sx and n. Ha: is the alternative hypothesis, written out (`mu≠mu0`, `mu<mu0`, `mu>mu0`; `p`, `sd`, `slope` for proportions, standard deviations and the slope), chosen with {◀} {▶}. {F5} (calc) computes and {F4} (draw) draws from anywhere in the form. Empty fields show `(enter a value)`; the line at the bottom says what the highlighted field takes, or what is wrong.
+- Calculate shows the statistic, p and df, with the hypothesis tested at the top right (`Ha: mu>5`); Draw shades the p-value region ([[stat-results]]).
+- 2-SampTTest: Pooled Yes assumes equal variances; No uses Welch's df.
+- chi² GOF-Test: observed and expected lists and df; the contributions go to the list CNTRB.
+- chi²-Test: Observed is a matrix such as `[[10,20],[30,40]]` or the name of a CAS variable holding one; the expected counts are stored in the CAS variable `chi2exp`.
+- LinRegTTest tests the slope of LinReg(ax+b) and shows a, b, s, r², r.
+- ANOVA: Lists names the groups, e.g. `L1,L2,L3`.
+
+@page stat-intervals Confidence intervals
+STAT > TESTS: ZInterval, TInterval, 2-SampZInt, 2-SampTInt, 1-PropZInt, 2-PropZInt. Inputs as for the [[stat-tests|tests]]; C-Level is the confidence level, `0.95` or `95`. The result shows lower, upper, the margin of error ME and the sample statistics.
+
+@page stat-results Results
+Results are listed one per line ({▲} {▼} scroll), each with its meaning in grey (mean, sample std. dev., p-value, ...). The top right shows the alternative hypothesis of a test, the confidence level of an interval or the Y= function that got a regression equation.
+
+- {F1} (draw) or {enter}, for a test: the distribution with the p-value region shaded.
+- {F2} (plot), for a regression: the data and the fitted curve on the graph ([[stat-regression]]).
+- {clear} or {F5} (back): back to the form.
+
+{vars} > Statistics lists the values of the last result (xbar, Sx, p, z, a, b, r², ...) and RegEQ, the last regression equation; choosing one inserts it at the cursor.
+
+@page stat-distr Distributions
+{apps} > Distributions (DISTR; {shift} {F5} in the list editor) inserts the [[stat-cmds|distribution functions]]: normalpdf, normalcdf, invNorm, invT, tpdf, tcdf, chi2pdf, chi2cdf, Fpdf, Fcdf, binompdf, binomcdf, poissonpdf, poissoncdf, geometpdf, geometcdf, invChi2, invF. The menu shows the order of the arguments (in square brackets: optional, e.g. `normalcdf(lo,hi[,mu,sd])`) and inserts the name with its parentheses, the cursor inside. They work on the home screen in exact and approximate mode, in Y= functions (graph `normalpdf(x)`), in lists and in forms.
+
+For a normal probability such as P(-1 ≤ X ≤ 1): DISTR > normalcdf, type `-1,1` (for a mean of 100 and a standard deviation of 15: `85,115,100,15`), {enter}; or DRAW > ShadeNorm to see the area too.
+
+DRAW > ShadeNorm, Shade_t, Shadechi², ShadeF draw the density with the area between lower and upper shaded and print the area. Use `-1E99` / `1E99` (or `-inf` / `inf`) for unbounded tails.
+
+Relative accuracy: about 1E-12.
+
+@page stat-plots Stat plots
+{shift} {F1} (plots) on a graph screen or {F4} (plots) in the list editor lists Plot1..Plot3, PlotsOff, PlotsOn and ZoomStat. A plot has:
+
+- Type: Scat (scatter), Line (xyLine), Hist (histogram, bar width Xscl), MBox (modified box plot, outliers marked), Box, NPrb (normal probability plot); on the Type row the bottom line says what the chosen type draws
+- Xlist, Ylist (scatter and line), Freq (histogram and box plots, `1` = none)
+- Mark: box, + or dot (types that draw points); Color 1..8, shown as the Y= colours
+
+Rows a type does not use are hidden. Plots are drawn on the [[graph]]; ZoomStat ({F5}) fits the window to their data, {F4} (graph) shows the graph as it is. New plots are red, green and magenta, so they stand out from a regression line in Y1 (blue).
+
+@page stat-csv CSV files on the microSD card
+STAT > CSV on microSD:
+
+- Export lists...: the lists named in Lists (e.g. `L1,L2,DATA`) go to File (8.3 name, e.g. `LISTS.CSV`) in the card's root folder, one column per list, the names in the first row.
+- Export all lists: every non-empty list to `ALL.CSV`.
+- Import CSV...: choose a .CSV file in the root folder. A first row with text names the columns: L1..L6, RESID or a valid list name (created if needed); other columns go to L1, L2, ... in order. Commas, semicolons or tabs separate the values (with semicolons or tabs a decimal comma is accepted). The list editor then opens on the first imported list.
+- Card info: file system, size and free space.
+
+FAT16 and FAT32 cards (up to 32 GB) are supported. A file replaces its old version only when completely written: removing the card during a write keeps the old file. Card errors say what to do (insert a card, format it as FAT32, use an 8.3 name such as `DATA.CSV`).
+
+@group stat-cmds Distribution functions
+Probability distributions (the usual calculator names and argument order). Lists as arguments give lists of values.
+
+@cmd normalpdf
+group: stat-cmds
+summary: Normal probability density
+syntax: normalpdf(x)
+syntax: normalpdf(x, mu, sigma)
+insert: normalpdf(
+example: normalpdf(0)
+result: 0.398942280401
+example: normalpdf(1,0,2)
+result: 0.176032663382
+example: normalpdf([-1,0,1])
+result: [0.241970724519,0.398942280401,0.241970724519]
+see: normalcdf, invNorm, stat-distr
+
+Density of the normal distribution with mean `mu` (default 0) and standard deviation `sigma` (default 1). `normalpdf(x)` can be graphed in Y=.
+
+@cmd normalcdf
+group: stat-cmds
+summary: Normal probability of an interval
+syntax: normalcdf(lower, upper)
+syntax: normalcdf(lower, upper, mu, sigma)
+example: normalcdf(-1,1)
+result: 0.682689492137
+example: normalcdf(-inf,110,100,15)
+result: 0.747507462453
+see: normalpdf, invNorm
+
+## Refresher
+P(a < X < b) for X ~ Normal(μ, σ) = Φ((b − μ)/σ) − Φ((a − μ)/σ), Φ(z) = (1 + erf(z/√2))/2. About 68 %, 95 %, 99.7 % within 1, 2, 3 σ; 95 % within 1.96 σ. Use −inf or inf for a one-sided probability.
+example: normalcdf(-1.96,1.96)
+result: 0.950004209704
+## Syntax
+P(lower ≤ X ≤ upper) for a normal X; `-inf`, `inf` or ±1E99 for tails. Tail areas are computed directly, so small probabilities are accurate.
+
+@cmd invNorm
+group: stat-cmds
+summary: Inverse normal cumulative distribution
+syntax: invNorm(area)
+syntax: invNorm(area, mu, sigma)
+example: invNorm(0.975)
+result: 1.95996398454
+example: invNorm(0.1,100,15)
+result: 80.7767265168
+see: normalcdf, invT
+
+The x with P(X ≤ x) = area, 0 < area < 1.
+
+@cmd tpdf
+group: stat-cmds
+summary: Student t probability density
+syntax: tpdf(x, df)
+example: tpdf(0,5)
+result: 0.379606689822
+see: tcdf, invT
+
+Density of the t distribution with `df` degrees of freedom (df > 0, not necessarily whole).
+
+@cmd tcdf
+group: stat-cmds
+summary: Student t probability of an interval
+syntax: tcdf(lower, upper, df)
+example: tcdf(-2,2,10)
+result: 0.926611965229
+example: tcdf(2.1,inf,8)
+result: 0.0344687621477
+see: tpdf, invT
+
+P(lower ≤ T ≤ upper) for the t distribution with `df` degrees of freedom.
+
+@cmd invT
+group: stat-cmds
+summary: Inverse Student t cumulative distribution
+syntax: invT(area, df)
+example: invT(0.975,10)
+result: 2.22813885199
+see: tcdf, invNorm
+
+The t with P(T ≤ t) = area.
+
+@cmd chi2pdf
+group: stat-cmds
+summary: Chi-square probability density
+syntax: chi2pdf(x, df)
+example: chi2pdf(2,3)
+result: 0.20755374871
+see: chi2cdf, invChi2
+
+Density of the chi² distribution with `df` degrees of freedom.
+
+@cmd chi2cdf
+group: stat-cmds
+summary: Chi-square probability of an interval
+syntax: chi2cdf(lower, upper, df)
+example: chi2cdf(0,3.84,1)
+result: 0.949956478751
+example: chi2cdf(11.07,inf,5)
+result: 0.0500096186224
+see: chi2pdf, invChi2
+
+P(lower ≤ X ≤ upper) for the chi² distribution.
+
+@cmd invChi2
+group: stat-cmds
+summary: Inverse chi-square cumulative distribution
+syntax: invChi2(area, df)
+example: invChi2(0.95,5)
+result: 11.0704976935
+see: chi2cdf
+
+The x with P(X ≤ x) = area for the chi² distribution with `df` degrees of freedom.
+
+@cmd Fpdf
+group: stat-cmds
+summary: F probability density
+syntax: Fpdf(x, df1, df2)
+example: Fpdf(1,4,10)
+result: 0.455349629588
+see: Fcdf, invF
+
+Density of the F distribution with numerator df1 and denominator df2 degrees of freedom.
+
+@cmd Fcdf
+group: stat-cmds
+summary: F probability of an interval
+syntax: Fcdf(lower, upper, df1, df2)
+example: Fcdf(0,3,4,10)
+result: 0.927676777712
+see: Fpdf, invF
+
+P(lower ≤ F ≤ upper) for the F distribution.
+
+@cmd invF
+group: stat-cmds
+summary: Inverse F cumulative distribution
+syntax: invF(area, df1, df2)
+example: invF(0.95,4,10)
+result: 3.47804969077
+see: Fcdf
+
+The x with P(F ≤ x) = area.
+
+@cmd binompdf
+group: stat-cmds
+summary: Binomial probability
+syntax: binompdf(n, p, x)
+syntax: binompdf(n, p)
+example: binompdf(10,0.3,3)
+result: 0.266827932
+example: binompdf(4,1/2,2)
+result: 3/8
+example: binompdf(3,1/2)
+result: [1/8,3/8,3/8,1/8]
+see: binomcdf
+
+## Refresher
+P(X = k) = C(n,k) p^k (1 − p)^(n−k) for the number of successes in n independent trials; mean np, variance np(1 − p). Approximately Normal(np, √(np(1−p))) when both np and n(1−p) are large, Poisson(np) when p is small.
+example: binomcdf(10,0.5,5)
+result: 0.623046875
+## Syntax
+P(X = x) for X binomial with n trials and success probability p; without x, the list for x = 0..n. With exact p in exact mode the result is exact.
+
+@cmd binomcdf
+group: stat-cmds
+summary: Binomial cumulative probability
+syntax: binomcdf(n, p, x)
+syntax: binomcdf(n, p)
+example: binomcdf(10,0.3,3)
+result: 0.6496107184
+example: binomcdf(5,1/2,2)
+result: 1/2
+see: binompdf
+
+P(X ≤ x) for X binomial; without x, the list for x = 0..n.
+
+@cmd poissonpdf
+group: stat-cmds
+summary: Poisson probability
+syntax: poissonpdf(mu, x)
+example: poissonpdf(2.5,3)
+result: 0.21376301725
+see: poissoncdf
+
+P(X = x) for X Poisson with mean mu.
+
+@cmd poissoncdf
+group: stat-cmds
+summary: Poisson cumulative probability
+syntax: poissoncdf(mu, x)
+example: poissoncdf(2.5,3)
+result: 0.757576133133
+see: poissonpdf
+
+P(X ≤ x) for X Poisson with mean mu.
+
+@cmd geometpdf
+group: stat-cmds
+summary: Geometric probability
+syntax: geometpdf(p, x)
+example: geometpdf(0.2,3)
+result: 0.128
+example: geometpdf(1/6,2)
+result: 5/36
+see: geometcdf
+
+Probability that the first success is on trial x (x = 1, 2, ...).
+
+@cmd geometcdf
+group: stat-cmds
+summary: Geometric cumulative probability
+syntax: geometcdf(p, x)
+example: geometcdf(0.2,3)
+result: 0.488
+example: geometcdf(1/6,2)
+result: 11/36
+see: geometpdf
+
+Probability that the first success is on or before trial x.
+
+@cmd exppdf
+group: stat-cmds
+summary: Exponential probability density
+syntax: exppdf(x, rate)
+example: exppdf(1,2)
+result: 2/exp(2)
+see: expcdf, invExp
+
+## Refresher
+The waiting time between events of a Poisson process with rate λ: f(x) = λ e^(−λx) for x ≥ 0, mean 1/λ, P(X ≤ x) = 1 − e^(−λx). Memoryless: P(X > s + t | X > s) = P(X > t).
+example: exppdf(0.5,1)
+result: 0.606530659713
+## Syntax
+Density at x (0 for x < 0). Exact for exact arguments. These distribution commands live in the advanced CAS module.
+
+@cmd expcdf
+group: stat-cmds
+summary: Exponential cumulative probability
+syntax: expcdf(lo, hi, rate)
+example: expcdf(0,1,2)
+result: 1-exp(-2)
+example: expcdf(-inf,1.5,2)
+result: 0.950212931632
+see: exppdf, invExp
+
+P(lo ≤ X ≤ hi) = F(hi) − F(lo) with F(x) = 1 − e^(−rate x); the bounds may be inf or -inf (or ±1E99).
+
+@cmd invExp
+group: stat-cmds
+summary: Inverse exponential distribution
+syntax: invExp(p, rate)
+example: invExp(1/2,2)
+result: ln(2)/2
+see: expcdf
+
+The x with P(X ≤ x) = p, that is −ln(1 − p)/rate (for p = 1/2 the median).
+
+@cmd uniformpdf
+group: stat-cmds
+summary: Continuous uniform density
+syntax: uniformpdf(x, a, b)
+example: uniformpdf(1,0,4)
+result: 1/4
+see: uniformcdf, invUniform
+
+## Refresher
+Uniform on [a, b]: f(x) = 1/(b − a) inside, 0 outside; mean (a + b)/2, variance (b − a)²/12.
+## Syntax
+Density at x; requires a < b.
+
+@cmd uniformcdf
+group: stat-cmds
+summary: Continuous uniform cumulative probability
+syntax: uniformcdf(lo, hi, a, b)
+example: uniformcdf(1,3,0,4)
+result: 1/2
+see: uniformpdf
+
+P(lo ≤ X ≤ hi) for X uniform on [a, b].
+
+@cmd invUniform
+group: stat-cmds
+summary: Inverse continuous uniform distribution
+syntax: invUniform(p, a, b)
+example: invUniform(1/4,2,6)
+result: 3
+see: uniformcdf
+
+The x with P(X ≤ x) = p: a + p (b − a).
+
+@cmd gammapdf
+group: stat-cmds
+summary: Gamma probability density
+syntax: gammapdf(x, k, theta)
+example: gammapdf(2,3,2)
+result: 1/(4*e)
+see: gammacdf, invGamma, chi2pdf
+
+## Refresher
+Gamma with shape k and scale θ: f(x) = x^(k−1) e^(−x/θ)/(gamma(k) θ^k) for x > 0; mean kθ, variance kθ². For integer k it is the sum of k exponential waiting times with mean θ (Erlang); χ² with n degrees of freedom is gamma(n/2, 2).
+## Syntax
+Density at x (shape k > 0, scale theta > 0; the rate is 1/theta). Exact for exact arguments.
+
+@cmd gammacdf
+group: stat-cmds
+summary: Gamma cumulative probability
+syntax: gammacdf(lo, hi, k, theta)
+example: gammacdf(0,2,3,2)
+result: 1-5/(2*e)
+example: gammacdf(0,2,2.5,2)
+result: 0.150854963915
+see: gammapdf, invGamma
+
+P(lo ≤ X ≤ hi). Exact for an integer shape k ≤ 60 and exact bounds (the Erlang sum), otherwise a decimal (the regularized incomplete gamma function).
+
+@cmd invGamma
+group: stat-cmds
+summary: Inverse gamma distribution
+syntax: invGamma(p, k, theta)
+example: invGamma(0.5,3,2)
+result: 5.34812062745
+see: gammacdf
+
+The x with P(X ≤ x) = p, as a decimal.
+
+@cmd betapdf
+group: stat-cmds
+summary: Beta probability density
+syntax: betapdf(x, a, b)
+example: betapdf(1/2,2,3)
+result: 3/2
+see: betacdf, invBeta
+
+## Refresher
+Beta(a, b) on [0, 1]: f(x) = x^(a−1) (1 − x)^(b−1)/B(a, b), B(a, b) = gamma(a) gamma(b)/gamma(a + b); mean a/(a + b). A model for an unknown proportion (the conjugate prior of the binomial).
+## Syntax
+Density at x (a, b > 0). Exact for exact arguments.
+
+@cmd betacdf
+group: stat-cmds
+summary: Beta cumulative probability
+syntax: betacdf(lo, hi, a, b)
+example: betacdf(0,1/2,2,3)
+result: 11/16
+example: betacdf(0,0.3,2.5,3)
+result: 0.241237553921
+see: betapdf, invBeta
+
+P(lo ≤ X ≤ hi). Exact for integer a, b ≤ 60 and exact bounds (a binomial sum), otherwise a decimal (the regularized incomplete beta function).
+
+@cmd invBeta
+group: stat-cmds
+summary: Inverse beta distribution
+syntax: invBeta(p, a, b)
+example: invBeta(0.5,2,3)
+result: 0.385727568132
+see: betacdf
+
+The x with P(X ≤ x) = p, as a decimal.
+
+@cmd weibullpdf
+group: stat-cmds
+summary: Weibull probability density
+syntax: weibullpdf(x, k, lambda)
+example: weibullpdf(1,2,3)
+result: 2/(9*exp(1/9))
+see: weibullcdf, invWeibull
+
+## Refresher
+Weibull with shape k and scale λ: F(x) = 1 − e^(−(x/λ)^k), f(x) = (k/λ)(x/λ)^(k−1) e^(−(x/λ)^k) for x ≥ 0. Lifetimes: k < 1 early failures, k = 1 exponential, k > 1 wear-out.
+## Syntax
+Density at x (k, lambda > 0). Exact for exact arguments.
+
+@cmd weibullcdf
+group: stat-cmds
+summary: Weibull cumulative probability
+syntax: weibullcdf(lo, hi, k, lambda)
+example: weibullcdf(0,1,2,3)
+result: 1-exp(-1/9)
+see: weibullpdf
+
+P(lo ≤ X ≤ hi) with F(x) = 1 − e^(−(x/lambda)^k).
+
+@cmd invWeibull
+group: stat-cmds
+summary: Inverse Weibull distribution
+syntax: invWeibull(p, k, lambda)
+example: invWeibull(0.5,2,3)
+result: 2.49766383347
+see: weibullcdf
+
+The x with P(X ≤ x) = p: lambda (−ln(1 − p))^(1/k).
+
+@cmd lognormpdf
+group: stat-cmds
+summary: Lognormal probability density
+syntax: lognormpdf(x, mu, sigma)
+example: lognormpdf(2.0,0,1)
+result: 0.156874019279
+see: lognormcdf, invLognorm, normalpdf
+
+## Refresher
+X is lognormal when ln X is normal with mean μ and standard deviation σ: f(x) = e^(−(ln x − μ)²/(2σ²))/(x σ √(2π)) for x > 0; median e^μ, mean e^(μ + σ²/2).
+## Syntax
+Density at x; mu and sigma (> 0) are the parameters of ln X.
+
+@cmd lognormcdf
+group: stat-cmds
+summary: Lognormal cumulative probability
+syntax: lognormcdf(lo, hi, mu, sigma)
+example: lognormcdf(0,2,0,1)
+result: 0.755891404214
+see: lognormpdf
+
+P(lo ≤ X ≤ hi) = normalcdf(ln lo, ln hi, mu, sigma), as a decimal.
+
+@cmd invLognorm
+group: stat-cmds
+summary: Inverse lognormal distribution
+syntax: invLognorm(p, mu, sigma)
+example: invLognorm(0.5,1,2)
+result: 2.71828182846
+see: lognormcdf, invNorm
+
+The x with P(X ≤ x) = p: e^invNorm(p, mu, sigma).
+
+@cmd invBinom
+group: stat-cmds
+summary: Inverse binomial distribution
+syntax: invBinom(p, n, prob)
+example: invBinom(0.5,10,0.3)
+result: 3
+see: binomcdf
+
+The smallest integer x with binomcdf(n, prob, x) ≥ p (a quantile of the number of successes in n trials).
+
+@cmd invPoisson
+group: stat-cmds
+summary: Inverse Poisson distribution
+syntax: invPoisson(p, mu)
+example: invPoisson(0.9,4)
+result: 7
+see: poissoncdf
+
+The smallest integer x with poissoncdf(mu, x) ≥ p.

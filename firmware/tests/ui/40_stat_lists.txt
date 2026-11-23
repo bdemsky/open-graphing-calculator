@@ -1,0 +1,136 @@
+# Statistics lists: STAT menu, list editor (entry, INS/DEL, formulas, named
+# lists, sort, clear), lists as CAS variables, persistence
+app stat
+expect screen menu
+expect state menu STAT
+expect text CALC
+expect text TESTS
+screenshot stat_menu.png
+key 1
+expect screen statedit
+expect state statedit_list L1
+expect state statedit_row 1
+# enter 5, 3, 9, 1 into L1
+type "5\n3\n9\n1\n"
+stat expect L1 5,3,9,1
+expect state statedit_row 5
+# expressions are evaluated
+type "2^3\n"
+stat expect L1 5,3,9,1,8
+# ⌫ deletes the element under the cursor, SHIFT ⌫ inserts a 0
+key UP DEL
+stat expect L1 5,3,9,1
+key UP UP SHIFT DEL
+stat expect L1 5,3,0,9,1
+key DEL
+# edit a value in place
+key UP ENTER CLEAR
+type "4\n"
+stat expect L1 5,4,9,1
+# L2 by typing into the next column
+key RIGHT
+expect state statedit_list L2
+key UP UP UP UP UP
+expect state statedit_row 0
+key DOWN
+type "10\n20\n30\n40\n"
+stat expect L2 10,20,30,40
+screenshot stat_edit.png
+# a column formula on L3 recomputes when L1 changes
+key RIGHT UP UP UP UP UP UP
+expect state statedit_list L3
+ifcas src type "\"L1+L2\"\n"
+ifcas src stat expect L3 15,24,39,41
+ifcas src stat lists
+key LEFT LEFT DOWN
+type "100\n"
+ifcas src stat expect L3 110,24,39,41
+ifcas src expect text L3*
+# a value computed once (no quotes)
+key RIGHT RIGHT RIGHT UP UP UP UP UP UP
+expect state statedit_list L4
+ifcas src type "L2/10\n"
+ifcas src stat expect L4 1,2,3,4
+# a named list in the empty column after L6
+key RIGHT RIGHT RIGHT
+expect state statedit_list ""
+type "DATA\n"
+expect state statedit_list DATA
+key DOWN
+type "7\n8\n"
+stat expect DATA 7,8
+expect text DATA
+key CLEAR
+expect screen home
+# lists are CAS variables on the home screen
+ifcas src type "mean(L2)\n"
+ifcas src expect state last_output 25
+ifcas src type "L2*2"
+ifcas src key ASSIGN
+ifcas src type "L5\n"
+ifcas src stat expect L5 20,40,60,80
+ifcas src key SHIFT 8
+ifcas src type "3,1,2"
+ifcas src key SHIFT 9 ASSIGN
+ifcas src type "L6\n"
+ifcas src stat expect L6 3,1,2
+ifcas src type "sort(L6)"
+ifcas src key ASSIGN
+ifcas src type "L6\n"
+ifcas src stat expect L6 1,2,3
+# VARS > Lists inserts a name
+key VARS
+expect text Lists
+key CLEAR
+# SortD from the STAT menu while in the editor sorts the current column
+stat set L1 2,7,1,8
+app stat
+key 1
+app stat
+key 5
+expect screen statedit
+stat expect L1 8,7,2,1
+# SortA with a form (from the home screen), carrying L2 along
+stat set L1 3,1,2
+stat set L2 30,10,20
+key CLEAR
+app stat
+key 4
+expect screen statform
+type "L1"
+key DOWN
+type "L2"
+key DOWN ENTER
+expect screen statedit
+stat expect L1 1,2,3
+stat expect L2 10,20,30
+# ClrList from the editor clears the current column, after a No/Yes question
+app stat
+key 6
+expect screen menu
+expect state menu "Clear L1 (3 values)?"
+key ENTER
+expect screen statedit
+stat expect L1 1,2,3
+app stat
+key 6 2
+expect screen statedit
+stat expect L1
+# lists survive a power cycle
+key SHIFT ON
+key ON
+expect screen home
+stat expect L2 10,20,30
+stat expect DATA 7,8
+ifcas src stat lists
+# the list name line: ENTER shows the list, unchanged ENTER keeps it, CLEAR ENTER clears it
+app stat
+key 1
+key RIGHT UP
+expect state statedit_row 0
+key ENTER
+expect text {10,20,30}
+key ENTER
+stat expect L2 10,20,30
+key ENTER CLEAR ENTER
+stat expect L2

@@ -1,0 +1,48 @@
+# COMPLEX mode and odd roots of negative numbers: REAL gives the real root
+# (the CAS gets settings.real from app_apply_settings, state cas_real), a+bi
+# keeps the principal branch; even roots of negatives are non-real in REAL.
+setmode DISPLAY CLASSIC
+key HOME
+expect state complex rect
+expect state cas_real 0
+type "(~8)^(1/3)\n"
+ifcas src expect state last_error 0
+ifcas src expect statecontains last_output (-1)^(1/3)
+setmode COMPLEX REAL
+expect state complex real
+expect state cas_real 1
+type "(~8)^(1/3)\n"
+ifcas src expect state last_error 0
+expect state last_output -2
+type "(~1)^(2/3)\n"
+expect state last_output 1
+type "(~8)^(~1/3)\n"
+expect state last_output -1/2
+ifcas src type "integrate(x^(~1/3),x,~1,8)\n"
+ifcas src expect state last_output 9/2
+ifcas src type "solve(x^3=~8,x)\n"
+ifcas src expect state last_output [-2]
+# even roots stay non-real, like √(-1)
+key SQRT
+type "~1)\n"
+ifcas src expect state last_error 1
+ifcas src expect statecontains last_output NONREAL
+type "(~8)^(1/6)\n"
+ifcas src expect state last_error 1
+ifcas src expect statecontains last_output NONREAL
+# r∠θ is a complex mode: principal branch again
+setmode COMPLEX r∠θ
+expect state cas_real 0
+type "(~1)^(2/3)\n"
+ifcas src expect state last_error 0
+ifcas src expect state last_output 1∠2*π/3
+type "(~8)^(1/3)\n"
+ifcas src expect state last_output 2∠π/3
+setmode ANGLE DEGREE
+type "(~8)^(1/3)\n"
+ifcas src expect state last_output 2∠60
+setmode ANGLE RADIAN
+setmode COMPLEX a+bi
+expect state cas_real 0
+type "(~8)^(~1/3)\n"
+ifcas src expect statecontains last_output (-1)^(5/3)

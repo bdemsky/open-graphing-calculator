@@ -1,0 +1,72 @@
+# Ans and Out[n] in Python cells of the home notebook (modules/python nb_doc.c; help pages
+# "home-notebook", "python"): Ans is the latest result, Out maps execution counts to results: a
+# math cell's as a calc.Expr, a Python cell's as the object itself (kept since the interpreter
+# started), rebuilt from its text after a reboot when it is a calc.Expr or a literal; a missing n
+# is a KeyError that says so. One numbering with the math cells; a Python cell's [n] by its result.
+requirecfg MOD_PYTHON
+requirecfg CAS_SRC
+type "x^2+1\n"
+type "1/3\n"
+key MENU 8
+type "[Ans, Out[1], Out[1]*2]"
+key ENTER
+expect state home_kind python
+expect state last_output "[1/3, x^2+1, 2*x^2+2]"
+expect text [3]
+screenshot home_refs_python.png
+key MENU 8
+type "len(Out[3])*7"
+key ENTER
+expect state last_output 21
+# the ANS key on a Python line: Ans, the Python name
+key MENU 8
+key SHIFT NEG
+expect state entry Ans
+type "+1"
+key ENTER
+expect state last_output 22
+# a math cell after it: Out[n] of a math result; a Python cell's Ans is that calc.Expr
+type "Out[1]*2\n"
+expect state last_output 2*x^2+2
+key MENU 8
+type "Ans/2"
+key ENTER
+expect state last_output x^2+1
+# an object that has no text to rebuild it from: Out keeps the object itself
+key MENU 8
+type "object()"
+key ENTER
+key MENU 8
+type "Out[8] is Out[8]"
+key ENTER
+expect state last_output True
+key MENU 8
+type "8 in Out, 99 in Out"
+key ENTER
+expect state last_output "(True, False)"
+key MENU 8
+type "Out[99]"
+key ENTER
+expect statecontains last_output "KeyError: Out[99]: no such result"
+# a selected Python cell: edit, result, Out[n]
+key UP UP UP
+expect state home_kind python
+expect state softkeys "edit|result|Out[10]||"
+key F3
+expect state entry Out[10]
+key CLEAR
+# a reboot: a fresh interpreter; math results and calc.Expr / literal values rebuilt from their text
+session save
+reboot
+key MENU 8
+type "Out[1], Out[4], Out[6]"
+key ENTER
+expect state last_output "(x^2+1, 21, 2*x^2+2)"
+key MENU 8
+type "Out[8]"
+key ENTER
+expect statecontains last_output "Out[8]: its value is not kept: run that cell again"
+# the numbering goes on after the reboot
+expect state history 13
+key UP UP UP UP
+expect state softkeys "edit|result|Out[12]||"

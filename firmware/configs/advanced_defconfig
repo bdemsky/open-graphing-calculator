@@ -1,0 +1,9 @@
+# Advanced tier: standard + code modules and CAS extension modules in the QSPI (phase 2):
+# the Animation and advanced CAS code modules are in the factory content; the other CAS extension modules are
+# placeholders (this builds the "cas" module interface only).
+CONFIG_CONTENT_QSPI=y
+CONFIG_MANUAL_FULL=y
+CONFIG_CAS_SRC=y
+CONFIG_CAS_EXT=y
+CONFIG_MOD_ANIMATION=y
+CONFIG_MOD_CASX=y

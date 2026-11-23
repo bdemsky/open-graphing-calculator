@@ -1,0 +1,52 @@
+# Math Quest's keypad action games (modules/mathquest/mq_action.c) from the arcade: Cloud Dash
+# (lanes with UP/DOWN, rows of answer bubbles), Star Sled (LEFT/RIGHT), Pop-up Pals (the number
+# keys as holes); the end of a game with a new best. Deterministic with `mq seed` and `mq step`.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+mq seed 6
+mq fun 30000
+mq grant bosses
+key F3
+expect state mq_scene arcade
+mq step 4
+screenshot mathquest_arcade_action.png
+# Cloud Dash
+touch tap 56 156
+expect state mq_scene action
+mq step 30
+key UP
+mq step 20
+screenshot mathquest_action_run.png
+mq step 120
+screenshot mathquest_action_run_row.png
+key DOWN
+mq step 200
+# Star Sled
+key F5
+expect state mq_scene arcade
+touch tap 160 156
+expect state mq_scene action
+mq step 40
+key LEFT
+key LEFT
+mq step 60
+screenshot mathquest_action_sled.png
+# Pop-up Pals: the number keys are the holes
+key F5
+touch tap 264 156
+expect state mq_scene action
+mq step 150
+key 5
+key 7
+screenshot mathquest_action_pals.png
+mq step 1200
+expect text New best!
+screenshot mathquest_action_best.png
+key F5
+expect state mq_scene arcade

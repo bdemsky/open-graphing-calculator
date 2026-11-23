@@ -1,0 +1,85 @@
+# PDE grids (pdenum of the casx module, cas/ext/sci/pdenum.c) in the graphing apps: the 3D
+# graph draws z = gridval(U,[a,b],[t0,t1],x,y) and a 2D graph plays y = gridval(U,...,x,t) in
+# time with the slider t and the Animation module; the compiled graph functions look the grid
+# up (cas/src/numeric.c OP_GRID). The core tier leaves the science commands out of its flash.
+requirecfg CAS_SRC
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library
+ifcfg !MOD_CASX module install /CALC/MODULES/{mod:casx}
+ifcfg !MOD_CASX key CLEAR
+ifcfg !MOD_ANIMATION module install /CALC/MODULES/{mod:animation}
+ifcfg !MOD_ANIMATION key CLEAR
+# heat equation on [0,1], u = 0 at the ends, u(x,0) = sin(pi x): 11 x 51 grid
+key HOME
+key CLEAR
+expect screen home
+# typed in pieces (the key queue is short); u(x,t) with two arguments is a call, not u*(x,t)
+type "U:=pdenum(u_t(x,t)"
+type "=u_xx(x,t),u(x,t),"
+type "[u(0,t)=0,u(1,t)=0,"
+type "u(x,0)=sin(pi*x)],"
+type "[x,0,1,10],"
+type "[t,0,0.1,50])\n"
+expect state last_error 0
+expect eval "dim(U)" "[51,11]"
+expect eval "gridval(U,[0,1],[0,0.1],0.5,0.1)" "0.372105279067"
+# the closed form for comparison
+expect eval "pdesolve(u_t(x,t)=u_xx(x,t),u(x,t),[u(0,t)=0,u(1,t)=0,u(x,0)=sin(pi*x)])" "exp(-pi^2*t)*sin(pi*x)"
+# a surface over (x, t) in the 3D graph
+app settings
+app graph3d
+g3d set 1 1 "gridval(U,[0,1],[0,0.1],x,y)"
+# window x 0..1, y (time) 0..0.1, z 0..1
+key F2
+expect screen graph3d_win
+type "0"
+key ENTER
+type "1"
+key ENTER
+type "0"
+key ENTER
+type "0.1"
+key ENTER
+type "0"
+key ENTER
+type "1"
+key ENTER
+key F5
+expect screen graph3d
+redraw
+expect state g3d_drawn 1
+expect state g3d_err1 ""
+screenshot pde_heat_surface.png
+# played in time on a 2D graph: t is a slider, the Animation module moves it
+app graph
+key F1
+type "gridval(U,[0,1],[0,0.1],x,t)"
+key F5
+expect screen graph
+# window x 0..1, y -0.1..1.1
+key F2
+type "0"
+key ENTER
+type "1"
+key ENTER
+type "0.1"
+key ENTER
+type "~0.1"
+key ENTER
+type "1.1"
+key ENTER
+key F5
+expect screen graph
+expect state xmax 1
+expect state sliders 1
+expect text back
+anim cfg t 0 0.1 2 0
+key SHIFT F5 1
+expect state anim_playing 1
+expect state anim_var t
+anim step 10
+screenshot pde_heat_anim.png
+key LEFT
+expect state anim_playing 0

@@ -1,0 +1,82 @@
+# Undo / redo (MENU F1 / MENU F2, app/input_undo.c) on the home entry line,
+# after ENTER and CLEAR, in Y= and in a form field
+expect screen home
+type "12+3"
+expect state entry 12+3
+# the home screen's MENU (the notebook menu) shows the edit bar
+key MENU
+expect screen menu
+expect state menu "NOTEBOOK (not saved)"
+screenshot edit_bar.png
+key F1
+expect screen home
+expect state entry 12+
+# digits typed in a row are one step
+key MENU F1
+expect state entry 12
+key MENU F1
+expect state entry ""
+# nothing left to undo: no change
+key MENU F1
+expect state entry ""
+key MENU F2
+expect state entry 12
+key MENU F2 MENU F2
+expect state entry 12+3
+key MENU F2
+expect state entry 12+3
+# a new change forgets the redo steps
+key MENU F1
+expect state entry 12+
+type "4"
+key MENU F2
+expect state entry 12+4
+# undo brings back a line that ENTER evaluated
+key ENTER
+expect state last_input 12+4
+expect state entry ""
+key MENU F1
+expect state entry 12+4
+# ... and a line that CLEAR cleared
+key CLEAR
+expect state entry ""
+key MENU F1
+expect state entry 12+4
+# a function key is one step, the cursor comes back too
+key CLEAR
+type "x"
+key SIN
+expect state entry xsin(
+key MENU F1
+expect state entry x
+expect state cursor 1
+# menu insertions are one step
+key CAS 1
+expect state entry xfactor()
+key MENU F1
+expect state entry x
+key CLEAR CLEAR
+# Y=: every line has its own steps
+key F1
+expect screen yeq
+type "x+1"
+key MENU F1
+expect screen yeq
+expect state y1 x+
+key MENU F1
+expect state y1 x
+key MENU F2 MENU F2
+expect state y1 x+1
+key HOME
+expect screen home
+# window form field
+key F1 F2
+expect screen window
+key CLEAR
+type "5"
+key MENU F1
+expect screen window
+key MENU F2
+key ENTER
+expect state xmin 5
+key HOME

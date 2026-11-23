@@ -1,0 +1,145 @@
+# Graphing usability (docs/usability/graphing.md): the Y= mode header is in
+# view, typing on it goes to the first entry, the Y= MENU options, an empty
+# graph and an empty TRACE say what to do, CALC prompts say how to answer,
+# intersect picks the curves itself when there are only two, WINDOW / TBLSET
+# explain the selected field and name what is wrong, TABLE goes to a typed x.
+# --- Y=: the graph-mode header is visible on arrival
+key F1
+expect screen yeq
+expect state yeq_row 0
+expect text PAR
+expect text IMPL
+# typing on the header goes to the first entry (nothing is lost)
+key UP
+expect state yeq_row -1
+type "x^2-2"
+expect state yeq_row 0
+expect state y1 x^2-2
+# a tap on the header chooses the mode and puts the focus on its first entry
+touch tap 40 29
+expect state graph_type PAR
+expect state yeq_row 0
+type "cos(x)"
+expect state e1_1 cos(t)
+touch tap 10 29
+expect state graph_type FUNC
+expect state y1 x^2-2
+# --- the MENU key: options of the focused entry and the graph modes
+key MENU
+expect screen menu
+expect state menu "Y= OPTIONS"
+expect text "Y1 on/off"
+expect text "Y1 next line style"
+screenshot yeq_menu.png
+key 1
+expect screen yeq
+expect state y1_on 0
+key MENU 1
+expect state y1_on 1
+key MENU 2
+expect state y1_color red
+key MENU 3
+expect state y1_style thick
+key MENU 3 MENU 3 MENU 3 MENU 3 MENU 3
+expect state y1_style line
+# graph mode from the menu (item 6 = PAR), and back (item 5 = FUNC)
+key MENU 6
+expect state graph_type PAR
+expect state yeq_row 0
+key MENU 5
+expect state graph_type FUNC
+# clear the entry from the menu, then retype it
+key MENU 4
+expect state y1 ""
+type "x^2-2"
+# --- an empty graph says where its content comes from; TRACE says why it cannot start
+key SHIFT LEFT LEFT ENTER
+expect state y1_on 0
+key F5
+expect text "y= (F1): enter a function"
+key F4
+expect state graph_mode plain
+expect state graph_result "Nothing to trace: switch on an entry in y="
+screenshot graph_empty.png
+key F1 ENTER
+expect state y1_on 1
+key RIGHT
+# --- CALC: the prompt says how to answer
+key F5 SHIFT F4 2
+expect text "◀ ▶ or type, enter"
+screenshot calc_hint.png
+key CLEAR CLEAR
+# a failed search says what to try
+key SHIFT F4 2
+type "2"
+key ENTER
+type "3"
+key ENTER ENTER
+expect state graph_result "No zero between the bounds: widen them"
+key CLEAR
+# intersect with one curve: nothing to intersect
+key SHIFT F4 5
+expect screen message
+expect text "Intersect needs two"
+key CLEAR
+# with three curves the curves are chosen with UP/DOWN
+key F1 DOWN
+type "x"
+key DOWN
+type "~x"
+key F5 SHIFT F4 5
+expect state calc_prompt "First curve?"
+expect text "▲ ▼ curve, enter"
+key ENTER
+expect state calc_prompt "Second curve?"
+expect state trace_fn 2
+key DOWN ENTER
+expect state calc_prompt "Guess?"
+expect text "Guess?  Y1 and Y3"
+type "1"
+key ENTER
+expect statecontains graph_result Intersection  X=1.
+key CLEAR CLEAR
+# --- WINDOW: the selected field is explained; a wrong range names the problem
+key F2
+expect text "left edge of the graph"
+key DOWN DOWN
+expect text "distance between x tick marks (0: none)"
+key UP
+type "~20"
+key ENTER
+expect text "ERR: Xmin must be less than Xmax"
+expect state xmax 10
+screenshot window_hint.png
+key CLEAR
+type "10"
+key ENTER
+# TBLSET
+key SHIFT F2 DOWN
+expect text "step between rows (not 0; negative counts down)"
+type "0"
+key ENTER
+expect text "ERR: ΔTbl must not be 0"
+key CLEAR
+type "1"
+key ENTER
+# --- TABLE: typing a number goes to that x (expressions work)
+key SHIFT F5
+expect text "type a number: go there"
+type "2.5"
+expect text "go to X=2.5"
+key ENTER
+expect state table_start 2.5
+expect state table_row 0
+expect text 4.25
+key 2 SHIFT X
+key ENTER
+expect state table_start 6.283185307
+# CLEAR cancels typing, a second CLEAR leaves the table
+key 7 CLEAR CLEAR
+expect state table_start 6.283185307
+expect screen table
+screenshot table_goto.png
+key CLEAR
+expect screen home
+lcdcheck

@@ -1,0 +1,175 @@
+# Help coverage: SHIFT MENU opens a help page (not the index fallback) on
+# every screen: home, Y=, WINDOW, TBLSET, GRAPH, TABLE, settings, base-n, the
+# 3D graph screens, geometry, spreadsheet, list editor, stat forms, solver
+# screens, the finance screens, MATRIX, microSD tools, UNITS, a message box
+# (bug: it opened the index; now the page of the screen below it) and RPN.
+requirecfg MANUAL_FULL
+key SHIFT MENU
+expect state help_topic home-screen
+key CLEAR
+key F1
+key SHIFT MENU
+expect state help_topic yeq
+key CLEAR
+app graph
+key F2
+key SHIFT MENU
+expect state help_topic window
+key CLEAR
+key SHIFT F2
+key SHIFT MENU
+expect state help_topic tblset
+key CLEAR
+app graph
+key SHIFT MENU
+expect state help_topic graph
+key CLEAR
+app table
+key SHIFT MENU
+expect state help_topic table
+key CLEAR
+key SHIFT HOME
+key SHIFT MENU
+expect state help_topic mode-angle
+key CLEAR
+app basen
+key SHIFT MENU
+expect state help_topic basen
+key CLEAR
+app graph3d
+key SHIFT MENU
+expect state help_topic graph3d
+key CLEAR
+key F1
+key SHIFT MENU
+expect state help_topic graph3d-eq
+key CLEAR
+key F2
+key SHIFT MENU
+expect state help_topic graph3d-window
+key CLEAR
+app geometry
+key SHIFT MENU
+expect state help_topic geometry
+key CLEAR
+app sheet
+key SHIFT MENU
+expect state help_topic sheet
+key CLEAR
+app stat
+key 1
+key SHIFT MENU
+expect state help_topic stat-edit
+key CLEAR
+app stat
+key 2 1
+key SHIFT MENU
+expect state help_topic stat-calc
+key CLEAR
+app distr
+key DOWN DOWN
+key ENTER
+key SHIFT MENU
+expect state help_topic stat-calc
+key CLEAR
+app solver
+key 1
+key SHIFT MENU
+expect state help_topic solver
+key CLEAR
+app solver
+key 2
+key SHIFT MENU
+expect state help_topic polyroot
+key CLEAR
+app solver
+key 3
+key SHIFT MENU
+expect state help_topic linsys
+key CLEAR
+app finance
+key 1
+key SHIFT MENU
+expect state help_topic tvm
+key CLEAR
+key F2
+key SHIFT MENU
+expect state help_topic amortization
+key CLEAR
+key F3
+key SHIFT MENU
+expect state help_topic cashflow
+key CLEAR
+key F4
+key SHIFT MENU
+expect state help_topic interest-conv
+key CLEAR
+key SHIFT F1
+key SHIFT MENU
+expect state help_topic dbd
+key CLEAR
+app matrix
+key ENTER
+key SHIFT MENU
+expect state help_topic matrix-menu
+key CLEAR
+app sdtools
+key SHIFT MENU
+expect state help_topic sdtools
+key CLEAR
+app units
+key SHIFT MENU
+expect state help_topic pm
+key CLEAR
+app sheet
+msg T hello
+expect screen message
+key SHIFT MENU
+expect state help_topic sheet
+key CLEAR
+setmode ENTRY RPN
+key HOME
+key SHIFT MENU
+expect state help_topic rpn
+key CLEAR
+key UP
+key SHIFT MENU
+expect state help_topic rpn
+key CLEAR
+setmode ENTRY ALGEBRAIC
+# matrix editor, statistics result and DISTR DRAW screens
+key HOME SHIFT MATH 3
+key ENTER
+expect screen matedit
+key SHIFT MENU
+expect state help_topic matrix-edit
+key CLEAR
+stat set L1 1,2,3
+app stat
+key 2 1
+key DOWN DOWN DOWN DOWN DOWN ENTER
+expect screen statresult
+key SHIFT MENU
+expect state help_topic stat-results
+key CLEAR
+app distr
+key UP ENTER ENTER
+expect screen statform
+key SHIFT MENU
+expect state help_topic stat-distr
+key CLEAR
+# the help viewer's soft keys sit where the menus have them: F1 / F2 page,
+# F3 index, F4 exit, F5 back
+key HOME
+manual sheet
+expect state help_top 0
+key F2
+expect state help_top 13
+key F1
+expect state help_top 0
+key F3
+expect state help_topic index
+key F5
+expect state help_topic sheet
+key F4
+expect screen home

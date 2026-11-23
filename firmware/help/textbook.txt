@@ -1,0 +1,66 @@
+%% Textbook (2D) math entry and display, live preview, repeating decimals, themes and fonts
+%% (app/m2d_*.c, app/theme.c).
+
+@page textbook Textbook math
+With the [[mode-display|DISPLAY]] setting TEXTBOOK (the default) the home screen shows math the way it is written in a textbook: fractions stacked, roots with a bar, exponents raised, `|x|`, logarithms with a lowered base, d/dx, integrals and sums with their limits, matrices in brackets, 1.5×10 with a raised -7 for `1.5ᴇ-7`, and repeating decimals with a bar over the period.
+
+## Entering math
+- {xʸ} opens an exponent box: `2` {xʸ} `3` shows 2 with a raised 3. {▶} leaves the box. While you are typing an exponent, {+} {−} {×} {÷} {,} and {)} leave it first, so `2^3+1` means (2^3)+1 exactly as in Classic. Use parentheses for a sum in an exponent: `2^(3+1)`.
+- {√} opens a square-root box ({shift} {√}: a cube root), {shift} {log} gives 10 with an exponent box, {shift} {ln} gives e with an exponent box, {shift} {−} an |x| box and {shift} {+} a Σ sum.
+- On the home screen the soft keys {F2} (frac) open the FRAC menu (fraction n/d), {F3} (func) the FUNC menu (Σ, Π, d/dx, ∫, log base, √, n-th root, |x|) and {F4} (mtrx) the MTRX menu (matrices and vectors up to 3×3). See [[textbook-templates]].
+- {◀} {▶} move through the boxes in order; {▲} {▼} move between the numerator and the denominator, the limits of ∫, Σ and Π, the index of a root and the rows of a matrix. Elsewhere {▲} selects history entries as usual.
+- {⌫} on the edge of a box (the marker before the cursor): an empty box disappears, a filled one turns into ordinary text (a fraction becomes `(1)/(x+1)`-style text you can edit).
+- {)} at the end of a √ box steps out of it, so `√(2)` typed the Classic way gives the same result.
+- {shift} {enter} (entry) and pasting a history entry ({▲} {enter}) bring it back with its boxes.
+- Touch: tap the entry line to put the cursor at the nearest box position.
+
+## The history
+Inputs are on the left, results on the right, both in 2D. A line wider than the screen continues on the next line, broken before a + − or =, after a comma, then before a × or ÷, or inside a long number; a piece that cannot be broken (a wide matrix or list) shows ▶ at the edge: select it with {▲} and scroll it with {◀} {▶}. A result too tall for the screen, and errors, are shown as text.
+
+In a product of names the letters stand a little apart: x·y·z shows as `x y z`, while `xyz` written together is one variable called xyz (names can have several letters). Type the multiplications (`x*y*z`) when you mean a product. Pasting a result ({enter} on it) inserts its linear form.
+
+Everything still works in the linear syntax: the history keeps the text that can be typed in Classic mode (`(1+x)/2`, `√(8)`, `log(8,2)`, `diff(x^3,x)`, `[[1,2],[3,4]]`), which is also what `state last_input` reports.
+
+See also [[mode-preview|live preview]], [[mode-repeat|repeating decimals]], [[mode-theme|dark theme]] and [[mode-font|large font]].
+
+@page textbook-templates Template menus
+On the home screen in Textbook mode these menus insert boxes; in Classic mode and in other editors they insert the linear form with the cursor in the first gap.
+
+## FRAC ({F2} on the home screen)
+- n/d: a fraction, cursor in the numerator ({▼} goes to the denominator).
+- x^y: an exponent box (like {xʸ}).
+- |x|: absolute value.
+
+## FUNC ({F3} on the home screen)
+- Σ summation and Π product: variable, start (below), end (above), then the term; `sum(k^2,k,1,10)` is 385.
+- d/dx: the variable, then the expression; `diff(x^3,x)` is `3*x^2`.
+- ∫ definite integral: lower limit, upper limit, integrand, variable; `integrate(x^2,x,0,1)` is 1/3.
+- ∫ antiderivative: integrand and variable.
+- logBASE: the base (lowered), then the argument; `log(8,2)` is 3.
+- √ square root and ⁿ√ n-th root (index, then radicand: `8^(1/3)` is 2).
+- |x|: absolute value.
+
+## MTRX ({F4} on the home screen)
+2×2, 3×3, 2×3 and 3×2 matrices, 2×1 and 3×1 column vectors, 1×2 and 1×3 row vectors. {▶} moves from cell to cell (row by row), {▲} {▼} between rows. The result is the matrix `[[1,2],[3,4]]`.
+
+@page mode-display Display: Textbook or Classic
+TEXTBOOK shows inputs and results in textbook form and makes {xʸ}, √ and the template menus insert boxes (see [[textbook]]). CLASSIC shows everything as one line of text, as typed: `(x+1)/2`, `x^2`, `√(8)`. Switching to CLASSIC turns the boxes of the entry line into that text. The setting is kept when the calculator is off.
+
+@page mode-preview Live preview
+With PREVIEW ON the home screen shows the result of the entry line, dimmed, under it while you type (after a short pause). Unclosed parentheses are closed for the preview: `2*(3+4` shows 14.
+
+The preview never changes anything: Ans and the history stay as they are, and it is not shown for assignments (`a:=5`, {→}) or commands that change settings or take long ([[solve]], [[integrate]], [[limit]], series, random numbers). A slow calculation is abandoned after a fraction of a second, and as soon as you press a key, so typing never waits. Errors show no preview. {enter} evaluates as usual.
+
+@page mode-repeat Repeating decimals
+REPEAT 0.(3) (the default) does two things:
+
+- Input: a decimal with its period in parentheses is the exact fraction. `0.(3)` is 1/3, `1.2(34)` is 611/495, `0.(9)` is 1.
+- Display: a decimal result that is a fraction with a period of up to 16 digits is shown with its period: approx(1/7) shows `0.(142857)` (with a bar over 142857 in Textbook mode), 1/6 in APPROX mode shows `0.1(6)`. Ans and the stored value keep all digits; numbers that are not short fractions (`√(2)`) are shown as usual.
+
+Only in FORMAT NORMAL with DECIMAL FLOAT; FIX, SCI and ENG show the rounded decimal. REPEAT OFF shows all decimals. See [[mode-format]].
+
+@page mode-theme Theme: light or dark
+THEME DARK shows every screen with light text on a dark background (graphs, menus, help and the settings screen too); the colours of functions and links are lightened to stay readable, selections stay blue. LIGHT is the default. A dark screen is easier on the eyes at night and uses the backlight less for the same readability at a lower LIGHT setting. The theme is kept when the calculator is off.
+
+@page mode-font Font size
+FONT LARGE uses a bigger font (14×28 pixels instead of 10×20) on the home screen and in the menus, for easier reading: 22 characters per line and 7 lines. 2D math scales with it. The other screens keep the normal font so that their layout fits. NORMAL is the default.

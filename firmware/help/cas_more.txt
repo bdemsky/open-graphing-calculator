@@ -1,0 +1,93 @@
+%% More CAS commands (cas/src/xcmds.c)
+
+@cmd digits
+group: cas-integer
+summary: Digits of an integer
+syntax: digits(n)
+syntax: digits(n, base)
+example: digits(1234)
+result: [1,2,3,4]
+example: digits(255,16)
+result: [15,15]
+see: hex, ifactor
+
+Returns the list of digits of `|n|` in base 10 or the given base (2 to 1000000), most significant first.
+
+@cmd pade
+group: cas-calculus
+summary: Pade approximant
+syntax: pade(f, x, m, n)
+example: pade(exp(x),x,2,2)
+result: (x^2/12+x/2+1)/(x^2/12-x/2+1)
+see: series, taylor
+
+Returns the rational function `P/Q` with numerator degree at most `m` and denominator degree at most `n`, `Q(0)=1`, whose Taylor series at `x=0` agrees with that of `f` up to `x^(m+n)`. Gives an error when the linear system for the denominator is singular.
+
+@cmd fourier_an
+group: cas-calculus
+summary: Fourier cosine coefficient
+syntax: fourier_an(f, x, T, n, a)
+syntax: fourier_an(f, x, T, n)
+example: fourier_an(x^2,x,2*pi,0,-pi)
+result: pi^2/3
+example: fourier_an(x^2,x,2*pi,n,-pi)
+result: 4*(-1)^n/n^2
+see: fourier_bn, integrate
+
+## Refresher
+Fourier series of period T = 2L: f(x) ~ a₀ + Σ (a_n cos(nπx/L) + b_n sin(nπx/L)), with a₀ the mean value (this command for n = 0) and a_n, b_n = (1/L) ∫ f cos, f sin over one period. Even f: only cosines; odd f: only sines. At a jump the series converges to the midpoint (Gibbs overshoot about 9 % nearby). Parseval: (1/L)∫ f² = 2a₀² + Σ (a_n² + b_n²).
+example: fourier_an(abs(x),x,2*pi,n,-pi)
+result: 2*((-1)^n-1)/(n^2*pi)
+## Syntax
+The n-th cosine coefficient of `f` with period `T` over `[a, a+T]` (default a = 0): `2/T*integrate(f*cos(2*pi*n*x/T),x,a,a+T)`; for n = 0 the mean value `1/T*integrate(f,x,a,a+T)`. A symbolic `n` is treated as an integer.
+
+@cmd fourier_bn
+group: cas-calculus
+summary: Fourier sine coefficient
+syntax: fourier_bn(f, x, T, n, a)
+syntax: fourier_bn(f, x, T, n)
+example: fourier_bn(x,x,2*pi,n,-pi)
+result: -2*(-1)^n/n
+see: fourier_an
+
+The n-th sine coefficient `2/T*integrate(f*sin(2*pi*n*x/T),x,a,a+T)`; a symbolic `n` is treated as an integer.
+
+@cmd randpoly
+group: cas-algebra
+summary: Random polynomial
+syntax: randpoly(x, n)
+syntax: randpoly(n)
+example: degree(randpoly(x,4),x)
+result: 4
+see: randMat
+
+A polynomial of degree `n` (default 5) in `x` with random integer coefficients between -99 and 99.
+
+@cmd egcd
+group: cas-algebra
+summary: Extended gcd of polynomials
+syntax: egcd(p, q)
+syntax: egcd(p, q, x)
+example: egcd(x^2-1,x+3)
+result: [1/8,-x/8+3/8,1]
+example: egcd(12,18)
+result: [-1,1,6]
+see: gcd, iegcd
+
+Returns `[u, v, d]` with `u*p + v*q = d`, where `d` is the monic gcd of the polynomials `p` and `q` in `x` (default: the main variable). For two integers it is [[iegcd]].
+
+@cmd piecewise
+group: cas-functions
+summary: Piecewise defined expression
+syntax: piecewise(cond1, value1, cond2, value2, ..., otherwise)
+example: piecewise(3<0,-3,3)
+result: 3
+example: subst(piecewise(x<0,-x,x^2),x,-2)
+result: 2
+example: f(x):=piecewise(x<0,-x,x<2,1,x^2)
+result: piecewise(x<0,-x,x<2,1,x^2)
+example: f(5)
+result: 25
+see: when, heaviside
+
+Returns the value of the first condition that is true, or `otherwise` (undef if it is missing). It stays unevaluated while the first remaining condition cannot be decided (a free variable), and simplifies as soon as values are substituted. Graphs (Y=, graph cells) plot piecewise and [[when]] expressions, splines included; where no condition holds and there is no `otherwise`, nothing is drawn.

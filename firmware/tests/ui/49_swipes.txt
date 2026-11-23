@@ -1,0 +1,81 @@
+# Swipes (core/touch.c TEV_SWIPE): a fast straight drag gives a swipe after its UP.
+# The help viewer: swipe right = back, left = next page; a vertical drag still scrolls.
+# Math Quest: rooms, shop and book pages, worlds, celebrations waved away, serving in the
+# arcade. `touch swipe X Y DIR` injects one.
+requirecfg MANUAL_FULL
+manual index
+expect state help_topic index
+key RIGHT
+key ENTER
+expect state help_topic getting-started
+expect state help_history 1
+touch swipe 60 120 R
+expect state help_topic index
+expect state help_history 0
+expect state help_top 0
+touch swipe 250 120 L
+expect statecontains help_top 1
+touch drag 160 200 160 150 6
+key CLEAR
+expect screen home
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq new Mia 2
+# (the stops ask their own skills here; the engine and the placement: 49_mathquest_free.txt)
+mq engine stop
+mq seed 9
+mq grant bosses
+# the home: swipe between rooms (the garden is open)
+key F1
+expect state mq_room Bedroom
+touch swipe 250 70 L
+expect state mq_room Garden
+touch swipe 40 115 R
+expect state mq_room Bedroom
+# a swipe that drags an item moves the item, not the room
+touch drag 50 160 200 160 4
+expect state mq_room Bedroom
+# shop pages and book pages
+mq coins 500
+key F1
+expect state mq_scene shop
+expect state mq_page 0
+touch swipe 250 120 L
+expect state mq_page 1
+key F5
+key F5
+key F5
+expect state mq_scene map
+key F2
+expect state mq_scene book
+expect text Home:
+touch swipe 250 120 L
+expect text Garden:
+touch swipe 60 120 R
+expect text Home:
+key CLEAR
+# worlds: swipe to the next open world
+mq world 0
+expect state mq_world 0
+touch swipe 250 120 L
+expect state mq_world 1
+# a celebration is waved away
+mq level 1 0
+mq correct
+touch swipe 160 120 U
+expect state mq_run 1/10
+key F5
+key CLEAR
+key CLEAR
+# the arcade: a swipe serves the order typed in Cafe Rush
+mq game 1
+mq step 4
+key 1
+expect state mq_input 1
+touch swipe 160 100 U
+expect state mq_input ""

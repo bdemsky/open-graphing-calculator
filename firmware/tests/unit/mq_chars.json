@@ -1,0 +1,14 @@
+{
+  "title": "Story friends",
+  "cell": [20, 20],
+  "sprites": [
+    {"cell": 0, "slot": "garden", "name": "Clover"},
+    {"cell": 1, "slot": "post", "name": "Pebble"},
+    {"cell": 0, "slot": "garden", "anim": "pout", "frame": 0}
+  ],
+  "characters": {
+    "garden": {"food": "blueberry", "colour": "mint", "hobby": "skipping", "thing": "hula hoop", "pronoun": "he"},
+    "post": {"food": "pancake", "colour": "lilac", "hobby": "reading", "thing": "umbrella", "pronoun": "they"}
+  },
+  "variants": [{"sprite": 0, "scale": 2, "rect": [0, 0, 40, 20]}]
+}

@@ -1,0 +1,96 @@
+# The home screen is a notebook (app/home.c, app/nbdoc.h; help page "home-notebook"): calculations
+# are math cells (input + textbook result) and everything of the calculator's home screen works on
+# them; MENU is the notebook menu (text cells, edit in place, re-run, run all, delete, new); the
+# notebook is kept in the session (a power cycle and a reboot bring it back).
+expect screen home
+type "2+3\n"
+type "*4\n"
+expect state history 2
+expect state last_input Ans*4
+expect state last_output 20
+expect state home_kind math
+expect state home_nb ""
+# UP selects an earlier entry, ENTER copies it down (calculator style)
+key UP UP UP UP
+expect state home_sel 0
+key ENTER
+expect state entry 2+3
+key CLEAR
+# a text cell from the notebook menu: typed on the entry line, ENTER adds it
+key MENU
+expect state menu "NOTEBOOK (not saved)"
+expect state menu_item Save
+key DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect screen home
+expect state home_mode text
+type "speed of the cart"
+key ENTER
+expect state history 3
+expect state home_kind text
+expect state home_mode math
+expect text speed of the cart
+# calculations go on after it
+type "a:=3\n"
+type "a^2\n"
+expect state last_output 9
+screenshot home_notebook_text.png
+# edit in place: UP to the a:=3 input, MENU Edit in place, a new value, ENTER replaces the cell
+key UP UP UP UP
+expect state home_sel 6
+key MENU
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state home_edit 3
+expect state entry a:=3
+key DEL
+type "5"
+key ENTER
+expect state history 5
+expect state home_edit -1
+# run all: a^2 is evaluated again with the new a
+key MENU
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state last_output 25
+# re-run and delete the selected cell
+key UP UP
+key MENU
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+expect state history 4
+expect state last_input a:=5
+# ENTRY recall skips the text cell
+key SHIFT ENTER
+expect state entry a:=5
+key SHIFT ENTER
+expect state entry Ans*4
+key CLEAR
+# a power cycle keeps the notebook (the session), cells of every kind and the entry line
+type "7*6"
+key SHIFT ON
+key ON
+expect screen home
+expect state history 4
+expect state entry 7*6
+expect text speed of the cart
+key ENTER
+expect state last_output 42
+session save
+reboot
+expect state history 5
+expect state last_output 42
+expect text speed of the cart
+# New (on an unsaved notebook with cells: asks first; No keeps everything)
+key MENU
+key DOWN DOWN DOWN ENTER
+expect screen menu
+key ENTER
+expect state history 5
+key MENU
+key DOWN DOWN DOWN ENTER
+key F1
+expect screen home
+expect state history 0
+# CLEAR on an empty line still clears an unsaved notebook (MENU F1 undoes it)
+type "1+1\n"
+key CLEAR
+expect state history 0
+key MENU F1
+expect state history 1

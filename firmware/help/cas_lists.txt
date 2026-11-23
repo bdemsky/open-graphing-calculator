@@ -1,0 +1,521 @@
+%% CAS help: lists and statistics
+@group cas-lists Lists and statistics
+Building and transforming lists, and simple statistics of a list of values. Lists are written `[1,2,3]` or `{1,2,3}`.
+
+@cmd seq
+group: cas-lists
+summary: List of values of an expression
+syntax: seq(expr, k, a, b)
+syntax: seq(expr, k, a, b, step)
+example: seq(k^2,k,1,5)
+result: [1,4,9,16,25]
+example: seq(k,k,0,1,1/4)
+result: [0,1/4,1/2,3/4,1]
+see: makelist, sum, matrix
+
+Returns the list of values of `expr` for `k` = `a`, `a+step`, ... up to `b` (default step 1). The bounds must be numbers. [[makelist]] is the same command.
+
+@cmd makelist
+group: cas-lists
+summary: Same as seq
+syntax: makelist(expr, k, a, b)
+syntax: makelist(expr, k, a, b, step)
+example: makelist(2*k,k,1,4)
+result: [2,4,6,8]
+see: seq
+
+Same as [[seq]]: builds a list from an expression.
+
+@cmd sort
+group: cas-lists
+summary: Sort a list in increasing order
+syntax: sort(list)
+example: sort([3,1,2])
+result: [1,2,3]
+example: sort([b,a,c])
+result: [a,b,c]
+see: reverse, median, max
+
+Sorts numbers by value; symbolic elements are put in a fixed canonical order.
+
+@cmd reverse
+group: cas-lists
+summary: Reverse the order of a list
+syntax: reverse(list)
+example: reverse([1,2,3])
+result: [3,2,1]
+see: sort
+
+Returns the list with its elements in the opposite order.
+
+@cmd concat
+group: cas-lists
+summary: Join lists together
+syntax: concat(list1, list2, ...)
+example: concat([1,2],[3,4])
+result: [1,2,3,4]
+example: concat([1,2],5)
+result: [1,2,5]
+see: seq
+
+Joins the arguments into one list. Arguments that are not lists are added as single elements.
+
+@cmd map
+group: cas-lists
+summary: Apply a function to each element
+syntax: map(list, f)
+example: map([1,4,9],sqrt)
+result: [1,2,3]
+example: g(x):=x^2+1
+result: x^2+1
+example: map([1,2,3],g)
+result: [2,5,10]
+see: apply, seq
+
+Returns the list of `f(x)` for each element `x` of the list. `f` is the name of a built-in function or of a function defined with `:=`.
+
+@cmd apply
+group: cas-lists
+summary: Apply a function to each element
+syntax: apply(f, list)
+example: apply(sqrt,[1,4,9])
+result: [1,2,3]
+see: map
+
+Same as [[map]] with the arguments swapped: the function name comes first.
+
+@cmd mean
+group: cas-lists
+summary: Arithmetic mean of a list
+syntax: mean(list)
+example: mean([1,2,3,4])
+result: 5/2
+example: mean([a,b])
+result: a/2+b/2
+see: median, variance, stddev
+
+## Refresher
+Mean m = Σ x_i/n; it minimizes Σ (x_i − c)². Sensitive to outliers (the [[median]] is not). For a sample, the standard error of the mean is s/√n.
+example: mean([2,4,4,4,5,5,7,9])
+result: 5
+## Syntax
+Returns the sum of the elements divided by their number. Exact for exact data.
+
+@cmd median
+group: cas-lists
+summary: Median of a list
+syntax: median(list)
+example: median([3,1,4,1,5])
+result: 3
+example: median([1,2,3,4])
+result: 5/2
+see: mean, sort
+
+Returns the middle value of the sorted list, or the mean of the two middle values when the number of elements is even. The elements must be numeric.
+
+@cmd variance
+group: cas-lists
+summary: Population variance of a list
+syntax: variance(list)
+example: variance([1,2,3,4])
+result: 5/4
+see: stddev, mean
+
+## Refresher
+Here the population variance σ² = Σ (x_i − m)²/n (m the mean); the sample variance s² divides by n − 1 ([[variancep]]: note the naming). Var X = E(X²) − (E X)².
+example: variance([2,4,4,4,5,5,7,9])
+result: 4
+## Syntax
+Returns the mean of the squared deviations from the mean (dividing by n, not n-1).
+
+@cmd stddev
+group: cas-lists
+summary: Population standard deviation
+syntax: stddev(list)
+example: stddev([2,4,4,4,5,5,7,9])
+result: 2
+example: stddev([1,2,3,4])
+result: sqrt(5)/2
+see: variance, mean
+
+## Refresher
+σ = √(Σ (x_i − m)²/n) here (m the mean) (population); the sample s divides by n − 1: [[stddevp]] (the p here does not mean population). The Statistics app shows both, σx and Sx.
+example: stddevp([2,4,4,4,5,5,7,9])
+result: 4*sqrt(14)/7
+## Syntax
+Returns the square root of the [[variance]] (population formula, dividing by n).
+
+@cmd stddevp
+group: cas-lists
+summary: Sample standard deviation
+syntax: stddevp(list)
+example: stddevp([1,2,3,4,5])
+result: sqrt(10)/2
+see: stddev, variancep
+
+The square root of [[variancep]]: the sample formula, dividing by n-1 (the unbiased estimate from a sample). [[stddev]] divides by n.
+
+@cmd variancep
+group: cas-lists
+summary: Sample variance
+syntax: variancep(list)
+example: variancep([1,2,3,4,5])
+result: 5/2
+see: variance, stddevp
+
+The sum of squared deviations from the mean divided by n-1.
+
+@cmd covariance
+group: cas-lists
+summary: Population covariance of two lists
+syntax: covariance(xlist, ylist)
+example: covariance([1,2,3,4],[2,4,5,9])
+result: 11/4
+see: covariancep, correlation, variance
+
+## Refresher
+Cov(X,Y) = Σ (x_i − m_x)(y_i − m_y)/n (m_x, m_y the means): positive when the two tend to rise together. Cov(X,X) = Var X. Like [[variance]], the name without p divides by n; the sample covariance divides by n − 1 ([[covariancep]]).
+example: covariance([1,2,3],[1,2,3])
+result: 2/3
+## Syntax
+Returns the mean of the products of the deviations from the means (dividing by n). The lists must have the same length (at least 2). Exact for exact data.
+
+@cmd covariancep
+group: cas-lists
+summary: Sample covariance of two lists
+syntax: covariancep(xlist, ylist)
+example: covariancep([1,2,3,4],[2,4,5,9])
+result: 11/3
+see: covariance, correlation, variancep
+
+The sum of the products of the deviations from the means divided by n-1 (the unbiased estimate from a sample), consistent with [[variancep]] and [[stddevp]].
+
+@cmd correlation
+group: cas-lists
+summary: Pearson correlation coefficient
+syntax: correlation(xlist, ylist)
+example: correlation([1,2,3,4],[2,4,5,9])
+result: 11*sqrt(130)/130
+see: covariance, linreg
+
+## Refresher
+r = Cov(X,Y)/(σx σy), between −1 and 1; ±1 means the points lie on a line, r² is the share of the variance of y explained by the least-squares line ([[linreg]]). Correlation is not causation.
+example: correlation([1,2,3],[6,4,2])
+result: -1
+## Syntax
+Returns Σ(x−m_x)(y−m_y)/√(Σ(x−m_x)² Σ(y−m_y)²) (the same for the n and n−1 conventions). Exact for exact data; an error if a list is constant.
+
+@cmd ttest
+group: cas-lists
+summary: One-sample t test of a mean
+syntax: ttest(list, mu0)
+syntax: ttest(list, mu0, alpha)
+example: ttest([10,12,9,11],9)
+result: [t=2.32379000772,df=3,p=0.102728078858,mean=10.5,sx=1.29099444874,reject=false]
+see: ttest2, pairedttest, tinterval, tcdf
+
+## Refresher
+Tests H0: μ = μ0 against μ ≠ μ0 from a sample of size n with mean m and sample standard deviation s: t = (m − μ0)/(s/√n) has a t distribution with n − 1 degrees of freedom under H0. The p-value is the probability of a |t| at least as large; reject H0 when p < α (usually 0.05).
+example: ttest([5.1,4.9,5.6,5.8,6.0,5.3],5)
+result: [t=2.60532329994,df=5,p=0.0479399246663,mean=5.45,sx=0.423083916026,reject=true]
+## Syntax
+Two-sided test. Returns the statistic t, the degrees of freedom df, the p-value p, the sample mean and sample standard deviation sx (n-1), and reject=true when p < alpha (default 0.05). A one-sided p-value is p/2 when t has the sign of the alternative. The Statistics app's T-Test form also offers one-sided alternatives and summary statistics.
+
+@cmd ttest2
+group: cas-lists
+summary: Two-sample t test (Welch or pooled)
+syntax: ttest2(list1, list2)
+syntax: ttest2(list1, list2, pooled)
+syntax: ttest2(list1, list2, pooled, alpha)
+example: ttest2([5.1,4.9,5.6,5.8,6.0,5.3],[4.2,4.8,5.0,4.4,4.9])
+result: [t=3.41759784743,df=8.99971981045,p=0.00765732889136,mean1=5.45,mean2=4.66,reject=true]
+example: ttest2([5.1,4.9,5.6,5.8,6.0,5.3],[4.2,4.8,5.0,4.4,4.9],1)
+result: [t=3.34756002833,df=9,p=0.00855667212692,mean1=5.45,mean2=4.66,reject=true]
+see: ttest, pairedttest
+
+## Refresher
+Tests H0: μ1 = μ2 for two independent samples. Welch: t = (m1 − m2)/√(s1²/n1 + s2²/n2) with the Welch-Satterthwaite degrees of freedom (not an integer in general); it does not assume equal variances. Pooled: s_p² = ((n1−1)s1² + (n2−1)s2²)/(n1+n2−2), t = (m1 − m2)/(s_p √(1/n1+1/n2)), df = n1+n2−2.
+## Syntax
+Two-sided test; pooled = 0 (default, Welch) or 1 (equal variances assumed). Returns t, df, the p-value p, both means and reject=true when p < alpha (default 0.05).
+
+@cmd pairedttest
+group: cas-lists
+summary: Paired t test
+syntax: pairedttest(list1, list2)
+syntax: pairedttest(list1, list2, alpha)
+example: pairedttest([10,12,9,11],[9,11,9,10])
+result: [t=3.0,df=3,p=0.0576688856224,mean=0.75,sx=0.5,reject=false]
+see: ttest, ttest2
+
+## Refresher
+For paired measurements (the same subjects before and after) test the differences d_i = x_i − y_i: a one-sample t test of mean 0, t = m_d/(s_d/√n) with n − 1 degrees of freedom.
+## Syntax
+Two-sided test of H0: mean difference 0. Returns t, df, p, the mean and sample standard deviation sx of the differences list1 - list2, and reject=true when p < alpha (default 0.05).
+
+@cmd tinterval
+group: cas-lists
+summary: t confidence interval for a mean
+syntax: tinterval(list)
+syntax: tinterval(list, level)
+example: tinterval([5.1,4.9,5.6,5.8,6.0,5.3])
+result: [5.00600065986,5.89399934014]
+example: tinterval([5.1,4.9,5.6,5.8,6.0,5.3],0.99)
+result: [4.75355501651,6.14644498349]
+see: ttest, invT
+
+## Refresher
+With unknown σ the interval for μ is m ± t* s/√n, t* the (1+C)/2 quantile of the t distribution with n − 1 degrees of freedom (C the confidence level). In 95 % of samples such an interval covers μ.
+example: invT(0.975,5)
+result: 2.57058183564
+## Syntax
+Returns [lower, upper] at the confidence level (default 0.95).
+
+@cmd ztest
+group: cas-lists
+summary: One-sample z test of a mean (known sigma)
+syntax: ztest(list, mu0, sigma)
+syntax: ztest(list, mu0, sigma, alpha)
+example: ztest([5.1,4.9,5.6,5.8,6.0,5.3],5,0.5)
+result: [z=2.2045407685,p=0.0274863361115,mean=5.45,reject=true]
+see: ttest, zinterval, normalcdf
+
+## Refresher
+When the population standard deviation σ is known, z = (m − μ0)/(σ/√n) (m the sample mean) is standard normal under H0: μ = μ0. Two-sided p-value 2 P(Z ≥ |z|); |z| > 1.96 rejects at α = 0.05.
+## Syntax
+Two-sided test. Returns z, the p-value p, the sample mean and reject=true when p < alpha (default 0.05).
+
+@cmd zinterval
+group: cas-lists
+summary: z confidence interval for a mean (known sigma)
+syntax: zinterval(list, sigma)
+syntax: zinterval(list, sigma, level)
+example: zinterval([5.1,4.9,5.6,5.8,6.0,5.3],0.5)
+result: [5.04992402697,5.85007597303]
+see: tinterval, ztest, invNorm
+
+## Refresher
+With known σ the interval for μ is m ± z* σ/√n, z* the (1+C)/2 standard normal quantile (1.96 for C = 95 %).
+## Syntax
+Returns [lower, upper] at the confidence level (default 0.95).
+
+@cmd propinterval
+group: cas-lists
+summary: Confidence interval for a proportion
+syntax: propinterval(successes, trials)
+syntax: propinterval(successes, trials, level)
+example: propinterval(52,100)
+result: [0.422080230717,0.617919769283]
+see: zinterval, binomcdf
+
+## Refresher
+The sample proportion q = x/n is approximately normal for large n: the interval is q ± z* √(q(1 − q)/n) (Wald interval; use it when n q and n(1 − q) are both at least about 10).
+example: propinterval(52,100,0.9)
+result: [0.437823139136,0.602176860864]
+## Syntax
+Returns [lower, upper] at the confidence level (default 0.95), like the 1-PropZInt of the Statistics app.
+
+@cmd chi2gof
+group: cas-lists
+summary: Chi-square goodness-of-fit test
+syntax: chi2gof(observed, expected)
+syntax: chi2gof(observed, expected, alpha)
+example: chi2gof([18,22,20,40],[25,25,25,25])
+result: [chi2=12.32,df=3,p=0.0063636299952,reject=true]
+see: chi2test, chi2cdf
+
+## Refresher
+Do observed counts O_i fit a hypothesised distribution? χ² = Σ (O_i − E_i)²/E_i with k − 1 degrees of freedom (k categories); large χ² means a poor fit, p = P(χ² ≥ observed). Expected counts should be at least about 5.
+## Syntax
+The expected values may be counts or proportions: they are scaled to the observed total. Returns chi2, df, the p-value p and reject=true when p < alpha (default 0.05).
+
+@cmd chi2test
+group: cas-lists
+summary: Chi-square test of independence
+syntax: chi2test(matrix)
+syntax: chi2test(matrix, alpha)
+example: chi2test([[10,20,30],[6,9,17]])
+result: [chi2=0.271574651504,df=2,p=0.87302828338,reject=false]
+see: chi2gof
+
+## Refresher
+For a contingency table of counts (rows one variable, columns the other), under independence the expected count of a cell is (row total)(column total)/(grand total); χ² = Σ (O − E)²/E with (r − 1)(c − 1) degrees of freedom.
+## Syntax
+Returns chi2, df, the p-value p and reject=true when p < alpha (default 0.05). No continuity correction.
+
+@cmd anova
+group: cas-lists
+summary: One-way analysis of variance
+syntax: anova(list1, list2, ...)
+syntax: anova(list1, list2, ..., alpha)
+example: anova([6,8,4,5,3,4],[8,12,9,11,6,8],[13,9,11,8,7,12])
+result: [F=9.26470588235,df1=2,df2=15,p=0.00239877732939,reject=true]
+see: ttest2, Fcdf
+
+## Refresher
+Tests H0: all k group means are equal. F = (SSB/(k − 1))/(SSW/(N − k)), SSB = Σ n_i (m_i − m)² between groups, SSW = Σ (n_i − 1) s_i² within groups (N observations in all); under H0 F has an F distribution with k − 1 and N − k degrees of freedom. With two groups it is the pooled t test (F = t²).
+## Syntax
+Takes 2 to 16 lists, optionally followed by alpha. Returns F, df1, df2, the p-value p and reject=true when p < alpha (default 0.05).
+
+@cmd polyreg
+group: cas-lists
+summary: Polynomial least-squares regression
+syntax: polyreg(xlist, ylist, degree)
+example: polyreg([0,1,2,3,4],[1,2,5,11,16],2)
+result: [11*x^2/14+53*x/70+27/35,R2=2813/2835]
+see: linreg, multireg, nlfit
+
+## Refresher
+Least squares picks the coefficients c that minimise the sum of squared residuals Σ (y_i − p(x_i))²; they solve the normal equations A^T A c = A^T y (A the matrix of powers x_i^j). R² = 1 − SSres/SStot is the share of the variance of y explained by the fit (1 = perfect).
+example: polyreg([1,2,3],[2,4,7],1)
+result: [5*x/2-2/3,R2=75/76]
+## Syntax
+Returns [polynomial in x, R2=...]; the degree is from 1 to (number of points - 1). Exact for exact data.
+
+@cmd expreg
+group: cas-lists
+summary: Exponential regression y = a b^x
+syntax: expreg(xlist, ylist)
+example: expreg([1,2,3,4,5],[3,7,15,30,65])
+result: [1.46752938968*2.13973870156^x,R2=0.998903576409]
+see: powerreg, logreg, nlfit
+
+## Refresher
+Taking logarithms turns y = a b^x into the line ln y = ln a + x ln b, which is fitted by least squares (the usual calculator method; it weights small y more than a direct fit, see [[nlfit]]).
+## Syntax
+Returns [a*b^x, R2=...] with decimals; R2 is that of the fitted line through (x, ln y). The y values must be positive.
+
+@cmd powerreg
+group: cas-lists
+summary: Power regression y = a x^b
+syntax: powerreg(xlist, ylist)
+example: powerreg([1,2,3,4,5],[2,5.6,10.4,16,22.4])
+result: [1.99232611711*x^1.50242660586,R2=0.99997680252]
+see: expreg, logreg
+
+## Refresher
+ln y = ln a + b ln x: a straight line on log-log axes, fitted by least squares.
+## Syntax
+Returns [a*x^b, R2=...] (R2 of the line through (ln x, ln y)). The data must be positive.
+
+@cmd logreg
+group: cas-lists
+summary: Logarithmic regression y = a + b ln x
+syntax: logreg(xlist, ylist)
+example: logreg([1,2,3,4,5],[1,2.4,3.1,3.8,4.2])
+result: [1.9889229234*ln(x)+0.995609585441,R2=0.998527279665]
+see: expreg, powerreg
+
+A least-squares line through (ln x, y). Returns [a+b*ln(x), R2=...]; the x values must be positive.
+
+@cmd multireg
+group: cas-lists
+summary: Multiple linear regression
+syntax: multireg([x1list, x2list, ...], ylist)
+example: multireg([[1,2,3,4,5],[2,1,4,3,5]],[3,4,8,8,11])
+result: [4*x1/3+5*x2/6+3/10,R2=425/428]
+see: polyreg, linreg
+
+## Refresher
+Fits y = b0 + b1 x1 + b2 x2 + ... to observations of several explanatory variables by least squares (normal equations). R² is the share of the variance of y explained; adding variables never lowers it.
+## Syntax
+The first argument lists the values of each variable (1 to 16 lists of the length of ylist). Returns [b0+b1*x1+b2*x2+..., R2=...]. Exact for exact data.
+
+@cmd nlfit
+group: cas-lists
+summary: Nonlinear least-squares fit
+syntax: nlfit(expr, [params], [guesses], xlist, ylist)
+syntax: nlfit(expr, [params], [guesses], xlist, ylist, var)
+example: nlfit(a*exp(b*x),[a,b],[1,0.5],[1,2,3,4,5],[3,7,15,30,65])
+result: [1.51276878259*exp(0.75166220185*x),R2=0.999692323212]
+example: nlfit(a*sin(b*t),[a,b],[2,1],[0,1,2,3],[0,1.7,1.8,0.3],t)
+result: [1.99859609774*sin(0.998512768622*t),R2=0.999667150754]
+see: polyreg, expreg
+
+## Refresher
+Minimises Σ (y_i − f(x_i; p))² over the parameters p directly, by Levenberg-Marquardt iteration: Gauss-Newton steps (linearise f by its Jacobian, solve the normal equations) blended with gradient descent when a step does not reduce the sum. It converges to a local minimum, so start from reasonable guesses.
+## Syntax
+expr is the model in the variable var (default x) with up to 8 parameters; guesses gives their starting values. Returns [the model with the fitted parameters, R2=...] (R2 = 1 - SSres/SStot of the fit), with decimals.
+
+@cmd quartile1
+group: cas-lists
+summary: First quartile
+syntax: quartile1(list)
+example: quartile1([1,2,3,4,5,6,7,8])
+result: 5/2
+see: quartile3, median, modelist
+
+The median of the lower half of the sorted list (the middle value is left out of both halves when n is odd).
+
+@cmd quartile3
+group: cas-lists
+summary: Third quartile
+syntax: quartile3(list)
+example: quartile3([1,2,3,4,5,6,7,8])
+result: 13/2
+see: quartile1, median
+
+The median of the upper half of the sorted list.
+
+@cmd modelist
+group: cas-lists
+insert: mode(
+label: mode
+summary: Most frequent value
+syntax: mode(list)
+example: mode([3,7,11,7,3,5,7])
+result: 7
+example: mode([1,2,2,1])
+result: [1,2]
+see: median, mean
+
+The value that occurs most often; a list of values when several tie.
+
+@cmd linreg
+group: cas-lists
+summary: Least-squares line
+syntax: linreg(xlist, ylist)
+example: linreg([1,2,3],[2,4,7])
+result: 5*x/2-2/3
+see: mean, lagrange
+
+The line m x + b that fits the points (x_i, y_i) best in the least-squares sense, exact for exact data. The Statistics app has more regression models.
+
+@cmd union
+group: cas-lists
+summary: Union of lists as sets
+syntax: union(list1, list2, ...)
+example: union([a,b,b,c],[d,c,b])
+result: [a,b,c,d]
+see: intersect, setdiff
+
+The distinct elements of all the lists, in order of first appearance.
+
+@cmd intersect
+group: cas-lists
+summary: Intersection of lists as sets
+syntax: intersect(list1, list2, ...)
+example: intersect([a,b,b,c],[d,c,b],[b,e])
+result: [b]
+see: union, setdiff
+
+The distinct elements of the first list that are in every other list.
+
+@cmd setdiff
+group: cas-lists
+summary: Difference of lists as sets
+syntax: setdiff(list1, list2)
+example: setdiff([a,b,c,d],[b])
+result: [a,c,d]
+see: union, intersect
+
+The distinct elements of list1 that are not in list2.
+
+@cmd cartprod
+group: cas-lists
+summary: Cartesian product of lists
+syntax: cartprod(list1, list2, ...)
+example: cartprod([a,b],[c,d])
+result: [[a,c],[a,d],[b,c],[b,d]]
+see: union, seq
+
+The list of all tuples with one element from each list (2 to 8 lists, at most 20000 tuples). Needs the advanced CAS module.

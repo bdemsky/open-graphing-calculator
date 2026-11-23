@@ -1,0 +1,50 @@
+# Repeating decimals: 0.(3) input is exact, decimal results with a short period show the period
+expect state repeat 1
+# input: the period in parentheses
+type "0.(3)\n"
+expect state last_output 1/3
+type "1.2(34)\n"
+expect state last_output 611/495
+type "0.(9)\n"
+expect state last_output 1
+type "2*0.1(6)\n"
+expect state last_output 1/3
+# display: the history keeps the CAS text, the screen shows the period
+ifcas src type "approx(1/7)\n"
+ifcas src expect state last_output 0.142857142857
+ifcas src expect text 0.(142857)
+ifcas src type "approx(1/6)\n"
+ifcas src expect text 0.1(6)
+ifcas src type "approx(2/3)+x\n"
+ifcas src expect text x+0.(6)
+# not for numbers that are not short fractions
+type "approx(sqrt(2))\n"
+expect text 1.41421356237
+screenshot repdec.png
+# APPROX mode
+key SHIFT HOME DOWN RIGHT ENTER
+key HOME
+type "1/11\n"
+expect state last_output 0.0909090909091
+expect text 0.(09)
+# FIX mode shows the rounded decimal
+key SHIFT HOME DOWN DOWN DOWN RIGHT RIGHT RIGHT ENTER
+key HOME
+type "1/3\n"
+expect state last_output 0.33
+expect notext 0.(3)
+key SHIFT HOME LEFT LEFT LEFT ENTER
+# REPEAT OFF
+key DOWN DOWN DOWN DOWN RIGHT ENTER
+expect state repeat 0
+key HOME
+key CLEAR CLEAR
+type "1/7\n"
+expect text 0.142857142857
+expect notext 0.(142857)
+# Classic display keeps the parentheses form
+key SHIFT HOME LEFT ENTER
+key UP UP RIGHT ENTER
+expect state textbook 0
+key HOME
+expect text 0.(142857)

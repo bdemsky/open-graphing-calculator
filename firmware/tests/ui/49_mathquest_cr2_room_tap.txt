@@ -1,0 +1,42 @@
+# Sparkle Town, CODE_REVIEW_2.md CR2-02: a tap on a thing in her room selects it (a real tap is a DOWN, which
+# selects it to drag, then a TAP, which used to toggle it off again); a second tap puts it down.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+mq seed 4
+mq new Kid 2
+mq coins 300
+mq go shop
+touch tap 40 95
+mq step 2
+touch tap 188 153
+mq step 2
+key F5
+key F5
+expect state mq_scene room
+mq step 2
+touch drag 56 200 230 150 6
+expect state mq_placed 6
+expect state mq_sel 5
+expect state mq_sel_item "Heart bed 12,6 0"
+mq sel -1
+expect state mq_sel -1
+mq step 2
+touch 215 160 down
+mq step 1
+expect state mq_sel 5
+touch 215 160 up
+mq step 2
+screenshot mathquest_cr2_room_after_tap.png
+expect state mq_sel 5
+mq sel -1
+touch tap 215 160
+mq step 2
+expect state mq_sel 5
+touch tap 215 160
+mq step 2
+expect state mq_sel -1

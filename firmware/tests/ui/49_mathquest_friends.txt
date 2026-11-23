@@ -1,0 +1,160 @@
+# Sparkle Town's friends (modules/mathquest/mq_friends.c): the story acted out before an order,
+# memories in town ("You made 40 cookies yesterday!"), a friend running up with news, their own
+# stories told a step a play day, and the payoffs (a party, a toy wedding, a trip). The voice
+# sound fires with every line.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+modx sfx clear
+mq seed 7
+mq fun off
+mq new Mia 2
+# (the stops ask their own skills here; the engine and the placement: 49_mathquest_free.txt)
+mq engine stop
+# an order: the friend walks on and tells the story, its things pop onto the stage
+mq level 0 0
+mq step 12
+screenshot mq_scene_tell.png
+mq step 14
+screenshot mq_scene_stage.png
+expect statecontains modx_sfx voice
+mq step 70
+key ENTER
+mq correct
+mq settle
+mq step 2
+# the town: Pip has news (enough hearts), runs up with a "!"
+mq hearts 0 3
+mq go map
+mq step 30
+expect state mq_news 0
+screenshot mq_town_news.png
+key DOWN
+expect state mq_scene chapter
+mq step 30
+screenshot mq_chapter_tell.png
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+expect state mq_scene map
+expect state mq_chapters 1,0,0,0,0,0,0,0,0
+# one step a play day: no news from Pip again today
+mq hearts 0 30
+expect state mq_news -1
+# the payoffs (the console tells the next step, ready or not; CLEAR leaves it for later)
+mq chapter 0
+expect state mq_chapter 0/1/0
+key CLEAR
+expect state mq_chapters 1,0,0,0,0,0,0,0,0
+mq chapter 0
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 0
+expect state mq_chapter 0/2/0
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 0
+expect state mq_chapter 0/3/0
+mq step 70
+key ENTER
+mq step 60
+screenshot mq_chapter_party.png
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+expect state mq_chapters 4,0,0,0,0,0,0,0,0
+expect statecontains modx_sfx fanfare
+# Dabble's two toys get married; Nova goes home in a balloon; Momo's kitchen opens a game
+mq chapter 5
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 5
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 5
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 5
+mq step 70
+key ENTER
+mq step 30
+key ENTER
+mq step 50
+screenshot mq_chapter_wedding.png
+mq chapter 8
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 8
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 8
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 8
+mq step 70
+key ENTER
+mq step 30
+key ENTER
+mq step 50
+screenshot mq_chapter_trip.png
+key CLEAR
+mq chapter 2
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq chapter 2
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+mq step 70
+key ENTER
+expect state mq_games_open 1
+# memories in town: friends talk about what she did
+mq go map
+mq town 300
+mq step 100
+screenshot mq_town_chatter.png

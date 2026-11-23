@@ -1,0 +1,82 @@
+# Safe mode (core/safemode.h): ON and CLEAR held together at power-on (0.5 s), or three unfinished
+# boots in a row, start the calculator without content modules and without the saved session
+# (which is kept for the next normal start). Runs in every tier.
+type "sm:=7\n"
+session save
+expect state safemode 0
+# CLEAR alone, or ON alone, held through a start: a normal start
+press CLEAR
+reboot
+release CLEAR
+expect state safemode 0
+press ON
+reboot
+release ON
+expect state safemode 0
+# both, but let go before 0.5 s: a normal start
+hold 300 ON CLEAR
+reboot
+expect state safemode 0
+expect state last_reset software
+# CLEAR pressed after the start: nothing happens
+reboot
+press ON
+press CLEAR
+wait 1000
+release CLEAR
+release ON
+expect state safemode 0
+# ON and CLEAR held together while the calculator starts
+press ON CLEAR
+reboot
+release ON CLEAR
+expect state safemode 1
+expect state toast "SAFE MODE: Memory > About"
+screenshot safemode_home.png
+ifcas src expect eval sm sm
+ifcfg CONTENT_QSPI expect state module_manual disabled
+manual graph
+ifcfg CONTENT_QSPI expect state help_missing 1
+ifcfg CONTENT_QSPI expect text safe mode
+key HOME
+app mem
+key ENTER
+expect text "ON and CLEAR were held"
+key HOME
+# installing is refused, nothing is saved
+ifcfg CONTENT_QSPI app mem
+ifcfg CONTENT_QSPI key DOWN DOWN DOWN DOWN DOWN DOWN ENTER
+ifcfg CONTENT_QSPI expect text Safe mode is on
+ifcfg CONTENT_QSPI key HOME
+type "sm:=8\n"
+# a normal start: everything is back, the saved session untouched by safe mode
+reboot
+expect state safemode 0
+expect eval sm 7
+ifcfg CONTENT_QSPI expect state module_manual ok
+# a crash loop: three boots in a row that do not finish
+reboot crash
+expect state safemode 0
+reboot crash
+expect state safemode 0
+reboot crash
+expect state safemode 1
+expect state boot_attempts 4
+app mem
+key ENTER
+expect text crash loop
+key HOME
+safemode info
+# the next normal start (switch off and on) leaves it
+key SHIFT ON
+key ON
+expect state safemode 0
+expect eval sm 7
+# a boot that runs for 10 s counts as a success: the counter starts again
+reboot crash
+reboot crash
+wait 11000
+expect state boot_attempts 0
+reboot crash
+expect state safemode 0
+reboot

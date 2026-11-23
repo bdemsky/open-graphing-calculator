@@ -1,0 +1,144 @@
+# Graph modes: Y= header and MODE row, parametric, polar, sequences (time and
+# web), implicit relations with inequality shading, per-mode WINDOW and TABLE,
+# saved across power off/on.
+key F1
+expect state yeq_mode FUNC
+# UP from Y1 reaches the mode header; RIGHT/ENTER choose PAR
+key UP
+expect state yeq_row -1
+key RIGHT ENTER
+expect state graph_type PAR
+expect text X1T
+# X,T,θ,n types t in PAR mode
+# ENTER on a mode puts the focus on its first entry
+expect state yeq_row 0
+type "3cos(x)"
+key DOWN
+type "2sin(x)"
+expect state e1_1 3cos(t)
+expect state e1_2 2sin(t)
+screenshot par_yeq.png
+key F5
+expect state graph_plotted 1
+expect state graph_error ""
+# the ellipse is drawn in blue
+expect color 0x029b 300
+screenshot par_graph.png
+# TRACE steps T by Tstep (π/24)
+key F4
+expect state trace_t 0
+expect state trace_x 3
+key RIGHT RIGHT
+expect state trace_t 0.2617993878
+expect text T=0.26179939
+# WINDOW has Tmin/Tmax/Tstep first
+key F2
+expect text Tstep=
+key DOWN DOWN
+type "pi/12"
+key ENTER
+expect statecontains screen window
+key F5 F4 RIGHT
+expect state trace_t 0.5235987756
+# TABLE lists T, X1T, Y1T
+key F1 SHIFT F5
+expect text X1T
+expect text Y1T
+expect text 1.62090692
+key HOME
+# --- polar: MODE row GRAPH
+setmode GRAPH POL
+expect state graph_type POL
+key F1
+expect text r1
+type "2sin(4x)"
+expect state e1_1 2sin(4θ)
+key F5
+expect state graph_plotted 1
+expect color 0x029b 200
+screenshot pol_graph.png
+key F4 RIGHT RIGHT RIGHT
+expect statecontains trace_t 0.3926990
+expect text R=
+# --- sequences: u1 geometric, u2 Fibonacci (needs two initial values)
+key F1 UP RIGHT ENTER
+expect state graph_type SEQ
+expect state yeq_row 0
+type "1.5u1(x-1)"
+key DOWN
+type "1"
+key DOWN
+type "u2(x-1)+u2(x-2)"
+key DOWN
+type "1"
+key F5
+expect statecontains graph_error needs 2 initial values
+key F1
+type ",1"
+key F5
+expect state graph_error ""
+expect state graph_plotted 2
+key F3 7
+screenshot seq_time.png
+key F4 RIGHT RIGHT
+expect state trace_t 3
+expect state trace_y 2.25
+key DOWN RIGHT RIGHT RIGHT
+expect state trace_t 6
+expect state trace_y 8
+key F1 SHIFT F5
+expect text u2
+expect text 2.25
+key HOME
+# web plot: needs u(n-1) only; the cobweb of u1 = 1.5u1(n-1)
+key F1 UP UP UP UP UP
+expect state yeq_row -1
+key RIGHT RIGHT RIGHT RIGHT ENTER
+key F5
+expect statecontains graph_error u2: web plot needs u2(n-1)
+screenshot seq_web.png
+# --- implicit relations: a circle, an inequality, a hyperbola
+key F1 UP UP UP UP UP LEFT LEFT LEFT ENTER
+expect state graph_type IMPL
+expect state yeq_row 0
+type "x^2+y^2=16"
+key DOWN
+type "y<sin(x)"
+key DOWN
+type "x*y>=2"
+key F3 3
+expect state graph_plotted 3
+expect state graph_error ""
+expect color 0x029b 300
+# shading: tint of red below sin(x)
+expect color 0xedd6 3000
+screenshot impl_graph.png
+# free cursor shows F = left - right side of the first relation
+key RIGHT
+expect text F=-15.99
+# a relation that is not finished shows its error
+key F1 DOWN
+type "x+"
+key F5
+expect statecontains graph_error I4:
+key F1 CLEAR
+# --- everything is saved: power off and on
+key SHIFT ON
+key ON
+expect state graph_type IMPL
+key F1
+expect state e1_1 x^2+y^2=16
+expect state e3_1 x*y>=2
+key UP UP UP UP UP LEFT LEFT LEFT ENTER
+expect state graph_type PAR
+expect state e1_1 3cos(t)
+key F2
+expect state screen window
+key DOWN DOWN
+expect text Tstep=
+expect text 0.2617993878
+# back to FUNC: the Y= functions are separate
+key F1 UP UP UP UP UP LEFT LEFT LEFT LEFT ENTER
+expect state graph_type FUNC
+expect state y1 ""
+lcdcheck

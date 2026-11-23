@@ -1,0 +1,91 @@
+<h2>Calculator notebook</h2>
+<p>The notebook of the calculator's <strong>home screen</strong> (saved under a name or not), shown and edited here like a Jupyter notebook; its cells run
+<strong>on the calculator</strong>, connected by its USB cable. The calculator and this page are two views of one notebook: what you change
+on one shows on the other. This page is one file (<code>CALCULATOR.HTML</code> on the calculator's CALC drive): it needs no installation
+and no network, and it never sends anything anywhere but to the calculator.</p>
+
+<h3>Connect</h3>
+<ol>
+<li>Connect the calculator to the computer with a USB cable (the CALC drive appears).</li>
+<li>Open <code>CALCULATOR.HTML</code> in <strong>Chrome</strong> or <strong>Edge</strong> (Safari and Firefox can open notebooks to read them, but cannot talk to the calculator).
+  You can also copy the file to the computer first.</li>
+<li>Click <strong>Connect</strong> and choose the calculator in the list. The dot turns green and the page shows the notebook of the
+  calculator's home screen (<em>Unsaved</em> until it has a name). The calculator stays on the screen it shows.</li>
+</ol>
+<p>The page remembers the permission: next time it connects by itself. If the calculator leaves the USB bus for a moment
+(it refreshes its drive after a module was installed, or restarts), the page reconnects on its own and reads the notebook again.
+Not connected, the page shows the notebook as it last saw it, read-only.</p>
+
+<h3>One notebook, two views</h3>
+<ul>
+<li>Both always have the same notebook, the calculator's home screen's: opening, creating or switching one on either side switches the other. <em>Notebooks</em>
+  lists the calculator's notebooks (open, rename, delete); <em>New</em> makes one there. A name typed for an unsaved notebook saves it under that name.</li>
+<li>Calculations, cells and graphs made on the calculator's home screen appear here as they are made; what you add or run here appears there.
+  The calculator may show other apps meanwhile: this page keeps working.</li>
+<li>A cell being edited on one side cannot be edited on the other: here it says <em>editing on the calculator</em> and shows the typing as it
+  goes; the calculator says <em>being edited in the browser</em>. It is free again when the editing ends (Esc), or 30 seconds after the
+  page went quiet.</li>
+<li>Running a cell, here or on the calculator, runs it once on the calculator. Its results show on both. Interrupt, Run all and Restart work from either side.</li>
+<li>The calculator saves a named notebook when it is switched off (also on a low battery), when another notebook is
+  opened, before an export, and two minutes after the last change. Meanwhile a dot after the name says there are unsaved changes.</li>
+</ul>
+
+<h3>Cells</h3>
+<table>
+<tr><td>Python</td><td>Runs in the calculator's Python (MicroPython with the <code>calc</code> library). Variables stay until <em>Restart</em>.
+  The value of the last line is shown as the result, typeset when it is a CAS expression. <code>calc.plot(f, a, b)</code> is drawn here too.</td></tr>
+<tr><td>Math</td><td>One line of CAS input, e.g. <code>solve(x^2-2=0, x)</code>, <code>integrate(1/(1+x^2), x)</code>, <code>f(x):=x^2</code>; <kbd>Enter</kbd> runs it.
+  The result is typeset. It uses the calculator's CAS variables and settings.</td></tr>
+<tr><td>Graph</td><td>A graph cell, made here or on the calculator's home screen: its functions of <code>x</code>, one a line (<kbd>Enter</kbd> starts a new line), and its x and y range
+  under it, in the calculator's colours. The calculator computes the values; the page draws them. Drag to pan, pinch or (after a click on the graph) use the wheel to zoom,
+  double-click to go back: the calculator's cell gets the new window when you let go. While the calculator's graph app is open on the cell it is read-only here.</td></tr>
+<tr><td>3D graph</td><td><code>z = f(x,y)</code>, e.g. <code>sin(x)*cos(y)</code>, and its x, y, z range: a 3D graph cell on the calculator too. The surface is computed on the calculator
+  (40 &times; 40 values) and drawn here: drag to turn it, wheel or pinch to zoom, double-click for the cell's view (the calculator's view does not change).
+  Parametric surfaces and curves show the calculator's picture.</td></tr>
+<tr><td>Animated graph</td><td>A Graph or 3D graph cell whose functions use <code>t</code>, e.g. <code>sin(x-t)</code>: it plays here at once, from frames the
+  calculator computes in one go. Play / pause, the slider moves <code>t</code> by hand, the menu sets the speed: those are this page's (the calculator plays its cell only
+  when you press F5 there). Under the cell: <code>t</code> from, to, the seconds a sweep and loop, bounce or once, the cell's own settings on both sides.</td></tr>
+<tr><td>Earlier results</td><td><code>Out[n]</code> is the result of cell [n] (In [n] here, [n] on the calculator: one count), <code>Ans</code> the latest result,
+  in Math and Python cells alike (in Python <code>Out</code> maps the numbers to the values). Hover over an input or a result: <em>insert text</em> and
+  <em>insert Out[n]</em> put it where you type, or into a new cell.</td></tr>
+<tr><td>Text</td><td>Markdown: <code># heading</code>, <code>**bold**</code>, <code>*italic*</code>, lists, tables, <code>`code`</code>, math <code>$x^2$</code> and <code>$$\int_0^1 x\,dx$$</code>.</td></tr>
+</table>
+
+<!--@CALC_HELP@-->
+
+<h3>Keys</h3>
+<p>Like Jupyter: <strong>edit mode</strong> (green bar) types into the cell; <strong>command mode</strong> (blue bar) works on cells. <kbd>Esc</kbd> leaves the cell, <kbd>Enter</kbd> goes into it.</p>
+<table>
+<tr><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td><td>run the cell, go to the next one (a new cell at the end)</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Enter</kbd></td><td>run the cell, stay</td></tr>
+<tr><td><kbd>Alt</kbd>+<kbd>Enter</kbd></td><td>run the cell, insert a cell below</td></tr>
+<tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>(edit mode) indent / dedent the lines</td></tr>
+<tr><td><kbd>Alt</kbd>+<kbd>&uarr;</kbd> / <kbd>Alt</kbd>+<kbd>&darr;</kbd></td><td>(edit mode) the inputs of the cells above of this kind, nearest first, in place of the text</td></tr>
+<tr><td><kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>S</kbd></td><td>save a copy on the computer (with <kbd>Shift</kbd>: save as)</td></tr>
+<tr><td><kbd>&uarr;</kbd> <kbd>&darr;</kbd> or <kbd>K</kbd> <kbd>J</kbd></td><td>(command mode) previous / next cell; <kbd>Shift</kbd>+<kbd>K</kbd> / <kbd>J</kbd> move the cell</td></tr>
+<tr><td><kbd>A</kbd> / <kbd>B</kbd></td><td>insert a cell above / below</td></tr>
+<tr><td><kbd>D</kbd>,<kbd>D</kbd> / <kbd>Z</kbd></td><td>delete the cell / undo the delete</td></tr>
+<tr><td><kbd>X</kbd> <kbd>C</kbd> <kbd>V</kbd></td><td>cut, copy, paste below (<kbd>Shift</kbd>+<kbd>V</kbd>: above)</td></tr>
+<tr><td><kbd>Y</kbd> <kbd>T</kbd> <kbd>G</kbd> <kbd>M</kbd></td><td>make it a Python, Math, Graph or Text (Markdown) cell</td></tr>
+<tr><td><kbd>Shift</kbd>-<kbd>G</kbd></td><td>make it a 3D graph cell (z = f(x,y))</td></tr>
+<tr><td><kbd>I</kbd>,<kbd>I</kbd></td><td>interrupt (as the calculator's ON key: <code>KeyboardInterrupt</code>)</td></tr>
+<tr><td><kbd>0</kbd>,<kbd>0</kbd></td><td>restart Python (its variables are lost)</td></tr>
+<tr><td><kbd>O</kbd> / <kbd>H</kbd></td><td>hide or show the cell's output / this help</td></tr>
+</table>
+
+<h3>Files</h3>
+<p>Notebooks are Jupyter files (<code>.ipynb</code>, nbformat 4.5). <em>Open</em> (or a file dropped on the page) sends a notebook file from the
+computer to the calculator, under the file's name (a notebook of that name there is replaced; its previous version is kept), and opens it on
+both. <em>Save</em> writes the calculator's notebook to a file on the computer (Chrome and Edge ask for permission once), <em>Download</em>
+saves a copy: with the outputs, plots as pictures, so Jupyter shows them too. Not connected, <em>Open</em> shows a file here to read.</p>
+
+<h3>If something does not work</h3>
+<ul>
+<li><em>The calculator is not in the list</em>: check the cable (some cables only charge); another program (a terminal) may have the port open.</li>
+<li><em>The page says the calculator has no Notebook</em>: install the Python module (Memory &gt; Modules on the calculator, or drop its .MOD file on the CALC drive).</li>
+<li><em>A cell runs for ever</em>: Interrupt (or the ON key on the calculator).</li>
+</ul>
+
+<h3>About</h3>
+<p>Math typesetting: KaTeX 0.16.22 (MIT License). Everything else is part of the calculator's firmware.</p>
+<pre class="license"><!--@KATEX_LICENSE@--></pre>

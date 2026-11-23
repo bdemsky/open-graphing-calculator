@@ -1,0 +1,15 @@
+# Piecewise functions plot (cas/src/numeric.c OP_CMP / OP_SEL): a spline (a piecewise result) and
+# when(...) in a notebook graph cell and as Y1 on the home screen's graph cell.
+requirecfg MOD_PYTHON
+nb store wipe
+nb new "Pieces"
+nb set 1 "s:=spline([0,1,2,3],[0,1,0,1],x)"
+nb run 1
+nb add graph "s, -1, 4"
+nb run 2
+nb expect 2 plot s
+nb add graph "when(x>0 and x<2,x^2,1), -3, 3"
+nb run 3
+nb expect 3 plot when
+screenshot graph_piecewise_nb.png
+nb close

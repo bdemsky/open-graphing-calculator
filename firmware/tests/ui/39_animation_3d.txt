@@ -1,0 +1,119 @@
+# Animation in 3D and GIF recording (the "animation" code module): z = f(x, y, t)
+# ripples, the ANIMATION settings form, the frame-time budget (coarser grids while
+# playing, full grid when paused), a parametric surface and a space curve with a
+# free letter, recording animated GIFs from 3D and 2D, removing the module.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+ifcfg !MOD_ANIMATION module library
+ifcfg !MOD_ANIMATION module install /CALC/MODULES/{mod:animation}
+ifcfg !MOD_ANIMATION key CLEAR
+app settings
+app graph3d
+g3d set 1 1 "2*sin(√(x^2+y^2)-t)"
+redraw
+expect state g3d_drawn 1
+expect state g3d_err1 ""
+expect text back
+# settings: t from 0 to 2π in 2 s (the form of the ANIMATION menu)
+key SHIFT F5
+expect state menu ANIMATION
+key 3
+expect state toast "comet: PAR, POL and SEQ graphs only"
+key SHIFT F5 4
+expect screen animset
+expect text start=
+type "0"
+key ENTER
+type "6.283185307179586"
+key ENTER
+type "2"
+key ENTER
+key SHIFT MENU
+expect state help_topic animation
+key CLEAR
+key F5
+expect screen graph3d
+# play
+key SHIFT F5 1
+expect state anim_playing 1
+expect state anim_kind g3d
+expect state anim_var t
+anim step 10
+expect statecontains anim_value 1.25664
+expect state anim_grid 0
+screenshot anim_3d_ripple.png
+# frames over the budget: the grid gets coarser while playing ...
+anim budget 0
+anim step 3
+expect state anim_grid 9
+screenshot anim_3d_coarse.png
+# ... and a key pauses (without turning the box) at the full grid
+key LEFT
+expect state anim_playing 0
+expect state anim_grid 0
+expect state g3d_azim -60
+expect state g3d_grid 24
+anim budget 80000
+# GIF of one sweep (1 s at 10 frames per second)
+anim cfg t 0 6.283185307179586 1 0
+anim rec
+expect screen message
+expect text RECORDED
+expect text /CALC/ANIM001.GIF: 10 frames
+key CLEAR
+expect state anim_gif /CALC/ANIM001.GIF
+expect state anim_gif_frames 10
+fs expect /CALC/ANIM001.GIF GIF89a
+# a parametric surface uses t too; a space curve (whose variable is t) uses another letter
+g3d kind 1 surf
+g3d set 1 1 "(2+cos(v))cos(u+t)"
+g3d set 1 2 "(2+cos(v))sin(u+t)"
+g3d set 1 3 "sin(v)"
+redraw
+expect state g3d_err1 ""
+anim play
+expect state anim_var t
+anim step 5
+anim stop
+g3d kind 1 curve
+g3d set 1 1 "3cos(t+a)"
+g3d set 1 2 "3sin(t)"
+g3d set 1 3 "t/2-2"
+redraw
+expect state g3d_err1 ""
+anim play
+expect state anim_var a
+expect state anim_kind g3d
+anim step 5
+screenshot anim_3d_curve.png
+anim stop
+# a GIF of a 2D animation from the menu (bounce: there and back)
+key HOME F1
+type "x^2/4-t"
+key F5 ENTER
+anim cfg t 0 4 0.5 1
+key SHIFT F5 5
+expect text RECORDED
+expect text /CALC/ANIM002.GIF: 10 frames
+key CLEAR
+fs expect /CALC/ANIM002.GIF GIF89a
+# no card: the recording says so
+fs eject
+key SHIFT F5 5
+expect text RECORDING FAILED
+expect text microSD
+key CLEAR
+fs insert 64
+# the module removed: SHIFT F5 says how to get it back, the graph works as before
+module remove animation
+expect state anim_module "Install the Animation module (Memory > Modules)."
+app graph
+expect screen graph
+expect state sliders 1
+key SHIFT F5
+expect text Install the Animation module
+key CLEAR
+app animation
+expect text ANIMATION NOT INSTALLED
+key CLEAR

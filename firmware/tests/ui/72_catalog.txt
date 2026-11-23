@@ -1,0 +1,79 @@
+# Structured CATALOG (SHIFT APPS, app/input_catalog.c): type-to-search with
+# ranking, categories (LEFT/RIGHT, F3 categ), app entries, DEL, help
+key SHIFT APPS
+expect screen menu
+expect state menu CATALOG
+expect state catalog_query ""
+# ALPHA lock is on: letters type the query; the exact name comes first
+key MUL LOG DIV
+expect state catalog_query sin
+expect state menu_item sin(
+key DOWN
+expect statecontains menu_item singvals
+screenshot catalog_search.png
+# DEL erases the last letter
+key DEL
+expect state catalog_query si
+# SHIFT DEL clears the query: the full list again
+key SHIFT DEL
+expect state catalog_query ""
+expect state menu_sel 0
+# a subsequence still matches: "fctr" -> factor(
+key COS VARS COMMA 9
+expect state catalog_query fctr
+expect state menu_item factor(
+key SHIFT DEL
+# names first (nderiv), then summaries: diff is "Derivative of an expression"
+key X SIN 9 LOG 5
+expect state catalog_query deriv
+expect state menu_item nderiv(
+key DOWN
+expect statecontains menu_item diff
+key ENTER
+expect screen home
+expect statecontains entry diff(
+key CLEAR CLEAR
+# categories: RIGHT steps to Algebra, LEFT back to all
+key SHIFT APPS RIGHT
+expect state menu Algebra
+expect state catalog_cat Algebra
+key LEFT
+expect state menu CATALOG
+# F3: the category list; Trigonometry
+key F3
+expect state menu CATEGORIES
+expect statecontains menu_item All A-Z
+screenshot catalog_categories.png
+key DOWN DOWN DOWN DOWN
+expect statecontains menu_item Trigonometry
+key ENTER
+expect state menu Trigonometry
+expect state menu_item acos(
+screenshot catalog_trig.png
+# typing filters inside the category
+key COMMA CAS DIV
+expect state menu_item tan(
+key CLEAR
+expect screen home
+# a category with an app: Finance lists the app first, ENTER opens it
+key SHIFT APPS F3
+key UP UP
+expect statecontains menu_item Finance
+key ENTER
+expect state menu Finance
+expect state menu_item "▶ Finance"
+key ENTER
+expect state menu FINANCE
+key CLEAR
+key HOME
+# SHIFT HELP on a catalog entry opens its page; CLEAR returns to the catalog
+key SHIFT APPS
+key TAN VARS X
+expect state menu_item gcd(
+key SHIFT MENU
+expect state help_topic gcd
+key CLEAR
+expect state menu CATALOG
+key CLEAR
+expect screen home
+expect state alpha 0

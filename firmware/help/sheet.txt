@@ -1,0 +1,40 @@
+%% Spreadsheet app and microSD tools. Format: see app/EXTENDING.md ("Help pages").
+
+@page sheet Spreadsheet
+APPS > Spreadsheet: a grid of columns A to Z and rows 1 to 999. The line at the top shows the selected cell's entry and its value.
+
+## Entering
+- Move with the arrows (or tap a cell). Type to start a new entry, or press {enter} to edit the cell's entry. {enter} stores it and moves down; {▲} {▼} store it and move. {clear} empties the line, then cancels. {⌫} clears the selected cell.
+- Every cell is an expression (a leading `=` is optional): `3.5`, `1/3`, `2.0_m`, `9.81±0.02`, `=A1*2`, `=sum(A1:A10)`. Text in double quotes, `"mass"`, is a label.
+- MATH, CAS, VARS, UNITS and the catalog insert into the entry line.
+- Values are shown with the MODE number format; exact results stay exact.
+
+## References
+- `A1` refers to a cell (lowercase `a1` too); an empty cell counts as 0.
+- `A1:B3` is the list of the non-empty cells of a rectangle, row by row (labels are skipped): `sum(A1:A10)`, `mean(B1:B20)`, `max(A1:C3)`, `stddev(...)`.
+- `$A$1` is absolute, `$A1` and `A$1` fix the column or the row: fill and paste move only the relative parts.
+- Changing a cell recalculates every cell that depends on it, in dependency order. A cell that refers to itself, directly or through others, shows `ERR:CYCLE`; cells that use an error show `ERR:REF`.
+- Uncertainties keep their correlation between cells: with `A1` = `9.81±0.02`, `=A1-A1` is `0±0` (see [[uncertainty]]).
+- Names of one letter followed by digits are cells in formulas, so a statistics list such as L1 is the cell L1 there.
+
+## Soft keys
+- {F1} `$` and {F2} `:` type the absolute marker and the range colon.
+- {F3} fill↓ asks for the last row and copies the cell down, moving relative references. It proposes the last row of the data in the column to the left (or right), so filling a formula along a column of data is {F3} {enter}. The entry line confirms what was filled.
+- {F4} copy and {F5} paste copy one cell's entry, moving relative references by the distance. {menu} {F3} and {menu} {F4} ([[clipboard]]) copy the cell's value instead, to paste it into another app.
+- {shift} {F1} link: the selected column feeds a statistics list (its numeric cells, in row order; labels and empty cells are skipped). The list follows every recalculation, so it can be used by STAT CALC, tests and stat plots. The column header shows `A>L1`.
+- {shift} {F2} sheet: export the values (`/SHEET.CSV`) or the entries (`/SHEETF.CSV`, which imports back with its formulas) to the microSD card, import a CSV file (cleared sheet, from A1; numbers stay numbers, `=...` are formulas, other text becomes labels), copy a list into the column, clear the sheet.
+- {shift} {F3} plot graphs linked columns in one step: the selected column against the nearest linked column on its left (or, with none there, the nearest on its right) as a scatter plot, or a histogram when it is the only linked column. A stat plot is taken (the one already showing those lists, else the first that is off, else Plot1) and ZoomStat fits the window. A column without a link is refused with a hint.
+- {shift} {F4} stat opens the list editor, {shift} {F5} graph the graph screen (stat plots).
+
+The sheet (entries, links, selection) is saved with the session; the values are recalculated when it is used again.
+
+@page sdtools microSD tools
+APPS > microSD tools works with the card in the slot (FAT16 or FAT32). Files go to the folder `/CALC`.
+
+- Screenshot (PNG): saves the screen the menu was opened from as `/CALC/SHOT001.PNG`, `SHOT002.PNG`, ... (320 x 240, colour). From any screen, {alpha} then {menu} takes a screenshot directly.
+- Backup session: writes everything that survives power-off (settings, history, CAS variables and functions, Y= functions, lists, matrices, the spreadsheet, apps) to `/CALC/BACKUP.SES`. An existing backup is replaced only when the new file is complete.
+- Restore session: choose a `.SES` file in `/CALC` and confirm (No is the first choice: a restore replaces everything). Its length and checksum are verified first; then the calculator restarts with that session, exactly as after switching it off and on. A damaged file changes nothing.
+- Card info: file system, size and free space.
+- Connect card to computer: the card becomes a drive of the computer connected by USB until you press EXIT ([[usb]]).
+
+The card is switched off after every operation, so it can be removed whenever no operation is running. Card errors say what to do (insert a card, format it as FAT32, free some space).

@@ -1,0 +1,147 @@
+# Sparkle Town's toy box (modules/mathquest/mq_toys.c): toys where the numbers are the toy --
+# Bongo Beats (a rhythm game with Puff the drum sheep), the jam, the kaleidoscope, the magic
+# square, the cage puzzle, number magic, growing dots, the mandala and the secret code.
+# Deterministic with `mq seed` and `mq step`; the drums fire their sound hooks.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+modx sfx clear
+mq seed 5
+mq fun off
+mq new Mia 2
+mq go arcade
+mq step 4
+screenshot mq_arcade.png
+touch tap 160 202
+expect state mq_scene toys
+mq step 4
+screenshot mq_toys.png
+# Bongo Beats: drum the answer. The first time: the ghost hand and "The cloud asks. Drum the answer!"
+# while the song waits; the order's cloud rides in, the four bongos carry four answers; the cats
+# sing an original song (mew), paws on the bongos (paw), the band (bass, chord)
+modx sfx clear
+touch tap 56 70
+expect statecontains mq_toy Bongo
+mq step 20
+expect text The cloud asks. Drum the answer!
+expect text Drum the answer!
+screenshot mq_toys_bongo_demo.png
+mq step 80
+screenshot mq_toys_bongo.png
+# the right drum on the beat: perfect, a mew; a wrong one: a soft thud and the song waits
+mq correct
+mq step 3
+expect text perfect!
+screenshot mq_toys_bongo_hit.png
+mq step 40
+mq wrong
+mq step 30
+screenshot mq_toys_bongo_wrong.png
+mq correct
+# mashing: the guide steps in, only the order's drum lit
+mq step 40
+key 1
+key 2
+key 3
+key 4
+key 1
+mq step 3
+expect text Listen!
+screenshot mq_toys_bongo_calm.png
+expect statecontains modx_sfx mew
+expect statecontains modx_sfx paw
+expect statecontains modx_sfx bass
+expect statecontains modx_sfx dud
+key CLEAR
+# a song of one table (the user: "not sure what is being taught"): the times-table run she is learning (here the
+# grown-ups' focus, the 7s) -- "Song of 7s", the cloud asks "7 x 4 = ?" big in the middle, the drums carry the
+# answers, a right drum says the whole fact ("7 x 4 = 28"); the song's end: "You drummed the 7s!"
+mq grant facts
+mq focus mul 7
+touch tap 56 70
+mq step 80
+expect text Song of 7s
+screenshot mq_toys_bongo_table.png
+mq correct
+mq step 3
+screenshot mq_toys_bongo_fact.png
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 60
+mq correct
+mq step 30
+expect text You drummed the 7s!
+screenshot mq_toys_bongo_table_end.png
+mq focus clear
+key CLEAR
+# the jam: the free drumming (its own rhythm track)
+touch tap 160 70
+expect statecontains mq_toy Jam
+key 1
+expect statecontains modx_sfx bongo
+expect state modx_music "8 0"
+key CLEAR
+# the kaleidoscope: a stroke mirrored six ways
+touch tap 264 70
+expect statecontains mq_toy Kaleidoscope
+touch drag 190 90 220 110
+touch drag 200 130 170 150
+mq step 4
+screenshot mq_toys_kaleido.png
+key 8
+mq step 2
+screenshot mq_toys_kaleido8.png
+key CLEAR
+# the magic square
+touch tap 56 128
+expect statecontains mq_toy "Magic square"
+mq step 2
+screenshot mq_toys_magic.png
+key CLEAR
+# the cage puzzle
+touch tap 160 128
+mq step 2
+screenshot mq_toys_cage.png
+key CLEAR
+# number magic: always 3
+touch tap 264 128
+key 8
+key ENTER ENTER ENTER ENTER ENTER
+mq step 10
+screenshot mq_toys_magic3.png
+key CLEAR
+# growing dots
+touch tap 56 186
+key ENTER ENTER ENTER ENTER
+mq step 10
+screenshot mq_toys_grow.png
+key CLEAR
+# the mandala
+touch tap 160 186
+touch tap 260 40
+touch tap 104 50
+touch tap 150 100
+mq step 2
+screenshot mq_toys_mandala.png
+key CLEAR
+# the secret code
+touch tap 264 186
+mq step 2
+screenshot mq_toys_code.png
+key CLEAR
+key CLEAR
+expect state mq_scene arcade

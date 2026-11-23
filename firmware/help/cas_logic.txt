@@ -1,0 +1,129 @@
+%% CAS help: Boolean logic (the advanced CAS module, cas/ext/applied)
+@group cas-logic Logic
+Truth tables, simplification and normal forms of logical expressions built with `and`, `or`, `not`, `xor`, `implies` and `iff`.
+
+@page logic-ops Logical operators
+`not p`, `p and q`, `p or q`, `p xor q`, `p implies q`, `p iff q`; `true` and `false` (also 1 and 0) are the constants. `not` binds tightest, then `and`, then `or` and `xor`, then `implies` and `iff` (right to left: `p implies q implies r` is `p implies (q implies r)`). `p xor q` is the same as `xor(p, q)`, and similarly `implies(p, q)` and `iff(p, q)`; with integers `and`, `or`, `not` and `xor` work bitwise ([[xor]]).
+
+Any other part of an expression is a variable of the logic commands: a name (`p`), or a relation (`x>1`). Names come first in alphabetical order, then relations in order of appearance. See [[truthtable]], [[boolsimplify]], [[dnf]], [[cnf]], [[satisfiable]].
+
+@cmd truthtable
+group: cas-logic
+summary: Truth table of a logical expression
+syntax: truthtable(expr)
+syntax: truthtable(expr, vars)
+syntax: truthtable([expr1, expr2, ...])
+example: truthtable(p and q)
+result: [[p,q,p and q],[0,0,0],[0,1,0],[1,0,0],[1,1,1]]
+see: boolsimplify, satisfiable, logic-ops
+
+## Refresher
+One row per assignment, 2ⁿ rows for n variables, 1 = true and 0 = false; the first variable changes slowest. A tautology has a column of 1s, a contradiction of 0s; two formulas are equivalent when their columns agree. Laws: [[ref-boolean]].
+example: truthtable(p xor q)
+result: [[p,q,xor(p,q)],[0,0,0],[0,1,1],[1,0,1],[1,1,0]]
+## Syntax
+A matrix: the header row lists the variables and the expression, then one row per assignment with 1 for true and 0 for false, counting in binary (the first variable changes slowest). A list of expressions gives one column each; `vars` fixes the order of the variables. At most 10 variables. Needs the advanced CAS module.
+
+@cmd boolsimplify
+group: cas-logic
+summary: Simplest equivalent logical expression
+syntax: boolsimplify(expr)
+example: boolsimplify((a and b) or (a and not b))
+result: a
+example: boolsimplify(p implies (q implies p))
+result: true
+example: boolsimplify((p or q) and (p or r))
+result: p or (q and r)
+see: logicsimplify, dnf, cnf, logic-ops
+
+## Refresher
+Uses the laws of Boolean algebra (absorption p ∨ (¬p ∧ q) = p ∨ q, De Morgan, consensus, …; list in [[ref-boolean]]) by way of the truth table: the result is a minimal DNF or CNF, so equivalent inputs give the same answer.
+example: boolsimplify(p or (not p and q))
+result: p or q
+## Syntax
+The shorter of the minimal [[dnf]] and the minimal [[cnf]] (fewer variable occurrences; the DNF on a tie); `true` for a tautology and `false` for a contradiction. Computed from the truth table, so at most 12 variables. Needs the advanced CAS module.
+
+@cmd logicsimplify
+group: cas-logic
+summary: Simplest equivalent logical expression
+syntax: logicsimplify(expr)
+example: logicsimplify(not (p and q) or p)
+result: true
+see: boolsimplify
+
+The same as [[boolsimplify]]. Needs the advanced CAS module.
+
+@cmd dnf
+group: cas-logic
+summary: Minimal disjunctive normal form
+syntax: dnf(expr)
+example: dnf(p xor q)
+result: (p and not(q)) or (not(p) and q)
+example: dnf((a or b) and c)
+result: (a and c) or (b and c)
+see: cnf, boolsimplify, logic-ops
+
+## Refresher
+Disjunctive normal form: an or of and-terms. Canonical: one minterm per row of the truth table with value 1. The minimal one combines rows that differ in one variable (prime implicants), as a Karnaugh map does.
+example: dnf((p implies q) and (q implies p))
+result: (p and q) or (not(p) and not(q))
+## Syntax
+An `or` of `and` terms equivalent to `expr` with the fewest terms, then the fewest variable occurrences: the Quine-McCluskey method: all prime implicants, then a minimum cover of the true rows (essential implicants, then a branch-and-bound search). At most 12 variables. Needs the advanced CAS module.
+
+@cmd cnf
+group: cas-logic
+summary: Minimal conjunctive normal form
+syntax: cnf(expr)
+example: cnf((a and b) or c)
+result: (a or c) and (b or c)
+see: dnf, boolsimplify
+
+## Refresher
+Conjunctive normal form: an and of or-clauses; one clause per row with value 0 (a maxterm). cnf(f) = ¬dnf(¬f) by De Morgan. SAT solvers take CNF.
+example: cnf(p iff q)
+result: (not(p) or q) and (p or not(q))
+## Syntax
+An `and` of `or` clauses equivalent to `expr`, as short as possible: the negation of the minimal [[dnf]] of `not expr`. At most 12 variables. Needs the advanced CAS module.
+
+@cmd satisfiable
+group: cas-logic
+summary: An assignment that makes an expression true
+syntax: satisfiable(expr)
+example: satisfiable((p or q) and not p)
+result: [p=false,q=true]
+example: satisfiable(p and not p)
+result: false
+see: truthtable
+
+## Refresher
+Is some assignment true? (SAT, NP-complete in general.) f is a tautology ⇔ not f is unsatisfiable, so `satisfiable(not f)` = false proves f.
+example: satisfiable(not (p implies (q implies p)))
+result: false
+## Syntax
+The first assignment in truth-table order (all variables false first) that makes `expr` true, as a list of equations, or `false` if there is none. At most 24 variables. Needs the advanced CAS module.
+
+@cmd implies
+group: cas-logic
+summary: Logical implication
+syntax: implies(p, q)
+syntax: p implies q
+example: implies(true,false)
+result: false
+example: implies(false,q)
+result: true
+see: iff, logic-ops
+
+`p implies q` is false only when p is true and q is false. It evaluates when an argument is `true` or `false` and otherwise stays as written. Needs the advanced CAS module.
+
+@cmd iff
+group: cas-logic
+summary: Logical equivalence
+syntax: iff(p, q)
+syntax: p iff q
+example: iff(true,q)
+result: q
+example: iff(p,p)
+result: true
+see: implies, logic-ops
+
+`p iff q` is true when p and q have the same truth value. It evaluates when an argument is `true` or `false` (or both are the same expression) and otherwise stays as written. Needs the advanced CAS module.

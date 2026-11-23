@@ -1,0 +1,51 @@
+# 3D graph cells of the home notebook (app/gcell.c; help page "graph-cells"): MENU Insert 3D graph
+# (the 3D graph's surfaces; none yet: their editor opens bound to the new cell); the selected cell
+# turns with the arrows and a drag, zooms with + − and a pinch; ENTER opens the 3D graph on it and
+# the home screen writes its view back; a power cycle keeps it.
+type "2*3\n"
+key MENU
+key UP
+expect state menu_item "Insert 3D graph"
+key ENTER
+expect screen graph3d_eq
+type "(x^2-y^2)/5"
+key HOME
+expect screen home
+expect state history 2
+expect state home_kind graph
+expect state gcell_fn (x^2-y^2)/5
+expect state gcell_view "-60 25 1"
+expect text z1=(x^2-y^2)/5
+screenshot graph3d_cell.png
+# (back home the new cell is selected)
+expect state home_sel 2
+# arrows turn it (15° / 10°), + − zoom, CLEAR stops
+key RIGHT
+expect state gcell_view "-45 25 1"
+key UP
+expect state gcell_view "-45 35 1"
+key ADD
+expect state gcell_view "-45 35 1.25"
+key SUB
+expect state gcell_view "-45 35 1"
+key CLEAR
+# touch: a drag turns, a pinch zooms
+touch drag 160 100 200 100 4
+expect state gcell_view "-25 35 1"
+touch pinch 160 100 40 80
+expect statecontains gcell_view "-25 35 "
+screenshot graph3d_cell_turned.png
+# ENTER: the 3D graph on this cell; turn it there; back home it is written back
+key CLEAR
+key UP
+key ENTER
+expect screen graph3d
+expect state g3d_e1_1 (x^2-y^2)/5
+key HOME
+expect screen home
+expect state home_bound ""
+expect state gcell_fn (x^2-y^2)/5
+key SHIFT ON
+key ON
+expect state history 2
+expect state gcell_fn (x^2-y^2)/5

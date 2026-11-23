@@ -1,0 +1,331 @@
+# Sparkle Town's games (modules/mathquest/mq_play.c): every answer is a game action, never a
+# question screen. Each game is played deterministically (`mq seed`, `mq step N` frames of
+# 40 ms): a right action cheers, a dud is a story moment and the game goes on. The sound hooks
+# (modx API size 4) are logged by the simulator: `modx_sfx` lists the effects fired.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+key CLEAR
+app mathquest
+modx sfx clear
+mq seed 3
+mq fun off
+mq scene off
+mq new Mia 2
+# (the stops ask their own skills here; the engine and the placement: 49_mathquest_free.txt)
+mq engine stop
+mq grant bosses
+# Bubble Pop: a dud wilts and the friend says what it would mean; the right bubble pops
+mq level 0 0
+expect state mq_mech "Bubble Pop"
+expect state mq_moment play
+mq step 20
+screenshot mq_game_pop.png
+mq try
+expect state mq_moment play
+mq step 8
+screenshot mq_game_pop_dud.png
+mq correct
+expect state mq_moment cheer
+mq step 10
+screenshot mq_game_pop_cheer.png
+mq settle
+mq step 2
+expect state mq_run 1/8
+# a second miss: a helper friend pops in
+mq wrong
+expect state mq_moment help
+mq step 20
+screenshot mq_game_why.png
+mq next
+# Cloud Catch: steer under the falling star (the console steers like typing it would)
+mq mech "Cloud Catch"
+expect state mq_mech "Cloud Catch"
+mq step 30
+screenshot mq_game_catch.png
+# her first Cloud Catch: the guide's demo (a ghost hand moves the cloud), the three stars waiting mid-air
+mq step 30
+expect state mq_demo 1
+screenshot mq_game_catch_demo.png
+mq correct
+expect state mq_moment cheer
+# Gate Dash: the gates wait; a tap on a lane picks it, a tap on a gate dashes through
+mq skill 17 1
+mq mech "Gate Dash"
+mq step 40
+screenshot mq_game_gates.png
+key UP
+key DOWN
+mq correct
+mq step 20
+expect state mq_moment cheer
+# Kart Race: right pads are boosts
+mq skill 17 1
+mq mech "Kart Race"
+mq step 40
+mq correct
+mq step 10
+screenshot mq_game_kart.png
+# Peekaboo: friends hold the trays; the keypad keys bop the holes
+mq skill 6 1
+mq mech Peekaboo
+mq step 30
+screenshot mq_game_zap.png
+mq correct
+expect state mq_moment cheer
+# Sort Slide: compare the parcels, slide the card into its bin
+mq skill 14 1
+expect state mq_mech "Sort Slide"
+mq step 30
+screenshot mq_game_sort.png
+mq correct
+mq step 20
+expect state mq_moment cheer
+# Hop Along: hop along the cookie line, land on the fraction
+mq skill 25 1
+expect state mq_mech "Hop Along"
+key RIGHT
+key RIGHT
+mq step 10
+screenshot mq_game_jump.png
+mq correct
+expect state mq_moment cheer
+# rounding: hop to the nearer end
+mq skill 15 1
+expect state mq_mech "Hop Along"
+mq step 10
+screenshot mq_game_round.png
+mq correct
+# Sky Fling by degrees: aim with the protractor, fling the star
+mq skill 56 1
+expect state mq_mech "Sky Fling"
+mq step 10
+screenshot mq_game_launch.png
+mq correct
+mq step 40
+expect state mq_moment cheer
+# Sky Fling by fractions: the power in parts
+mq skill 25 1
+mq mech "Sky Fling"
+key RIGHT RIGHT RIGHT
+mq step 6
+screenshot mq_game_fling.png
+# Pie Shop: drag across the slices to frost them, serve!
+mq skill 29 1
+expect state mq_mech "Pie Shop"
+touch tap 140 110
+mq step 6
+screenshot mq_game_bake.png
+mq correct
+expect state mq_moment cheer
+# Build It: a flower bed in equal rows, a rug with a side missing, a frame with a side missing
+mq seed 2
+mq skill 1 1
+mq mech "Build It"
+expect state mq_mech "Build It"
+key RIGHT RIGHT
+mq step 6
+screenshot mq_game_build_bed.png
+mq correct
+expect state mq_moment cheer
+mq skill 49 2
+mq mech "Build It"
+expect state mq_mech "Build It"
+mq step 6
+screenshot mq_game_build_rug.png
+mq wrong
+expect state mq_moment help
+mq step 30
+screenshot mq_game_build_why.png
+mq seed 5
+mq skill 52 2
+mq mech "Build It"
+mq step 6
+screenshot mq_game_build_fence.png
+# Clock Tower: turn the hands to the train's time
+mq skill 39 1
+expect state mq_mech "Clock Tower"
+key RIGHT RIGHT RIGHT
+mq step 6
+screenshot mq_game_clock.png
+mq correct
+expect state mq_moment cheer
+# Shop Till: drop coins for the change, ring!
+mq skill 45 0
+expect state mq_mech "Shop Till"
+mq tap 32 204
+mq tap 80 204
+mq step 6
+screenshot mq_game_till.png
+mq correct
+expect state mq_moment cheer
+# ... or count her coins and ring up the total on the till's keys
+mq skill 44 1
+expect state mq_mech "Shop Till"
+mq step 6
+screenshot mq_game_till_count.png
+# Treasure Dig: dig at the map's point
+mq skill 70 0
+expect state mq_mech "Treasure Dig"
+key RIGHT RIGHT UP
+mq step 6
+screenshot mq_game_dig.png
+mq correct
+expect state mq_moment cheer
+# Treasure Heist: clues round the room, the chest's combination lock (typed or rolled)
+mq skill 21 1
+expect state mq_mech "Treasure Heist"
+mq tap 30 100
+mq answer 12
+mq step 6
+screenshot mq_game_vault.png
+mq correct
+mq step 10
+screenshot mq_game_vault_open.png
+# the trick: a little show in the round, then on with the game
+mq skill 0 1
+mq showme
+expect state mq_moment trick
+mq step 30
+screenshot mq_game_trick.png
+mq next
+mq next
+mq next
+mq next
+expect state mq_moment play
+# a story drama: an unfair share, told as a pout
+mq skill 1 2
+mq mech "Bubble Pop"
+mq step 20
+screenshot mq_game_story.png
+# no making (typing) the answer in the action games: every order of Bubble Pop, Gate Dash, Kart Race
+# and Peekaboo offers labelled answers to pick (typed answers are the calm games': the till, the Heist,
+# the notebook)
+mq level 0 0
+mq correct
+mq settle
+mq step 2
+expect state mq_make 0
+mq step 10
+screenshot mq_game_make.png
+mq correct
+mq step 10
+expect state mq_moment cheer
+mq settle
+mq step 2
+mq level 0 0
+mq correct
+mq settle
+mq step 2
+mq mech "Gate Dash"
+expect state mq_make 0
+mq step 10
+screenshot mq_game_make_gate.png
+mq correct
+mq step 6
+screenshot mq_game_make_gate_open.png
+mq settle
+mq step 2
+mq level 0 0
+mq correct
+mq settle
+mq step 2
+mq mech "Kart Race"
+expect state mq_make 0
+mq step 10
+screenshot mq_game_make_kart.png
+mq correct
+mq step 6
+mq settle
+mq step 2
+mq level 0 0
+mq correct
+mq settle
+mq step 2
+mq mech "Peekaboo"
+expect state mq_make 0
+mq step 10
+screenshot mq_game_make_peek.png
+mq correct
+mq step 6
+screenshot mq_game_make_peek_out.png
+mq settle
+mq step 2
+# a whole Kart Race: three rivals, overtakes, a dud spins her kart, the podium at the end
+mq level 1 4
+expect state mq_mech "Kart Race"
+mq step 30
+screenshot mq_game_race_start.png
+mq correct
+mq step 20
+screenshot mq_game_race_boost.png
+mq settle
+mq step 2
+mq try
+mq step 10
+screenshot mq_game_race_spin.png
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 22
+expect state mq_scene done
+expect state mq_race 1
+screenshot mq_game_podium.png
+# the finale: the grumble cheers up with every order
+mq boss 0
+mq step 20
+screenshot mq_game_finale.png
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+screenshot mq_game_finale_happier.png
+# the sound hooks fired along the way
+expect statecontains modx_sfx pop
+expect statecontains modx_sfx cheer
+expect statecontains modx_sfx dud
+expect statecontains modx_sfx whoosh
+expect statecontains modx_sfx launch
+expect statecontains modx_sfx land
+expect statecontains modx_sfx boss
+expect state modx_music "5 1"
+# the town grows: something new every few stars, quests, the cafe's tip jar
+mq grant stars 80
+mq go map
+mq step 1200
+expect state mq_unlocks 11
+mq step 400
+screenshot mq_town.png
+mq town 546
+mq step 20
+screenshot mq_town_cafe.png
+mq tap 202 112
+expect state mq_tips 0
+expect statecontains modx_sfx unlock

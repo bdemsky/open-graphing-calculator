@@ -1,0 +1,26 @@
+# WINDOW form, ZDecimal, ZSquare, TBLSET
+key F1 F2
+expect screen window
+type "~5"
+key ENTER
+expect state xmin -5
+type "5"
+key ENTER
+expect state xmax 5
+screenshot window.png
+# invalid range is refused
+key UP UP
+type "20"
+key ENTER
+expect statecontains xmin -5
+key CLEAR
+type "~5"
+key ENTER
+key F1 F3 4
+expect state xmax 15.9
+key HOME F1 SHIFT F2
+expect screen tblset
+key DOWN
+type "0.5"
+key ENTER
+expect state tbldelta 0.5

@@ -1,0 +1,101 @@
+# Regression tests for the matrix editor, the cell grid, the solver, finance
+# and base-n
+#
+# cell grid (linear system): UP from an edited cell in row 1 selects the rows
+# field, so a digit sets the rows (not the column it came from); the column
+# limit has its own message
+app solver
+key 3
+expect screen linsys
+key RIGHT RIGHT ENTER
+key UP
+type "3"
+key DOWN DOWN DOWN
+expect text "3,1="
+key UP UP UP RIGHT
+type "8"
+expect text "ERR: columns 1..7"
+key HOME
+# equation solver: roots beyond 1e12 (default bounds +-1e99) and roots in the
+# outermost scan cells of wide bounds are found
+app solver
+key 1
+type "x^2-10^26\n"
+key ALPHA ENTER
+expect text "x solved"
+expect text "root1=-1E13"
+expect text "root2=1E13"
+key UP
+type "x^2-1.1025*10^12\n"
+key DOWN
+type "~1100000\n1100000\n"
+key UP UP UP
+key ALPHA ENTER
+expect text "2 roots"
+expect text "root1=-1050000"
+expect text "root2=1050000"
+# a name of 24+ characters is one word, not split into a variable
+key UP
+type "abcdefgh"
+type "ijklmnop"
+type "qrstuvwx"
+type "yzab+x=2\n"
+expect text "x="
+expect notext "yzab="
+key HOME
+# finance: C/Y = 0 is refused and not stored
+app finance
+key 4
+key DOWN DOWN
+type "0\n"
+expect text "ERR: C/Y must be > 0"
+key HOME
+app finance
+key 4
+expect text "C/Y=12"
+key HOME
+# cash flows: the last row is IRR (no blank row after it)
+app finance
+key 3
+key UP
+expect text "IRR="
+expect pixel 2 160 0x02d9
+key HOME
+# amortization over many payments (resumable run): values of payment 360
+app finance
+key 1
+type "360\n6\n200000\n~1199.10105\n0\n"
+key HOME
+app finance
+key 2
+type "1\n360\n"
+expect text "ΣInt=-231676.378"
+expect text "bal=0.0003068678327"
+expect text "2:-999.004 -200.097 199600.8"
+screenshot amort_360.png
+key HOME
+# FIX 2: the forms show numbers with the MODE format
+setmode DECIMAL 2
+app finance
+key 1
+expect text "PMT=-1199.10"
+expect notext "-1199.101"
+key HOME
+setmode DECIMAL FLOAT
+# base-n: the home screen's word size and ans are not changed
+type "7\n"
+app basen
+ifcas src type "5\n"
+key HOME
+type "ans\n"
+expect state last_output 7
+ifcas src expect eval "wordsize()" "[64,true]"
+# matrix editor: opening an undefined matrix shows 3x3 zeros without defining it
+ifcas src key SHIFT MATH 3
+ifcas src key DOWN DOWN ENTER
+ifcas src expect screen matedit
+ifcas src expect text [C]
+ifcas src key CLEAR
+ifcas src expect screen home
+ifcas src type "matC\n"
+ifcas src expect state last_output matC

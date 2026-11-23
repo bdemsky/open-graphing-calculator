@@ -1,0 +1,37 @@
+# Uncertainty on the home screen: ± from the CATALOG (search "pm"), propagation with
+# correlations (ans-ans), units, MODE format leaves value±unc alone
+type "9.81"
+key SHIFT APPS
+expect state menu CATALOG
+key 7 RPAREN
+expect state menu_item "± (pm)"
+key ENTER
+type "0.02\n"
+ifcas src expect text 9.81±0.02
+ifcas src type "ans-ans\n"
+ifcas src expect text 0.0±0
+ifcas src type "ans*2\n"
+ifcas src expect text 0.0±0
+# units: (2.0±0.1)_m/(0.50±0.02)_s typed through the console's eval path
+ifcas src expect eval "(2.0±0.1)_m/(0.50±0.02)_s" "(4.0±0.3)_m/s"
+ifcas src expect eval "uncert(3*(2±1/10))" "3/10"
+# FIX 4 formats ordinary floats but keeps the significant figures of value±unc
+setmode DECIMAL 4
+ifcas src type "x:=9.81"
+key SHIFT APPS 7 RPAREN ENTER
+ifcas src type "0.02\n"
+ifcas src expect text 9.81±0.02
+ifcas src type "x*x\n"
+ifcas src expect text 96.2±0.4
+ifcas src type "nominal(x*x)\n"
+ifcas src expect text 96.2361
+screenshot uncertainty_home.png
+setmode DECIMAL FLOAT
+# the spreadsheet keeps the correlation between cells
+app sheet
+sheet set A1 x
+sheet set A2 =A1-A1
+ifcas src sheet expect A2 0.0±0
+sheet set A3 =A1^2
+ifcas src sheet expect A3 96.2±0.4
+ifcas src sheet value A3 96.2361

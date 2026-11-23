@@ -1,0 +1,143 @@
+%% CAS help: equations and solving
+@group cas-solve Equations and solving
+Exact and numeric solutions of equations, inequalities and systems, and roots of polynomials.
+
+@cmd solve
+group: cas-solve
+summary: Solve equations exactly
+syntax: solve(eq, x)
+syntax: solve([eq1, eq2], [x, y])
+syntax: solve(ineq, x)
+syntax: solve(eq, x, a, b)
+suffix: ,x)
+example: solve(x^2-4=0,x)
+result: [-2,2]
+example: solve(sin(x)=1/2,x)
+result: [2*n_1*pi+pi/6,2*n_1*pi+5*pi/6]
+example: solve(cos(x)=0,x)
+result: [n_1*pi+pi/2]
+example: solve(sin(x)=1/2,x,0,10)
+result: [pi/6,5*pi/6,13*pi/6,17*pi/6]
+example: solve(x^2<4,x)
+result: [-2<x and x<2]
+example: solve([x+y=3,x-y=1],[x,y])
+result: [[x=2,y=1]]
+see: csolve, fsolve, linsolve, roots
+
+## Refresher
+Real solutions of f(x) = 0 (or of a system). Polynomials: formulas up to degree 4 (exact here up to 3 and special forms); from degree 5 there is no general formula, so decimals.
+- Periodic equations give every solution: n_1 stands for any integer (tan x = 1: π/4 + nπ).
+- [[csolve]] for complex solutions, [[fsolve]] for a numeric root near a guess, `solve(eq,x,a,b)` for the solutions in [a, b].
+- A system returns a list of solutions, each a list `[x=…, y=…]`; `[]` means no real solution was found.
+example: solve(tan(x)=1,x)
+result: [n_1*pi+pi/4]
+## Syntax
+Returns the list of real solutions of an equation for `x`. An expression without `=` is treated as `expr=0`. Without `x`, the main variable is used. An empty list means no real solution was found.
+
+- Polynomials: exact up to degree 3 and for special forms such as `x^4=2`, otherwise decimal approximations.
+- Trig equations give all solutions as families such as `pi/6+2*pi*n_1`, where `n_1` stands for any integer (it is marked as an integer, as with [[assume]]; if the name is taken, `n_2` and so on are used). Families that overlap are merged: `cos(x)=0` gives `pi/2+pi*n_1`. Substituting a family into the equation simplifies, for example `subst(sin(x),x,2*n_1*pi+pi/6)` gives `1/2`.
+- `solve(eq, x, a, b)` lists the solutions between `a` and `b` (inclusive) as numbers in increasing order, at most 100 of them; `a` and `b` may be `-inf` and `inf` when there are finitely many solutions.
+- Without the advanced CAS module, trig equations give the principal solutions in one period and the interval form is not available.
+- Inequalities give conditions such as `-2<x and x<2`.
+- Systems: give lists of equations and unknowns; each solution is a list of `var=value`.
+- For complex solutions use [[csolve]]; for a numeric root of any equation use [[fsolve]].
+
+@cmd csolve
+group: cas-solve
+summary: Solve equations over the complex numbers
+syntax: csolve(eq, x)
+syntax: csolve([eq1, eq2], [x, y])
+suffix: ,x)
+example: csolve(x^2+1=0,x)
+result: [i,-i]
+example: csolve(x^3=1,x)
+result: [1,-sqrt(3)*i/2-1/2,sqrt(3)*i/2-1/2]
+see: solve, cfactor, proot
+
+Like [[solve]], but also returns non-real complex solutions.
+
+@cmd fsolve
+group: cas-solve
+summary: Numeric solution of an equation
+syntax: fsolve(eq, x)
+syntax: fsolve(eq, x, guess)
+syntax: fsolve(eq, x=guess)
+syntax: fsolve([eqs], [vars], [guesses])
+example: fsolve(cos(x)=x,x)
+result: [0.739085133215]
+example: fsolve(x^3-2*x-5,x,2)
+result: 2.09455148154
+example: fsolve([x^2+y^2=4,x=y],[x,y],[1,1])
+result: [x=1.41421356237,y=1.41421356237]
+see: nsolve, solve, proot
+
+## Refresher
+Newton's method x ← x − f(x)/f'(x) from the guess (quadratic convergence near a simple root; it may jump to another root or fail at f' = 0). Systems: x ← x − J⁻¹ F(x) with the [[jacobian]].
+example: fsolve(cos(x)=x,x)
+result: [0.739085133215]
+## Syntax
+Finds decimal solutions of an equation. Without a starting value, real roots are searched for and returned as a list; with a starting value `guess`, Newton's method returns the root closest to it. For systems (up to 10 unknowns) give a list of starting values. [[nsolve]] is the same command.
+
+@cmd nsolve
+group: cas-solve
+summary: Same as fsolve
+syntax: nsolve(eq, x)
+syntax: nsolve(eq, x, guess)
+example: nsolve(exp(x)=3,x)
+result: [1.09861228867]
+see: fsolve
+
+Same as [[fsolve]]: numeric solution of an equation or system.
+
+@cmd linsolve
+group: cas-solve
+summary: Solve a system of linear equations
+syntax: linsolve([eq1, eq2, ...], [x, y, ...])
+example: linsolve([x+y=3,x-y=1],[x,y])
+result: [x=2,y=1]
+example: linsolve([2*x+y=1,x+2*y=2],[x,y])
+result: [x=0,y=1]
+see: solve, rref, inv
+
+Solves a linear system exactly by Gauss-Jordan elimination and returns the list `[x=..., y=...]`. Coefficients may be symbolic. Gives an error if the equations are not linear.
+
+@cmd roots
+group: cas-solve
+summary: Roots of a polynomial with multiplicities
+syntax: roots(p)
+syntax: roots(p, x)
+example: roots(x^2-3*x+2)
+result: [[1,1],[2,1]]
+example: roots(x^3-x^2)
+result: [[1,1],[0,2]]
+see: proot, solve, factors
+
+Returns the roots of polynomial `p` in `x` as a list of `[root, multiplicity]` pairs.
+
+@cmd proot
+group: cas-solve
+summary: Numeric roots of a polynomial
+syntax: proot(p)
+syntax: proot(coefflist)
+example: proot(x^2-2)
+result: [-1.41421356237,1.41421356237]
+example: proot([1,0,-2])
+result: [-1.41421356237,1.41421356237]
+example: proot(x^3-1)
+result: [1.0,-0.5-0.866025403784*i,0.866025403784*i-0.5]
+see: roots, coeffs, fsolve
+
+Returns decimal approximations of all complex roots of a polynomial, given as an expression or as a list of coefficients from the highest power down.
+
+@cmd gbasis
+group: cas-solve
+summary: Groebner basis of polynomials
+syntax: gbasis([p1, p2, ...], [x, y, ...])
+syntax: gbasis(polys, vars, order)
+example: gbasis([x^2+y,x*y-1],[x,y])
+result: [y^3+1,x+y^2]
+example: gbasis([x+y-1,x-y],[x,y])
+result: [y-1/2,x-1/2]
+see: solve, resultant
+
+Returns the reduced Groebner basis of the ideal generated by the polynomials. The default monomial order is lexicographic (`plex`); give `tdeg` for graded reverse lexicographic order. With lex order the basis is triangular, which helps to solve polynomial systems.

@@ -1,0 +1,148 @@
+# DE graph mode: slope fields of y' = f(x, y) and solution curves (RK4) through
+# the typed initial points (IC line) and through points added on the graph
+# (ENTER on the free cursor, long press); TRACE along a curve, ⌫ removes an
+# added curve, Y= MENU removes them all; vertical tangents (y'=-x/y) and
+# blow-up (y'=y^2+x^2) end a curve; no CALC or TABLE; saved across power off/on.
+# DE is the sixth mode of the Y= header
+key F1 UP RIGHT RIGHT RIGHT RIGHT RIGHT ENTER
+expect state graph_type DE
+expect state yeq_row 0
+expect text "y1'"
+expect text IC1
+# x types x in DE mode; y' = x - y through (0, 1) and (0, -2)
+key X
+type "-y"
+key DOWN
+type "(0,1),(0,-2)"
+expect state e1_1 x-y
+expect state e1_2 (0,1),(0,-2)
+screenshot de_yeq.png
+key F5
+expect state graph_plotted 1
+expect state graph_error ""
+expect state de_curves 2
+# the field and the curves are drawn in the entry's colour (blue)
+expect color 0x029b 1200
+screenshot de_field.png
+# TRACE starts on the first curve's initial point; x steps by a pixel;
+# y = x - 1 + 2e^(-x): y(0.1880877743) = 0.8451719869
+key F4
+expect state trace_fn 1
+expect state trace_x 0
+expect state trace_y 1
+key RIGHT RIGHT RIGHT
+expect state trace_x 0.1880877743
+expect statecontains trace_y 0.84517
+expect text "y'=-0.657"
+expect text "y1'=x-y  (0, 1)"
+# DOWN: the second curve, y = x - 1 - e^(-x); typing an x goes there: y(1) = -1/e
+key DOWN
+expect state trace_fn 2
+expect state trace_y -2
+key 1 ENTER
+expect state trace_x 1
+expect statecontains trace_y -0.36787
+# ⌫ does not remove a typed curve
+key DEL
+expect state de_curves 2
+# the free cursor (arrows after CLEAR) shows the slope; ENTER adds a curve there
+key CLEAR
+expect state graph_mode plain
+key RIGHT
+expect state graph_mode free
+expect text "y'="
+key ENTER
+expect state de_added 1
+expect state de_curves 3
+expect state graph_mode trace
+expect state trace_fn 3
+expect statecontains graph_label "(0.0"
+# a long press adds a curve through the pressed point and traces it
+touch 240 60 down
+wait 800
+touch 240 60 up
+expect state de_added 2
+expect state de_curves 4
+expect state trace_fn 4
+expect statecontains trace_x 5.04
+screenshot de_added.png
+# a tap near a curve traces it
+touch tap 160 113
+expect state graph_mode trace
+# ⌫ on an added curve removes it
+key F4
+key DOWN DOWN DOWN
+expect state trace_fn 4
+key DEL
+expect state de_added 1
+expect state de_curves 3
+# no CALC, no TABLE in DE mode
+key SHIFT F4 1
+expect text "Not available in DE mode"
+key ENTER F1 SHIFT F5
+expect text "(no table in DE mode)"
+key HOME
+# a bad IC line is an error of the entry
+key F1
+expect state yeq_row 1
+key CLEAR
+type "(0,1"
+key F5
+expect statecontains graph_error "y1'"
+expect state graph_plotted 0
+key F1 CLEAR
+type "(0,1),(0,-2)"
+# y2' = -x/y (circles): switched off y1, the curve through (0, 3) ends at the
+# vertical tangents x = ±3 (no jump across y = 0)
+key UP MENU 1
+expect state e1_on 0
+key DOWN DOWN
+type "-x/y"
+key DOWN
+type "(0,3),(2,1)"
+key F5
+expect state graph_plotted 1
+expect state de_curves 2
+# ZSquare: round circles
+key F3 5
+screenshot de_circles.png
+key F4
+expect state trace_fn 1
+expect statecontains trace_y 3
+key 2 . 9 ENTER
+expect statecontains trace_y 0.768
+key 3 . 1 ENTER
+expect state trace_y nan
+# y3' = y^2 + x^2 blows up: no curve past the vertical asymptote
+key F1 UP MENU 1
+expect state e2_on 0
+key DOWN DOWN
+type "y^2+x^2"
+key DOWN
+type "0"
+key F5
+expect state graph_plotted 1
+key F4 0 ENTER
+expect state trace_y 0
+key 2 ENTER
+expect state trace_y nan
+screenshot de_blowup.png
+# --- saved: power off and on
+key SHIFT ON
+key ON
+expect state graph_type DE
+key F1
+expect state e1_1 x-y
+expect state e1_2 (0,1),(0,-2)
+expect state e2_1 -x/y
+expect state e3_1 y^2+x^2
+expect state e1_on 0
+expect state e2_on 0
+key F5
+expect state de_added 1
+# Y= MENU: remove the curves added on the graph
+key F1 MENU UP ENTER
+expect state de_added 0
+key HOME
+setmode GRAPH FUNC
+lcdcheck

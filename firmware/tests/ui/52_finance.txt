@@ -1,0 +1,84 @@
+# Finance app: TVM solver, amortization, cash flows, interest conversion, days; saved state
+app finance
+expect state menu FINANCE
+key 1
+expect screen tvm
+type "360\n6\n200000\n"
+key DOWN
+type "0\n"
+key UP UP
+key ALPHA ENTER
+expect text "PMT=-1199.10105"
+screenshot finance_tvm.png
+# solve the other variables back
+key UP UP UP
+key ALPHA ENTER
+expect text "N=360 solved"
+key DOWN
+type "0\n"
+key UP
+key ALPHA ENTER
+expect text "I%=6 solved"
+key DOWN
+type "0\n"
+key UP
+key ALPHA ENTER
+expect text "PV=200000 solved"
+# FV of a savings plan: 120 payments of -100 at 5%, monthly
+key UP UP
+type "120\n5\n0\n~100\n"
+key ALPHA ENTER
+expect text "FV=15528.22794"
+# BEGIN mode
+key DOWN DOWN DOWN
+key ENTER
+expect text "PMT: END [BEGIN]"
+key UP UP UP
+key ALPHA ENTER
+expect text "FV=15592.92889"
+key DOWN DOWN DOWN
+key LEFT
+expect text "PMT: [END] BEGIN"
+key HOME
+# amortization of the 200000 loan
+app finance
+key 1
+type "360\n6\n200000\n~1199.10105\n0\n"
+key HOME
+app finance
+key 2
+expect screen amort
+type "1\n12\n"
+expect text "bal=197543.9766"
+expect text "ΣInt=-11933.18918"
+screenshot finance_amort.png
+key HOME
+# cash flows
+app finance
+key 3
+type "10\n3\n~1000\n500\n400\n300\n"
+expect text "NPV=10.51840721"
+expect text "IRR=10.65168124"
+key HOME
+# interest conversion
+app finance
+key 4
+type "6\n"
+key DOWN
+expect text "Eff%=6.167781186"
+key HOME
+# days between dates
+app finance
+key 5
+type "20240101\n20241231\n"
+expect text "days=365"
+key UP UP
+type "20240301\n"
+expect text "days=305"
+key HOME
+# saved across power off/on
+key SHIFT ON
+key ON
+app finance
+key 1
+expect text "PV=200000"

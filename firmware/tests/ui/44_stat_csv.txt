@@ -1,0 +1,80 @@
+# CSV export/import of lists on the microSD card (simulator RAM card)
+# no card
+app stat
+key 9
+expect state menu "CSV ON MICROSD"
+screenshot stat_csv_menu.png
+key 3
+expect screen message
+expect text no card
+expect text Insert a FAT32 card.
+key CLEAR
+# a blank card has no file system until formatted
+fs insert 8
+app stat
+key 9 4
+expect text no FAT16/FAT32
+key CLEAR
+fs format
+app stat
+key 9 4
+expect text FAT16, 8 MB
+key CLEAR
+# export L1, L2 and a named list
+stat set L1 1,2.5,3
+stat set L2 10,20
+stat set WT 0.125
+app stat
+key 9 1
+expect screen statform
+key CLEAR
+type "L1,L2,WT"
+key DOWN DOWN ENTER
+expect screen message
+expect text 3 lists, 3 rows
+fs expect /LISTS.CSV L1,L2,WT
+fs expect /LISTS.CSV 1,10,0.125
+fs expect /LISTS.CSV 3,,
+fs ls
+key CLEAR
+# export all lists
+app stat
+key 9 2
+expect text EXPORTED
+fs expect /ALL.CSV L1,L2,WT
+key CLEAR
+# import a file written elsewhere (header names a new list, semicolons)
+fs put /SURVEY.CSV "age;height\n31;1,80\n45;1,65\n28;1,72\n"
+stat set L1
+app stat
+key 9 3
+expect screen menu
+expect text SURVEY.CSV
+expect text LISTS.CSV
+key DOWN DOWN
+expect state menu_item SURVEY.CSV
+key ENTER
+expect screen message
+expect text 3 rows
+stat expect age 31,45,28
+stat expect height 1.8,1.65,1.72
+key CLEAR
+expect screen statedit
+# the editor shows the first imported list (named lists come after L6)
+expect state statedit_list age
+expect text height
+screenshot stat_csv_imported.png
+# re-import our own export: L1..L2 back, exact
+stat set L1
+stat set L2
+stat import /LISTS.CSV
+stat expect L1 1,2.5,3
+stat expect L2 10,20
+# the card was removed: a clear error
+fs eject
+app stat
+key 9 1
+key DOWN DOWN ENTER
+expect screen statform
+expect text no card
+key CLEAR

@@ -1,0 +1,9 @@
+# Regression test for the live preview with repeating decimals: the preview
+# block is measured with the same text it shows (0.(142857), with its
+# overline), and the text uses the clamped DIGITS setting
+type "1/7."
+wait 400
+ifcas src expect statecontains preview 0.142857
+ifcas src expect text "0.(142857)"
+screenshot preview_repdec.png
+key CLEAR

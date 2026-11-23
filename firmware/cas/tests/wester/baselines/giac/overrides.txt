@@ -1,0 +1,236 @@
+# Giac per-problem overrides for run_baselines.py.
+#
+#   == ID
+#   in: / pre:     Giac input replacing the automatic translation (several in:
+#                  lines = pre lines + the graded last line)
+#   expect: check: var: ...   grading data, only for problems that have no
+#                  input in problems.txt ('unsupported:' for our CAS) and are
+#                  posed here for Giac; the expected answer is Wester's
+#   alt: CAT | output | reason   classify this exact (normalized) output
+#   override: CAT | reason       unconditional classification
+#   uncertain: ...  the translation itself may not pose Wester's problem
+#                  faithfully (reported in COMPARISON.md)
+#   note: ...
+#
+# Giac 2.1.0 (Xcas macOS build, October 2026), icas front end.
+
+# ---------------------------------------------------------------- A logic
+== A12
+alt: UNEVAL | ((v>0) and ((4*v*w)>0) and ((16*v^2*w^3+4*w^3+12*w*ww^2)>0) and ((64*v^4*w^6-64*v^4*w^4*ww^2+64*v^2*w^4*ww^2-64*v^2*w^2*ww^4)>0) and ((64*v^4*w^10-192*v^4*w^8*ww^2+192*v^4*w^6*ww^4-64*v^4*w^4*ww^6+64*v^2*w^8*ww^2-192*v^2*w^6*ww^4+192*v^2*w^4*ww^6-64*v^2*w^2*ww^8)>0)) | conjunction only expanded, not simplified
+
+# ---------------------------------------------------------------- C numbers
+== C3
+override: UNSUPPORTED | no double factorial: 10!! does not parse as one (Giac prints Done)
+
+== C8
+alt: PASS | [3,-1] | Giac prints the symmetric residue: -1 = 5 (mod 6)
+
+# ---------------------------------------------------------------- D numerical
+== D5
+in: subst(spline([1,2,4,5],[1,4,2,3],x,3)[1],x,3)
+expect: 27/8
+uncertain: spline() returns the list of cubic pieces; the piece for [2,4] is picked by hand and evaluated at 3
+
+== D8
+override: UNSUPPORTED | horner(P,x) evaluates P at a point (error for symbolic x); no Horner-form rewrite
+
+# ---------------------------------------------------------------- E statistics
+== E5
+in: stddevp([1,2,3,4,5])
+note: Giac's stddev is the population deviation; stddevp is the sample (n-1) one that Wester asks for
+
+== E12
+alt: PASS | [0.736461128916,6.96411839157] | slope and intercept of the least-squares line y = 0.7365 x + 6.964
+
+# ---------------------------------------------------------------- G number theory
+== G4
+in: solve(9*x=15 mod 21,x)
+expect: [4,11,18]
+check: set
+note: x = 4 (mod 7) is the residue set {4, 11, 18} (mod 21)
+
+== G5
+in: solve(7*x=22 mod 39,x)
+expect: [31]
+check: set
+
+== G6
+in: solve(x^2+x+4=0 mod 8,x)
+expect: [3,4]
+check: set
+
+== G7
+in: solve(x^3+2*x^2+5*x+6=0 mod 11,x)
+expect: [3]
+check: set
+
+== G12
+in: isolve(x^4+9=y^2)
+check: manual
+alt: PASS | [[x=-2,y=-5],[x=-2,y=5],[x=0,y=3],[x=0,y=-3],[x=2,y=-5],[x=2,y=5]] | all integer solutions, including (2,5) and the trivial (0,+-3)
+
+== G13
+in: isolve(x^2+4=y^3)
+check: manual
+alt: WRONG | [] | claims no integer solution; (2,2) and (11,5) exist
+
+== G18
+alt: PASS | [1,[1]] | periodic notation [1; (1)] = [1; 1, 1, ...]
+
+# ---------------------------------------------------------------- H algebra
+== H24
+in: factor((x^4-3*x^2+1) % 5)
+expect: (x-2)^2*(x+2)^2
+check: factor
+note: residues printed symmetrically; the % 5 tags are dropped for grading
+
+== H25
+in: factor((x^11+x+1) % 65537)
+expect: (x^2+x+1)*(x^9-x^8+x^6-x^5+x^3-x^2+1)
+check: factor
+
+== H26
+in: factor(x^4-3*x^2+1,sqrt(5))
+note: Wester's Macsyma input names the extension (phi^2 - phi - 1); Giac's factor takes it as a second argument
+
+== H31
+in: factor(x^3+y^3,sqrt(-3))
+note: over Q(sqrt(-3)) as Wester asks; the extension is factor's second argument
+
+== H30
+in: factor((4*x^2-21*x*y+20*y^2) % 3)
+expect: (x+y)*(x-y)
+check: factor
+
+# ---------------------------------------------------------------- J special functions
+== J6
+alt: UNEVAL | besselj(2,1.0+i) | BesselJ is not evaluated at a complex argument, even by evalf
+
+== J16
+alt: UNEVAL | zeta(0,1) | Zeta(0,1) is Giac's notation for zeta'(0), left unevaluated
+
+# ---------------------------------------------------------------- K complex
+== K1
+pre: assume(x,complex)
+pre: assume(y,complex)
+in: [re(x+i*y),im(x+i*y)]
+note: Wester's x, y are complex; Giac can declare that
+
+== K4
+in: evalc(ln(3+4*i))
+note: evalc is Giac's rectangular-form command (Wester: rectform)
+
+== K5
+in: evalc(tan(x+i*y))
+note: evalc is Giac's rectangular-form command (Wester: rectform)
+
+# ---------------------------------------------------------------- M equations
+== M9
+alt: UNEVAL | [0.318131505205+1.33723570143*i] | one numeric root (the conjugate of -W(-1)); no Lambert W
+
+== M16
+alt: UNEVAL | [1.31434242222e-07] | numeric root finder: 1.3e-7 instead of the exact root 0
+
+# ---------------------------------------------------------------- N inequalities
+== N18
+override: UNEVAL | returns one feasible point [0,1] with a "certificate of existence", not the solution set
+
+# ---------------------------------------------------------------- O vectors
+== O9
+note: curl of Giac's [0, x^2 y^2 z^2 - x^2 z/2, y^2 z^3 - x^2 y/2] was checked by hand to equal the field
+alt: PASS | [0,x^2*y^2*z^2-x^2/2*z,y^2*z^3-x^2/2*y] | curl of the result equals the field (checked by hand)
+
+# ---------------------------------------------------------------- P matrices
+== P20
+note: pmin returns the expanded minimal polynomial; the factor check wants (x-1)^2 (x+1)
+
+# ---------------------------------------------------------------- X series
+== X10
+in: series(sqrt(sec(x)),x,3*pi/2,5)
+uncertain: for a Puiseux series Giac's order counts the integer powers that multiply sqrt(x-3pi/2); order 5 is needed to keep the (x-3pi/2)^(7/2) term that our order 4 keeps
+
+# ---------------------------------------------------------------- Z ODEs
+== Z19
+pre: Y:=desolve(y'=[[1,-1],[1,1]]*y,t,y)[0]
+in: [u=Y[0],v=Y[1]]
+note: Giac solves linear systems in matrix form y' = A y
+
+== Z20
+pre: Y:=desolve(y'=[[1+cos(t)/(2+sin(t)),0],[1,-1]]*y,t,y)[0]
+in: [u=Y[0],v=Y[1]]
+override: UNSUPPORTED | desolve: "Non constant linear differential system" (only constant-coefficient systems)
+
+== Z21
+pre: Y:=desolve(y'=[[2,0,0],[-2,1,-2],[1,0,3]]*y,t,y)[0]
+in: [u=Y[0],v=Y[1],w=Y[2]]
+
+== Z22
+pre: Y:=desolve(y'=[[0,1,0],[0,0,1],[0,-3,-2]]*y,t,y)[0]
+in: [u=Y[0],v=Y[1],w=Y[2]]
+
+== Z23
+pre: Y:=desolve(y'=[[3,0,-1],[0,2,0],[1,0,1]]*y,t,y)[0]
+in: [u=Y[0],v=Y[1],w=Y[2]]
+
+== Z24
+override: UNSUPPORTED | desolve takes only first-order systems y' = A y (Bad Argument Value on the second-order system)
+
+== O10
+alt: PASS | [[0,1/sqrt(6),2/sqrt(6),1/sqrt(6)],[0,-1/3/(sqrt(3)/3),1/3/(sqrt(3)/3),-1/3/(sqrt(3)/3)],[1/(sqrt(6)/2),1/2/(sqrt(6)/2),0,-1/2/(sqrt(6)/2)],[0,0,0,0]] | dependent 4th vector returned as the zero vector (Orthogonalize convention); the others are an orthonormal basis of the span
+
+== P10
+alt: PASS | [[1,conj(f(4-5*i))],[2-3*i,6]] | conj(f(4-5i)) is the exact Hermitian-transpose entry for an unknown f; Wester's f(4+5i) assumes conj(f(z)) = f(conj(z))
+
+== P13
+alt: PASS | [[[1,0,0],[x-2,1,0],[x-1,(x^2-3*x+6+(-x+1)*(x-2))/(x^2-8+(-x+2)*(x-2)),1]],[[1,x-2,x-3],[0,x^2-8+(-x+2)*(x-2),2*x^2-12*x+14+(-x+2)*(x-3)],[0,0,x^2-3*x-2+(-x+1)*(x-3)-(x^2-3*x+6+(-x+1)*(x-2))/(x^2-8+(-x+2)*(x-2))*(2*x^2-12*x+14+(-x+2)*(x-3))]],[[1,0,0],[0,0,1],[0,1,0]]] | valid P A = L U with a row exchange (checked with SymPy); entries unsimplified
+
+== P30
+alt: PASS | [[1,1,0,0,0],[0,1,0,0,0],[0,0,1,1,0],[0,0,0,1,0],[0,0,0,0,-1]] | Jordan form: blocks [[1,1],[0,1]] twice and -1
+
+== P31
+alt: UNEVAL | [[1,0],[0,(-x*x+1)*x*x-1]] | invariant factor -(x^4-x^2+1) not normalized to monic
+
+== P39
+alt: UNEVAL | [[[-0.267261241912,0.963624111659,-2.11041391348e-16],[-0.534522483825,-0.148249863332,-0.832050294338],[-0.801783725737,-0.222374794998,0.554700196225]],[5.29150262213,3.77456465917e-16],[[-0.707106781187,-0.707106781187],[-0.707106781187,0.707106781187]]] | numeric SVD only: singular values 5.2915 (= 2 sqrt 7) and ~4e-16
+
+== T12
+alt: UNEVAL | (2*Eta(1,1)+ln(2)^2)*1/2/ln(2) | correct value expressed through the unevaluated Eta'(1)
+
+== U5
+alt: PASS | (diff(g(t),t))^2*(f')'(g(t))+diff(g(t),t,2)*f'(g(t)) | chain rule: g'^2 f''(g) + g'' f'(g)
+
+== U6
+alt: PASS | diff(h(x),x)*f(h(x))-diff(g(x),x)*f(g(x)) | Leibniz rule: h' f(h) - g' f(g)
+
+== U9
+alt: PASS | 2*g'(x^2+y^2)*(x+y) | 2 (x+y) g'(x^2+y^2)
+
+== V18
+alt: WRONG | inf | returns infinity
+
+== W9
+alt: UNEVAL | undef | improper integral reported as undefined; no principal value (same classification as our CAS)
+
+== X7
+alt: WRONG | integrate(h(c*y),y,0,d)+g(b*d)+(b*(function_diff(g))(b*d)+h(c*d))*(x-d)+(x-d)^2*0 | the a f'(a x) term of the input is missing from the series
+
+== X17
+alt: UNEVAL | 1/x-(1/x)^2+2*(1/x)^3+(1/x)^4*0 | correct terms, but the expansion stops at O(1/x^4) whatever order is requested
+
+== Y8
+alt: PASS | pi*2*dirac(z) | 2 pi delta(z): correct for Giac's convention (no 1/sqrt(2 pi) factor)
+
+== Y9
+alt: PASS | sqrt(pi)/3*exp(-z^2/36) | sqrt(pi)/3 exp(-z^2/36): correct for Giac's convention (no 1/sqrt(2 pi) factor)
+
+== Y10
+alt: PASS | -2*(z-3)*(z+3)/(z^2+9)^2 | 2 (9-z^2)/(9+z^2)^2: correct for Giac's convention (no 1/sqrt(2 pi) factor)
+
+== Y13
+alt: PASS | 1/(z^3-z^2) | z^-2/(z-1) = sum over n >= 3 of z^-n
+
+== Z14
+alt: UNEVAL | 0 | only the trivial solution; no eigenvalue condition cos(k) = 0
+
+== Z17
+alt: WRONG | c0*cosh(sqrt(sign(q-x))*x)+c1/sqrt(sign(q-x))*sinh(sqrt(sign(q-x))*x) | sign(x-q) treated as a constant: the two branches do not match at x = q

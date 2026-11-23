@@ -1,0 +1,36 @@
+# CATALOG: every command added in Phase 2 (uncertainty: pm, nominal, uncert,
+# ucov) is in a category (Units and constants), and no command is left in the
+# generated "Other" category: the last category is Tools.
+key SHIFT APPS F3
+expect state menu CATEGORIES
+key UP
+expect statecontains menu_item Tools
+key UP UP
+expect statecontains menu_item "Units and constants"
+key ENTER
+expect state menu "Units and constants"
+# ALPHA letters: u = 4, c = VARS, o = SQRT, v = 5, n = DIV, e = SIN, r = 9, t = COMMA
+key 4 VARS SQRT 5
+expect state menu_item ucov(
+key SHIFT DEL
+key 4 DIV VARS SIN 9 COMMA
+expect state menu_item uncert(
+key SHIFT DEL
+key DIV SQRT RPAREN LOG DIV CAS LPAREN
+expect state menu_item nominal(
+key SHIFT DEL
+key 7 RPAREN
+expect state menu_item "± (pm)"
+screenshot catalog_units.png
+# ENTER inserts it; SHIFT HELP on it opens its page
+key SHIFT MENU
+expect state help_topic pm
+key CLEAR
+key ENTER
+expect screen home
+expect state entry ±
+key CLEAR
+# the app entries of the category: Units & constants
+key SHIFT APPS F3 UP UP UP ENTER
+expect state menu_item "▶ Units & constants"
+key CLEAR

@@ -1,0 +1,147 @@
+%% Input comforts (app/input_*.c): edit bar, undo/redo, clipboard, history
+%% search, and the CATALOG categories (@category, see tools/gen_help.py).
+
+@page edit-bar Edit keys: undo, copy, paste
+{menu} opens the options of the current screen. While that menu is open, the soft keys are the edit keys, so {menu} works like {shift}: press it, then the soft key.
+
+- {menu} {F1} undo, {menu} {F2} redo ([[undo]]).
+- {menu} {F3} copy, {menu} {F4} paste ([[clipboard]]).
+- {menu} {F5} searches the home history ([[history-search]]).
+- {menu} {shift} {F1} cut (copy the line, then clear it); {menu} {shift} {F2} lists older clips; {menu} {shift} {F4} help.
+
+They work on every screen with an entry line: home, Y=, window, table setup, the solver and finance forms, the list editor, the matrix editor, base-n, RPN. The menu lists these actions first, with the keys that do them now (undo F1, ...), then the screen's own soft keys and Help; {enter} or a digit chooses an entry, {menu} {menu} or {clear} closes the menu without doing anything.
+
+When an action changes nothing you can see, the status bar says so until the next key: "copied", "nothing to undo", "clipboard is empty: copy first".
+
+@page undo Undo and redo
+{menu} {F1} undoes the last change of the line you are editing; press it again for earlier changes. {menu} {F2} redoes what was undone. Typing a new change forgets the redo steps of that line.
+
+- One step is one key: a key that types a word (`sin(`), a template, a menu or catalog insertion, a paste or {clear} is undone at once.
+- Letters, digits and the decimal point typed in a row are one step, so `123+45` is undone as `45`, `+`, `123`.
+- {enter} on the home screen clears the line: undo brings the expression back.
+- {clear} on an empty home line clears the history; {menu} {F1} right after it brings the history back (the status bar says so). {shift} {clear} (clear all) asks first instead.
+- Every line has its own steps (each Y= function, each form field, each matrix or list cell): moving to another cell starts over, so undo never brings back another cell's text. The oldest steps are dropped when the memory for them is full; they are not kept when the calculator is switched off.
+
+See [[edit-bar]].
+
+@page clipboard Copy and paste
+{menu} {F3} copies, {menu} {F4} pastes at the cursor. What is copied depends on the screen:
+
+- Home: the line; with a history entry selected ({▲}) that input or result.
+- RPN: the level selected in the interactive stack ({▲}), else the command line, else level 1.
+- Matrix editor: the selected cell; on the size line the whole matrix as `[[1,2],[3,4]]`. Pasting such a matrix on the size line resizes the matrix and fills it.
+- List editor: the selected value; on the list name the whole list `{1,2,3}`. Paste it on the list name and press {enter} to fill a list.
+- Spreadsheet: the selected cell's value as shown (while a cell is edited: its line). Pasting opens the cell's entry line; {enter} stores it.
+- Geometry: the value of the measurement whose list row is under the cursor or that is highlighted, else of the newest measurement.
+- Solver and finance forms: the selected field. Y= and other screens: the line.
+
+The clipboard keeps the last 8 texts. {menu} {shift} {F2} (clips) lists them: {enter} pastes the highlighted one. The clipboard is kept when the calculator is switched off. {menu} {shift} {F1} (cut) copies the line and clears it. Pasting on the home screen in Textbook mode builds fractions, roots and powers as templates.
+
+See [[edit-bar]], [[history-search]].
+
+@page history-search History search
+{menu} {F5} lists the home screen's history, newest first: each row is an input and its result. Type to filter: keys type as in the entry line (digits, operators, `sin(`; letters with {alpha}); the best matches come first. {⌫} erases the last key, {shift} {⌫} the whole filter.
+
+- {enter} inserts the input where you were editing.
+- {F3} (result) inserts the result instead.
+- {F4} (copy) copies the input to the [[clipboard]], {shift} {F4} the result.
+- {clear} or {F5} (back) closes the list.
+
+It works from any entry line, for example to reuse a home result in Y= or a form. {shift} {enter} on the home screen still recalls inputs one by one.
+
+%% ---------------------------------------------------------------- categories
+%% Shown in this order (◀ ▶ in the CATALOG). Commands that no category claims
+%% go to "Other". `commands:` wins over another category's `groups:`.
+
+@category cat-algebra Algebra
+groups: cas-algebra
+
+Polynomials, factoring, simplification and rewriting. See also [[cas-algebra]].
+
+@category cat-solve Equations
+groups: cas-solve
+apps: solver
+
+Solving equations and systems. See [[cas-solve]].
+
+@category cat-calculus Calculus
+groups: cas-calculus
+
+Derivatives, integrals, limits, series and sums. See [[cas-calculus]].
+
+@category cat-trig Trigonometry
+commands: sin, cos, tan, cot, sec, csc, asin, acos, atan, acot, asec, acsc, atan2, sinh, cosh, tanh, asinh, acosh, atanh, texpand, tlin, tcollect, trigsimp, trig2exp, exp2trig
+
+Trigonometric and hyperbolic functions and the identities that rewrite them. The angle unit is set in [[mode-angle|settings]].
+
+@category cat-complex Complex numbers
+commands: re, im, conj, arg
+
+Parts of complex numbers. Results follow the [[mode-complex|COMPLEX]] setting.
+
+@category cat-functions Functions
+groups: cas-functions
+
+Roots, powers, logarithms, rounding and special functions. See [[cas-functions]].
+
+@category cat-matrix Matrices and vectors
+groups: cas-linalg
+apps: matrix
+
+Matrix and vector operations; the Matrix app edits [A]..[J]. See [[cas-linalg]].
+
+@category cat-lists Lists
+groups: cas-lists
+
+Building and transforming lists `{1,2,3}`. See [[cas-lists]].
+
+@category cat-stats Statistics
+commands: mean, median, variance, stddev, variancep, stddevp, quartile1, quartile3, modelist, linreg, covariance, covariancep, correlation, ttest, ttest2, pairedttest, tinterval, ztest, zinterval, propinterval, chi2gof, chi2test, anova, polyreg, expreg, powerreg, logreg, multireg, nlfit
+apps: stat, statplot
+
+Summary statistics; the Statistics app has lists, regressions and tests. See [[stat]].
+
+@category cat-prob Probability
+groups: stat-cmds
+commands: binomial, factorial, perm, nPr, comb, nCr
+apps: distr
+
+Counting and probability distributions. See [[stat-cmds]].
+
+@category cat-numtheory Number theory
+groups: cas-integer
+
+Primes, divisors, modular arithmetic. See [[cas-integer]].
+
+@category cat-bits Bases and bits
+groups: cas-bits
+apps: basen
+
+Binary, octal and hexadecimal numbers and bit operations. See [[cas-bits]].
+
+@category cat-numeric Numerical methods
+groups: cas-numeric
+
+Discrete Fourier transforms, splines and linear programming. See [[cas-numeric]].
+
+@category cat-logic Logic
+groups: cas-logic
+
+Truth tables, simplification and normal forms of logical expressions. See [[cas-logic]].
+
+@category cat-units Units and constants
+groups: cas-units, cas-constants, cas-unc
+apps: units
+
+Unit conversion and physical and mathematical constants. See [[cas-units]].
+
+@category cat-finance Finance
+apps: finance
+
+Time value of money, amortization, cash flows, interest conversion and day counts are in the Finance app. See [[finance]].
+
+@category cat-misc Tools
+groups: cas-misc
+apps: animation, mathquest
+
+Conditions, assumptions, variables and other helpers. See [[cas-misc]].

@@ -1,0 +1,156 @@
+# 3D graphing (APPS > 3D graph): entries of the three kinds, the 3D window,
+# rotation by keys and touch, zoom, wireframe / shaded / height colours,
+# the VIEW menu, trace, zoom fit, help, saved state. Started away from the home screen (from there
+# it makes a 3D graph cell: tests/ui/116_graph_flow.txt), the plain 3D graph.
+app settings
+app graph3d
+expect screen graph3d
+expect text "z= (F1): enter z=f(x,y) or a surface"
+key SHIFT MENU
+expect state help_topic graph3d
+key CLEAR
+expect screen graph3d
+# a saddle
+key F1
+expect screen graph3d_eq
+expect text "z1(x,y)"
+type "(x^2-y^2)/5"
+expect state g3d_e1_1 (x^2-y^2)/5
+key F5
+expect screen graph3d
+expect state g3d_drawn 1
+expect state g3d_err1 ""
+expect text Z1
+expect state g3d_window -5,5,-5,5,-5,5
+screenshot g3d_saddle.png
+# rotation and zoom by keys (re-projects the cached grid, no evaluation)
+key RIGHT RIGHT
+expect state g3d_azim -30
+key UP
+expect state g3d_elev 10
+key ADD
+expect state g3d_zoom 1.25
+key SUB
+expect state g3d_zoom 1
+key SHIFT F1
+expect state g3d_azim -60
+expect state g3d_elev 25
+# drag turns the box: 40 px right = 20 degrees
+touch drag 160 100 200 100 4
+expect state g3d_azim -40
+expect state g3d_elev 25
+key SHIFT F1
+# styles
+key SHIFT F2
+expect state g3d_style wire
+screenshot g3d_wire.png
+key SHIFT F2
+key SHIFT F3
+expect state g3d_color height
+screenshot g3d_height.png
+key SHIFT F3
+# trace: centre node, then along x and y
+key F4
+expect state g3d_trace_on 1
+expect state g3d_trace "Z1 x=0 y=0 z=0"
+key RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT
+expect state g3d_trace "Z1 x=2.5 y=0 z=1.25"
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state g3d_trace "Z1 x=2.5 y=-5 z=-3.75"
+expect text "Z1 x=2.5 y=-5 z=-3.75"
+screenshot g3d_trace.png
+key CLEAR
+expect state g3d_trace_on 0
+expect screen graph3d
+# a parametric surface (sphere) and a space curve (helix)
+key F1
+key DOWN
+key SHIFT F1
+expect state g3d_e2_kind surf
+expect text "x2(u,v)"
+key X
+type "*0+3*cos(u)*sin(v)"
+expect state g3d_e2_1 u*0+3*cos(u)*sin(v)
+key DOWN
+type "3*sin(u)*sin(v)"
+key DOWN
+type "3*cos(v)"
+key DOWN
+key SHIFT F1 SHIFT F1
+expect state g3d_e3_kind curve
+type "4*cos(t)"
+key DOWN
+type "4*sin(t)"
+key DOWN
+type "t/2-3"
+screenshot g3d_entries.png
+# window: v from 0 to pi, a finer grid
+key F2
+expect screen graph3d_win
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+type "pi"
+key ENTER
+key DOWN DOWN
+type "32"
+key ENTER
+expect state g3d_grid 32
+# a refused value: grid 2 is below the minimum
+key UP
+type "2"
+key ENTER
+expect text "ERR: grid must be 4 to 64"
+key CLEAR
+type "32"
+key F5
+expect screen graph3d
+expect state g3d_drawn 3
+screenshot g3d_multi.png
+# trace: F4 then next goes to the sphere
+key F4 F4
+expect statecontains g3d_trace "Z2 u="
+key F4
+expect statecontains g3d_trace "Z3 t="
+key CLEAR
+# VIEW menu: top view
+key F3
+expect screen menu
+expect state menu "3D VIEW"
+key 2
+expect screen graph3d
+expect state g3d_elev 90
+expect state g3d_azim 0
+screenshot g3d_top.png
+key F3 1
+expect state g3d_azim -60
+# zoom fit z: only z = f(x,y) surfaces count; the saddle spans -5..5
+key SHIFT F4
+expect state g3d_window -5,5,-5,5,-5,5
+# an entry that does not compile shows its error
+key F1
+key UP UP UP UP UP UP UP UP UP UP
+type "+*"
+key F5
+expect statecontains g3d_err1 "rror"
+expect state g3d_drawn 2
+key F1
+key CLEAR
+type "sin(x)*cos(y)"
+key F5
+expect state g3d_err1 ""
+# the entries, window and view survive a power cycle
+key SHIFT F2
+key SHIFT ON
+key ON
+app settings
+app graph3d
+expect state g3d_e1_1 sin(x)*cos(y)
+expect state g3d_e2_kind surf
+expect state g3d_style wire
+expect state g3d_grid 32
+expect state g3d_drawn 3
+# dark theme
+key SHIFT F2
+setmode THEME Dark
+app graph3d
+screenshot g3d_dark.png
+setmode THEME Light

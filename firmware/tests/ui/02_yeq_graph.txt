@@ -1,0 +1,55 @@
+# Y= editor, GRAPH, TRACE, ZOOM, TABLE
+key F1
+expect screen yeq
+key SIN X RPAREN DOWN
+type "x^2"
+key DOWN
+type "x/2-3"
+expect state y1 sin(x)
+expect state y2 x^2
+expect state y3 x/2-3
+# disable Y3 by moving onto its '=' and pressing ENTER
+key SHIFT LEFT LEFT ENTER
+expect state y3_on 0
+# Y4: set colour by moving to the swatch
+key DOWN
+type "1/x"
+key SHIFT LEFT LEFT LEFT ENTER
+expect state y4_color green
+screenshot yeq.png
+# graph: a graph cell on the home screen (selected); ENTER opens the graph app on it
+key F5
+expect screen home
+expect state home_kind graph
+key ENTER
+expect screen graph
+expect state graph_plotted 3
+# Y1 blue and Y2 red must actually be drawn
+expect color 0x029b 200
+expect color 0xd8e3 200
+screenshot graph.png
+key F4
+expect state graph_mode trace
+expect state trace_fn 1
+key RIGHT RIGHT RIGHT RIGHT RIGHT
+key DOWN
+expect state trace_fn 2
+expect text X=
+screenshot trace.png
+key F3
+expect screen menu
+expect state menu ZOOM
+key 6
+expect screen graph
+expect state ymax 4
+screenshot graph_ztrig.png
+key F3 3
+expect state xmax 10
+key HOME F1 SHIFT F5
+expect screen table
+expect text Y1
+expect text 0.84147098
+screenshot table.png
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+expect state table_start 4
+lcdcheck

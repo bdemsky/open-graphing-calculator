@@ -1,0 +1,293 @@
+# Math Quest's home (modules/mathquest/mq_home.c): coins earned by playing, the shop,
+# buying by touch, dragging a new item from the tray into the room, turning it and undoing,
+# show-off mode with a photo on the card, everything kept over a power cycle, and every
+# room decorated (screenshots mathquest_home_*.png). Animations advance with `mq step N`.
+requirecfg CONTENT_QSPI
+fs insert 64
+fs format
+module library extra
+module install /CALC/MODULES/{mod:mathquest}
+expect text installed and verified
+key CLEAR
+app mathquest
+expect state mq_scene title
+mq new Mia 2
+# (the stops ask their own skills here; the engine and the placement: 49_mathquest_free.txt)
+mq engine stop
+mq seed 21
+mq fun off
+expect state mq_coins 20
+# earn: a first run, every answer right (answers, two combos, mastering, the first finish; a stop of ten)
+mq level 0 1
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+mq correct
+mq settle
+mq step 2
+expect state mq_scene done
+mq step 30
+expect text +
+screenshot mathquest_home_earned.png
+expect state mq_coins 70
+key CLEAR
+key CLEAR
+expect state mq_scene map
+# the home: the starter bedroom, then the shop (F1); a full fun budget (no friend at the door)
+mq fun 36000
+key F1
+expect state mq_scene room
+# the unlock ladder's present is already in her room, shining (and selected)
+expect state mq_placed 6
+expect state mq_sel 5
+mq step 4
+screenshot mathquest_home_present.png
+key F1
+expect state mq_scene shop
+mq step 2
+screenshot mathquest_home_shop.png
+# LEFT / RIGHT turn the pages (the playtest: LEFT went back): a bump at the first page, the shop kept
+expect state mq_page 0
+key LEFT
+expect state mq_scene shop
+expect state mq_page 0
+key RIGHT
+expect state mq_page 1
+expect state mq_scene shop
+key LEFT
+expect state mq_page 0
+expect state mq_scene shop
+# buy a heart bed by touch: the card, then "buy!"
+touch tap 40 95
+mq step 40
+screenshot mathquest_home_card.png
+expect text 40
+screenshot mathquest_home_item.png
+touch tap 188 153
+expect state mq_coins 50
+key F5
+key F5
+expect state mq_scene room
+# drag it from the tray into the room
+mq step 2
+touch drag 56 200 230 150 6
+expect state mq_placed 7
+expect state mq_sel 6
+mq step 2
+screenshot mathquest_home_placed.png
+# turn it (tray tool), then undo
+touch tap 27 204
+expect state mq_sel_item "Heart bed 12,5 1"
+key F3
+expect state mq_sel -1
+expect state mq_placed 7
+# keys move a selected item; DEL puts it away
+mq sel 6
+key LEFT
+key DEL
+expect state mq_placed 6
+key F3
+expect state mq_placed 7
+# show off, with a photo on the card
+key F4
+expect state mq_scene showoff
+mq step 10
+screenshot mathquest_home_showoff.png
+key F1
+expect state mq_shot "Saved /CALC/SHOT001.PNG."
+key F5
+expect state mq_scene room
+# power off and on: coins, the room and the photo are kept
+mq save
+key SHIFT ON
+key ON
+app mathquest
+touch tap 85 130
+expect state mq_coins 50
+expect state mq_scene surprise
+touch tap 160 110
+mq step 30
+expect text yay!
+screenshot mathquest_home_gift.png
+mq next
+expect state mq_scene map
+mq fun 36000
+key F1
+expect state mq_placed 7
+# every room, decorated (the rooms open with the worlds)
+mq grant bosses
+mq coins 9000
+mq style Pink_stripes
+mq buy Sleepy_kitten
+mq buy Fish_bowl
+mq buy Star_lamp
+mq buy Bookshelf
+mq buy Cat_clock
+mq buy Fairy_lights
+mq buy Heart_paper
+mq buy Pink_carpet
+mq style Heart_paper
+mq style Pink_carpet
+# (the pink bow is in her starter wardrobe: no need to buy it)
+mq wear Pink_bow
+mq place Sleepy_kitten 7 7
+mq place Fish_bowl 10 5
+mq place Bookshelf 16 1
+mq place Star_lamp 13 4
+mq place Cat_clock 10 1
+mq place Fairy_lights 0 0
+mq sel -1
+mq step 30
+screenshot mathquest_home_bedroom.png
+mq room 1
+mq buy Garden_bench
+mq buy Flower_bed
+mq buy Bird_bath
+mq buy Sunflower
+mq buy Tree_swing
+mq buy Hoppy_bunny
+mq buy Toadstool_seat
+mq buy Snail_pal
+mq buy Tulip_pot
+mq place Tree_swing 1 3
+mq place Garden_bench 6 6
+mq place Flower_bed 11 7
+mq place Bird_bath 16 5
+mq place Sunflower 18 4
+mq place Hoppy_bunny 13 6
+mq place Toadstool_seat 4 7
+mq place Snail_pal 9 7
+mq place Tulip_pot 15 7
+mq sel -1
+mq step 30
+screenshot mathquest_home_garden.png
+mq room 2
+mq buy Cafe_table
+mq buy Cafe_table
+mq buy Cafe_chair
+mq buy Cafe_chair
+mq buy Coffee_machine
+mq buy Stripy_awning
+mq buy Menu_board
+mq buy Cafe_sign
+mq buy Cake_display
+mq buy Kitchen_counter
+mq buy Tea_set
+mq buy Turtle_buddy
+mq buy Flower_vase
+mq place Stripy_awning 0 0
+mq place Cafe_sign 7 1
+mq place Menu_board 12 1
+mq place Kitchen_counter 0 6
+mq place Coffee_machine 1 4
+mq place Cake_display 15 6
+mq place Cafe_chair 5 7
+mq place Cafe_table 7 7
+mq place Cafe_chair 10 7
+mq place Cafe_table 12 7
+mq place Tea_set 7 6
+mq place Flower_vase 13 5
+mq place Turtle_buddy 18 7
+mq sel -1
+mq step 30
+screenshot mathquest_home_cafe.png
+mq room 3
+mq buy Grand_clock
+mq buy Telescope
+mq buy Treasure_trunk
+mq buy Velvet_chair
+mq buy Candle_lamp
+mq buy Moon_window
+mq buy Owl_plush
+mq buy Canary_cage
+mq buy Gear_clock
+mq buy Book_stack
+mq place Moon_window 8 1
+mq place Gear_clock 3 1
+mq place Grand_clock 0 5
+mq place Velvet_chair 3 6
+mq place Telescope 13 3
+mq place Treasure_trunk 16 7
+mq place Candle_lamp 7 7
+mq place Owl_plush 9 7
+mq place Canary_cage 17 1
+mq place Book_stack 11 7
+mq sel -1
+mq step 30
+screenshot mathquest_home_treehouse.png
+mq room 4
+mq buy Cloud_bed
+mq buy Cloud_sofa
+mq buy Moon_lamp
+mq buy Rainbow_rug
+mq buy Moon_chair
+mq buy Castle_model
+mq buy Crystal_ball
+mq buy Star_mobile
+mq buy Cloud_dragon
+mq buy Cloud_window
+mq buy Cloud_floor
+mq style Cloud_floor
+mq place Cloud_window 8 1
+mq place Star_mobile 2 1
+mq place Rainbow_rug 7 8
+mq place Cloud_bed 0 6
+mq place Moon_lamp 5 5
+mq place Cloud_sofa 12 7
+mq place Moon_chair 17 6
+mq place Castle_model 15 1
+mq place Crystal_ball 9 6
+mq place Cloud_dragon 13 3
+mq sel -1
+mq step 30
+screenshot mathquest_home_tower.png
+key F4
+mq step 12
+screenshot mathquest_home_tower_showoff.png
+key F5
+# the catalogue book and dress-up
+key F5
+key F2
+expect state mq_scene book
+mq step 2
+screenshot mathquest_home_book.png
+# the book's pages: LEFT at the first is a bump (the book kept), RIGHT and LEFT page; back only by CLEAR
+key LEFT
+expect state mq_scene book
+expect state mq_page 0
+key RIGHT
+expect state mq_page 1
+key LEFT
+expect state mq_page 0
+expect state mq_scene book
+key CLEAR
+key F1
+key F1
+key F1
+expect state mq_scene wardrobe
+mq step 2
+screenshot mathquest_home_dressup.png

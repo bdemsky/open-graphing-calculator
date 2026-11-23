@@ -1,0 +1,913 @@
+%% CAS help: calculus commands
+@group cas-calculus Calculus
+Derivatives, integrals, limits, series, sums and products, vector calculus, Laplace transforms and differential equations.
+
+@cmd fourier
+group: cas-calculus
+summary: Fourier transform
+syntax: fourier(f, x, w)
+example: fourier(exp(-x^2),x,w)
+result: sqrt(2)*exp(-w^2/4)/2
+example: fourier(exp(-abs(x)),x,w)
+result: sqrt(2)/(sqrt(pi)*w^2+sqrt(pi))
+example: fourier(1/(1+x^2),x,w)
+result: sqrt(2)*exp(-abs(w))*sqrt(pi)/2
+example: fourier(heaviside(x+1)-heaviside(x-1),x,w)
+result: sqrt(2)*sin(w)/(sqrt(pi)*w)
+example: fourier(cos(3*x),x,w)
+result: sqrt(2)*dirac(w-3)*sqrt(pi)/2+sqrt(2)*dirac(w+3)*sqrt(pi)/2
+example: fourier(exp(-a*abs(x)),x,w)
+result: when(a>0,a*sqrt(2)/(sqrt(pi)*(a^2+w^2)),undef)
+see: ifourier, laplace, ztrans
+
+## Refresher
+This calculator: F(ω) = (1/√(2π)) ∫ f(x) exp(−iωx) dx over ℝ (unitary, angular frequency); the inverse has exp(+iωx) and the same factor.
+- f' → iωF; x f → iF'; f(x − a) → exp(−iaω) F; convolution f*g → √(2π) F G; Parseval ∫ |f|² dx = ∫ |F|² dω.
+- Other conventions: without the factor (common in engineering) the transform is √(2π) F(ω); with exp(−2πikx) it is √(2π) F(2πk).
+- Table: [[ref-transforms]].
+example: fourier(exp(-x^2/2),x,w)
+result: exp(-w^2/2)
+## Syntax
+The unitary transform with angular frequency: F(w) = 1/sqrt(2 pi) times the integral of f(x) exp(-i w x) dx over the real line; [[ifourier]] inverts it. Rules, applied with linearity:
+
+- constants give `dirac(w)`, `dirac(x-a)` gives exp(-i a w)/sqrt(2 pi);
+- shift and scaling: g(a x+b) gives exp(i w b/a) G(w/a)/|a| (for arguments of abs, sign, heaviside);
+- modulation: exp(i k x), cos(k x), sin(k x) times g shift G by k; x^n g gives i^n times the n-th derivative of G;
+- `heaviside(x)`, `sign(x)` as distributions; `heaviside(x)` times a decaying g by the Laplace transform at s = i w;
+- Gaussians P(x) exp(-a x^2+b x+c) with a > 0;
+- rational functions with poles off the real axis by residues (results with abs(w) or sign(w));
+- functions decaying at both ends (exp(-a abs(x)) ...) as two one-sided Laplace transforms;
+- a parameter of unknown sign that decides whether the transform exists: the result with its condition, `when(a>0, F, undef)` (after `assume(a>0)` just F).
+
+Other conventions: SymPy's fourier_transform(f, x, k) (exponent -2 pi i x k) equals sqrt(2 pi) F(2 pi k). Needs the advanced CAS module.
+
+@cmd ifourier
+group: cas-calculus
+summary: Inverse Fourier transform
+syntax: ifourier(F, w, x)
+example: ifourier(exp(-w^2/2),w,x)
+result: exp(-x^2/2)
+example: ifourier(sqrt(2/pi)/(1+w^2),w,x)
+result: exp(-abs(x))
+see: fourier
+
+## Refresher
+f(x) = (1/√(2π)) ∫ F(ω) exp(iωx) dω, so ifourier(fourier(f)) = f; at a jump the inverse integral gives the mean of the two sides. A wide Gaussian in ω is a narrow one in x (uncertainty: the widths multiply to at least ½).
+example: ifourier(exp(-2*w^2),w,x)
+result: exp(-x^2/8)/2
+## Syntax
+f(x) = 1/sqrt(2 pi) times the integral of F(w) exp(i w x) dw, the inverse of [[fourier]] (computed as fourier(F, w, -x)). Needs the advanced CAS module.
+
+@cmd ztrans
+group: cas-calculus
+summary: z-transform of a sequence
+syntax: ztrans(f, n, z)
+example: ztrans(1,n,z)
+result: z/(z-1)
+example: ztrans(n*3^n,n,z)
+result: 3*z/(z-3)^2
+example: ztrans(sin(n),n,z)
+result: sin(1)*z/(z^2-2*cos(1)*z+1)
+see: iztrans, laplace, sum
+
+## Refresher
+X(z) = Σ x(n) z⁻ⁿ, n = 0, 1, 2, … (one-sided), for |z| larger than the largest pole.
+- x(n + 1) → z X − z x(0); x(n − 1) → X/z (x = 0 before 0); aⁿ x(n) → X(z/a); n x(n) → −z X'(z); convolution → X Y.
+- It does for recurrences what Laplace does for ODEs. Table: [[ref-transforms]].
+example: ztrans(a^n,n,z)
+result: z/(z-a)
+## Syntax
+The unilateral transform: the sum of f(n) z^(-n) over n = 0, 1, 2, ... Rules: linearity; a^n g(n) gives G(z/a); n^k g(n) gives (-z d/dz)^k G; cos, sin, cosh, sinh of a n+b; 1/n! gives exp(1/z); binomial(n,k) gives z/(z-1)^(k+1); anything else is summed with [[sum]]. Needs the advanced CAS module.
+
+@cmd iztrans
+group: cas-calculus
+summary: Inverse z-transform
+syntax: iztrans(F, z, n)
+example: iztrans(z/(z-2),z,n)
+result: 2^n
+example: iztrans(z^2/((z-1)*(z-1/2)),z,n)
+result: 2-(1/2)^n
+example: iztrans(z/(z^2+1),z,n)
+result: sin(n*pi/2)
+example: iztrans(1/(z-1),z,n)
+result: 1-piecewise(n=0,1,0)
+see: ztrans
+
+## Refresher
+x(n) from X(z): partial fractions of X(z)/z, then z/(z − p) → pⁿ. All poles inside the unit circle ⇒ x(n) → 0 (a stable system).
+example: iztrans(z/(z-1/2),z,n)
+result: (1/2)^n
+## Syntax
+The sequence f(n), n >= 0, whose [[ztrans]] is the rational function F(z) (degree of the numerator at most that of the denominator). Partial fractions of F(z)/z with the poles found exactly: z/(z-p)^j gives binomial(n,j-1) p^(n-j+1); a pole at 0 gives the unit impulse `piecewise(n=k,1,0)`; a pair of complex poles r exp(+-i t) of a real F gives r^n times cos(n t) and sin(n t). Needs the advanced CAS module.
+
+@cmd diff
+group: cas-calculus
+summary: Derivative of an expression
+syntax: diff(expr, x)
+syntax: diff(expr, x, n)
+syntax: diff(expr, x, y, ...)
+syntax: diff(expr, [x, y])
+suffix: ,x)
+example: diff(x^3,x)
+result: 3*x^2
+example: diff(x*sin(x),x)
+result: cos(x)*x+sin(x)
+example: diff(x^5,x,3)
+result: 60*x^2
+see: integrate, nderiv, grad, implicitdiff, tangent
+
+## Refresher
+f'(a) = lim (f(a+h) − f(a))/h as h → 0; the slope of the tangent, the best linear approximation f(a+h) ≈ f(a) + f'(a) h.
+- Product, quotient and chain rules and a table: [[ref-calculus]].
+- `diff(f,x,n)` is the n-th derivative; `diff(f,x,y)` the mixed partial ∂²f/∂x∂y (equal to ∂²f/∂y∂x for smooth f).
+example: diff(exp(x)*cos(x),x)
+result: cos(x)*exp(x)-exp(x)*sin(x)
+## Syntax
+Differentiates `expr` with respect to `x`. With an integer `n`, returns the n-th derivative. Several variables give a mixed partial derivative; a list of variables gives the list of partial derivatives (the gradient).
+
+- `d/dx(expr)` is another way to write `diff(expr,x)`.
+- For a function defined with `f(x):=...`, `f'(a)` and `f''(a)` give derivatives at a point.
+
+@cmd integrate
+group: cas-calculus
+summary: Indefinite or definite integral
+syntax: integrate(expr, x)
+syntax: integrate(expr, x, a, b)
+suffix: ,x)
+example: integrate(x^2,x)
+result: x^3/3
+example: integrate(x*exp(x),x)
+result: exp(x)*(x-1)
+example: integrate(exp(-x),x,0,inf)
+result: 1
+example: integrate(1/sqrt(1-x^4),x)
+result: elliptic_f(asin(x),-1)
+example: integrate(x^2/sqrt(1-x^4),x)
+result: elliptic_e(asin(x),-1)-elliptic_f(asin(x),-1)
+example: integrate(1/sqrt(1+x^4),x)
+result: elliptic_f(2*atan(x),1/2)/2
+see: int, nint, diff, sum
+
+## Refresher
+∫ f dx = F + C with F' = f; ∫ f dx from a to b = F(b) − F(a) (fundamental theorem).
+- The constant C is not shown. ∫ dx/x appears as ln(x); on x < 0 read ln|x|.
+- A pole inside [a, b] makes the integral divergent (an error); an improper integral with inf converges or not.
+- No closed form: returned unevaluated; use [[nint]] for a number.
+- Techniques (parts, substitution, partial fractions) and a table: [[ref-calculus]].
+example: integrate(x*exp(-x),x,0,inf)
+result: 1
+## Syntax
+With two arguments, returns an antiderivative of `expr` with respect to `x` (no constant of integration is added). With limits `a` and `b`, returns the definite integral.
+
+- Limits may be `inf` or `-inf` (improper integrals).
+- If no closed form is found, the integral is returned unevaluated, for example `integrate(exp(x^3),x)`.
+- A definite integral over an interval containing a pole gives an error (divergent). For a numeric value use [[nint]] or [[approx]].
+- `integrate(expr, x, b)` integrates from 0 to `b`.
+- Rational functions: denominators whose roots are found exactly (such as x^3+2) give ln and atan terms over the reals.
+- With the advanced CAS module (standard and advanced tiers) more integrals have a closed form: radicals of one or two linear factors such as `(a+b*x)^(1/3)/(c+d*x)^(1/3)` or `sqrt(c-c/(a*x))`, exponentials of `atanh`, `atan`, `asinh`, `acosh`, powers of `asin(c*x)` and the other inverse functions times algebraic factors, denominators like `a+b*x^3` or `a+b*x^2+c*x^4` with symbolic coefficients, and results with `Ei`, `Si`, `Ci`, `erf` and `erfi` (`exp(a+b*x)/x^2`, `sin(b*x)/(c+d*x)`, `x^2*exp(-b*x^2)`, `x^3/ln(x)`). Each such result is checked by differentiation at sample points before it is returned.
+- `piecewise(x<a, f, g)`, `heaviside`, `sign` and `abs` of a linear argument give a continuous antiderivative written with `heaviside`, e.g. `integrate(piecewise(x<0,-x,x),x)` is `heaviside(x)*x^2-x^2/2`.
+- Elliptic integrals (advanced CAS module): a rational function times square roots whose product is a cubic or quartic polynomial, such as `1/sqrt(1-x^4)`, `sqrt(1+x^3)` or `sqrt(a+b*x^2)/sqrt(c+d*x^2)`, and the same with `cos`, `sin` or `cosh` in place of x (`1/sqrt(1+cos(x)^2)`, `sqrt(a+b*sec(x))`), give `elliptic_f`, `elliptic_e` and `elliptic_pi` in Legendre's form. Powers `sin(x)^p*cos(x)^q` with p or q not an integer give `hyp2f1`.
+
+@cmd int
+group: cas-calculus
+summary: Same as integrate
+syntax: int(expr, x)
+syntax: int(expr, x, a, b)
+suffix: ,x)
+example: int(cos(x),x)
+result: sin(x)
+example: int(x,x,0,1)
+result: 1/2
+see: integrate, nint
+
+Same as [[integrate]]: indefinite or definite integral.
+
+@cmd nint
+group: cas-calculus
+summary: Numeric definite integral
+syntax: nint(expr, x, a, b)
+example: nint(exp(-x^2),x,0,1)
+result: 0.746824132812
+see: integrate, nderiv
+
+Computes the definite integral of `expr` from `a` to `b` numerically by adaptive quadrature. Use it when [[integrate]] finds no closed form.
+
+@cmd nderiv
+group: cas-calculus
+summary: Numeric derivative at a point
+syntax: nderiv(expr, x, a)
+example: nderiv(sin(x),x,0)
+result: 0.999999999983
+example: nderiv(x^2,x,3)
+result: 5.99999999997
+see: diff
+
+Estimates the derivative of `expr` with respect to `x` at the numeric point `a` with a central difference quotient. The result is a decimal and may differ from the exact value in the last digits.
+
+@cmd limit
+group: cas-calculus
+summary: Limit of an expression
+syntax: limit(expr, x, a)
+syntax: limit(expr, x, a, dir)
+syntax: limit(expr, x=a)
+suffix: ,x,0)
+example: limit(sin(x)/x,x,0)
+result: 1
+example: limit((1+1/n)^n,n,inf)
+result: e
+example: limit(1/x,x,0,1)
+result: inf
+see: series, diff
+
+## Refresher
+lim f(x) = L as x → a: |f(x) − L| < ε whenever 0 < |x − a| < δ.
+- Two-sided unless dir = 1 (right) or −1 (left); `undef` when the sides differ.
+- 0/0 and ∞/∞: lim f/g = lim f'/g'. Standard: sin x/x → 1, (1 + 1/n)ⁿ → e, x ln x → 0 as x → 0⁺.
+example: limit(x*ln(x),x,0,1)
+result: 0
+## Syntax
+Returns the limit of `expr` as `x` tends to `a`.
+
+- `a` may be `inf` or `-inf`.
+- `dir` = 1 gives the limit from the right, -1 from the left; without it the limit is two-sided and `undef` is returned if the one-sided limits differ.
+- Results can be `inf`, `-inf` or `undef`. An error is given if the limit could not be determined.
+- At `inf`, factorials and gamma functions are handled by Stirling's formula, and a difference of exponentials in a numerator by taking one of them out (advanced CAS module): `limit(n!^(1/n)/n,n,inf)` is `exp(-1)`.
+
+@cmd series
+group: cas-calculus
+summary: Series expansion around a point
+syntax: series(expr, x)
+syntax: series(expr, x, a, n)
+syntax: series(expr, x=a, n)
+suffix: ,x,0,5)
+example: series(sin(x),x,0,5)
+result: x-1/6*x^3+O(x^5)
+example: series(exp(x),x,0,3)
+result: 1+x+1/2*x^2+O(x^3)
+example: series(1/x+x,x,0,3)
+result: 1/x+x+O(x^3)
+see: taylor, limit
+
+## Refresher
+f(x) = Σ f⁽ⁿ⁾(a) (x − a)ⁿ/n!; the order term O((x − a)ⁿ) says what is left out.
+- The last argument n is the order: the terms of degree below n (not the number of nonzero terms).
+- Poles give Laurent series (negative powers). Common series and convergence tests: [[ref-series]].
+example: series(exp(x)*sin(x),x,0,5)
+result: x+x^2+1/3*x^3+O(x^5)
+## Syntax
+Expands `expr` as a power series in `x` around `a` (default 0) and returns the terms of degree less than `n` (default 6). The result is shown in ascending powers of `x-a` (of `1/x` at `inf`) with the order term `O((x-a)^n)`; the value itself (`ans`, a variable it is stored in, a graph) is the polynomial without the order term.
+
+- Laurent series (negative powers) and fractional powers are supported.
+- [[taylor]] is the same command.
+
+@cmd taylor
+group: cas-calculus
+summary: Same as series
+syntax: taylor(expr, x, a, n)
+syntax: taylor(expr, x=a, n)
+suffix: ,x,0,5)
+example: taylor(cos(x),x,0,4)
+result: 1-1/2*x^2+O(x^4)
+example: taylor(ln(x),x,1,3)
+result: x-1-1/2*(x-1)^2+O((x-1)^3)
+see: series
+
+## Refresher
+Taylor polynomial f(a) + f'(a)(x − a) + … + f⁽ⁿ⁻¹⁾(a)(x − a)ⁿ⁻¹/(n − 1)!; the remainder is f⁽ⁿ⁾(c)(x − a)ⁿ/n! for some c between a and x. Series of common functions: [[ref-series]].
+example: taylor(ln(x),x,1,4)
+result: x-1-1/2*(x-1)^2+1/3*(x-1)^3+O((x-1)^4)
+## Syntax
+Same as [[series]]: Taylor polynomial of `expr` in `x` around `a` with the terms of degree less than `n` (defaults: `a`=0, `n`=6).
+
+@cmd sum
+group: cas-calculus
+summary: Sum of a sequence of terms
+syntax: sum(expr, k, a, b)
+syntax: sum(list)
+example: sum(k,k,1,n)
+result: n*(n+1)/2
+example: sum(1/k^2,k,1,inf)
+result: pi^2/6
+example: sum([1,2,3])
+result: 6
+example: sum(sin((2*k-1)*x),k,1,n)
+result: sin(n*x)^2/sin(x)
+example: sum(binomial(n,k)/(k+1),k,0,n)
+result: (2^(n+1)-1)/(n+1)
+example: sum(k*k!,k,0,n)
+result: (n+1)!-1
+example: sum(binomial(n,k)^2,k,0,n)
+result: binomial(2*n,n)
+example: sum(binomial(n,k)*binomial(m,n-k),k,0,n)
+result: binomial(m+n,m)
+see: product, seq
+
+## Refresher
+Σ_k f(k) from a to b. Closed forms to recognize:
+    Σ k = n(n+1)/2   Σ k² = n(n+1)(2n+1)/6
+    Σ k³ = (n(n+1)/2)²
+    Σ r^k, k=0..n = (r^(n+1) − 1)/(r − 1)
+    Σ C(n,k) x^k = (1 + x)ⁿ   Σ 1/k² = π²/6
+- Hypergeometric terms (t(k+1)/t(k) rational in k): Gosper's algorithm decides whether Σ t(k) up to n has a hypergeometric closed form; Zeilberger's algorithm finds a recurrence in n for Σ over k = 0..n (advanced CAS module).
+- Convergence tests: [[ref-series]].
+example: sum(k^2,k,1,n)
+result: n*(n+1)*(2*n+1)/6
+## Syntax
+Adds the values of `expr` for `k` from `a` to `b`. The bounds may be symbolic or `inf`, in which case a closed form is looked for; if none is found the sum is returned unevaluated. With a list, returns the sum of its elements.
+
+Closed forms: polynomials times powers r^k, binomial sums, rational terms (telescoping, zeta values), sums of sin and cos of a k + b; with the advanced CAS module also binomial(n,k) R(k) with R rational and lower bounds other than 0, and hypergeometric terms (products of powers, factorials and binomials): Gosper's algorithm for sums with a symbolic upper bound, and Zeilberger's algorithm for sums over k = 0..n, which finds a recurrence in n and solves it. A closed form for a symbolic bound found by the module is checked against the explicit sum for small bounds.
+
+
+@cmd product
+group: cas-calculus
+summary: Product of a sequence of terms
+syntax: product(expr, k, a, b)
+syntax: product(list)
+example: product(k,k,1,5)
+result: 120
+example: product(1+1/k,k,1,n)
+result: n+1
+example: product((2*k-1)/(2*k),k,1,n)
+result: gamma(n+1/2)/(gamma(n+1)*sqrt(pi))
+see: sum, factorial, gamma
+
+## Refresher
+Π_k f(k) from a to b. Telescoping: Π (1 + 1/k) = n + 1; Π k = n!; linear factors give gamma: Π (k + q), k = 1..n = gamma(n + q + 1)/gamma(q + 1).
+example: product(k/(k+1),k,1,n)
+result: 1/(n+1)
+## Syntax
+Multiplies the values of `expr` for `k` from `a` to `b`. Symbolic bounds are supported for rational terms; with the advanced CAS module any rational term whose factors are linear, through the gamma function (p k + q gives p^n gamma(b + 1 + q/p)/gamma(a + q/p)). With a list, returns the product of its elements.
+
+@cmd tangent
+group: cas-calculus
+summary: Tangent line at a point
+syntax: tangent(expr, x, a)
+syntax: tangent(expr, x=a)
+example: tangent(x^2,x,1)
+result: 2*x-1
+example: tangent(sin(x),x=0)
+result: x
+see: diff, series
+
+Returns the equation of the tangent line `f(a)+f'(a)*(x-a)` of the graph of `expr` at `x = a`, expanded.
+
+@cmd grad
+group: cas-calculus
+summary: Gradient vector
+syntax: grad(expr, [x, y, ...])
+syntax: grad(expr, vars, coords)
+example: grad(x^2+y^2,[x,y])
+result: [2*x,2*y]
+example: grad(x*y*z,[x,y,z])
+result: [y*z,x*z,x*y]
+example: grad(r^2*cos(t),[r,t],polar)
+result: [2*cos(t)*r,-r*sin(t)]
+see: hessian, jacobian, diff, divergence, laplacian, potential
+
+## Refresher
+∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z): the direction of fastest increase, |∇f| the rate; ∇f is normal to the level set f = c.
+- Directional derivative D_u f = ∇f·u (|u| = 1); tangent plane of f = c at p: ∇f(p)·(x − p) = 0.
+- ∇×∇f = 0: gradient fields are conservative; [[potential]] goes back from F to f.
+- Spherical [r,t,p] here: t the angle from the z axis, p the azimuth.
+example: grad(x^2+y^2+z^2,[x,y,z])
+result: [2*x,2*y,2*z]
+## Syntax
+Returns the list of partial derivatives of `expr` with respect to each variable.
+
+`coords` is `cartesian`, `polar` ([r,t]), `cylindrical` ([r,t,z]) or `spherical` ([r,t,p], t the angle from the z axis, p the azimuth); the result has the components along the unit vectors of that system. The coordinate forms of grad, divergence, curl and laplacian are in the advanced CAS module.
+
+@cmd hessian
+group: cas-calculus
+summary: Matrix of second derivatives
+syntax: hessian(expr, [x, y, ...])
+example: hessian(x^3,[x])
+result: [[6*x]]
+example: hessian(x^2*y^3,[x,y])
+result: [[2*y^3,6*x*y^2],[6*x*y^2,6*x^2*y]]
+see: grad, jacobian
+
+## Refresher
+H_ij = ∂²f/∂x_i∂x_j, symmetric for smooth f; f(p + h) ≈ f(p) + ∇f·h + ½ h·H h.
+- At a critical point (∇f = 0): H positive definite ⇒ minimum, negative definite ⇒ maximum, eigenvalues of both signs ⇒ saddle ([[eigenvals]]).
+example: eigenvals(hessian(x^2+3*x*y+y^2,[x,y]))
+result: [-1,5]
+
+Eigenvalues −1 and 5: the origin is a saddle.
+## Syntax
+Returns the Hessian matrix of `expr`: entry (i,j) is the second partial derivative with respect to the i-th and j-th variables.
+
+@cmd jacobian
+group: cas-calculus
+summary: Jacobian matrix
+syntax: jacobian([f1, f2, ...], [x, y, ...])
+example: jacobian([x*y,x+y],[x,y])
+result: [[y,x],[1,1]]
+see: grad, hessian
+
+## Refresher
+J_ij = ∂f_i/∂x_j; f(p + h) ≈ f(p) + J h. Change of variables: dx dy = |det J| du dv (polar r, spherical ρ² sin φ). det J ≠ 0 ⇒ a local inverse with Jacobian J⁻¹; chain rule J(f∘g) = J(f)·J(g).
+example: simplify(det(jacobian([r*cos(t),r*sin(t)],[r,t])))
+result: r
+## Syntax
+Returns the matrix of partial derivatives: row i holds the derivatives of the i-th function with respect to each variable.
+
+@cmd divergence
+group: cas-calculus
+summary: Divergence of a vector field
+syntax: divergence([f1, f2, ...], [x, y, ...])
+syntax: divergence(F, vars, coords)
+example: divergence([x,y,z],[x,y,z])
+result: 3
+example: divergence([x^2,x*y],[x,y])
+result: 3*x
+example: divergence([r^2,0,0],[r,t,p],spherical)
+result: 4*r
+see: curl, grad, flux
+
+## Refresher
+∇·F = ∂P/∂x + ∂Q/∂y + ∂R/∂z for F = (P, Q, R): the net outflow per unit volume (source density).
+- Divergence theorem: the outward flux through a closed surface ∂V is ∫∫∫ ∇·F dV; in the plane ∮ F·n ds = ∫∫ ∇·F dA.
+- ∇·(∇×A) = 0; on simple regions ∇·F = 0 ⇔ F = ∇×A ([[vpotential]]).
+example: divergence([x,y,z],[x,y,z])
+result: 3
+
+So the flux of (x, y, z) out of the unit sphere is 3 · 4π/3 = 4π (see [[flux]]).
+## Syntax
+Returns the sum of the partial derivatives of each component with respect to the corresponding variable. Both lists must have the same length. With `coords` (polar, cylindrical, spherical; see [[grad]]) the components are along that system's unit vectors and the scale factors are applied.
+
+@cmd curl
+group: cas-calculus
+summary: Curl of a vector field
+syntax: curl([f1, f2, f3], [x, y, z])
+syntax: curl([f1, f2], [x, y])
+syntax: curl(F, vars, coords)
+example: curl([y,-x,0],[x,y,z])
+result: [0,0,-2]
+example: curl([-y,x],[x,y])
+result: 2
+example: curl([0,0,r^2],[r,t,z],cylindrical)
+result: [0,-2*r,0]
+see: divergence, grad, cross, vpotential
+
+## Refresher
+∇×F = (R_y − Q_z, P_z − R_x, Q_x − P_y): twice the local angular velocity of the flow; a plane field gives the scalar Q_x − P_y.
+- Stokes: ∮ F·dr around ∂S = ∫∫ (∇×F)·n dS, the boundary counter-clockwise seen from the side n points to (right-hand rule); Green's theorem is the plane case.
+- On a simply connected region ∇×F = 0 ⇔ F = ∇f ([[potential]]).
+example: curl([-y,x,0],[x,y,z])
+result: [0,0,2]
+## Syntax
+Returns the curl (rotation) of a vector field with three components in three variables. A plane field gives the scalar curl dF2/dx - dF1/dy. With `coords` (see [[grad]]) the components are along that system's unit vectors.
+
+@cmd laplacian
+group: cas-calculus
+summary: Laplacian of a function or vector field
+syntax: laplacian(expr, vars [, coords])
+example: laplacian(x^2*y+z^3,[x,y,z])
+result: 2*y+6*z
+example: laplacian(1/r,[r,t,p],spherical)
+result: 0
+example: laplacian(ln(r),[r,t],polar)
+result: 0
+see: grad, divergence, pdesolve
+
+## Refresher
+∇²f = ∇·∇f = f_xx + f_yy + f_zz. Harmonic: ∇²f = 0 (mean-value property; maximum on the boundary).
+- Polar: f_rr + f_r/r + f_θθ/r². Radial in ℝ³: (r² f_r)_r/r², so 1/r is harmonic away from 0; in the plane ln r.
+- Heat u_t = k∇²u, wave u_tt = c²∇²u, Poisson ∇²u = ρ ([[pdesolve]]).
+example: laplacian(1/sqrt(x^2+y^2+z^2),[x,y,z])
+result: 0
+## Syntax
+Returns div grad of `expr`. For a vector field (a list) it is the vector Laplacian: component by component in Cartesian coordinates, grad div F - curl curl F in cylindrical and spherical ones. `coords` as for [[grad]].
+
+@cmd potential
+group: cas-calculus
+summary: Scalar potential of a conservative field
+syntax: potential(F, vars [, coords])
+example: potential([2*x*y,x^2+1,6*z^2],[x,y,z])
+result: x^2*y+y+2*z^3
+example: potential([1/r,0],[r,t],polar)
+result: ln(r)
+see: grad, vpotential, lineint
+
+## Refresher
+f with ∇f = F. On a simply connected domain F has one ⇔ ∇×F = 0 (plane: Q_x = P_y). Then ∫ F·dr from A to B = f(B) − f(A): path independent, 0 around closed curves.
+- Exact ODE M dx + N dy = 0: f = potential([M,N],[x,y]) and f = C is the solution.
+- Pitfall: around a hole curl 0 is not enough: (−y, x)/(x² + y²) has curl 0 but circulation 2π about the origin.
+example: potential([y,x],[x,y])
+result: x*y
+## Syntax
+Returns f with grad f = F (no constant added). The field must be conservative: its curl is checked first, and a field whose curl is not 0 is an error. If an integral cannot be done exactly the call is returned unevaluated.
+
+@cmd vpotential
+group: cas-calculus
+summary: Vector potential of a solenoidal field
+syntax: vpotential(F, [x, y, z])
+example: vpotential([0,0,1],[x,y,z])
+result: [0,x,0]
+see: curl, potential
+
+## Refresher
+A with ∇×A = F; exists on ℝ³ (or a star-shaped region) ⇔ ∇·F = 0. A is unique up to a gradient ∇g (gauge).
+example: vpotential([0,0,2],[x,y,z])
+result: [0,2*x,0]
+## Syntax
+Returns A with curl A = F, in the gauge where the z component of A is 0. F must have divergence 0 (checked). Any other potential differs from this one by a gradient.
+
+@cmd lineint
+group: cas-calculus
+summary: Line integral along a parametrised curve
+syntax: lineint(F, vars, curve, t, a, b)
+example: lineint([-y,x],[x,y],[cos(t),sin(t)],t,0,2*pi)
+result: 2*pi
+example: lineint(x*y,[x,y,z],[cos(t),sin(t),t],t,0,pi/2)
+result: sqrt(2)/2
+see: surfint, flux, potential
+
+## Refresher
+Work ∫ F·dr = ∫ F(r(t))·r'(t) dt (circulation when closed); scalar ∫ f ds = ∫ f(r(t)) |r'(t)| dt (f = 1: arc length).
+- Reversing the curve flips the sign of ∫ F·dr, not of ∫ f ds.
+- F = ∇f: the value is f(end) − f(start). Closed curves: Green / Stokes ([[ref-vector]]).
+example: lineint([y,x],[x,y],[t,t^2],t,0,1)
+result: 1
+
+(y, x) = ∇(xy), so the work from (0,0) to (1,1) is 1 on any path.
+## Syntax
+`curve` lists the coordinates of the curve as functions of `t`, for `t` from `a` to `b`. For a vector field F (a list) returns the work integral of F . dr; for a scalar f the integral of f with respect to arc length, f |r'(t)| dt.
+
+@cmd surfint
+group: cas-calculus
+summary: Surface integral over a parametrised surface
+syntax: surfint(f, [x, y, z], surface, u, u0, u1, v, v0, v1)
+example: surfint(1,[x,y,z],[R*sin(u)*cos(v),R*sin(u)*sin(v),R*cos(u)],u,0,pi,v,0,2*pi)
+result: 4*R^2*pi
+example: surfint(1,[x,y,z],[u,v,1-u-v],u,0,1-v,v,0,1)
+result: sqrt(3)/2
+see: flux, lineint
+
+## Refresher
+∫∫ f dS = ∫∫ f(r(u,v)) |r_u × r_v| du dv; f = 1 gives the area. Sphere of radius R (u from the z axis): |r_u × r_v| = R² sin u. A graph z = g(x,y): dS = √(1 + g_x² + g_y²) dx dy.
+example: surfint(x^2+y^2,[x,y,z],[sin(u)*cos(v),sin(u)*sin(v),cos(u)],u,0,pi,v,0,2*pi)
+result: 8*pi/3
+## Syntax
+Integrates the scalar f over the surface r(u,v) = `surface` with the area element |r_u x r_v| du dv. The integral over u is the inner one, so u0 and u1 may depend on v.
+
+@cmd flux
+group: cas-calculus
+summary: Flux of a vector field through a surface or curve
+syntax: flux(F, [x, y, z], surface, u, u0, u1, v, v0, v1)
+syntax: flux(F, [x, y], curve, t, a, b)
+example: flux([x,y,z],[x,y,z],[sin(u)*cos(v),sin(u)*sin(v),cos(u)],u,0,pi,v,0,2*pi)
+result: 4*pi
+example: flux([x,y],[x,y],[cos(t),sin(t)],t,0,2*pi)
+result: 2*pi
+see: surfint, divergence, lineint
+
+## Refresher
+Φ = ∫∫ F·n dS = ∫∫ F(r)·(r_u × r_v) du dv. The orientation is n = r_u × r_v as parametrised (swap u and v to flip it); for the sphere with u from the z axis and v the azimuth it points outward.
+- Closed surface: Φ = ∫∫∫ ∇·F dV (divergence theorem). Plane curve: the outward flux ∮ (P dy − Q dx) of a counter-clockwise curve.
+example: flux([0,0,z],[x,y,z],[sin(u)*cos(v),sin(u)*sin(v),cos(u)],u,0,pi,v,0,2*pi)
+result: 4*pi/3
+
+∇·(0, 0, z) = 1, so the flux is the volume of the unit ball.
+## Syntax
+Integrates F . (r_u x r_v) du dv over the parametrised surface (u inner, as in [[surfint]]); the orientation is that of r_u x r_v. For a plane curve it is the outward flux F . (y', -x') dt of a counter-clockwise curve.
+
+@cmd laplace
+group: cas-calculus
+summary: Laplace transform
+syntax: laplace(expr)
+syntax: laplace(expr, t, s)
+example: laplace(exp(2*t))
+result: 1/(s-2)
+example: laplace(sin(t),t,s)
+result: 1/(s^2+1)
+see: ilaplace, dsolve
+
+## Refresher
+F(s) = ∫ f(t) exp(−st) dt, t from 0 to ∞ (for Re s large enough).
+- Linear; f' → sF − f(0); f'' → s²F − s f(0) − f'(0); exp(at) f → F(s − a); heaviside(t−a) f(t−a) → exp(−as) F; t f → −F'; convolution ∫ f(τ) g(t−τ) dτ → F G.
+- Linear ODEs with constant coefficients: transform, solve for Y(s), invert ([[ilaplace]]). Table: [[ref-transforms]].
+example: laplace(t^3)
+result: 6/s^4
+example: laplace(heaviside(t-1))
+result: exp(-s)/s
+## Syntax
+Returns the Laplace transform of `expr`, a function of `t`, as a function of `s`. The default variables are `t` and `s`.
+
+@cmd ilaplace
+group: cas-calculus
+summary: Inverse Laplace transform
+syntax: ilaplace(expr)
+syntax: ilaplace(expr, s, t)
+example: ilaplace(1/(s-2),s,t)
+result: exp(2*t)
+example: ilaplace(1/s^2)
+result: t
+see: laplace
+
+## Refresher
+f(t) with laplace(f) = F: for rational F by partial fractions (the residues of F(s) exp(st) at the poles). Complete the square for complex poles: 1/((s + a)² + b²) → exp(−at) sin(bt)/b. Poles in Re s < 0 ⇒ f → 0.
+example: ilaplace(1/(s^2+2*s+5))
+result: exp(-t)*sin(2*t)/2
+## Syntax
+Returns the function of `t` whose Laplace transform is `expr` (a function of `s`). Rational functions are handled by partial fractions. Default variables are `s` and `t`.
+
+@cmd dsolve
+group: cas-calculus
+summary: Solve an ordinary differential equation
+syntax: dsolve(eq)
+syntax: dsolve(eq, y, x)
+syntax: dsolve([eq, y(a)=b, ...], y, x)
+example: dsolve(y'=y)
+result: c1*exp(x)
+example: dsolve(y''+y=0,y,x)
+result: c1*cos(x)+c2*sin(x)
+example: dsolve([y'=2*y,y(0)=3],y,x)
+result: 3*exp(2*x)
+syntax: dsolve(eq, y, x, x0, n)
+syntax: dsolve([eq1, eq2, ..., u(a)=b, ...], [u, v, ...], t)
+example: dsolve([u'=v,v'=-u,u(0)=1,v(0)=0],[u,v],t)
+result: [u=cos(t),v=-sin(t)]
+example: dsolve(y'+2*y=exp(x),y,x)
+result: c1*exp(-2*x)+exp(x)/3
+example: dsolve(y'=y^2-x^2+1,y,x)
+result: x+exp(x^2)/(c1-erfi(x)*sqrt(pi)/2)
+example: dsolve(x^2*y''+x*y'+(4*x^2-1)*y=0,y,x)
+result: besselj(1,2*x)*c1+bessely(1,2*x)*c2
+example: dsolve(y''+x*y=0,y,x,0,8)
+result: c1*(x^6/180-x^3/6+1)+c2*(x^7/504-x^4/12+x)
+example: dsolve([y''+x*y=0,y(0)=1,y'(0)=0],y,x,0,8)
+result: x^6/180-x^3/6+1
+see: desolve, odesolve, laplace, expm, rsolve, wronskian
+
+## Refresher
+An ODE of order n has an n-parameter general solution (constants c1 … cn here). y' = f(x,y), y(x₀) = y₀ has exactly one local solution when f and ∂f/∂y are continuous near (x₀, y₀).
+- Linear: y = c1 y₁ + … + cn yn + y_p, where y₁ … yn are independent (Wronskian ≠ 0, [[wronskian]]) and y_p is any particular solution.
+- Types, methods and what is solved here: [[ref-ode]].
+- Write y', y'' (not dy/dx); the unknown is y and the variable x unless you give others.
+example: dsolve(y''+y'-2*y=exp(x))
+result: c1*exp(-2*x)+c2*exp(x)+exp(x)*(3*x-1)/9
+
+exp(x) solves the homogeneous equation (root 1), so the particular solution needs x exp(x): resonance.
+## Syntax
+Finds the general solution `y` of a differential equation in `x`, written with `y'`, `y''`, ... Free constants are named `c1`, `c2`, ... Default unknown is `y`, default variable `x`. The general solution of a linear equation is written as c1 times one solution plus c2 times another, and so on, plus a particular solution.
+
+- Supported: first order separable, linear and Bernoulli equations; linear equations with constant coefficients of any order.
+- Initial conditions such as `y(0)=1` and `y'(0)=0` go in a list together with the equation and fix the constants.
+- Systems: a list of first-order equations `u'=...` and a list of unknowns, linear with constant coefficients (a forcing term in t is allowed). The solution is [[expm]](A t) times the constants, plus a particular solution; it is returned as `[u=..., v=...]`.
+- With the advanced CAS module also Riccati equations y' = a(x) y^2 + b(x) y + c(x) (through a rational particular solution, or the linear second-order equation for u with y = -u'/(a u)) and Bessel's equation x^2 y'' + x y' + (b x^2 - nu^2) y = 0 (`besselj`, `bessely`, or `besseli`, `besselk`).
+- `dsolve(eq, y, x, x0, n)` gives a power series solution of a linear equation about x = x0 with the terms below (x-x0)^n: at an ordinary point every coefficient follows from the first ones (`c1` = y(x0), `c2` = y'(x0), ...); at a regular singular point of a second-order equation Frobenius' method gives (x-x0)^r times a series, with a logarithm in the second solution when the roots of the indicial equation differ by an integer. Conditions at x0 can be added as above.
+- For a numeric solution use [[odesolve]].
+
+@cmd pdesolve
+group: cas-calculus
+summary: Solve a partial differential equation
+syntax: pdesolve(eq, u(x,t))
+syntax: pdesolve(eq, u(x,t), [conditions] [, n])
+example: pdesolve(u_t(x,t)+2*u_x(x,t)=0,u(x,t),u(x,0)=sin(x))
+result: sin(x-2*t)
+example: pdesolve(x*u_x(x,y)+y*u_y(x,y)=u(x,y),u(x,y))
+result: F(y/x)*x
+example: pdesolve(u_t(x,t)=u_xx(x,t),u(x,t),[u(0,t)=0,u(pi,t)=0,u(x,0)=sin(x)+3*sin(2*x)])
+result: exp(-t)*sin(x)+3*exp(-4*t)*sin(2*x)
+example: pdesolve(u_t(x,t)=u_xx(x,t),u(x,t),[u(0,t)=0,u(1,t)=0,u(x,0)=1],3)
+result: 4*exp(-pi^2*t)*sin(pi*x)/pi+4*exp(-9*pi^2*t)*sin(3*pi*x)/(3*pi)
+example: pdesolve(u_tt(x,t)=c^2*u_xx(x,t),u(x,t),[u(x,0)=exp(-x^2),u_t(x,0)=0])
+result: exp(-(x+c*t)^2)/2+exp(-(x-c*t)^2)/2
+example: pdesolve(u_xx(x,y)+u_yy(x,y)=0,u(x,y),[u(0,y)=0,u(1,y)=0,u(x,0)=0,u(x,1)=sin(pi*x)])
+result: sin(pi*x)*sinh(pi*y)/sinh(pi)
+see: pdenum, dsolve, laplacian
+
+Solves a linear PDE for the unknown function `u(x,t)`. Write partial derivatives as `u_x(x,t)`, `u_xx(x,t)`, `u_t(x,t)`, `u_tt(x,t)` (or `diff(u(x,t),x)`, `diff(u(x,t),x,2)`). Conditions give u or a first derivative on a line: `u(0,t)=0`, `u_x(L,t)=0`, `u(x,0)=f(x)`, `u_t(x,0)=g(x)`.
+
+- First order, a u_x + b u_t + c u = f: by characteristics. Without a condition the answer has an arbitrary function F; a condition such as `u(x,0)=g(x)` fixes it.
+- Heat equation u_t = k u_xx and wave equation u_tt = c^2 u_xx on an interval: separation of variables, with u or u_x given at each end (constant values). The answer is a Fourier series: finite when the initial data is a sum of the modes, otherwise a sum to infinity; with a last argument `n` the first n terms.
+- Laplace's equation u_xx + u_yy = 0 on a rectangle with u given on the four sides.
+- On the whole line (only initial conditions): d'Alembert's formula for the wave equation, the heat kernel for the heat equation.
+- Anything else, or an integral that cannot be done exactly, stays unevaluated; use [[pdenum]] for a numeric solution.
+
+@cmd pdenum
+group: cas-calculus
+summary: Numeric solution of a PDE on a grid
+syntax: pdenum(eq, u(x,t), [conditions], [x,a,b,nx], [t,t0,t1,nt] [, method])
+example: dim(pdenum(u_t(x,t)=u_xx(x,t),u(x,t),[u(0,t)=0,u(1,t)=0,u(x,0)=sin(pi*x)],[x,0,1,10],[t,0,0.1,50]))
+result: [51,11]
+see: gridval, pdesolve, odesolve
+
+Finite differences on nx steps in x and nt steps in t. Returns the matrix of values: row j is the time t0 + j (t1-t0)/nt, column i the point a + i (b-a)/nx.
+
+- Heat equation u_t = k u_xx: explicit scheme (stable when k dt/dx^2 <= 1/2, an error otherwise) or Crank-Nicolson (method `cn`, always stable); without a method the explicit scheme is used when it is stable.
+- Wave equation u_tt = c^2 u_xx: leapfrog scheme, stable when c dt/dx <= 1.
+- Conditions: u or u_x at x = a and x = b (any expression in t), u(x,t0) and for the wave equation u_t(x,t0).
+- Laplace and Poisson equation u_xx + u_yy = rho(x,y) on [a,b] x [c,d] (give [y,c,d,ny] instead of the time range) with u on the four sides: successive over-relaxation.
+- At most 250000 grid points; the memory needed is checked first.
+
+To see the result, store it (`U:=pdenum(...)`) and graph [[gridval]](U, [a,b], [t0,t1], x, y) in the 3D graph, or `gridval(U,[a,b],[t0,t1],x,t)` on a function graph and play the slider t with the animation.
+
+@cmd gridval
+group: cas-calculus
+summary: Interpolate a grid of values
+syntax: gridval(M, [a,b], [c,d], x, y)
+example: gridval([[1,2],[3,4]],[0,1],[0,1],0.5,0.5)
+result: 2.5
+see: pdenum
+
+Bilinear interpolation in the matrix M, whose columns are equally spaced points from a to b and whose rows are equally spaced points from c to d (as [[pdenum]] returns them). Outside the rectangle the value is undef. Graphs compile it into a fast table lookup, so `gridval(U,[0,1],[0,0.1],x,y)` can be drawn in the 3D graph and animated.
+
+@cmd rsolve
+group: cas-calculus
+summary: Solve a linear recurrence
+syntax: rsolve(eq, f(n))
+syntax: rsolve(eq, f(n), [f(0)=a, f(1)=b, ...])
+example: rsolve(f(n)=5*f(n-1)-6*f(n-2),f(n),[f(0)=0,f(1)=1])
+result: 3^n-2^n
+example: rsolve(f(n+1)=2*f(n)+1,f(n),[f(0)=0])
+result: 2^n-1
+example: rsolve(f(n+1)=3*f(n),f(n))
+result: 3^n*c1
+see: dsolve, sum
+
+## Refresher
+Linear recurrence with constant coefficients: try rⁿ; the characteristic roots r give c1 r₁ⁿ + c2 r₂ⁿ + …, a double root n rⁿ, plus a particular solution for the right side (as for ODEs). The z-transform turns the recurrence into algebra ([[ztrans]]).
+example: rsolve(f(n)=f(n-1)+f(n-2),f(n),[f(0)=0,f(1)=1])
+result: sqrt(5)*(sqrt(5)/2+1/2)^n/5-sqrt(5)*(1/2-sqrt(5)/2)^n/5
+## Syntax
+Solves a linear recurrence with constant coefficients for f(n), of order up to 8. The right side may be a polynomial in n times b^n. Without conditions the free constants are `c1`, `c2`, ... Recurrences with coefficients depending on n are returned unevaluated.
+
+@cmd wronskian
+group: cas-calculus
+summary: Wronskian of a list of functions
+syntax: wronskian([f1, f2, ..., fn], x)
+example: wronskian([sin(x),cos(x)],x)
+result: -1
+example: wronskian([exp(x),x*exp(x),x^2*exp(x)],x)
+result: 2*exp(3*x)
+see: dsolve, det, wronskianmat
+
+## Refresher
+W(f₁, …, f_n) = det[f_j⁽ⁱ⁻¹⁾], i, j = 1 … n: the derivatives 0 … n−1 of the functions as rows.
+- W not identically 0 ⇒ the functions are independent. For n solutions of one linear ODE y⁽ⁿ⁾ + p₁ y⁽ⁿ⁻¹⁾ + … = 0, W is either never 0 or always 0 (Abel: W = C exp(−∫ p₁ dx)).
+- Variation of parameters divides by W ([[ref-ode]]).
+- W ≡ 0 does not prove dependence for arbitrary functions: x² and x|x|.
+example: wronskian([exp(x),exp(2*x)],x)
+result: exp(3*x)
+## Syntax
+The determinant of the n x n matrix whose row k holds the k-th derivatives of f1 ... fn (k = 0 ... n-1), simplified. Solutions of a linear differential equation of order n are independent exactly when their Wronskian is not identically 0. Needs the advanced CAS module.
+
+@cmd wronskianmat
+group: cas-calculus
+summary: Wronskian matrix of a list of functions
+syntax: wronskianmat([f1, f2, ..., fn], x)
+example: wronskianmat([cos(t),sin(t)],t)
+result: [[cos(t),sin(t)],[-sin(t),cos(t)]]
+see: wronskian
+
+## Refresher
+Row i holds the (i−1)-th derivatives of f₁ … f_n; for solutions of y⁽ⁿ⁾ + … = 0 it is the fundamental matrix of the equivalent first-order system, and its determinant is the [[wronskian]].
+example: wronskianmat([exp(x),x*exp(x)],x)
+result: [[exp(x),exp(x)*x],[exp(x),exp(x)*x+exp(x)]]
+## Syntax
+The n x n matrix whose row k holds the k-th derivatives of f1 ... fn (k = 0 ... n-1); its determinant is the [[wronskian]]. Needs the advanced CAS module.
+
+@cmd desolve
+group: cas-calculus
+summary: Same as dsolve
+syntax: desolve(eq, y, x)
+example: desolve(y'=x,y,x)
+result: x^2/2+c1
+see: dsolve
+
+Same as [[dsolve]]: solves an ordinary differential equation.
+
+@cmd implicitdiff
+group: cas-calculus
+summary: Derivative of an implicit function
+syntax: implicitdiff(eq, y, x)
+example: implicitdiff(x^2+y^2=1,y,x)
+result: -x/y
+see: diff
+
+## Refresher
+F(x, y) = 0 defines y(x) near a point where F_y ≠ 0 (implicit function theorem), with dy/dx = −F_x/F_y.
+example: implicitdiff(x^3+y^3=6*x*y,y,x)
+result: (-x^2+2*y)/(-2*x+y^2)
+## Syntax
+Returns `dy/dx` for `y` defined implicitly by the equation `eq` in `x` and `y`, computed as `-F_x/F_y`.
+
+@cmd odesolve
+group: cas-calculus
+summary: Numeric solution of y'=f(x,y)
+syntax: odesolve(f, [x, y], [x0, y0], x1)
+example: odesolve(y,[x,y],[0,1],1)
+result: 2.71828182846
+example: odesolve(x+y,[x,y],[0,0],1)
+result: 0.718281828458
+see: dsolve, fsolve
+
+## Refresher
+Initial value problem y' = f(x,y), y(x₀) = y₀ solved numerically (adaptive Runge-Kutta: the step shrinks where the solution changes fast). Stiff problems need tiny steps; a solution that blows up before x1 cannot be continued.
+example: odesolve(-2*x*y,[x,y],[0,1],1)
+result: 0.367879441171
+
+The exact value is exp(−1).
+## Syntax
+Solves the initial value problem `y' = f(x,y)`, `y(x0) = y0` numerically with an adaptive Runge-Kutta method and returns the value `y(x1)`.
+
+@cmd residue
+group: cas-calculus
+summary: Residue at a pole
+syntax: residue(expr, z, a)
+example: residue(1/(z^2+1),z,i)
+result: -i/2
+example: residue(exp(z)/z^3,z,0)
+result: 1/2
+see: series, limit
+
+## Refresher
+Res(f, a) = the coefficient of 1/(z − a) in the Laurent series. Simple pole: lim (z − a) f(z); f = g/h with h(a) = 0, h'(a) ≠ 0: g(a)/h'(a); pole of order m: the (m−1)-th derivative of (z − a)^m f over (m−1)!.
+- Residue theorem: ∮ f dz = 2πi Σ residues inside the curve (counter-clockwise).
+example: residue(1/(z*(z-1)),z,1)
+result: 1
+## Syntax
+The coefficient of 1/(z-a) in the Laurent series of `expr` at `a`, for a pole of order up to 12 (0 where `expr` is finite). Essential singularities stay unevaluated. Needs the advanced CAS module.
+
+@cmd minimize
+group: cas-calculus
+summary: Least value over the reals
+syntax: minimize(expr, x)
+syntax: minimize(expr, constraints, vars)
+example: minimize(x^4-x+1,x)
+result: 1-3*2^(1/3)/8
+example: minimize(x^3,x)
+result: -inf
+example: minimize(x*ln(x),x)
+result: -1/e
+example: minimize(x+y,[x>=1,y>=2],[x,y])
+result: [3,[x=1,y=2]]
+example: minimize(x+y,[x^2+y^2=1],[x,y])
+result: [-sqrt(2),[x=-sqrt(2)/2,y=-sqrt(2)/2]]
+see: maximize, linprog, solve, diff
+
+## Refresher
+Necessary conditions: f'(x) = 0 (one variable), ∇f = 0 (several); with constraints g = 0: ∇f = λ ∇g (Lagrange); with g ≤ 0: KKT (multipliers μ ≥ 0, μ g = 0). Sufficient: second derivative or Hessian positive (definite); for a convex problem any local minimum is global.
+- Here: over all reals the infimum (maybe −inf); linear objective and constraints: a linear program ([[linprog]]); equality constraints: Lagrange, the least critical value (boundedness not checked). More: [[ref-optim]].
+example: minimize(x^2+y^2,[x+2*y=5],[x,y])
+result: [5,[x=1,y=2]]
+## Syntax
+The least value (the infimum) of `expr` over all real `x` where it is real, from the values at the real critical points (where diff(expr,x) = 0), the limits at -inf and inf and the one-sided limits at the ends of the domain set by `ln` and roots (x*ln(x) needs x > 0). Unevaluated when the critical points cannot be found. Needs the advanced CAS module.
+
+With a list of constraints and a list of variables the result is `[value, [x=..., ...]]`:
+
+- a linear `expr` with linear constraints (<=, >=, =; < and > count as <= and >=) is a linear program, solved exactly as in [[linprog]]; a variable can be negative unless a constraint `x>=0` says otherwise; an unbounded problem gives `[-inf,[]]` and an empty feasible set `[inf,[]]` (the least value of an empty set; for maximize the signs swap);
+- otherwise the constraints must be equations (or the list empty): Lagrange multipliers, the real solutions of grad(expr) = l1 grad(g1) + ... with all g = 0 found by [[solve]], and the least value of `expr` among them (a critical value: the problem is not checked to be bounded).
+
+@cmd maximize
+group: cas-calculus
+summary: Greatest value over the reals
+syntax: maximize(expr, x)
+syntax: maximize(expr, constraints, vars)
+example: maximize(2*x-x^2,x)
+result: 1
+example: maximize(3*x+2*y,[x+y<=4,x+3*y<=6,x>=0,y>=0],[x,y])
+result: [12,[x=4,y=0]]
+see: minimize
+
+## Refresher
+max f = −min(−f): the same conditions with the inequalities reversed (Hessian negative definite at a maximum). See [[minimize]] and [[ref-optim]].
+example: maximize(x*exp(-x),x)
+result: exp(-1)
+## Syntax
+The greatest value (the supremum) of `expr` over all real `x`; see [[minimize]], also for `maximize(expr, constraints, vars)`. Needs the advanced CAS module.
+
+@cmd nabla
+group: cas-calculus
+summary: ∇ (del): gradient, divergence, curl, Laplacian
+syntax: ∇f   ∇·F   ∇×F   ∇²f
+syntax: nabla f   nabla.F   nabla×F   nabla^2 f
+syntax: ∇_[r,t]f   ∇(f, vars, coords)
+insert: ∇
+label: ∇ nabla
+example: ∇(x^2*y)
+result: [2*x*y,x^2]
+example: ∇·[x*y,y*z,z*x]
+result: x+y+z
+example: ∇×[y,-x,0]
+result: [0,0,-2]
+example: ∇²(x^2*y+z^3)
+result: 2*y+6*z
+example: ∇_[r,t](r^2*t)
+result: [2*r*t,r^2]
+example: ∇·∇(x^2+y^2)
+result: 4
+see: grad, divergence, curl, laplacian
+
+The del operator in textbook notation. {CAS} has the four forms as templates (∇f, ∇·F, ∇×F, ∇²f); the CATALOG entry inserts ∇ alone.
+
+- `∇f` is [[grad]] `grad(f)`, `∇·F` is [[divergence]], `∇×F` is [[curl]] and `∇²f` is [[laplacian]]. `∇^2 f` and `∇.F` work too, and the word `nabla` can stand for ∇ (`nabla.F`, `nabla^2 f`).
+- ∇ applies to the next factor, like `sin x`: `∇f*g` is (∇f)*g and `∇x^2` is ∇(x^2). Put sums in parentheses: `∇(x^2+y^2)`.
+- The variables are x, y, z: a vector field with 2 or 3 components uses [x,y] or [x,y,z]; for a scalar, [x,y,z] if z occurs, else [x,y] if y occurs, else [x]. So `∇(x*y)` is [y,x] but `∇(x*z)` is [z,0,x].
+- Other variables: `∇_[r,t]f`, `∇_[r,t]·F` (or `∇·_[r,t]F`); after the `]` only · × ² work, not `.`. For polar, cylindrical or spherical coordinates put everything in parentheses, `∇(f,[r,t],polar)`, or use the commands.
+- · and × multiply everywhere else (`2×3`); only right after ∇ do they mean divergence and curl.
+- In a function definition the variables are found when it is called: after `g(x,y):=∇(x*y)`, `g(1,2)` differentiates the number 2. Name them there: `grad(x*y,[x,y])`.
+
+∇² needs the advanced CAS module, like [[laplacian]].

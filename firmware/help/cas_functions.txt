@@ -1,0 +1,843 @@
+%% CAS help: built-in mathematical functions
+@group cas-functions Functions
+Built-in mathematical functions. They simplify automatically at special values, can be differentiated and integrated, and give decimal values for decimal arguments or with [[approx]].
+
+@cmd sqrt
+group: cas-functions
+summary: Square root
+syntax: sqrt(x)
+insert: √(
+label: sqrt(
+example: sqrt(12)
+result: 2*sqrt(3)
+example: sqrt(-4)
+result: 2*i
+example: approx(sqrt(2))
+result: 1.41421356237
+see: exp, abs, assume
+
+Returns the principal square root. Exact results are simplified (`sqrt(12)` = `2*sqrt(3)`); the square root of a negative number is imaginary. `x^(1/n)` gives other roots; for odd n and negative x it is the real root when [[mode-complex|COMPLEX]] is REAL (`(-8)^(1/3)` = -2) and the principal complex root otherwise (see [[nth-roots]]).
+
+@cmd exp
+group: cas-functions
+summary: Exponential function e^x
+syntax: exp(x)
+example: exp(0)
+result: 1
+example: exp(ln(5))
+result: 5
+example: exp(1.0)
+result: 2.71828182846
+see: ln, e, expexpand
+
+Returns `e^x`. `exp(x)` and `e^x` are the same; results are printed as `exp(...)`.
+
+@cmd ln
+group: cas-functions
+summary: Natural logarithm
+syntax: ln(x)
+example: ln(e^3)
+result: 3
+example: ln(1)
+result: 0
+example: ln(-1)
+result: i*pi
+see: log, exp, lnexpand
+
+Logarithm to base `e`. For negative or complex arguments it returns the principal complex value.
+
+@cmd log
+group: cas-functions
+summary: Common logarithm (base 10)
+syntax: log(x)
+syntax: log(x, b)
+example: log(100)
+result: 2
+example: log(8,2)
+result: 3
+example: log(x)
+result: ln(x)/ln(10)
+see: ln, log10, log2
+
+`log(x)` is the logarithm to base 10 (calculator convention); use [[ln]] for the natural logarithm. With a second argument `b`, returns the logarithm to base `b`. Symbolic logarithms are written in terms of `ln`.
+
+@cmd log10
+group: cas-functions
+summary: Logarithm to base 10
+syntax: log10(x)
+example: log10(1000)
+result: 3
+see: log, ln
+
+Same as `log(x)`: logarithm to base 10.
+
+@cmd log2
+group: cas-functions
+summary: Logarithm to base 2
+syntax: log2(x)
+example: log2(32)
+result: 5
+see: log, ln
+
+Logarithm to base 2, equal to `ln(x)/ln(2)`.
+
+@cmd sin
+group: cas-functions
+summary: Sine
+syntax: sin(x)
+example: sin(pi/6)
+result: 1/2
+example: sin(pi)
+result: 0
+see: asin, cos, tan, mode
+
+Sine of `x`. In radian mode `x` is in radians; in degree mode it is in degrees (`sin(30)` = 1/2). Exact values are given at rational multiples of pi with small denominators.
+
+@cmd cos
+group: cas-functions
+summary: Cosine
+syntax: cos(x)
+example: cos(pi/3)
+result: 1/2
+example: cos(0)
+result: 1
+see: acos, sin, tan, mode
+
+Cosine of `x`. In radian mode `x` is in radians; in degree mode it is in degrees.
+
+@cmd tan
+group: cas-functions
+summary: Tangent
+syntax: tan(x)
+example: tan(pi/4)
+result: 1
+example: tan(pi/3)
+result: sqrt(3)
+see: atan, sin, cos, mode
+
+Tangent `sin(x)/cos(x)`. In radian mode `x` is in radians; in degree mode it is in degrees.
+
+@cmd cot
+group: cas-functions
+summary: Cotangent
+syntax: cot(x)
+example: cot(pi/4)
+result: 1
+see: tan, acot, mode
+
+Cotangent `cos(x)/sin(x)` = `1/tan(x)`. The argument is in radians or degrees according to the angle mode.
+
+@cmd sec
+group: cas-functions
+summary: Secant
+syntax: sec(x)
+example: sec(pi/3)
+result: 2
+see: cos, asec, mode
+
+Secant `1/cos(x)`. The argument is in radians or degrees according to the angle mode.
+
+@cmd csc
+group: cas-functions
+summary: Cosecant
+syntax: csc(x)
+example: csc(pi/6)
+result: 2
+see: sin, acsc, mode
+
+Cosecant `1/sin(x)`. The argument is in radians or degrees according to the angle mode.
+
+@cmd asin
+group: cas-functions
+summary: Inverse sine (arcsine)
+syntax: asin(x)
+example: asin(1/2)
+result: pi/6
+example: asin(1)
+result: pi/2
+see: sin, acos, mode
+
+Returns the angle in [-pi/2, pi/2] whose sine is `x`. In degree mode the result is in degrees. For |x| > 1 the result is complex.
+
+@cmd acos
+group: cas-functions
+summary: Inverse cosine (arccosine)
+syntax: acos(x)
+example: acos(1/2)
+result: pi/3
+example: acos(0)
+result: pi/2
+see: cos, asin, mode
+
+Returns the angle in [0, pi] whose cosine is `x`. In degree mode the result is in degrees.
+
+@cmd atan
+group: cas-functions
+summary: Inverse tangent (arctangent)
+syntax: atan(x)
+example: atan(1)
+result: pi/4
+example: atan(sqrt(3))
+result: pi/3
+see: tan, atan2, mode
+
+Returns the angle in (-pi/2, pi/2) whose tangent is `x`. In degree mode the result is in degrees.
+
+@cmd acot
+group: cas-functions
+summary: Inverse cotangent
+syntax: acot(x)
+example: acot(1)
+result: pi/4
+example: acot(0)
+result: pi/2
+see: cot, atan
+
+Defined as `pi/2 - atan(x)`, with values in (0, pi). In degree mode the result is in degrees.
+
+@cmd asec
+group: cas-functions
+summary: Inverse secant
+syntax: asec(x)
+example: asec(2)
+result: pi/3
+see: sec, acos
+
+Equal to `acos(1/x)`. In degree mode the result is in degrees.
+
+@cmd acsc
+group: cas-functions
+summary: Inverse cosecant
+syntax: acsc(x)
+example: acsc(2)
+result: pi/6
+see: csc, asin
+
+Equal to `asin(1/x)`. In degree mode the result is in degrees.
+
+@cmd sinh
+group: cas-functions
+summary: Hyperbolic sine
+syntax: sinh(x)
+example: sinh(0)
+result: 0
+example: sinh(1.0)
+result: 1.17520119364
+see: cosh, tanh, asinh
+
+`(exp(x)-exp(-x))/2`. Hyperbolic functions do not depend on the angle mode.
+
+@cmd cosh
+group: cas-functions
+summary: Hyperbolic cosine
+syntax: cosh(x)
+example: cosh(0)
+result: 1
+example: diff(cosh(x),x)
+result: sinh(x)
+see: sinh, tanh, acosh
+
+`(exp(x)+exp(-x))/2`.
+
+@cmd tanh
+group: cas-functions
+summary: Hyperbolic tangent
+syntax: tanh(x)
+example: tanh(0)
+result: 0
+example: limit(tanh(x),x,inf)
+result: 1
+see: sinh, cosh, atanh
+
+`sinh(x)/cosh(x)`, with values between -1 and 1 for real `x`.
+
+@cmd asinh
+group: cas-functions
+summary: Inverse hyperbolic sine
+syntax: asinh(x)
+example: asinh(0)
+result: 0
+example: diff(asinh(x),x)
+result: 1/sqrt(x^2+1)
+see: sinh, acosh
+
+Inverse of [[sinh]]: `ln(x+sqrt(x^2+1))`.
+
+@cmd acosh
+group: cas-functions
+summary: Inverse hyperbolic cosine
+syntax: acosh(x)
+example: acosh(1)
+result: 0
+see: cosh, asinh
+
+Inverse of [[cosh]] for x >= 1: `ln(x+sqrt(x^2-1))`.
+
+@cmd atanh
+group: cas-functions
+summary: Inverse hyperbolic tangent
+syntax: atanh(x)
+example: atanh(0)
+result: 0
+example: diff(atanh(x),x)
+result: 1/(-x^2+1)
+see: tanh, asinh
+
+Inverse of [[tanh]] for -1 < x < 1: `ln((1+x)/(1-x))/2`.
+
+@cmd abs
+group: cas-functions
+summary: Absolute value
+syntax: abs(x)
+example: abs(-3)
+result: 3
+example: abs(3+4*i)
+result: 5
+example: |-7|
+result: 7
+see: sign, norm, assume
+
+Absolute value of a real number, or modulus of a complex number. `|x|` is another way to write `abs(x)`.
+
+@cmd sign
+group: cas-functions
+summary: Sign of a number
+syntax: sign(x)
+example: sign(-2)
+result: -1
+example: sign(0)
+result: 0
+see: abs, signum, heaviside
+
+Returns -1, 0 or 1 according to the sign of a real `x`. [[signum]] is the same function.
+
+@cmd signum
+group: cas-functions
+summary: Same as sign
+syntax: signum(x)
+example: signum(-2)
+result: -1
+see: sign
+
+Same as [[sign]]: -1, 0 or 1.
+
+@cmd floor
+group: cas-functions
+summary: Round down to an integer
+syntax: floor(x)
+example: floor(7/2)
+result: 3
+example: floor(-2.5)
+result: -3.0
+see: ceil, round, frac, iquo
+
+Largest integer less than or equal to `x`.
+
+@cmd ceil
+group: cas-functions
+summary: Round up to an integer
+syntax: ceil(x)
+example: ceil(7/2)
+result: 4
+example: ceil(-2.5)
+result: -2.0
+see: floor, round
+
+Smallest integer greater than or equal to `x`.
+
+@cmd round
+group: cas-functions
+summary: Round to the nearest integer
+syntax: round(x)
+example: round(7/3)
+result: 2
+example: round(5/2)
+result: 3
+example: round(-2.5)
+result: -3.0
+see: floor, ceil, frac
+
+Rounds to the nearest integer; halves are rounded away from zero.
+
+@cmd frac
+group: cas-functions
+summary: Fractional part
+syntax: frac(x)
+example: frac(7/2)
+result: 1/2
+example: frac(2.75)
+result: 0.75
+see: floor, propfrac
+
+Returns `x - floor(x)`, a value in [0, 1); for positive `x` it is the part after the decimal point. It is not the same as converting to a fraction; for that see [[exact]].
+
+@cmd re
+group: cas-functions
+summary: Real part of a complex number
+syntax: re(z)
+example: re(3+4*i)
+result: 3
+see: im, conj, arg
+
+Returns the real part of `z`. Variables are assumed real.
+
+@cmd im
+group: cas-functions
+summary: Imaginary part of a complex number
+syntax: im(z)
+example: im(3+4*i)
+result: 4
+see: re, conj
+
+Returns the imaginary part of `z` (a real number).
+
+@cmd conj
+group: cas-functions
+summary: Complex conjugate
+syntax: conj(z)
+example: conj(3+4*i)
+result: 3-4*i
+see: re, im, abs
+
+Returns the complex conjugate of `z`: the sign of the imaginary part is changed.
+
+@cmd arg
+group: cas-functions
+summary: Argument (angle) of a complex number
+syntax: arg(z)
+example: arg(1+i)
+result: pi/4
+example: arg(-1)
+result: pi
+see: abs, atan2, re
+
+Returns the angle of `z` in the complex plane, in (-pi, pi].
+
+@cmd atan2
+group: cas-functions
+summary: Angle of the point (x, y)
+syntax: atan2(y, x)
+example: atan2(1,1)
+result: pi/4
+example: atan2(1,-1)
+result: 3*pi/4
+see: atan, arg
+
+Returns the angle in (-pi, pi] of the point with coordinates `(x, y)`; note that `y` comes first. Unlike `atan(y/x)` it gives the correct quadrant.
+
+@cmd gamma
+group: cas-functions
+summary: Gamma function
+syntax: gamma(x)
+example: gamma(5)
+result: 24
+example: gamma(1/2)
+result: sqrt(pi)
+see: factorial, binomial
+
+Euler's gamma function. For positive integers `gamma(n)` = `(n-1)!`; exact values are also given at half-integers.
+
+@cmd factorial
+group: cas-functions
+summary: Factorial n!
+syntax: n!
+syntax: factorial(n)
+insert: !
+label: ! factorial
+example: 5!
+result: 120
+example: factorial(20)
+result: 2432902008176640000
+example: 0!
+result: 1
+see: gamma, binomial, perm
+
+`n!` = 1*2*...*n, computed exactly for large `n` (try `100!`). For non-integer `x`, `x!` = `gamma(x+1)`.
+
+@cmd erf
+group: cas-functions
+summary: Error function
+syntax: erf(x)
+example: erf(0)
+result: 0
+example: erf(1.0)
+result: 0.84270079295
+example: diff(erf(x),x)
+result: 2*exp(-x^2)/sqrt(pi)
+see: erfc, erfi
+
+The error function `2/sqrt(pi)` times the integral of `exp(-t^2)` from 0 to `x`.
+
+@cmd erfc
+group: cas-functions
+summary: Complementary error function
+syntax: erfc(x)
+example: erfc(0)
+result: 1
+example: erfc(1.0)
+result: 0.15729920705
+see: erf
+
+Equal to `1 - erf(x)`.
+
+@cmd erfi
+group: cas-functions
+summary: Imaginary error function
+syntax: erfi(x)
+example: erfi(0)
+result: 0
+example: integrate(exp(x^2),x)
+result: erfi(x)*sqrt(pi)/2
+see: erf
+
+Equal to `-i*erf(i*x)`; appears in integrals of `exp(x^2)`.
+
+@cmd Si
+group: cas-functions
+summary: Sine integral
+syntax: Si(x)
+example: Si(1.0)
+result: 0.946083070367
+example: integrate(sin(x)/x,x)
+result: Si(x)
+see: Ci, Ei
+
+The integral of `sin(t)/t` from 0 to `x`.
+
+@cmd Ci
+group: cas-functions
+summary: Cosine integral
+syntax: Ci(x)
+example: Ci(1.0)
+result: 0.337403922901
+example: diff(Ci(x),x)
+result: cos(x)/x
+see: Si, Ei
+
+The cosine integral, whose derivative is `cos(x)/x`.
+
+@cmd Ei
+group: cas-functions
+summary: Exponential integral
+syntax: Ei(x)
+example: Ei(1.0)
+result: 1.89511781636
+example: integrate(exp(x)/x,x)
+result: Ei(x)
+see: Si, Ci
+
+The exponential integral, whose derivative is `exp(x)/x`.
+
+@cmd zeta
+group: cas-functions
+summary: Riemann zeta function
+syntax: zeta(s)
+example: zeta(2)
+result: pi^2/6
+example: zeta(3)
+result: zeta(3)
+example: zeta(3.0)
+result: 1.20205690316
+see: sum
+
+The Riemann zeta function, the sum of `1/k^s` for k = 1, 2, ... Exact at even positive integers; other values stay symbolic until evaluated numerically.
+
+@cmd heaviside
+group: cas-functions
+summary: Unit step function
+syntax: heaviside(x)
+example: heaviside(2)
+result: 1
+example: heaviside(-1)
+result: 0
+see: dirac, sign, laplace
+
+Equals 0 for `x` < 0, 1 for `x` > 0 and 1/2 at 0. Useful with [[laplace]].
+
+@cmd dirac
+group: cas-functions
+summary: Dirac delta
+syntax: dirac(x)
+example: dirac(1)
+result: 0
+example: diff(heaviside(x),x)
+result: dirac(x)
+see: heaviside, laplace
+
+The Dirac delta distribution: zero for `x` not equal to 0, the derivative of [[heaviside]].
+
+@cmd max
+group: cas-functions
+summary: Largest of the arguments
+syntax: max(a, b, ...)
+example: max(3,7)
+result: 7
+example: max(1,5,2)
+result: 5
+see: min, sort
+
+Returns the largest of its arguments. Stays symbolic if the arguments cannot be compared.
+
+@cmd min
+group: cas-functions
+summary: Smallest of the arguments
+syntax: min(a, b, ...)
+example: min(3,7)
+result: 3
+example: min(4,-2,9)
+result: -2
+see: max, sort
+
+Returns the smallest of its arguments. Stays symbolic if the arguments cannot be compared.
+
+@cmd mod
+group: cas-functions
+summary: Remainder of a division (modulo)
+syntax: mod(a, m)
+example: mod(17,5)
+result: 2
+example: mod(-7,3)
+result: 2
+see: irem, powmod, invmod
+
+Returns `a - m*floor(a/m)`, which has the sign of `m`. For the remainder with the sign of `a` use [[irem]].
+
+@cmd binomial
+group: cas-functions
+summary: Binomial coefficient
+syntax: binomial(n, k)
+example: binomial(5,2)
+result: 10
+example: binomial(n,2)
+result: n*(n-1)/2
+see: comb, nCr, factorial
+
+Returns `n!/(k!*(n-k)!)`, the number of ways to choose `k` items out of `n`. `n` may be symbolic when `k` is a small integer. Same as [[comb]].
+
+@cmd chebyshevt
+group: cas-functions
+summary: Chebyshev polynomial of the first kind
+syntax: chebyshevt(n, x)
+example: chebyshevt(4,x)
+result: 8*x^4-8*x^2+1
+example: chebyshevt(n,-1)
+result: (-1)^n
+see: chebyshevu, legendre, hermite, laguerre
+
+T_n(x) for an integer n from 0 to 4000, with T_n(cos t) = cos(n t). For a symbolic `n` only the values at x = 1, -1 and 0 are known; otherwise the call stays unevaluated. Needs the advanced CAS module.
+
+@cmd chebyshevu
+group: cas-functions
+summary: Chebyshev polynomial of the second kind
+syntax: chebyshevu(n, x)
+example: chebyshevu(3,x)
+result: 8*x^3-4*x
+see: chebyshevt, legendre
+
+U_n(x) for an integer n from 0 to 4000, with U_n(cos t) = sin((n+1) t)/sin(t). With a symbolic `n`: U_n(1) = n+1, U_n(-1) = (-1)^n (n+1). Needs the advanced CAS module.
+
+@cmd legendre
+group: cas-functions
+summary: Legendre polynomial
+syntax: legendre(n, x)
+example: legendre(3,x)
+result: 5*x^3/2-3*x/2
+see: legendrep, chebyshevt, hermite
+
+P_n(x) for an integer n from 0 to 4000 (orthogonal on [-1, 1], P_n(1) = 1). Needs the advanced CAS module.
+
+@cmd legendrep
+group: cas-functions
+summary: Associated Legendre function
+syntax: legendrep(n, m, x)
+example: legendrep(2,1,x)
+result: -3*x*sqrt(-x^2+1)
+see: legendre
+
+P_n^m(x) = (-1)^m (1-x^2)^(m/2) d^m/dx^m P_n(x) (with the Condon-Shortley sign) for integers 0 <= m and 0 <= n <= 4000; 0 for m > n. Needs the advanced CAS module.
+
+@cmd hermite
+group: cas-functions
+summary: Hermite polynomial
+syntax: hermite(n, x)
+example: hermite(3,x)
+result: 8*x^3-12*x
+see: laguerre, legendre
+
+The physicists' Hermite polynomial H_n(x) (orthogonal with the weight exp(-x^2)) for an integer n from 0 to 4000. Needs the advanced CAS module.
+
+@cmd laguerre
+group: cas-functions
+summary: Laguerre polynomial
+syntax: laguerre(n, x)
+example: laguerre(2,x)
+result: x^2/2-2*x+1
+see: hermite, legendre
+
+L_n(x) (orthogonal on [0, inf) with the weight exp(-x)) for an integer n from 0 to 4000. Needs the advanced CAS module.
+
+@cmd digamma
+group: cas-functions
+summary: Digamma function psi(x)
+syntax: digamma(x)
+example: digamma(1)
+result: -euler_gamma
+example: digamma(1/2)
+result: -euler_gamma-2*ln(2)
+see: gamma, euler_gamma
+
+The logarithmic derivative of [[gamma]]. Exact for integers (harmonic numbers minus euler_gamma) and for rationals p/q with q <= 12 (Gauss's digamma theorem); a decimal argument > 0 gives a decimal. Otherwise the call stays unevaluated. Needs the advanced CAS module.
+
+@cmd polylog
+group: cas-functions
+summary: Polylogarithm Li_s(z)
+syntax: polylog(s, z)
+example: approx(polylog(2,1/2))
+result: 0.582240526465
+example: diff(polylog(3,x),x)
+result: polylog(2,x)/x
+see: ln, zeta
+
+## Refresher
+Li_s(z) = Σ z^k/k^s, k ≥ 1 (|z| < 1; continued analytically). Li₁(z) = −ln(1 − z); Li_s(1) = zeta(s); z d/dz Li_s = Li_(s−1); the dilogarithm Li₂(z) = −∫ ln(1 − t)/t dt from 0 to z.
+example: polylog(2,1/2)
+result: pi^2/12-ln(2)^2/2
+## Syntax
+Li_s(z) = sum z^k/k^s for an integer s >= 1 (Li_1(z) = -ln(1-z)), continued to the whole complex plane. It stays symbolic; [[diff]] knows its derivative Li_(s-1)(z)/z and [[approx]] gives its value. [[integrate]] returns it for integrals such as `ln(1+x)/x`. Special values: Li_1(z) = -ln(1-z), Li_s(1) = zeta(s), Li_s(-1), Li_2(1/2). Needs the advanced CAS module.
+
+@cmd besselj
+group: cas-functions
+summary: Bessel functions J, Y, I, K
+syntax: besselj(n, z)
+syntax: bessely(n, z)
+syntax: besseli(n, z)
+syntax: besselk(n, z)
+example: approx(besselj(2,1+i))
+result: 0.041579886944+0.247397641513*i
+example: diff(besselj(0,z),z)
+result: -besselj(1,z)
+see: polylog, gamma
+
+The Bessel functions of the first and second kind J_n, Y_n and the modified ones I_n, K_n. They stay symbolic; [[diff]] knows their derivatives (J_n' = (J_(n-1) - J_(n+1))/2, ...) and [[approx]] evaluates them for |z| <= 25: any real order for J and I, integer orders for Y and K. J and I of half-integer order are written with sin, cos (sinh, cosh), e.g. `besselj(1/2,z)` = sqrt(2/(pi z)) sin(z). Y and K of a non-integer real order come from J and I (Y_n = (J_n cos(n pi) - J_(-n))/sin(n pi)). A decimal argument gives a decimal. Needs the advanced CAS module.
+
+@cmd lambertw
+group: cas-functions
+summary: Lambert W function
+syntax: lambertw(z)
+example: lambertw(1.0)
+result: 0.56714329041
+see: ln, exp
+
+Principal branch of w e^w = z. Needs the advanced CAS module.
+
+@cmd fresnels
+group: cas-functions
+summary: Fresnel integrals S and C
+syntax: fresnels(z)
+syntax: fresnelc(z)
+example: fresnels(1.0)
+result: 0.43825914739
+example: integrate(cos(x^2),x)
+result: sqrt(2)*fresnelc(sqrt(2)*x/sqrt(pi))*sqrt(pi)/2
+see: erf, Si
+
+Integrals of sin(pi t^2/2), cos(pi t^2/2) from 0 to z. Needs the advanced CAS module.
+
+@cmd Shi
+group: cas-functions
+summary: Hyperbolic sine and cosine integrals
+syntax: Shi(z)
+syntax: Chi(z)
+example: Shi(1.0)
+result: 1.05725087538
+see: Si, Ci, Ei
+
+Integrals of sinh(t)/t and (cosh(t)-1)/t (plus euler_gamma + ln z). Needs the advanced CAS module.
+
+@cmd expint
+group: cas-functions
+summary: Exponential integral E_n
+syntax: expint(n, z)
+example: expint(1,1.0)
+result: 0.219383934396
+example: integrate(expint(1,x),x)
+result: -expint(2,x)
+see: Ei
+
+Integral of exp(-z t)/t^n for t from 1 to infinity, integer n. Needs the advanced CAS module.
+
+@cmd elliptic_f
+group: cas-functions
+summary: Incomplete elliptic integrals F, E, Pi
+syntax: elliptic_f(phi, m)
+syntax: elliptic_e(phi, m)
+syntax: elliptic_pi(n, phi, m)
+example: elliptic_f(0.5,0.3)
+result: 0.506140211962
+example: integrate(sqrt(cos(x)),x)
+result: 2*elliptic_e(x/2,2)
+example: elliptic_e(pi/2,1)
+result: 1
+see: elliptic_k, integrate
+
+## Refresher
+Legendre forms with the parameter m (= k², the modulus squared; some software takes k):
+    F(φ,m) = ∫ dθ/√(1 − m sin²θ)
+    E(φ,m) = ∫ √(1 − m sin²θ) dθ
+    Π(n,φ,m) = ∫ dθ/((1−n sin²θ)√(1−m sin²θ))
+θ from 0 to φ. Complete integrals at φ = π/2: K(m) = F(π/2, m), E(m). Arc length of an ellipse: 4a E(e²); pendulum of amplitude θ₀: period 4√(L/g) K(sin²(θ₀/2)).
+example: approx(elliptic_f(pi/2,1/2))
+result: 1.8540746773
+## Syntax
+Integrals from 0 to phi of 1/sqrt(1-m sin(t)^2), sqrt(1-m sin(t)^2) and 1/((1-n sin(t)^2) sqrt(1-m sin(t)^2)). Exact values: F(phi,0) = E(phi,0) = phi; for real phi with |phi| <= pi/2, E(phi,1) = sin(phi) and F(phi,1) = atanh(sin(phi)). The complete integrals are [[elliptic_k]] and elliptic_e(m). Needs the advanced CAS module.
+
+@cmd elliptic_k
+group: cas-functions
+summary: Complete elliptic integrals K and E
+syntax: elliptic_k(m)
+syntax: elliptic_e(m)
+example: elliptic_k(0)
+result: pi/2
+example: elliptic_e(1)
+result: 1
+example: elliptic_k(1/2)
+result: gamma(1/4)^2/(4*sqrt(pi))
+example: elliptic_k(0.3)
+result: 1.71388944818
+example: diff(elliptic_e(m),m)
+result: (elliptic_e(m)-elliptic_k(m))/(2*m)
+see: elliptic_f
+
+K(m) = elliptic_f(pi/2, m) and E(m) = elliptic_e(pi/2, m), with the parameter m = k² (the modulus squared). Exact values at m = 0 (both pi/2), m = 1 (K = inf, E = 1) and m = 1/2 (gamma(1/4)); decimal values for other numbers (complex for m > 1); derivatives in m. Needs the advanced CAS module.
+
+@cmd uppergamma
+group: cas-functions
+summary: Upper incomplete gamma function
+syntax: uppergamma(a, z)
+example: uppergamma(2.5,1.3)
+result: 1.0121136007
+example: integrate(x^m*exp(b*x),x)
+result: uppergamma(m+1,-b*x)*x^m*(-b*x)^(-m)/b
+see: gamma, expint
+
+Integral of t^(a-1) e^(-t) from z to infinity. Needs the advanced CAS module.
+
+@cmd hyp2f1
+group: cas-functions
+summary: Gauss hypergeometric function 2F1
+syntax: hyp2f1(a, b, c, z)
+example: hyp2f1(0.5,1.2,2.3,0.4)
+result: 1.13245399559
+see: uppergamma
+
+Sum of (a)_k (b)_k/((c)_k k!) z^k. Needs the advanced CAS module.
+
+@cmd li
+group: cas-functions
+summary: Logarithmic integral
+syntax: li(z)
+example: li(2.0)
+result: 1.04516378012
+see: Ei, ln
+
+li(z) = Ei(ln z). Needs the advanced CAS module.

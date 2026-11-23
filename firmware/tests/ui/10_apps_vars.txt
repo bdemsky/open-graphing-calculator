@@ -1,0 +1,97 @@
+# APPS menu (registry), VARS menu (CAS names, Y-VARS), MEM, SHIFT functions
+app list
+key APPS
+expect screen menu
+expect state menu APPS
+# (Graph and 3D graph are not listed: the graph key of the home screen and graph cells open them)
+expect state menu_item Table
+expect text "Graph analysis"
+expect notext "3D graph"
+# (Help is the last entry; reached with UP below)
+screenshot apps.png
+key 1
+expect screen table
+key HOME
+key APPS UP ENTER
+expect screen help
+expect state help_topic index
+key CLEAR
+expect screen home
+# VARS: empty CAS -> only Y-VARS
+key VARS
+expect state menu VARS
+expect notext Variables
+expect text Y-VARS
+key CLEAR
+ifcas src type "a:=3\n"
+ifcas src type "bb:=x+1\n"
+ifcas src type "g(t):=2t\n"
+ifcas src key VARS
+ifcas src expect text Variables
+ifcas src expect text Functions
+ifcas src screenshot vars.png
+ifcas src key ENTER
+ifcas src expect state menu Variables
+ifcas src expect state menu_item a
+ifcas src key DOWN ENTER
+ifcas src expect screen home
+ifcas src expect state entry bb
+ifcas src key CLEAR
+ifcas src key VARS DOWN ENTER
+ifcas src expect state menu_item "g(1 arg)"
+ifcas src key ENTER
+ifcas src type "5)\n"
+ifcas src expect state last_input g(5)
+ifcas src expect state last_output 10
+# Y-VARS: Y1( evaluates the Y= function
+ifcas src key F1
+ifcas src type "x^2+1"
+ifcas src key HOME
+ifcas src key VARS DOWN DOWN ENTER
+ifcas src expect state menu Y-VARS
+ifcas src expect statecontains menu_item Y1=x^2+1
+ifcas src key ENTER
+ifcas src type "3)\n"
+ifcas src expect state last_output 10
+# Ans is not disturbed by the Y-VARS definitions
+ifcas src type "7\n"
+ifcas src key VARS DOWN DOWN ENTER ENTER
+ifcas src type "2)+"
+ifcas src key SHIFT NEG
+ifcas src key ENTER
+ifcas src expect state last_output 12
+# a one-letter user function is called, not multiplied
+ifcas src type "g(4)\n"
+ifcas src expect state last_output 8
+# MEM: about page
+app mem
+expect state menu MEMORY
+key 1
+expect screen help
+expect text About
+expect text "Last reset"
+key F2
+expect text CAS:
+key CLEAR
+expect state menu MEMORY
+key CLEAR
+expect screen home
+# MEM: clear variables (with confirmation)
+app mem
+key 3
+expect state menu "Are you sure?"
+key 1
+expect screen home
+ifcas src type "a\n"
+ifcas src expect state last_output 3
+app mem
+key 3 2
+expect screen message
+key ENTER
+ifcas src type "a\n"
+ifcas src expect state last_output a
+# SHIFT → types :=
+key SHIFT ASSIGN
+expect state entry :=
+key CLEAR
+expect screen home

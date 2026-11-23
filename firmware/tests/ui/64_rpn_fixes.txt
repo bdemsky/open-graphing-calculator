@@ -1,0 +1,49 @@
+# Regression tests for RPN: textbook stack levels, soft keys with text on the
+# line, PICK when the stack is full, polar display, levels of maximum length
+# across a power cycle
+setmode ENTRY RPN
+key HOME
+# levels are drawn in textbook form (the text log still has the linear text)
+type "1\n2/"
+expect state rpn_1 1/2
+expect text 1/2
+ifcas src type "x\n2^"
+ifcas src expect state rpn_1 x^2
+screenshot rpn_textbook.png
+# Classic display: the built-in text renderer
+setmode DISPLAY CLASSIC
+redraw
+expect text 1/2
+setmode DISPLAY TEXTBOOK
+# F1..F4 with text that is not a number on the line say why nothing happened
+key SHIFT CLEAR
+type "x"
+key F1
+expect state rpn_error "Press ENTER first"
+key CLEAR
+# polar display of a complex level (level_disp has its own buffers)
+ifcas src setmode COMPLEX r∠θ
+ifcas src type "1\ni\n+"
+ifcas src expect statecontains rpn_1 ∠
+ifcas src setmode COMPLEX a+bi
+# PICK refused with "Stack full" leaves the UNDO of the last DUP in place;
+# levels of 2047 digits (one less than the level limit) survive a power cycle
+ifcas src key SHIFT CLEAR
+ifcas src type "10\n2046^"
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src key ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER ENTER
+ifcas src expect state rpn_depth 57
+ifcas src expect state rpn_error "Stack full"
+ifcas src key UP F2
+ifcas src expect state rpn_error "Stack full"
+ifcas src key F5
+ifcas src expect state rpn_depth 56
+ifcas src key SHIFT ON
+ifcas src key ON
+ifcas src expect state rpn_depth 15
+key SHIFT CLEAR
+setmode ENTRY ALGEBRAIC

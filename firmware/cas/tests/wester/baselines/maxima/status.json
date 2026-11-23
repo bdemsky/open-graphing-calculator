@@ -1,0 +1,6 @@
+{
+ "engine": "maxima",
+ "available": true,
+ "info": "Maxima 5.49.0 (/opt/local/bin/maxima)",
+ "timeout_s": 30.0
+}

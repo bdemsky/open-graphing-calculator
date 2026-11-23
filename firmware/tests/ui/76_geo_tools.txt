@@ -1,0 +1,162 @@
+# Geometry app: circles, intersections, perpendiculars, tangents,
+# transformations with number prompts, loci, regular polygons, delete,
+# hide and undo. World (x, y) = pixel (160 + 20x, 121 - 20y).
+requirecfg GEOMETRY
+app geometry
+# circle with centre A (0, 0) through B (3, 0)
+key F3
+key 6
+touch tap 160 121
+touch tap 220 121
+geo expect a "a: x² + y² = 9"
+# line CD through (-5, 2) and (5, 2)
+key F3
+key 1
+touch tap 60 81
+touch tap 260 81
+geo expect b "b: y = 2"
+# intersection near (-2.24, 2)
+key F2
+key 3
+touch tap 220 121
+expect text "Intersection: 2nd curve"
+touch tap 115 81
+geo expect E "E = (-2.23607, 2)"
+# the point tool makes the other intersection itself
+key F2
+key 1
+touch tap 205 81
+geo expect F "F = (2.23607, 2)"
+geo list
+# perpendicular to b through A
+key F4
+key 1
+touch tap 240 81
+touch tap 160 121
+geo expect c "c: x = 0"
+# tangents from D to the circle
+key F4
+key 5
+touch tap 260 81
+touch tap 160 61
+geo expect d "d: y = -0.213525x + 3.06763"
+geo expect e "e: y = 1.46353x - 5.31763"
+screenshot geo_tangents.png
+# rotate E by 90 degrees about A: the prompt offers 90
+key F4
+key 7
+touch tap 115 81
+touch tap 160 121
+geo expect prompt "Angle °:"
+expect text "Angle °:"
+screenshot geo_prompt.png
+key ENTER
+geo expect E' "E' = (-2, -2.23607)"
+# dilate the circle from A by 1/2 (any expression)
+key F4
+key 9
+touch tap 160 181
+touch tap 160 121
+key CLEAR
+type "1/2"
+key ENTER
+geo expect a' "a': x² + y² = 2.25"
+# reflect C in the perpendicular c
+key F4
+key 6
+touch tap 60 81
+touch tap 160 161
+geo expect C' "C' = (5, 2)"
+# translate C by the vector A -> B
+key F4
+key 8
+touch tap 60 81
+touch tap 160 121
+touch tap 220 121
+geo expect G "G = (-2, 2)"
+# locus: a point H on the circle, the midpoint I of H and D traces a circle
+key F2
+key 2
+touch tap 160 61
+geo expect H "H = (0, 3)"
+key F2
+key 4
+touch tap 160 61
+touch tap 260 81
+geo expect I "I = (2.5, 2.5)"
+key F4
+key 0
+touch tap 210 71
+touch tap 160 61
+geo expect f "f: locus"
+screenshot geo_locus.png
+# measurements on the dilated circle and the locus point
+key F5
+key 5
+touch tap 190 121
+geo expect m1 "a': x² + y² = 2.25"
+key F5
+key 6
+touch tap 210 71
+geo expect m2 "I = (2.5, 2.5)"
+# dragging H along the circle moves I and keeps the locus
+touch drag 160 61 220 121 6
+geo expect H "H = (3, 0)"
+geo expect m2 "I = (4, 1)"
+# delete the line b: the intersections, the perpendicular and the
+# reflection go with it (everything that depends on b)
+geo expect count 20
+key SHIFT F2
+touch tap 100 81
+geo expect count 14
+expect notext "C' ="
+key SHIFT F1
+geo expect count 20
+geo expect C' "C' = (5, 2)"
+# ⌫ deletes the object under the cursor
+geo cursor 5 2
+key F1
+key DEL
+geo expect count 8
+key SHIFT F1
+geo expect count 20
+# hide the tangent d; View > Show hidden objects brings it back
+key SHIFT F5
+touch tap 300 90
+geo expect hidden 1
+key SHIFT F1
+geo expect hidden 0
+touch tap 300 90
+key SHIFT F3
+key 9
+geo expect hidden 0
+# regular hexagon on (-6, -4) -> (-4, -4)
+geo new
+key F3
+key 5
+touch tap 40 201
+touch tap 80 201
+geo expect prompt "Sides:"
+key CLEAR
+type "6"
+key ENTER
+geo expect count 7
+key F5
+key 3
+touch tap 60 201
+geo expect m1 "area a = 10.3923"
+screenshot geo_hexagon.png
+# no intersection: the message says so
+key F3
+key 1
+touch tap 0 41
+touch tap 40 41
+key F3
+key 1
+touch tap 0 61
+touch tap 40 61
+key F2
+key 3
+touch tap 20 41
+touch tap 20 61
+geo expect message "No intersection"

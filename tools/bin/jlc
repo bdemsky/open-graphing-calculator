@@ -1,0 +1,14 @@
+#!/bin/bash
+# jlc <keyword> [n] — live JLCPCB parts search: code | model | package | type | stock | unit price | description
+n=${2:-5}
+curl -s -m 20 'https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList' \
+  -H 'Content-Type: application/json' -H 'User-Agent: Mozilla/5.0' \
+  -d "{\"keyword\":\"$1\",\"currentPage\":1,\"pageSize\":25}" |
+/opt/local/bin/python3.13 -I -c '
+import sys,json
+n=int(sys.argv[1]); d=json.load(sys.stdin); L=(d.get("data") or {}).get("componentPageInfo",{}).get("list") or []
+L=[c for c in L if c["stockCount"]>0]; L.sort(key=lambda c:(c["componentLibraryType"]!="base",-c["stockCount"]))
+for c in L[:n]:
+  p=c["componentPrices"][0]["productPrice"] if c["componentPrices"] else "?"
+  print(" | ".join(map(str,[c["componentCode"],c["componentModelEn"],c["componentSpecificationEn"],c["componentLibraryType"],c["stockCount"],p,(c.get("describe") or "")[:70]])))
+if not L: print("NONE IN STOCK")' "$n"

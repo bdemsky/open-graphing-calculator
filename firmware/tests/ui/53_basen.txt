@@ -1,0 +1,60 @@
+# Base-n app (word size, signedness, input base, BITS menu) and base-n on the home screen
+app basen
+expect screen basen
+expect text "32-bit signed"
+ifcas src type "255+1\n"
+ifcas src expect text 100
+ifcas src expect text 400
+ifcas src expect text "1 0000 0000"
+# HEX input: plain digits are hexadecimal
+key UP
+expect text "input HEX"
+ifcas src type "ff"
+key F5
+expect state menu BITS
+key 1
+ifcas src expect screen basen
+ifcas src type "f0\n"
+ifcas src expect text F0
+ifcas src expect text 240
+screenshot basen.png
+# 8-bit unsigned: not 5 = 250 = FA
+key F5
+key 9
+expect text "8-bit signed"
+key F5
+key DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN DOWN
+key ENTER
+expect text "8-bit unsigned"
+key DOWN
+ifcas src key F5 4
+ifcas src type "5\n"
+ifcas src expect text FA
+ifcas src expect text 250
+# wrap-around and shifts
+ifcas src type "200+100\n"
+ifcas src expect text 44
+ifcas src key F5 5
+ifcas src type "1,7\n"
+ifcas src expect text 128
+# binary input rejects other digits
+key DOWN DOWN
+expect text "input BIN"
+ifcas src type "102\n"
+ifcas src expect text "ERR: digit not in BIN"
+key CLEAR CLEAR
+expect screen home
+# settings are kept across power off/on
+key SHIFT ON
+key ON
+app basen
+expect text "8-bit unsigned"
+expect text "input BIN"
+key CLEAR
+# on the home screen
+ifcas src type "0x1F+1\n"
+ifcas src expect state last_output 32
+ifcas src type "5 and 3\n"
+ifcas src expect state last_output 1
+ifcas src type "hex(255)\n"
+ifcas src expect state last_output "\"0xFF\""

@@ -1,0 +1,124 @@
+# Statistics usability: result lines explained, the hypothesis on test
+# results, draw / plot soft keys, form hints and errors that say what to do,
+# list editor hints, small p-values drawn without missing glyphs
+casreset
+stat set L1
+stat set L2
+app stat
+key 1
+expect screen statedit
+expect text type a value, ENTER
+key UP
+expect text ENTER: the whole list, or a formula
+key RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT
+expect state statedit_list ""
+expect text + new
+expect text type a name for a new list
+screenshot stat_edit_hints.png
+key CLEAR
+# 1-Var Stats: each value says what it is
+stat set L1 2,4,4,4,5,5,7,9
+app stat
+key 2 1
+expect text a list name, or VARS > Lists
+key DOWN
+expect text frequency list, 1 = none
+key F5
+expect screen statresult
+expect text xbar=5
+expect text mean
+expect text sample std. dev.
+expect text population std. dev.
+expect text values: VARS > Statistics
+screenshot stat_1var_described.png
+key CLEAR CLEAR
+# T-Test: the alternative is spelled out, the result repeats it, F4 / F1 draw
+stat set L1 5.1,4.9,5.6,5.8,6,5.2,4.7,5.5
+app stat
+key 3 2
+expect text Input:
+expect text mu≠mu0
+key DOWN
+type "5\n"
+key DOWN DOWN
+expect text ◀ ▶ change the choice
+key RIGHT RIGHT
+key F5
+expect screen statresult
+expect text Ha: mu>5
+expect text p-value
+expect text degrees of freedom
+screenshot stat_ttest_result.png
+key F1
+expect screen statdraw
+key CLEAR CLEAR
+expect screen statform
+key F4
+expect screen statdraw
+key CLEAR CLEAR
+# empty fields show a placeholder; a missing value says what to do
+app stat
+key 3 1
+key RIGHT
+expect text (enter a value)
+key DOWN DOWN DOWN DOWN
+key F5
+expect screen statform
+expect text n: missing, type a value
+key CLEAR
+# a list that does not exist or is empty
+app stat
+key 2 1
+key CLEAR
+type "L4"
+key F5
+expect text List: L4 is empty, enter data first
+key CLEAR
+type "NOPE"
+key F5
+expect text List: no list named 'NOPE'
+key CLEAR CLEAR
+# a tiny p-value is drawn with E, not a missing glyph (Input: Stats is remembered)
+app stat
+key 3 1
+expect text xbar:
+key DOWN
+type "0\n1\n2.5\n4\n"
+key F5
+expect text p=5.73303143758ᴇ-7
+key CLEAR CLEAR
+# LinReg: soft key plot puts the equation into the first empty Y= function,
+# turns on a scatter plot of Xlist/Ylist, fits the window and graphs both
+stat set L1 1,2,3,4,5,6
+stat set L2 2.1,3.9,6.2,8.1,9.7,12.2
+app stat
+key 2 3
+key F5
+expect screen statresult
+expect text r²=0.997238104335
+expect text fit quality (0..1)
+expect state y1 ""
+key F2
+expect screen graph
+expect statecontains y1 1.99428571428
+expect state statplot1 "on 0 L1 L2 1 0 1"
+expect state xmin 0.5
+expect color 0xD8E3 20
+expect color 0x029B 100
+screenshot stat_regplot.png
+# a regression with RegEQ shows where the equation went
+app stat
+key 2 3
+key DOWN DOWN DOWN RIGHT RIGHT
+key F5
+expect text RegEQ in Y2
+key F2
+expect screen graph
+expect state statplot1 "on 0 L1 L2 1 0 1"
+expect state statplot2 "off 0 L1 L2 1 0 4"
+key CLEAR
+# DISTR DRAW names what each shading computes
+app distr
+key UP ENTER
+expect text ShadeNorm (normal area)
+key CLEAR

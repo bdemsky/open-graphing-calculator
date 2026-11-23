@@ -1,0 +1,2505 @@
+# Michael Wester's CAS benchmark ("A Critique of the Mathematical Abilities of
+# CA Systems", in M. Wester (ed.), Computer Algebra Systems: A Practical Guide,
+# Wiley 1999), translated to this CAS's syntax.
+#
+# Provenance
+#   Primary source: Wester's own Macsyma transcripts of the test suite,
+#   http://math.unm.edu/~wester/demos/<Section>/Macsyma.problems (25 sections,
+#   fetched 2026-10; linked from http://math.unm.edu/~wester/cas_review.html).
+#   The expected answers are the "=> ..." comments in those files.
+#   Cross-checked against SymPy's transcription
+#   sympy/utilities/tests/test_wester.py (SymPy 1.14.0, in .venv), whose
+#   expected values were used where Wester's comment is informal; problem ids
+#   follow SymPy's lettering (A logic, B sets, C numbers, D numerical analysis,
+#   E statistics, F combinatorics, G number theory, H algebra, I trig,
+#   J special functions, K complex domain, L zero equivalence, M equations,
+#   N inequalities, O vectors, P matrices, R sums, S products, T limits,
+#   U calculus, V indefinite integrals, W definite integrals, X series,
+#   Y transforms, Z difference/differential equations).  Numbers within a
+#   section follow Wester's order, so they do not always equal SymPy's.
+#   Corrections: C21 uses (41+29*sqrt(2))^(1/5) (Wester's file has a typo,
+#   49+21*sqrt(2)); Y4 uses 1/s - exp(-6*sqrt(s))/s (the transform of erf, the
+#   comment gives the one of erfc); M26 follows SymPy's corrected equation.
+#
+# Format: one block per problem
+#   @section <letter> <name>
+#   == <id> | <title>
+#   pre:  <line>        setup lines sent before the graded line (repeatable)
+#   in:   <line>        the graded input (several in: lines = pre + last in)
+#   expect: <answer>    in this CAS's syntax (also parsed by SymPy: ^, ln, i,
+#                       e, pi, inf); SymPy names allowed (LambertW, besselj..)
+#   check: <kind ...>   how to grade (default exact), see run_wester.py:
+#       exact      equivalent and not merely numeric
+#       value      equivalent within tol (floats fine)      rel  relative tol only
+#       simp       equivalent and no bigger (count_ops) than expect (+slack)
+#       form       equivalent and structurally equal to expect after SymPy parse
+#       factor     equivalent and same number of non-constant factors
+#       terms N    equivalent and a sum of N terms
+#       set        solution list, order-free (set distinct: ignore multiplicity)
+#       satisfy    every solution makes `eq` vanish; all `need` values present
+#       ineq       truth sets agree at sample points of var
+#       antideriv  d/dvar(output) equals expect (the integrand)
+#       ode N      expect = residual in Y, Y1, Y2 (solution and derivatives),
+#                  ic: list of residuals; N = number of free constants c1..cN;
+#                  implicit solutions F(x,y)=c are checked by implicit diff.
+#       odesys N   expect = residual list in U, V, W (solutions for u, v, w)
+#       linsys N / nlsys N  substitute into the input system; N free vars /
+#                  N solutions
+#       eigvecs N  M v = lambda v for each vector, N vectors in all
+#       span       same span as the expected basis
+#       matsq      output squared equals the expected matrix
+#       oneof      equivalent to one of the listed alternatives
+#       asym E     |output-expect| * var^E -> 0 as var -> inf
+#       logic      boolean equivalent to expect and no bigger
+#       rect       equivalent, i only outside function arguments (a+b*i form)
+#       bool / str exact text;  error  an error or divergence is the answer
+#       curlof     a list [A1,A2,A3] whose curl in x, y, z equals expect
+#       manual     graded by hand (see override:)
+#   domain: v=pos|neg|real|int|big|lo:hi   sampling domain of a symbol
+#   allow: names        function names allowed in the output (unknown f, g..)
+#   alt: CAT | output | note     classify this exact output as CAT
+#   override: CAT | reason       manual classification after review
+#   na: reason          not applicable to this CAS (excluded from the score)
+#   unsupported: reason no plausible input exists (feature absent)
+#   note: free text
+
+@section A Boolean logic
+== A1 | true and false => false
+in: true and false
+expect: false
+check: bool
+
+== A2 | x or (not x) => true
+in: x or not(x)
+expect: true
+check: bool
+
+== A3 | x or y or (x and y) => x or y
+in: x or y or (x and y)
+expect: x or y
+check: logic
+
+== A4 | xor(xor(x, y), y) => x
+in: xor(xor(x,y),y)
+expect: x
+check: logic
+alt: UNSUPPORTED | ERROR 2: expected an integer | xor is bitwise only; no logical xor
+
+== A5 | (w and x) implies (y and z) => not(w and x) or (y and z)
+unsupported: no logical implication operator
+
+== A6 | x iff y => (x and y) or not(x or y)
+unsupported: no logical equivalence operator
+
+== A7 | x and 1 > 2 => false
+in: x and 1>2
+expect: false
+check: bool
+
+== A8 | QE: forall y in C (a y^2 + b y + c = 0 => Re y < 0)
+na: quantifier elimination
+
+== A9 | QE: exists w in R (v > 0 and w > 0 and -5v^2-13v+vw-w > 0) => v > 1
+na: quantifier elimination
+
+== A10 | QE: forall c in [-1,1] (...) => a^2 <= 1/2
+na: quantifier elimination
+
+== A11 | QE: forall y in C (quartic stability) => v > 0 and w > |W|
+na: quantifier elimination
+
+== A12 | simplify the QEPCAD output => v > 0 and w > abs(ww)
+in: simplify(v>0 and 4*w*v>0 and 4*w*(4*w^2*v^2+3*ww^2+w^2)>0 and 64*w^2*v^2*(w^2-ww^2)*(w^2*v^2+ww^2)>0 and 64*w^2*v^2*(w^2-ww^2)^3*(w^2*v^2+ww^2)>0)
+expect: v>0 and w>abs(ww)
+check: manual
+alt: UNEVAL | (((v>0 and 4*v*w>0) and 4*w*(4*v^2*w^2+w^2+3*ww^2)>0) and 64*v^2*w^2*(v^2*w^2+ww^2)*(w^2-ww^2)>0) and 64*v^2*w^2*(v^2*w^2+ww^2)*(w^2-ww^2)^3>0 | conjunction returned unsimplified
+
+== A13 | QE: exists y, n in C, e in R (...) => B < 0 and a b > 0
+na: quantifier elimination
+
+@section B Set theory
+== B1 | union of [a,b,b,c,c,c], [d,c,b], [b,e,b] => {a,b,c,d,e}
+in: union([a,b,b,c,c,c],[d,c,b],[b,e,b])
+expect: [a,b,c,d,e]
+check: set
+
+== B2 | intersection => {b}
+in: intersect([a,b,b,c,c,c],[d,c,b],[b,e,b])
+expect: [b]
+check: set
+
+== B3 | set difference {a,b,c,d,e} - {b} => {a,c,d,e}
+in: setdiff([a,b,c,d,e],[b])
+expect: [a,c,d,e]
+check: set
+
+== B4 | Cartesian product {a,b} x {c,d}
+in: cartprod([a,b],[c,d])
+expect: [[a,c],[a,d],[b,c],[b,d]]
+check: set
+
+@section C Numbers
+== C1 | 50! (bignum)
+in: 50!
+expect: 30414093201713378043612608166064768844377641568960512000000000000
+
+== C2 | factor 50!
+in: ifactor(50!)
+expect: 2^47*3^22*5^12*7^8*11^4*13^3*17^2*19^2*23^2*29*31*37*41*43*47
+check: str
+
+== C3 | double factorials [10!!, 9!!] => [3840, 945]
+in: [10!!,9!!]
+expect: [3840,945]
+alt: UNSUPPORTED | ERROR 4: factorial argument too large | no double factorial: n!! parses as (n!)!
+
+== C4 | ABC base 16 => 2748
+in: 0xABC
+expect: 2748
+
+== C5 | 123 base 10 => 234 base 7
+in: digits(123,7)
+expect: [2,3,4]
+
+== C6 | 677 base 8 => 1BF base 16
+in: hex(0o677)
+expect: "0x1BF"
+check: str
+
+== C7 | log base 8 of 32768 => 5
+in: log(32768,8)
+expect: 5
+
+== C8 | 5^(-1) mod 7 => 3; 5^(-1) mod 6 => 5
+in: [invmod(5,7),invmod(5,6)]
+expect: [3,5]
+
+== C9 | gcd(1776, 1554, 5698) => 74
+in: gcd(1776,1554,5698)
+expect: 74
+
+== C10 | 1/2 + 1/3 + ... + 1/10 => 4861/2520
+in: 1/2+1/3+1/4+1/5+1/6+1/7+1/8+1/9+1/10
+expect: 4861/2520
+
+== C11 | complete decimal expansion of 1/7 => 0.(142857)
+in: approx(1/7,30)
+expect: 0.142857142857142857142857142857
+check: rel
+tol: 1e-28
+note: no repeating-decimal notation; only the digits are checked
+
+== C12 | (7/11)*(22/7) => 2
+in: 7/11*(22/7)
+expect: 2
+
+== C13 | 10/7 (1 + 29/1000)^(1/3) => 3^(1/3) automatically
+in: 10/7*(1+29/1000)^(1/3)
+expect: 3^(1/3)
+check: form
+
+== C14 | denest sqrt(2 sqrt(3) + 4) => 1 + sqrt(3)
+in: simplify(sqrt(2*sqrt(3)+4))
+expect: 1+sqrt(3)
+check: simp
+
+== C15 | Putnam denesting => 3 + sqrt(2)
+in: simplify(sqrt(14+3*sqrt(3+2*sqrt(5-12*sqrt(3-2*sqrt(2))))))
+expect: 3+sqrt(2)
+check: simp
+
+== C16 | Jeffrey-Rich denesting => sqrt(2) + sqrt(3) + sqrt(5)
+in: simplify(sqrt(10+2*sqrt(6)+2*sqrt(10)+2*sqrt(15)))
+expect: sqrt(2)+sqrt(3)+sqrt(5)
+check: simp
+
+== C17 | rationalize (sqrt(3)+sqrt(2))/(sqrt(3)-sqrt(2)) => 5 + 2 sqrt(6)
+in: simplify((sqrt(3)+sqrt(2))/(sqrt(3)-sqrt(2)))
+expect: 5+2*sqrt(6)
+check: simp
+
+== C18 | sqrt(-2 + sqrt(-5)) sqrt(-2 - sqrt(-5)) => 3
+in: simplify(sqrt(-2+sqrt(-5))*sqrt(-2-sqrt(-5)))
+expect: 3
+check: simp
+
+== C19 | (90 + 34 sqrt(7))^(1/3) => 3 + sqrt(7)
+in: simplify((90+34*sqrt(7))^(1/3))
+expect: 3+sqrt(7)
+check: simp
+
+== C20 | nontrivial way of writing 12
+in: simplify(((135+78*sqrt(3))^(2/3)+3)*sqrt(3)/(135+78*sqrt(3))^(1/3))
+expect: 12
+check: simp
+
+== C21 | (41 + 29 sqrt(2))^(1/5) => 1 + sqrt(2)
+in: simplify((41+29*sqrt(2))^(1/5))
+expect: 1+sqrt(2)
+check: simp
+
+== C22 | nasty Axiom example => (log(sqrt(2) + 1) + sqrt(2))/3
+in: simplify(((6-4*sqrt(2))*ln(3-2*sqrt(2))+(3-2*sqrt(2))*ln(17-12*sqrt(2))+32-24*sqrt(2))/(48*sqrt(2)-72))
+expect: (ln(sqrt(2)+1)+sqrt(2))/3
+check: simp
+slack: 2
+
+== C23 | cardinal arithmetic 2 inf - 3 => inf
+in: 2*inf-3
+expect: inf
+
+== C24 | 2^aleph_0 => aleph_1
+na: transfinite cardinals
+
+@section D Numerical analysis
+== D1 | 0.0/sqrt(2) => 0.0
+in: 0.0/sqrt(2)
+expect: 0
+check: value
+
+== D2 | exp(-1000000.0) => 3.29683e-434295 (underflow)
+in: exp(-1000000.0)
+expect: 3.29683147808856e-434295
+check: rel
+tol: 1e-5
+note: a double underflows; the right answer needs an extended exponent range
+
+== D2b | exp(-1000000) in arbitrary precision
+in: approx(exp(-1000000),15)
+expect: 3.29683147808856e-434295
+check: rel
+tol: 1e-12
+
+== D3 | exp(pi sqrt(163)) to 50 digits (nearly an integer)
+in: approx(exp(pi*sqrt(163)),50)
+expect: 262537412640768743.99999999999925007259719818568888
+check: rel
+tol: 1e-45
+
+== D4 | [floor(-5/3), ceil(-5/3)] => [-2, -1]
+in: [floor(-5/3),ceil(-5/3)]
+expect: [-2,-1]
+
+== D5 | natural cubic spline through (1,1),(2,4),(4,2),(5,3) at 3 => 27/8
+unsupported: no spline interpolation
+
+== D6 | translate sum(a[i] x^i) to FORTRAN
+na: code generation
+
+== D7 | translate sum(a[i] x^i) to C
+na: code generation
+
+== D8 | Horner form of sum(a[i] x^i, i=1..5)
+in: horner(a1*x+a2*x^2+a3*x^3+a4*x^4+a5*x^5,x)
+expect: x*(a1+x*(a2+x*(a3+x*(a4+a5*x))))
+check: form
+note: our horner(p,a) evaluates p at a point; there is no Horner-form rewrite
+alt: UNSUPPORTED | a5*x^5+a4*x^4+a3*x^3+a2*x^2+a1*x | horner() only evaluates at a point; no Horner-form rewriting
+
+== D9 | Horner form to FORTRAN
+na: code generation
+
+== D10 | Horner form to C
+na: code generation
+
+== D11 | count floating point operations
+na: operation counting
+
+== D12 | interval arithmetic ([-4,2] x + [1,3])^2
+unsupported: no interval arithmetic
+
+== D13 | discretize the heat equation
+na: finite difference scheme generation
+
+@section E Statistics
+== E1 | mean([3, 7, 11, 5, 19]) => 9
+in: mean([3,7,11,5,19])
+expect: 9
+
+== E2 | median => 7
+in: median([3,7,11,5,19])
+expect: 7
+
+== E3 | first quartile of [1..8] => 2 or 5/2
+in: quartile1([1,2,3,4,5,6,7,8])
+expect: [2,5/2]
+check: oneof
+
+== E4 | mode([3, 7, 11, 7, 3, 5, 7]) => 7
+in: mode([3,7,11,7,3,5,7])
+expect: 7
+
+== E5 | unbiased sample standard deviation of [1..5] => sqrt(5/2)
+in: stddevp([1,2,3,4,5])
+expect: sqrt(5/2)
+note: stddev is the population deviation; stddevp the sample (n-1) one that Wester asks for
+
+== E6 | binomial pdf: 12 of 15 at p = 0.75 => 0.22520
+in: binompdf(15,0.75,12)
+expect: 0.225199
+check: value
+tol: 1e-5
+
+== E7 | binomial cdf: up to 12 of 15 => 0.76391
+in: binomcdf(15,0.75,12)
+expect: 0.763912
+check: value
+tol: 1e-5
+
+== E8 | normal(4.35, 0.59): P(4 <= X <= 5) => 0.5867
+in: normalcdf(4,5,4.35,0.59)
+expect: 0.588185984502579
+check: value
+tol: 1e-9
+note: Wester's 0.5867 is inaccurate; mpmath gives 0.5881860
+
+== E9 | Student t test of mean 5 => 0.057567
+pre: L:=[1,-2,3,-4,5,-6,7,-8,9,10]
+in: tcdf(-inf,(mean(L)-5)/(stddev(L)*sqrt(10/9)/sqrt(10)),9)
+expect: 0.057567
+check: value
+tol: 1e-5
+note: sample sd built from the population stddev
+
+== E10 | same with the normal distribution => 0.040583
+pre: L:=[1,-2,3,-4,5,-6,7,-8,9,10]
+in: normalcdf(-inf,(mean(L)-5)/(stddev(L)*sqrt(10/9)/sqrt(10)))
+expect: 0.040583
+check: value
+tol: 1e-5
+
+== E11 | chi-square independence test (chi2 = 1153/252) => 0.469859
+in: chi2cdf(1153/252,inf,5)
+expect: 0.469859
+check: value
+tol: 1e-5
+note: Wester's degrees of freedom m n - 1 = 5; the statistic itself is not computed by the CAS
+
+== E12 | linear regression => y = 0.7365 x + 6.964
+in: linreg([3.33,3.25,3.92,3.50,4.33,4.92,6.08,7.42,8.33,8.00,9.25,10.75],[8.61,9.40,9.86,9.91,10.53,10.61,10.59,13.28,12.76,13.44,14.27,14.13])
+expect: 0.7365*x+6.964
+check: manual
+alt: PASS | 0.736461128915*x+6.96411839157 | least-squares line y = 0.7365 x + 6.964
+
+== E13 | multiple linear regression => -16278.7 + 960.925 x1 + 2975.66 x2
+unsupported: no multiple regression in the CAS
+
+== E14 | L1 (least absolute deviations) regression
+unsupported: no L1 regression
+
+== E15 | nonlinear least squares fit
+unsupported: no nonlinear regression in the CAS
+
+@section F Combinatorial theory
+== F1 | Pochhammer (a)_3 => a (a+1) (a+2)
+in: pochhammer(a,3)
+expect: a*(a+1)*(a+2)
+
+== F2 | binomial(n, 3) => n (n-1) (n-2)/6
+in: binomial(n,3)
+expect: n*(n-1)*(n-2)/6
+domain: n=int
+
+== F3 | 2^n n! (2n-1)!! => (2n)!
+in: simplify(2^n*n!*factorial2(2*n-1))
+expect: factorial(2*n)
+domain: n=int
+check: simp
+
+== F4 | 2^n n! product(2k-1, k=1..n) => (2n)!
+in: simplify(2^n*n!*product(2*k-1,k,1,n))
+expect: factorial(2*n)
+domain: n=int
+check: simp
+
+== F5 | gamma(n+1/2)/(sqrt(pi) n!) => (2n)!/(2^(2n) (n!)^2)
+in: simplify(gamma(n+1/2)/(sqrt(pi)*n!))
+expect: factorial(2*n)/(4^n*factorial(n)^2)
+domain: n=int
+check: simp
+
+== F6 | number of partitions of 4 => 5
+in: partition(4)
+expect: 5
+
+== F7 | Stirling number of the first kind S1(5, 2) => -50
+in: stirling1(5,2)
+expect: -50
+
+== F8 | Euler totient(1776) => 576
+in: euler(1776)
+expect: 576
+
+@section G Number theory
+== G1 | largest 6-digit and smallest 7-digit prime => [999983, 1000003]
+in: [prevprime(10^6),nextprime(10^6)]
+expect: [999983,1000003]
+
+== G2 | primitive root of 191 => 19
+in: primroot(191)
+expect: 19
+
+== G3 | (a + b)^p mod p => a^p + b^p for p prime
+unsupported: no modular polynomial arithmetic with symbolic modulus
+
+== G4 | 9 x = 15 mod 21 => x = 4 mod 7
+in: msolve(9*x=15,x,21)
+expect: [4,11,18]
+check: set
+note: x = 4 (mod 7) is the residue set {4, 11, 18} (mod 21)
+
+== G5 | 7 x = 22 mod 39 => x = 31 mod 39
+in: msolve(7*x=22,x,39)
+expect: [31]
+check: set
+
+== G6 | x^2 + x + 4 = 0 mod 8 => x = {3, 4} mod 8
+in: msolve(x^2+x+4=0,x,8)
+expect: [3,4]
+check: set
+
+== G7 | x^3 + 2x^2 + 5x + 6 = 0 mod 11 => x = 3 mod 11
+in: msolve(x^3+2*x^2+5*x+6=0,x,11)
+expect: [3]
+check: set
+
+== G8 | x = 7 mod 9, 13 mod 23, 1 mod 2 => x = 151 mod 414
+in: ichinrem(ichinrem([7,9],[13,23]),[1,2])
+expect: [151,414]
+
+== G9 | linear system mod 7 => x = 1, y = 2
+unsupported: no modular equation solving
+
+== G10 | 2x + 3y = 1 mod 5 => 5 solutions
+unsupported: no modular equation solving
+
+== G11 | 2x + 3y = 1 mod 6 => 6 solutions
+unsupported: no modular equation solving
+
+== G12 | Diophantine x^4 + 9 = y^2 => (2, 5)
+unsupported: no Diophantine solver
+
+== G13 | Diophantine x^2 + 4 = y^3 => (11, 5)
+unsupported: no Diophantine solver
+
+== G14 | Pythagorean system => (3,4,5,12,13), ...
+unsupported: no Diophantine solver
+
+== G15 | rational approximation of sqrt(3) within 1/500 => 26/15
+unsupported: no best rational approximation with tolerance
+
+== G16 | continued fraction of pi => [3; 7, 15, 1, 292, ...]
+in: contfrac(pi,5)
+expect: [3,7,15,1,292]
+
+== G17 | continued fraction of sqrt(23) => [4; 1, 3, 1, 8, ...]
+in: contfrac(sqrt(23),5)
+expect: [4,1,3,1,8]
+
+== G18 | continued fraction of the golden ratio => [1; 1, 1, ...]
+in: contfrac((1+sqrt(5))/2,5)
+expect: [1,1,1,1,1]
+
+== G19 | continued fraction of tanh(1/(2x)) => [0; 2x, 6x, 10x, ...]
+unsupported: no continued fractions of symbolic expressions
+
+== G20 | continued fraction of sqrt(x^2+1) - x => [0; 2x, 2x, ...]
+unsupported: no continued fractions of symbolic expressions
+
+@section H Algebra
+== H1 | 2 2^n => 2^(n+1)
+in: simplify(2*2^n)
+expect: 2^(n+1)
+check: form
+
+== H2 | 4 2^n => 2^(n+2)
+in: simplify(4*2^n)
+expect: 2^(n+2)
+check: form
+
+== H3 | (-1)^(n (n+1)) => 1 for integer n
+pre: assume(n,integer)
+in: (-1)^(n*(n+1))
+expect: 1
+domain: n=int
+check: simp
+
+== H4 | factor(6 x - 10) => 2 (3 x - 5)
+in: factor(6*x-10)
+expect: 2*(3*x-5)
+check: factor
+
+== H5 | univariate gcd(p1, p2) => 1 (Liska)
+in: gcd(64*x^34-21*x^47-126*x^8-46*x^5-16*x^60-81,72*x^60-25*x^25-19*x^23-22*x^39-83*x^52+54*x^10+81)
+expect: 1
+
+== H6 | gcd(p1 q, p2 q) => q
+in: gcd(expand((64*x^34-21*x^47-126*x^8-46*x^5-16*x^60-81)*(34*x^19-25*x^16+70*x^7+20*x^3-91*x-86)),expand((72*x^60-25*x^25-19*x^23-22*x^39-83*x^52+54*x^10+81)*(34*x^19-25*x^16+70*x^7+20*x^3-91*x-86)))
+check: oneof
+expect: [34*x^19-25*x^16+70*x^7+20*x^3-91*x-86,-(34*x^19-25*x^16+70*x^7+20*x^3-91*x-86)]
+
+== H7 | resultant(p1 q, p2 q) => 0
+in: resultant(expand((64*x^34-21*x^47-126*x^8-46*x^5-16*x^60-81)*(34*x^19-25*x^16+70*x^7+20*x^3-91*x-86)),expand((72*x^60-25*x^25-19*x^23-22*x^39-83*x^52+54*x^10+81)*(34*x^19-25*x^16+70*x^7+20*x^3-91*x-86)),x)
+expect: 0
+
+== H8 | factor(expand(p1 p2)) => p1 p2
+in: factor(expand((64*x^34-21*x^47-126*x^8-46*x^5-16*x^60-81)*(72*x^60-25*x^25-19*x^23-22*x^39-83*x^52+54*x^10+81)))
+expect: (64*x^34-21*x^47-126*x^8-46*x^5-16*x^60-81)*(72*x^60-25*x^25-19*x^23-22*x^39-83*x^52+54*x^10+81)
+check: factor
+
+== H9 | multivariate gcd(p1, p2) => 1
+in: gcd(24*x*y^19*z^8-47*x^17*y^5*z^8+6*x^15*y^9*z^2-3*x^22+5,34*x^5*y^8*z^13+20*x^7*y^7*z^7+12*x^9*y^16*z^4+80*y^14*z)
+expect: 1
+
+== H10 | multivariate gcd(p1 q, p2 q) => q
+in: gcd(expand((24*x*y^19*z^8-47*x^17*y^5*z^8+6*x^15*y^9*z^2-3*x^22+5)*(11*x^12*y^7*z^13-23*x^2*y^8*z^10+47*x^17*y^5*z^8)),expand((34*x^5*y^8*z^13+20*x^7*y^7*z^7+12*x^9*y^16*z^4+80*y^14*z)*(11*x^12*y^7*z^13-23*x^2*y^8*z^10+47*x^17*y^5*z^8)))
+check: oneof
+expect: [11*x^12*y^7*z^13-23*x^2*y^8*z^10+47*x^17*y^5*z^8,-(11*x^12*y^7*z^13-23*x^2*y^8*z^10+47*x^17*y^5*z^8)]
+
+== H11 | multivariate factor(expand(p1 p2)) => p1 p2
+in: factor(expand((24*x*y^19*z^8-47*x^17*y^5*z^8+6*x^15*y^9*z^2-3*x^22+5)*(34*x^5*y^8*z^13+20*x^7*y^7*z^7+12*x^9*y^16*z^4+80*y^14*z)))
+expect: -2*z*y^7*(6*x^9*y^9*z^3+10*x^7*z^6+17*y*x^5*z^12+40*y^7)*(3*x^22+47*x^17*y^5*z^8-6*x^15*y^9*z^2-24*x*y^19*z^8-5)
+check: factor
+
+== H12 | gcd(2 x^(n+4) - x^(n+2), 4 x^(n+1) + 3 x^n) => x^n
+in: gcd(2*x^(n+4)-x^(n+2),4*x^(n+1)+3*x^n)
+expect: x^n
+domain: n=int
+
+== H13 | resultant with a common factor => 0
+in: resultant(3*x^4+3*x^3+x^2-x-2,x^3-3*x^2+x+5,x)
+expect: 0
+
+== H14 | (x^2 - 4)/(x^2 + 4x + 4) => (x - 2)/(x + 2)
+in: normal((x^2-4)/(x^2+4*x+4))
+expect: (x-2)/(x+2)
+check: simp
+
+== H15 | (e^x - 1)/(e^(x/2) + 1) => e^(x/2) - 1
+in: simplify((exp(x)-1)/(exp(x/2)+1))
+expect: exp(x/2)-1
+check: simp
+
+== H16 | expand (x+1)^20, differentiate, factor => 20 (x+1)^19
+in: factor(diff(expand((x+1)^20),x))
+expect: 20*(x+1)^19
+check: factor
+
+== H17 | factor x^3 + x^2 - 7 via its roots, multiply them back together
+pre: R:=csolve(x^3+x^2-7=0,x)
+in: expand(product(map(R,u)))
+pre: u(r):=x-r
+expect: x^3+x^2-7
+check: simp
+
+== H18 | factor(x^100 - 1) => 9 cyclotomic factors
+in: factor(x^100-1)
+expect: (x-1)*(x+1)*(x^2+1)*(x^4-x^3+x^2-x+1)*(x^4+x^3+x^2+x+1)*(x^8-x^6+x^4-x^2+1)*(x^20-x^15+x^10-x^5+1)*(x^20+x^15+x^10+x^5+1)*(x^40-x^30+x^20-x^10+1)
+check: factor
+
+== H19 | factor over Q(i): 4x^4+8x^3+77x^2+18x+153 => (2x+3i)(2x-3i)(x+1+4i)(x+1-4i)
+in: cfactor(4*x^4+8*x^3+77*x^2+18*x+153)
+expect: (2*x+3*i)*(2*x-3*i)*(x+1+4*i)*(x+1-4*i)
+check: factor
+
+== H20 | 1/(sqrt2 - 1) with sqrt2^2 = 2 => sqrt2 + 1
+in: simplify(1/(sqrt(2)-1))
+expect: sqrt(2)+1
+check: simp
+
+== H21 | (x^3 + (sqrt2-2)x^2 - (2sqrt2+3)x - 3sqrt2)/(x^2-2) => (x^2-2x-3)/(x-sqrt2)
+in: simplify((x^3+(sqrt(2)-2)*x^2-(2*sqrt(2)+3)*x-3*sqrt(2))/(x^2-2))
+expect: (x^2-2*x-3)/(x-sqrt(2))
+check: simp
+slack: 1
+
+== H22 | (cbrt2 + sqrt3)^4 with cbrt2^3 = 2, sqrt3^2 = 3
+in: expand((2^(1/3)+sqrt(3))^4)
+expect: 2*2^(1/3)+8*sqrt(3)+18*2^(2/3)+12*2^(1/3)*sqrt(3)+9
+check: simp
+
+== H23 | factor(x^4 - 3x^2 + 1) over Q => (x^2-x-1)(x^2+x-1)
+in: factor(x^4-3*x^2+1)
+expect: (x^2-x-1)*(x^2+x-1)
+check: factor
+
+== H24 | factor x^4 - 3x^2 + 1 mod 5 => (x-2)^2 (x+2)^2
+in: factormod(x^4-3*x^2+1,5)
+expect: (x-2)^2*(x+2)^2
+check: factor
+
+== H25 | factor x^11 + x + 1 mod 65537
+in: factormod(x^11+x+1,65537)
+expect: (x^2+x+1)*(x^9-x^8+x^6-x^5+x^3-x^2+1)
+check: factor
+
+== H26 | factor x^4 - 3x^2 + 1 over Q(phi) => 4 linear factors
+in: cfactor(x^4-3*x^2+1)
+expect: (x-(1+sqrt(5))/2)*(x+(1+sqrt(5))/2)*(x-(1+sqrt(5))/2+1)*(x+(1+sqrt(5))/2-1)
+check: factor
+note: no algebraic extensions; cfactor splits quadratics, which is enough here
+
+== H27 | factor(expand((x - 2y^2 + 3z^3)^20))
+in: factor(expand((x-2*y^2+3*z^3)^20))
+expect: (x-2*y^2+3*z^3)^20
+check: factor
+
+== H28 | factor(expand((sin x - 2 cos^2 y + 3 tan^3 z)^20))
+in: factor(expand((sin(x)-2*cos(y)^2+3*tan(z)^3)^20))
+expect: (sin(x)-2*cos(y)^2+3*tan(z)^3)^20
+check: factor
+
+== H29 | (1-c^2)^5 (1-s^2)^5 (c^2+s^2)^10 with c^2 + s^2 = 1 => c^10 s^10
+in: factor(rem(expand((1-c^2)^5*(1-s^2)^5*(c^2+s^2)^10),s^2+c^2-1,s))
+expect: -c^10*(c-1)^5*(c+1)^5
+check: exact
+note: reduction modulo s^2 + c^2 - 1 by polynomial remainder in s (c^10 s^10 = c^10 (1-c^2)^5)
+
+== H30 | factor 4x^2 - 21xy + 20y^2 mod 3 => (x + y)(x - y)
+in: factormod(4*x^2-21*x*y+20*y^2,3)
+expect: (x+y)*(x-y)
+check: factor
+
+== H31 | factor x^3 + y^3 over Q(sqrt(-3))
+in: cfactor(x^3+y^3)
+expect: (x+y)*(x+y*(-1/2-sqrt(3)/2*i))*(x+y*(-1/2+sqrt(3)/2*i))
+check: factor
+domain: x=real y=real
+
+== H32 | partial fractions of (x^2+2x+3)/(x^3+4x^2+5x+2)
+in: partfrac((x^2+2*x+3)/(x^3+4*x^2+5*x+2),x)
+expect: 3/(x+2)-2/(x+1)+2/(x+1)^2
+check: terms 3
+
+== H33 | noncommutative (ABC - (ABC)^-1) ACB
+na: noncommutative algebra
+
+== H34 | Jacobi identity for commutators
+na: noncommutative algebra
+
+@section I Trigonometry
+== I1 | tan(7 pi/10) => -sqrt(1 + 2/sqrt(5))
+in: tan(7*pi/10)
+expect: -sqrt(1+2/sqrt(5))
+
+== I1b | simplify(tan(7 pi/10))
+in: simplify(tan(7*pi/10))
+expect: -sqrt(1+2/sqrt(5))
+check: simp
+slack: 2
+
+== I2 | sqrt((1 + cos 6)/2) => -cos 3
+in: simplify(sqrt((1+cos(6))/2))
+expect: -cos(3)
+check: simp
+
+== I3 | cos(n pi) + sin((4n - 1) pi/2) => (-1)^n - 1 for integer n
+pre: assume(n,integer)
+in: cos(n*pi)+sin((4*n-1)/2*pi)
+expect: (-1)^n-1
+domain: n=int
+check: simp
+
+== I4 | cos(cos(n pi) pi) + sin(cos(n pi) pi/2) => (-1)^n - 1
+pre: assume(n,integer)
+in: cos(cos(n*pi)*pi)+sin(cos(n*pi)*pi/2)
+expect: (-1)^n-1
+domain: n=int
+check: simp
+
+== I5 | sin((n^5/5 + n^4/2 + n^3/3 - n/30) pi) => 0 for integer n
+pre: assume(n,integer)
+in: sin((n^5/5+n^4/2+n^3/3-n/30)*pi)
+expect: 0
+domain: n=int
+check: simp
+
+== I6 | |cos x|, |sin x| for -3 pi < x < -5/2 pi => -cos x, -sin x
+pre: assume(x>-3*pi and x<-5*pi/2)
+in: [abs(cos(x)),abs(sin(x))]
+expect: [-cos(x),-sin(x)]
+domain: x=-3*pi:-5*pi/2
+check: simp
+alt: UNSUPPORTED | ERROR 2: assume: only comparisons with 0 are supported | assumptions only of the form x > 0, x < 0, integer
+
+== I7 | cos(3x)/cos(x) => cos(x)^2 - 3 sin(x)^2 or similar
+in: normal(texpand(cos(3*x)/cos(x)))
+expect: cos(x)^2-3*sin(x)^2
+check: simp
+slack: 3
+
+== I8 | cos(3x)/cos(x) => 2 cos(2x) - 1
+in: tcollect(normal(texpand(cos(3*x)/cos(x))))
+expect: 2*cos(2*x)-1
+check: simp
+
+== I8b | simplify(cos(3x)/cos(x)) => 2 cos(2x) - 1 or similar
+in: simplify(cos(3*x)/cos(x))
+expect: 2*cos(2*x)-1
+check: simp
+slack: 3
+
+== I9 | cos(3x)/cos(x) via user rewrite rules
+unsupported: no user-defined rewrite rules
+
+== I10 | trigsimp((tan^2 x + 1 - sec^2 x)/(sin^2 x + cos^2 x - 1)) => undefined (0/0)
+in: trigsimp((tan(x)^2+1-sec(x)^2)/(sin(x)^2+cos(x)^2-1))
+check: error
+
+== I11 | limit of the 0/0 expression at 0 => undefined
+in: limit((tan(x)^2+1-sec(x)^2)/(sin(x)^2+cos(x)^2-1),x,0)
+check: error
+
+== I12 | derivative of the 0/0 expression => undefined
+in: diff((tan(x)^2+1-sec(x)^2)/(sin(x)^2+cos(x)^2-1),x)
+check: error
+alt: UNEVAL | (2*tan(x)*(tan(x)^2+1)-2*sec(x)^2*tan(x))/(cos(x)^2+sin(x)^2-1) | identically-zero denominator not detected (Macsyma also returns an expression)
+
+@section J Special functions
+== J1 | Bernoulli B_16 => -3617/510
+in: bernoulli(16)
+expect: -3617/510
+
+== J2 | d/dk E(phi, k) => (E(phi, k) - F(phi, k))/k
+in: diff(ellipticE(p,k^2),k)
+expect: (elliptic_e(p,k^2)-elliptic_f(p,k^2))/k
+domain: p=0:1 k=0:0.8
+
+== J3 | d/du dn(u, k) => -k^2 sn(u, k) cn(u, k)
+in: diff(jacobidn(u,k),u)
+expect: 0
+check: manual
+
+== J4 | gamma(-1/2) => -2 sqrt(pi)
+in: gamma(-1/2)
+expect: -2*sqrt(pi)
+
+== J5 | psi(1/3) => -gamma - pi/(2 sqrt 3) - 3/2 log 3
+in: digamma(1/3)
+note: psi is the pressure unit (pound-force per square inch) in this CAS
+expect: -euler_gamma-pi/(2*sqrt(3))-3*ln(3)/2
+
+== J6 | J_2(1 + i) => 0.04158 + 0.24740 i
+in: approx(besselj(2,1+i))
+expect: 0.04157988694396212+0.24739764151330632*i
+check: value
+tol: 1e-6
+
+== J7 | J_{-5/2}(pi/2) => 12/pi^2
+in: besselj(-5/2,pi/2)
+expect: 12/pi^2
+
+== J8 | J_{3/2}(z) => sqrt(2/(pi z)) (sin z/z - cos z)
+in: besselj(3/2,z)
+expect: sqrt(2/(pi*z))*(sin(z)/z-cos(z))
+
+== J9 | d/dz J_0(z) => -J_1(z)
+in: diff(besselj(0,z),z)
+expect: -besselj(1,z)
+
+== J10 | associated Legendre P^mu_nu(0)
+in: legendrep(n,m,0)
+expect: 0
+check: manual
+
+== J11 | P^1_3(x) => -3/2 sqrt(1 - x^2) (5 x^2 - 1)
+in: legendrep(3,1,x)
+expect: -3/2*sqrt(1-x^2)*(5*x^2-1)
+domain: x=0:1
+
+== J12 | T_1008 - 2x T_1007 + T_1006 => 0
+in: normal(chebyshevt(1008,x)-2*x*chebyshevt(1007,x)+chebyshevt(1006,x))
+expect: 0
+
+== J13 | T_n(-1) => (-1)^n
+pre: assume(n,integer)
+in: chebyshevt(n,-1)
+expect: (-1)^n
+domain: n=int
+
+== J14 | 2F1(1/2, 1/2; 3/2; z^2) => asin(z)/z
+in: hypergeom([1/2,1/2],[3/2],z^2)
+expect: asin(z)/z
+domain: z=0:1
+
+== J15 | 2F1((n+2)/2, -(n-2)/2; 3/2; sin^2 z) => sin(n z)/(n sin z cos z)
+in: hypergeom([(n+2)/2,-(n-2)/2],[3/2],sin(z)^2)
+expect: sin(n*z)/(n*sin(z)*cos(z))
+domain: z=0:1
+
+== J16 | zeta'(0) => -log(2 pi)/2
+in: subst(diff(zeta(x),x),x,0)
+expect: -ln(2*pi)/2
+alt: WRONG | diff(-1/2,0) | subst also replaced the differentiation variable of the unevaluated derivative: diff(-1/2,0) is meaningless
+
+== J17 | Dirac delta: int f((x+2)/5) delta((x-2)/3) - g(x) delta'(x-1), 0..3 => 3 f(4/5) + g'(1)
+in: integrate(f((x+2)/5)*dirac((x-2)/3)-g(x)*diff(dirac(x-1),x),x,0,3)
+allow: f g
+expect: 0
+check: manual
+
+== J17b | same with f = exp, g = sin => 3 exp(4/5) + cos(1)
+in: integrate(exp((x+2)/5)*dirac((x-2)/3)-sin(x)*diff(dirac(x-1),x),x,0,3)
+expect: 3*exp(4/5)+cos(1)
+
+== J18 | define an antisymmetric function
+unsupported: no symmetry declarations for functions
+
+@section K Complex domain
+== K1 | [Re(x + i y), Im(x + i y)] for complex x, y => [Re x - Im y, Im x + Re y]
+in: [re(x+i*y),im(x+i*y)]
+expect: [re(x)-im(y),im(x)+re(y)]
+alt: UNSUPPORTED | [x,y] | symbols are real by default and cannot be declared complex
+
+== K2 | |3 - sqrt(7) + i sqrt(6 sqrt(7) - 15)| => 1 (Kahan)
+in: abs(3-sqrt(7)+i*sqrt(6*sqrt(7)-15))
+expect: 1
+check: simp
+
+== K3 | |1/(a + i/a + i b)| for real a, b => 1/sqrt(a^2 + (1/a + b)^2)
+in: abs(1/(a+i/a+i*b))
+expect: 1/sqrt(a^2+(1/a+b)^2)
+domain: a=real b=real
+check: simp
+slack: 4
+
+== K4 | log(3 + 4i) in rectangular form => log 5 + i atan(4/3)
+in: ln(3+4*i)
+expect: ln(5)+i*atan(4/3)
+check: rect
+
+== K5 | tan(x + i y) in rectangular form
+in: tan(x+i*y)
+expect: (sin(2*x)+i*sinh(2*y))/(cos(2*x)+cosh(2*y))
+domain: x=real y=real
+check: rect
+
+== K6 | sqrt(x y |z|^2)/(sqrt(x) |z|) => sqrt(x y)/sqrt(x) (no further in general)
+in: simplify(sqrt(x*y*abs(z)^2)/(sqrt(x)*abs(z)))
+expect: sqrt(x*y)/sqrt(x)
+domain: x=real y=real z=real
+note: the point is not to simplify to sqrt(y) (wrong for x, y < 0); any equivalent form passes
+
+== K7 | same for y >= 0 => sqrt(y)
+pre: assume(y>=0)
+in: simplify(sqrt(x*y*abs(z)^2)/(sqrt(x)*abs(z)))
+expect: sqrt(y)
+domain: x=real y=pos z=real
+check: simp
+
+== K8 | sqrt(1/z) - 1/sqrt(z) does not vanish (z real negative)
+in: simplify(sqrt(1/z)-1/sqrt(z))
+expect: sqrt(1/z)-1/sqrt(z)
+domain: z=real
+
+== K9 | sqrt(1/z) - 1/sqrt(z) => 0 for z > 0
+pre: assume(z>0)
+in: simplify(sqrt(1/z)-1/sqrt(z))
+expect: 0
+check: simp
+
+== K10 | sqrt(1/z) + 1/sqrt(z) => 0 for z < 0
+pre: assume(z<0)
+in: simplify(sqrt(1/z)+1/sqrt(z))
+expect: 0
+domain: z=neg
+check: simp
+
+== K11 | sqrt(e^z) - e^(z/2) for complex z (nonzero in general)
+unsupported: symbols cannot be declared complex
+
+== K12 | sqrt(e^z) - e^(z/2) => 0 for real z
+in: simplify(sqrt(exp(z))-exp(z/2))
+expect: 0
+domain: z=real
+check: simp
+
+== K13 | sqrt(e^(6 i)) => -e^(3 i)
+in: sqrt(exp(6*i))
+expect: -exp(3*i)
+
+== K14 | log(e^z) for complex z
+unsupported: symbols cannot be declared complex
+
+== K15 | log(e^z) => z for real z
+in: ln(exp(z))
+expect: z
+domain: z=real
+check: simp
+
+== K16 | log(e^(10 i)) => (10 - 4 pi) i
+in: ln(exp(10*i))
+expect: (10-4*pi)*i
+
+== K17 | (x y)^(1/n) - x^(1/n) y^(1/n) for complex x, y
+unsupported: symbols cannot be declared complex
+
+== K18 | (x y)^(1/n) - x^(1/n) y^(1/n) => 0 for y > 0
+pre: assume(y>0)
+in: simplify((x*y)^(1/n)-x^(1/n)*y^(1/n))
+expect: 0
+domain: x=real n=big
+check: simp
+
+== K19 | (x y)^n - x^n y^n => 0 for integer n
+pre: assume(n,integer)
+in: simplify((x*y)^n-x^n*y^n)
+expect: 0
+domain: x=real y=real n=int
+check: simp
+
+== K20 | atan(tan(z)) does not simplify to z for real z
+in: simplify(atan(tan(z)))
+expect: atan(tan(z))
+domain: z=-10:10
+
+== K21 | atan(tan(z)) => z for -pi/2 < z < pi/2
+pre: assume(z>-pi/2 and z<pi/2)
+in: simplify(atan(tan(z)))
+expect: z
+domain: z=-pi/2:pi/2
+check: simp
+alt: UNSUPPORTED | ERROR 2: assume: only comparisons with 0 are supported | assumptions only of the form x > 0, x < 0, integer
+
+== K22 | atan(tan(10)) => 10 - 3 pi
+in: atan(tan(10))
+expect: 10-3*pi
+check: simp
+
+== K23 | atan(tan(11 + 30 i)) => 11 - 4 pi + 30 i
+in: atan(tan(11+30*i))
+expect: 11-4*pi+30*i
+check: simp
+
+== K24 | Kahan: w + sqrt(w+1) sqrt(w-1), w = (z + 1/z)/2 => z (z > 1)
+in: simplify((z+1/z)/2+sqrt((z+1/z)/2+1)*sqrt((z+1/z)/2-1))
+expect: z
+domain: z=big
+check: simp
+note: real z > 1 only (z cannot be declared complex)
+
+@section L Zero equivalence
+== L1 | sqrt(997) - (997^3)^(1/6) => 0
+in: sqrt(997)-(997^3)^(1/6)
+expect: 0
+check: form
+
+== L2 | sqrt(999983) - (999983^3)^(1/6) => 0
+in: sqrt(999983)-(999983^3)^(1/6)
+expect: 0
+check: form
+
+== L3 | (2^(1/3) + 4^(1/3))^3 - 6 (2^(1/3) + 4^(1/3)) - 6 => 0
+in: simplify((2^(1/3)+4^(1/3))^3-6*(2^(1/3)+4^(1/3))-6)
+expect: 0
+check: form
+
+== L4 | cos^3 x + cos x sin^2 x - cos x => 0
+in: trigsimp(cos(x)^3+cos(x)*sin(x)^2-cos(x))
+expect: 0
+check: form
+
+== L5 | log(tan(x/2 + pi/4)) - asinh(tan x) => 0 for -pi/2 < x < pi/2
+in: simplify(ln(tan(x/2+pi/4))-asinh(tan(x)))
+expect: 0
+domain: x=-pi/2:pi/2
+check: form
+note: no interval assumption is possible; zero on (-pi/2, pi/2) only, so a 0 answer is correct there
+
+== L6 | d/dx of the L5 expression => 0
+in: simplify(diff(ln(tan(x/2+pi/4))-asinh(tan(x)),x))
+expect: 0
+domain: x=-pi/2:pi/2
+check: form
+
+== L7 | log((2 sqrt(r) + 1)/sqrt(4r + 4 sqrt(r) + 1)) => 0
+in: simplify(ln((2*sqrt(r)+1)/sqrt(4*r+4*sqrt(r)+1)))
+expect: 0
+domain: r=pos
+check: form
+
+== L8 | (4r + 4 sqrt r + 1)^(sqrt r/(2 sqrt r + 1)) (2 sqrt r + 1)^(1/(2 sqrt r + 1)) - 2 sqrt r - 1 => 0
+in: simplify((4*r+4*sqrt(r)+1)^(sqrt(r)/(2*sqrt(r)+1))*(2*sqrt(r)+1)^(1/(2*sqrt(r)+1))-2*sqrt(r)-1)
+expect: 0
+domain: r=pos
+check: form
+
+== L9 | 2^(1-z) gamma(z) zeta(z) cos(z pi/2) - pi^z zeta(1-z) => 0
+in: simplify(2^(1-z)*gamma(z)*zeta(z)*cos(z*pi/2)-pi^z*zeta(1-z))
+expect: 0
+check: form
+
+@section M Equations
+== M1 | (x = 2)/2 + (1 = 1) => x/2 + 1 = 2
+in: (x=2)/2+(1=1)
+expect: x/2+1=2
+
+== M2 | 3x^3 - 18x^2 + 33x - 19 = 0 (three real roots, exact)
+in: solve(3*x^3-18*x^2+33*x-19=0,x)
+expect: [2+2/sqrt(3)*cos(pi/18),2+2/sqrt(3)*cos(pi/18-2*pi/3),2+2/sqrt(3)*cos(pi/18+2*pi/3)]
+check: set
+
+== M3 | x^4 + x^3 + x^2 + x + 1 = 0 (exact roots)
+in: csolve(x^4+x^3+x^2+x+1=0,x)
+expect: [exp(2*pi*i/5),exp(4*pi*i/5),exp(6*pi*i/5),exp(8*pi*i/5)]
+check: set
+
+== M4 | x^6 - 9x^4 - 4x^3 + 27x^2 - 36x - 23 = 0 (Rayes)
+in: csolve(x^6-9*x^4-4*x^3+27*x^2-36*x-23=0,x)
+expect: [2^(1/3)+sqrt(3),2^(1/3)-sqrt(3),sqrt(3)-2^(-2/3)+i*sqrt(3)*2^(-2/3),sqrt(3)-2^(-2/3)-i*sqrt(3)*2^(-2/3),-sqrt(3)-2^(-2/3)+i*sqrt(3)*2^(-2/3),-sqrt(3)-2^(-2/3)-i*sqrt(3)*2^(-2/3)]
+check: set
+
+== M5 | x^7 - 1 = 0 => 7th roots of unity
+in: csolve(x^7-1=0,x)
+expect: [1,exp(2*pi*i/7),exp(4*pi*i/7),exp(6*pi*i/7),exp(8*pi*i/7),exp(10*pi*i/7),exp(12*pi*i/7)]
+check: set
+
+== M6 | Liska's degree-8 polynomial => 1 +- sqrt(+-sqrt(+-4 sqrt(3) - 3) - 3)/sqrt(2)
+in: csolve(x^8-8*x^7+34*x^6-92*x^5+175*x^4-236*x^3+226*x^2-140*x+46=0,x)
+expect: [1+sqrt(sqrt(4*sqrt(3)-3)-3)/sqrt(2),1-sqrt(sqrt(4*sqrt(3)-3)-3)/sqrt(2),1+sqrt(-sqrt(4*sqrt(3)-3)-3)/sqrt(2),1-sqrt(-sqrt(4*sqrt(3)-3)-3)/sqrt(2),1+sqrt(sqrt(-4*sqrt(3)-3)-3)/sqrt(2),1-sqrt(sqrt(-4*sqrt(3)-3)-3)/sqrt(2),1+sqrt(-sqrt(-4*sqrt(3)-3)-3)/sqrt(2),1-sqrt(-sqrt(-4*sqrt(3)-3)-3)/sqrt(2)]
+check: set
+
+== M7 | e^(2x) + 2 e^x + 1 = z => x = log(sqrt z - 1), log(sqrt z + 1) + i pi (+ 2 n pi i)
+in: csolve(exp(2*x)+2*exp(x)+1=z,x)
+expect: [ln(sqrt(z)-1),ln(sqrt(z)+1)+i*pi]
+domain: z=big
+check: set
+
+== M8 | exp(2 - x^2) = exp(-x) => real solutions {-1, 2}
+in: solve(exp(2-x^2)=exp(-x),x)
+expect: [-1,2]
+check: set
+
+== M9 | e^x = x => x = -W(-1)
+in: csolve(exp(x)=x,x)
+expect: [-LambertW(-1)]
+check: set
+alt: WRONG | [] | csolve claims there is no solution (needs Lambert W)
+
+== M10 | x^x = x => {-1, 1}
+in: solve(x^x=x,x)
+expect: [-1,1]
+check: set
+
+== M11 | (x + 1)(sin^2 x + 1)^2 cos^3(3x) = 0 => -1, pi/6 + n pi/3 (real)
+in: solve((x+1)*(sin(x)^2+1)^2*cos(3*x)^3=0,x)
+eq: (x+1)*(sin(x)^2+1)^2*cos(3*x)^3
+need: [-1,pi/6]
+check: satisfy
+
+== M12 | sin x = cos x => pi/4 (+ n pi)
+in: solve(sin(x)=cos(x),x)
+eq: sin(x)-cos(x)
+need: [pi/4]
+check: satisfy
+
+== M13 | tan x = 1 => pi/4 (+ n pi)
+in: solve(tan(x)=1,x)
+eq: tan(x)-1
+need: [pi/4]
+check: satisfy
+
+== M14 | sin x = 1/2 => pi/6, 5 pi/6 (+ 2 n pi)
+in: solve(sin(x)=1/2,x)
+eq: sin(x)-1/2
+need: [pi/6,5*pi/6]
+check: satisfy
+
+== M15 | sin x = tan x => 0 (+ n pi)
+in: solve(sin(x)=tan(x),x)
+eq: sin(x)-tan(x)
+need: [0]
+check: satisfy
+
+== M16 | asin x = atan x => 0
+in: solve(asin(x)=atan(x),x)
+expect: [0]
+check: set
+
+== M17 | acos x = atan x => sqrt((sqrt(5) - 1)/2)
+in: solve(acos(x)=atan(x),x)
+expect: [sqrt((sqrt(5)-1)/2)]
+check: set
+
+== M18 | (x - 2)/x^(1/3) = 0 => 2
+in: solve((x-2)/x^(1/3)=0,x)
+expect: [2]
+check: set
+
+== M19 | sqrt(x^2 + 1) = x - 2 => no solutions
+in: solve(sqrt(x^2+1)=x-2,x)
+expect: []
+check: set
+
+== M20 | x + sqrt(x) = 2 => 1
+in: solve(x+sqrt(x)=2,x)
+expect: [1]
+check: set
+
+== M21 | 2 sqrt(x) + 3 x^(1/4) - 2 = 0 => 1/16
+in: solve(2*sqrt(x)+3*x^(1/4)-2=0,x)
+expect: [1/16]
+check: set
+
+== M22 | x = 1/sqrt(1 + x^2) => sqrt((sqrt5-1)/2), -i sqrt((sqrt5+1)/2)
+in: csolve(x=1/sqrt(1+x^2),x)
+expect: [sqrt((sqrt(5)-1)/2),-i*sqrt((sqrt(5)+1)/2)]
+check: set
+
+== M23 | binomial(m, 2) 2^k = 1 => k = 1 - log2(m (m - 1))
+in: solve(binomial(m,2)*2^k=1,k)
+expect: [1-ln(m*(m-1))/ln(2)]
+domain: m=big
+check: set
+
+== M24 | a b^x = c d^x => x = log(c/a)/log(b/d)
+in: solve(a*b^x=c*d^x,x)
+expect: [ln(c/a)/ln(b/d)]
+check: set
+
+== M25 | sqrt(log x) = log(sqrt x) => {1, e^4}
+in: solve(sqrt(ln(x))=ln(sqrt(x)),x)
+expect: [1,exp(4)]
+check: set
+
+== M26 | log(acos(asin(x^(2/3) - b)) - 1) + 2 = 0 => x = (b + sin(cos(e^-2) + 1))^(3/2)
+in: solve(ln(acos(asin(x^(2/3)-b))-1)+2=0,x)
+expect: [[(b+sin(cos(exp(-2)+1)))^(3/2)],[-(b+sin(cos(exp(-2)+1)))^(3/2),(b+sin(cos(exp(-2)+1)))^(3/2)],[(b+sin(cos(exp(-2)+1)))^(3/2),-(b+sin(cos(exp(-2)+1)))^(3/2)]]
+domain: b=0:0.5
+check: oneof
+note: the negative root is valid only for the real cube root (real mode); either answer is accepted
+
+== M27 | 5x + exp((x - 5)/2) = 8x^3 => {-0.784966, -0.016291, 0.802557, 29.454528}
+in: solve(5*x+exp((x-5)/2)=8*x^3,x)
+expect: [-0.78496614648634752,-0.016290737729935251,0.8025567019143254,29.454527572105314]
+check: set
+tol: 1e-8
+note: Wester lists three roots; there is a fourth at 29.4545 (exp overtakes 8x^3), confirmed with mpmath.findroot
+
+== M28 | |x - 1| = 2 => {-1, 3}
+in: solve(abs(x-1)=2,x)
+expect: [-1,3]
+check: set
+
+== M29 | |2x + 5| = |x - 2| => {-1, -7}
+in: solve(abs(2*x+5)=abs(x-2),x)
+expect: [-1,-7]
+check: set
+
+== M30 | 1 - |x| = max(-x - 2, x - 2) => {-3/2, 3/2}
+in: solve(1-abs(x)=max(-x-2,x-2),x)
+expect: [-3/2,3/2]
+check: set
+
+== M31 | max(2 - x^2, x) = max(-x, x^3/9) => {-1, 3}
+in: solve(max(2-x^2,x)=max(-x,x^3/9),x)
+expect: [-1,3]
+check: set
+
+== M32 | max(2 - x^2, x) = x^3/9 => {-3, 3, -1.554894}
+in: solve(max(2-x^2,x)=x^3/9,x)
+expect: [-3,3,-3*(1+sqrt(3)*sin((atan(sqrt(5)/2)-pi)/3)+cos((atan(sqrt(5)/2)-pi)/3))]
+check: set
+
+== M33 | (1 + i) z + (2 - i) conj(z) = -3 i => z = 2 + 3 i
+in: csolve((1+i)*z+(2-i)*conj(z)=-3*i,z)
+expect: [2+3*i]
+check: set
+
+== M33b | same with z = x + i y, x, y real => x = 2, y = 3
+in: solve([re((1+i)*(x+i*y)+(2-i)*(x-i*y)+3*i)=0,im((1+i)*(x+i*y)+(2-i)*(x-i*y)+3*i)=0],[x,y])
+expect: [[x=2,y=3]]
+check: set
+
+== M34 | f(x)^2 + f(x) - 2 = 0 solved for f(x) => {1, -2}
+in: solve(f(x)^2+f(x)-2=0,f(x))
+allow: f
+expect: [1,-2]
+check: set
+alt: UNSUPPORTED | ERROR 2: solve: expected a variable | cannot solve for a function application f(x)
+
+== M35 | 3x3 linear system with a parametric solution => x = 4 - z, y = 2
+in: solve([x+y+z=6,2*x+y+2*z=10,x+3*y+z=10],[x,y,z])
+check: linsys 1
+
+== M36 | Steinberg: 189 linear equations in 49 unknowns, 3 free
+in: linsolve([-b*k8/a+c*k8/a=0,-b*k11/a+c*k11/a=0,-b*k10/a+c*k10/a+k2=0,-k3-b*k9/a+c*k9/a=0,-b*k14/a+c*k14/a=0,-b*k15/a+c*k15/a=0,-b*k18/a+c*k18/a-k2=0,-b*k17/a+c*k17/a=0,-b*k16/a+c*k16/a+k4=0,-b*k13/a+c*k13/a-b*k21/a+c*k21/a+b*k5/a-c*k5/a=0,b*k44/a-c*k44/a=0,-b*k45/a+c*k45/a=0,-b*k20/a+c*k20/a=0,-b*k44/a+c*k44/a=0,b*k46/a-c*k46/a=0,b^2*k47/a^2-2*b*c*k47/a^2+c^2*k47/a^2=0,k3=0,-k4=0,-b*k12/a+c*k12/a-a*k6/b+c*k6/b=0,-b*k19/a+c*k19/a+a*k7/c-b*k7/c=0,b*k45/a-c*k45/a=0,-b*k46/a+c*k46/a=0,-k48+c*k48/a+c*k48/b-c^2*k48/(a*b)=0,-k49+b*k49/a+b*k49/c-b^2*k49/(a*c)=0,a*k1/b-c*k1/b=0,a*k4/b-c*k4/b=0,a*k3/b-c*k3/b+k9=0,-k10+a*k2/b-c*k2/b=0,a*k7/b-c*k7/b=0,-k9=0,k11=0,b*k12/a-c*k12/a+a*k6/b-c*k6/b=0,a*k15/b-c*k15/b=0,k10+a*k18/b-c*k18/b=0,-k11+a*k17/b-c*k17/b=0,a*k16/b-c*k16/b=0,-a*k13/b+c*k13/b+a*k21/b-c*k21/b+a*k5/b-c*k5/b=0,-a*k44/b+c*k44/b=0,a*k45/b-c*k45/b=0,a*k14/c-b*k14/c+a*k20/b-c*k20/b=0,a*k44/b-c*k44/b=0,-a*k46/b+c*k46/b=0,-k47+c*k47/a+c*k47/b-c^2*k47/(a*b)=0,a*k19/b-c*k19/b=0,-a*k45/b+c*k45/b=0,a*k46/b-c*k46/b=0,a^2*k48/b^2-2*a*c*k48/b^2+c^2*k48/b^2=0,-k49+a*k49/b+a*k49/c-a^2*k49/(b*c)=0,k16=0,-k17=0,-a*k1/c+b*k1/c=0,-k16-a*k4/c+b*k4/c=0,-a*k3/c+b*k3/c=0,k18-a*k2/c+b*k2/c=0,b*k19/a-c*k19/a-a*k7/c+b*k7/c=0,-a*k6/c+b*k6/c=0,-a*k8/c+b*k8/c=0,-a*k11/c+b*k11/c+k17=0,-a*k10/c+b*k10/c-k18=0,-a*k9/c+b*k9/c=0,-a*k14/c+b*k14/c-a*k20/b+c*k20/b=0,-a*k13/c+b*k13/c+a*k21/c-b*k21/c-a*k5/c+b*k5/c=0,a*k44/c-b*k44/c=0,-a*k45/c+b*k45/c=0,-a*k44/c+b*k44/c=0,a*k46/c-b*k46/c=0,-k47+b*k47/a+b*k47/c-b^2*k47/(a*c)=0,-a*k12/c+b*k12/c=0,a*k45/c-b*k45/c=0,-a*k46/c+b*k46/c=0,-k48+a*k48/b+a*k48/c-a^2*k48/(b*c)=0,a^2*k49/c^2-2*a*b*k49/c^2+b^2*k49/c^2=0,k8=0,k11=0,-k15=0,k10-k18=0,-k17=0,k9=0,-k16=0,-k29=0,k14-k32=0,-k21+k23-k31=0,-k24-k30=0,-k35=0,k44=0,-k45=0,k36=0,k13-k23+k39=0,-k20+k38=0,k25+k37=0,b*k26/a-c*k26/a-k34+k42=0,-2*k44=0,k45=0,k46=0,b*k47/a-c*k47/a=0,k41=0,k44=0,-k46=0,-b*k47/a+c*k47/a=0,k12+k24=0,-k19-k25=0,-a*k27/b+c*k27/b-k33=0,k45=0,-k46=0,-a*k48/b+c*k48/b=0,a*k28/c-b*k28/c+k40=0,-k45=0,k46=0,a*k48/b-c*k48/b=0,a*k49/c-b*k49/c=0,-a*k49/c+b*k49/c=0,-k1=0,-k4=0,-k3=0,k15=0,k18-k2=0,k17=0,k16=0,k22=0,k25-k7=0,k24+k30=0,k21+k23-k31=0,k28=0,-k44=0,k45=0,-k30-k6=0,k20+k32=0,k27+b*k33/a-c*k33/a=0,k44=0,-k46=0,-b*k47/a+c*k47/a=0,-k36=0,k31-k39-k5=0,-k32-k38=0,k19-k37=0,k26-a*k34/b+c*k34/b-k42=0,k44=0,-2*k45=0,k46=0,a*k48/b-c*k48/b=0,a*k35/c-b*k35/c-k41=0,-k44=0,k46=0,b*k47/a-c*k47/a=0,-a*k49/c+b*k49/c=0,-k40=0,k45=0,-k46=0,-a*k48/b+c*k48/b=0,a*k49/c-b*k49/c=0,k1=0,k4=0,k3=0,-k8=0,-k11=0,-k10+k2=0,-k9=0,k37+k7=0,-k14-k38=0,-k22=0,-k25-k37=0,-k24+k6=0,-k13-k23+k39=0,-k28+b*k40/a-c*k40/a=0,k44=0,-k45=0,-k27=0,-k44=0,k46=0,b*k47/a-c*k47/a=0,k29=0,k32+k38=0,k31-k39+k5=0,-k12+k30=0,k35-a*k41/b+c*k41/b=0,-k44=0,k45=0,-k26+k34+a*k42/c-b*k42/c=0,k44=0,k45=0,-2*k46=0,-b*k47/a+c*k47/a=0,-a*k48/b+c*k48/b=0,a*k49/c-b*k49/c=0,k33=0,-k45=0,k46=0,a*k48/b-c*k48/b=0,-a*k49/c+b*k49/c=0],[k1,k2,k3,k4,k5,k6,k7,k8,k9,k10,k11,k12,k13,k14,k15,k16,k17,k18,k19,k20,k21,k22,k23,k24,k25,k26,k27,k28,k29,k30,k31,k32,k33,k34,k35,k36,k37,k38,k39,k40,k41,k42,k43,k44,k45,k46,k47,k48,k49])
+check: linsys 3
+
+== M37 | 3x3 nonlinear system => 16 solutions
+in: csolve([x^2*y+3*y*z-4=0,-3*x^2*z+2*y^2+1=0,2*y*z^2-z^2-1=0],[x,y,z])
+check: nlsys 16
+floats: ok
+note: the lex Groebner basis has (z-1)(3z^2-2z+1)(6z^5-6z^4-9z^3-7z^2-3z-1) and two x per z, so 16 solutions; SymPy's transcription lists only the 6 from the first two factors. Numeric roots of the quintic are accepted.
+
+== M37b | same, real solutions => (+-1, 1, 1) and (+-0.5332, 0.6172, 2.0655)
+in: solve([x^2*y+3*y*z-4=0,-3*x^2*z+2*y^2+1=0,2*y*z^2-z^2-1=0],[x,y,z])
+check: nlsys 4
+floats: ok
+
+@section N Inequalities
+== N1 | e^pi > pi^e => true
+in: e^pi>pi^e
+expect: true
+check: bool
+
+== N2 | x^4 - x + 1 > 0 for real x => true
+in: x^4-x+1>0
+expect: true
+check: bool
+
+== N3 | x^4 - x + 1 > 1 for all real x => false
+in: x^4-x+1>1
+expect: false
+check: bool
+
+== N4 | |x| < 1 => -1 < x < 1 (true)
+pre: assume(abs(x)<1)
+in: -1<x and x<1
+expect: true
+check: bool
+
+== N5 | x > y > 0 => 2 x^2 > 2 y^2
+pre: assume(x>y)
+pre: assume(y>0)
+in: 2*x^2>2*y^2
+expect: true
+check: bool
+
+== N6 | x > y > 0, k > 0 => k x^2 > k y^2
+pre: assume(x>y)
+pre: assume(y>0)
+pre: assume(k>0)
+in: k*x^2>k*y^2
+expect: true
+check: bool
+
+== N7 | x > y > 0, k, n > 0 => k x^n > k y^n
+pre: assume(x>y)
+pre: assume(y>0)
+pre: assume(k>0)
+pre: assume(n>0)
+in: k*x^n>k*y^n
+expect: true
+check: bool
+
+== N8 | x > 1, y >= x - 1 => y > 0
+pre: assume(x>1)
+pre: assume(y>=x-1)
+in: y>0
+expect: true
+check: bool
+
+== N9 | x >= y >= z >= x => x = y
+pre: assume(x>=y)
+pre: assume(y>=z)
+pre: assume(z>=x)
+in: x=y
+expect: true
+check: bool
+
+== N10 | |x - 1| > 2 => x < -1 or x > 3
+in: solve(abs(x-1)>2,x)
+expect: x<-1 or x>3
+check: ineq
+
+== N11 | (x-1)...(x-5) < 0 expanded => x < 1 or 2 < x < 3 or 4 < x < 5
+in: solve(expand((x-1)*(x-2)*(x-3)*(x-4)*(x-5))<0,x)
+expect: x<1 or (2<x and x<3) or (4<x and x<5)
+check: ineq
+
+== N12 | 6/(x - 3) <= 3 => x < 3 or x >= 5
+in: solve(6/(x-3)<=3,x)
+expect: x<3 or x>=5
+check: ineq
+
+== N13 | sqrt(x) < 2 => 0 <= x < 4
+in: solve(sqrt(x)<2,x)
+expect: 0<=x and x<4
+check: ineq
+
+== N14 | sin x < 2 => all real x
+in: solve(sin(x)<2,x)
+expect: true
+check: ineq
+
+== N15 | sin x < 1 => x != pi/2 + 2 n pi
+in: solve(sin(x)<1,x)
+expect: sin(x)<1
+points: [pi/2,5*pi/2,-3*pi/2,0,1]
+check: ineq
+
+== N16 | |2 A (cos t - 1) + 1| <= 1 => 0 <= A <= 1/(1 - cos t)
+in: solve(abs(2*a*(cos(t)-1)+1)<=1,a)
+expect: 0<=a and a<=1/(1-cos(t))
+var: a
+check: ineq
+
+== N17 | A^2 (cos t - 4)^2 sin^2 t < 9 => |A| < 3/|(cos t - 4) sin t|
+in: solve(a^2*(cos(t)-4)^2*sin(t)^2<9,a)
+expect: abs(a)<3/abs((cos(t)-4)*sin(t))
+var: a
+check: ineq
+
+== N18 | x + y > 0 and x - y < 0 => |x| < y
+in: solve([x+y>0,x-y<0],[x,y])
+expect: abs(x)<y
+check: manual
+
+@section O Vector analysis
+== O1 | norm([1 + i, -2, 3 i]) => sqrt(15)
+in: norm([1+i,-2,3*i])
+expect: sqrt(15)
+
+== O2 | (2, 2, -3) x (1, 3, 1) => (11, -5, 4)
+in: cross([2,2,-3],[1,3,1])
+expect: [11,-5,4]
+
+== O3 | (a x b) . (c x d) for abstract vectors
+unsupported: no abstract (basis-free) vectors
+
+== O4 | curl(x y z, x^2 y^2 z^2, y^2 z^3)
+in: curl([x*y*z,x^2*y^2*z^2,y^2*z^3],[x,y,z])
+expect: [2*y*z^3-2*x^2*y^2*z,x*y,2*x*y^2*z^2-x*z]
+
+== O5 | div(f x g) = g . curl f - f . curl g for abstract fields
+unsupported: no abstract (basis-free) vectors
+
+== O6 | divergence in spherical coordinates
+in: divergence([f(r,theta,phi),g(r,theta,phi),h(r,theta,phi)],[r,theta,phi],spherical)
+expect: diff(f(r,theta,phi),r)+2*f(r,theta,phi)/r+cos(theta)*g(r,theta,phi)/(r*sin(theta))+diff(g(r,theta,phi),theta)/r+diff(h(r,theta,phi),phi)/(r*sin(theta))
+allow: diff
+
+== O7 | dR/dt in spherical coordinates
+unsupported: no curvilinear coordinate systems
+
+== O8 | scalar potential of (2xy, x^2 + 1, 6z^2) => x^2 y + y + 2z^3
+in: potential([2*x*y,x^2+1,6*z^2],[x,y,z])
+expect: x^2*y+y+2*z^3
+
+== O9 | vector potential of the O4 curl
+in: vpotential([2*y*z^3-2*x^2*y^2*z,x*y,2*x*y^2*z^2-x*z],[x,y,z])
+expect: [2*y*z^3-2*x^2*y^2*z,x*y,2*x*y^2*z^2-x*z]
+check: curlof
+note: any vector potential differs from Wester's [x y z, x^2 y^2 z^2, y^2 z^3] by a gradient: the check is that the curl of the result (in x, y, z) is the field
+
+== O10 | Gram-Schmidt of [0,1,2,1], [0,1,3,1], [1,1,1,0], [1,3,6,2]
+in: gramschmidt([[0,1,2,1],[0,1,3,1],[1,1,1,0],[1,3,6,2]])
+expect: [[0,1,2,1],[0,-1,1,-1],[2,1,0,-1]]
+check: span
+
+@section P Matrix theory
+== P1 | superdiagonal of [[1,2,3],[4,5,6],[7,8,9]] => [2, 6]
+in: diag([[1,2,3],[4,5,6],[7,8,9]],1)
+expect: [2,6]
+
+== P2 | (2,3)-minor matrix => [[1, 2], [7, 8]]
+in: minor([[1,2,3],[4,5,6],[7,8,9]],2,3)
+expect: [[1,2],[7,8]]
+
+== P3 | build a 7x6 matrix from submatrices of a 4x4 matrix
+unsupported: no submatrix indexing / block assembly
+
+== P4 | block diagonal matrix from [[a,1],[0,a]], b, [[c,1,0],[0,c,1],[0,0,c]]
+in: blockdiag([[a,1],[0,a]],b,[[c,1,0],[0,c,1],[0,0,c]])
+expect: [[a,1,0,0,0,0],[0,a,0,0,0,0],[0,0,b,0,0,0],[0,0,0,c,1,0],[0,0,0,0,c,1],[0,0,0,0,0,c]]
+
+== P5 | [[7, 11], [3, 8]] mod 2 => [[1, 1], [1, 0]]
+in: mod([[7,11],[3,8]],2)
+expect: [[1,1],[1,0]]
+
+== P6 | d^2/dt^2 [[cos t, sin t], [-sin t, cos t]]
+in: diff([[cos(t),sin(t)],[-sin(t),cos(t)]],t,2)
+expect: [[-cos(t),-sin(t)],[sin(t),-cos(t)]]
+
+== P7 | [[x, y]] (a [[1,3,5],[2,4,6]] + [[7,-9,11],[-8,10,-12]])
+in: [[x,y]]*(a*[[1,3,5],[2,4,6]]+[[7,-9,11],[-8,10,-12]])
+expect: [[(a+7)*x+(2*a-8)*y,(3*a-9)*x+(4*a+10)*y,(5*a+11)*x+(6*a-12)*y]]
+
+== P8 | infinity norm of [[1, -2i], [-3i, 4]] => 7
+in: norm([[1,-2*i],[-3*i,4]],inf)
+expect: 7
+alt: UNSUPPORTED | ERROR 2: wrong number of arguments | norm() has no p/inf argument (Frobenius only)
+
+== P9 | Frobenius norm => (a^2 + b^2 + c^2)/(|a| |b| |c|)
+in: factor(norm([[a/(b*c),1/c,1/b],[1/c,b/(a*c),1/a],[1/b,1/a,c/(a*b)]]))
+expect: (a^2+b^2+c^2)/(abs(a)*abs(b)*abs(c))
+domain: a=real b=real c=real
+check: simp
+slack: 4
+
+== P10 | Hermitian transpose of [[1, 2+3i], [f(4-5i), 6]]
+in: conj(transpose([[1,2+3*i],[f(4-5*i),6]]))
+allow: f
+expect: [[1,f(4+5*i)],[2-3*i,6]]
+note: Wester's answer assumes f is real valued (conj(f(z)) = f(conj(z))); the CAS makes the same assumption
+
+== P11 | inverse of [[a, b], [1, a b]] => 1/(a^2 - 1) [[a, -1], [-1/b, a/b]]
+in: inv([[a,b],[1,a*b]])
+expect: [[a/(a^2-1),-1/(a^2-1)],[-1/(b*(a^2-1)),a/(b*(a^2-1))]]
+
+== P12 | inverse of a block triangular matrix with symbolic blocks
+unsupported: no symbolic (noncommutative) matrix blocks
+
+== P13 | LU decomposition of a symbolic matrix (Wood)
+in: lu([[1,x-2,x-3],[x-1,x^2-3*x+6,x^2-3*x-2],[x-2,x^2-8,2*x^2-12*x+14]])
+expect: [[[1,0,0],[x-1,1,0],[x-2,x-3,1]],[[1,x-2,x-3],[0,4,x-5],[0,0,x-7]],[[1,0,0],[0,1,0],[0,0,1]]]
+
+== P14 | reduced row echelon form (Cullen)
+in: rref([[1,2,3,1,3],[3,2,1,1,7],[0,2,4,1,1],[1,1,1,1,4]])
+expect: [[1,0,-1,0,2],[0,1,2,0,-1],[0,0,0,1,3],[0,0,0,0,0]]
+
+== P15 | rank => 2
+in: rank([[-1,3,7,-5],[4,-2,1,3],[2,4,15,-7]])
+expect: 2
+
+== P16 | rank of [[2 sqrt 2, 8], [6 sqrt 6, 24 sqrt 3]] => 1
+in: rank([[2*sqrt(2),8],[6*sqrt(6),24*sqrt(3)]])
+expect: 1
+
+== P17 | rank of a trigonometric matrix => 1
+in: rank([[sin(2*t),cos(2*t)],[2*(1-cos(t)^2)*cos(t),(1-2*sin(t)^2)*sin(t)]])
+expect: 1
+
+== P18 | null space => span{[2,4,1,0], [0,-3,0,1]}
+in: ker([[1,0,-2,0],[-2,1,0,3],[-1,2,-6,6]])
+expect: [[2,4,1,0],[0,-3,0,1]]
+check: span
+
+== P19 | factor the 4x4 Vandermonde determinant
+in: factor(det([[1,1,1,1],[w,x,y,z],[w^2,x^2,y^2,z^2],[w^3,x^3,y^3,z^3]]))
+expect: (w-x)*(w-y)*(w-z)*(x-y)*(x-z)*(y-z)
+check: factor
+
+== P20 | minimal polynomial => (lambda - 1)^2 (lambda + 1)
+in: minpoly([[17,-8,-12,14],[46,-22,-35,41],[-2,1,4,-4],[4,-2,-2,3]],x)
+expect: (x-1)^2*(x+1)
+check: factor
+
+== P21 | characteristic polynomial => x^3 - 2x^2 - 5x + 6
+in: charpoly([[5,-3,-7],[-2,1,2],[2,-3,-4]],x)
+expect: x^3-2*x^2-5*x+6
+
+== P21b | eigenvalues from it => {1, -2, 3}
+in: solve(charpoly([[5,-3,-7],[-2,1,2],[2,-3,-4]],x)=0,x)
+expect: [1,-2,3]
+check: set
+
+== P22 | eigenvalues of (2 - a) I_100 => 2 - a
+in: eigenvals((2-a)*identity(100))
+expect: [2-a]
+check: set distinct
+
+== P23 | eigenvalues of the 5x5 tridiagonal [1 2 1] matrix
+in: eigenvals([[2,1,0,0,0],[1,2,1,0,0],[0,1,2,1,0],[0,0,1,2,1],[0,0,0,1,2]])
+expect: [2-sqrt(3),1,2,3,2+sqrt(3)]
+check: set distinct
+
+== P24 | exact eigenvalues of the Rosser matrix
+in: eigenvals([[611,196,-192,407,-8,-52,-49,29],[196,899,113,-192,-71,-43,-8,-44],[-192,113,899,196,61,49,8,52],[407,-192,196,611,8,44,59,-23],[-8,-71,61,8,411,-599,208,208],[-52,-43,49,44,-599,411,208,208],[-49,-8,8,59,208,208,99,-911],[29,-44,52,-23,208,208,-911,99]])
+expect: [-10*sqrt(10405),0,510-100*sqrt(26),1000,510+100*sqrt(26),1020,10*sqrt(10405)]
+check: set distinct
+
+== P25 | numeric eigenvalues of the Rosser matrix
+in: eigenvals(approx([[611,196,-192,407,-8,-52,-49,29],[196,899,113,-192,-71,-43,-8,-44],[-192,113,899,196,61,49,8,52],[407,-192,196,611,8,44,59,-23],[-8,-71,61,8,411,-599,208,208],[-52,-43,49,44,-599,411,208,208],[-49,-8,8,59,208,208,99,-911],[29,-44,52,-23,208,208,-911,99]]))
+expect: [-1020.0490184299969,0,0.09804864072151699,1000,1019.9019513592784,1020,1020.0490184299969]
+check: set distinct
+tol: 1e-6
+
+== P26 | eigenvalues of a hypercompanion matrix => roots of x^2+x+1 (twice), RootOf(quintic)
+in: eigenvals([[-a4,-a3,-a2,-a1,-a0,0,0,0,0],[1,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,-1,-1,0,0],[0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,1,-1,-1],[0,0,0,0,0,0,0,1,0]])
+allow: rootof
+expect: [-1/2-sqrt(3)*i/2,-1/2+sqrt(3)*i/2]
+check: manual
+
+== P27 | eigenvectors of a 5x5 matrix with eigenvalues {a, a, a, 1 - i, 1 + i}
+in: eigenvects([[a,0,0,0,0],[0,0,0,0,1],[0,0,a,0,0],[0,0,0,a,0],[0,-2,0,0,2]])
+check: eigvecs 5
+
+== P28 | generalized eigenvectors (3x3, lambda = 1 triple)
+unsupported: no generalized eigenvectors (Jordan chains)
+
+== P29 | generalized eigenvectors (6x6)
+unsupported: no generalized eigenvectors (Jordan chains)
+
+== P30 | Jordan form => diag([[1,1],[0,1]], [[1,1],[0,1]], -1)
+in: jordan([[1,0,0,1,-1],[0,1,-2,3,-3],[0,0,-1,2,-2],[1,-1,1,0,1],[1,-1,1,-1,2]])
+expect: [[-1,0,0,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,0,1,1],[0,0,0,0,1]]
+check: manual
+alt: PASS | [[-1,0,0,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,0,1,1],[0,0,0,0,1]] | blocks [-1], J2(1), J2(1): the expected form
+
+== P31 | Smith normal form of [[x^2, x - 1], [x + 1, x^2]] => [[1, 0], [0, x^4 - x^2 + 1]]
+in: smith([[x^2,x-1],[x+1,x^2]])
+expect: [[1,0],[0,x^4-x^2+1]]
+
+== P32 | matrix exponential of [[1, -2], [2, 1]] => e [[cos 2, -sin 2], [sin 2, cos 2]]
+in: expm([[1,-2],[2,1]])
+expect: [[e*cos(2),-e*sin(2)],[e*sin(2),e*cos(2)]]
+
+== P33 | matrix exponential exp(M t) (Niles)
+in: expm([[0,1,0,0],[0,0,0,2*w],[0,0,0,1],[0,-2*w,3*w^2,0]]*t)
+expect: [[1,4*sin(w*t)/w-3*t,6*(w*t-sin(w*t)),2/w*(1-cos(w*t))],[0,4*cos(w*t)-3,6*w*(1-cos(w*t)),2*sin(w*t)],[0,-2/w*(1-cos(w*t)),4-3*cos(w*t),sin(w*t)/w],[0,-2*sin(w*t),3*w*sin(w*t),cos(w*t)]]
+
+== P34 | sine of a Jordan matrix
+in: sinm([[a,1,0,0,0,0],[0,a,0,0,0,0],[0,0,b,0,0,0],[0,0,0,c,1,0],[0,0,0,0,c,1],[0,0,0,0,0,c]])
+expect: [[sin(a),cos(a),0,0,0,0],[0,sin(a),0,0,0,0],[0,0,sin(b),0,0,0],[0,0,0,sin(c),cos(c),-sin(c)/2],[0,0,0,0,sin(c),cos(c)],[0,0,0,0,0,sin(c)]]
+
+== P35 | sin(pi/2 [[2,1,1],[2,3,2],[1,1,2]]) => identity
+in: sinm(pi/2*[[2,1,1],[2,3,2],[1,1,2]])
+expect: [[1,0,0],[0,1,0],[0,0,1]]
+
+== P36 | matrix square root of [[10, 7], [7, 17]]
+in: [[10,7],[7,17]]^(1/2)
+expect: [[10,7],[7,17]]
+check: matsq
+
+== P37 | square root of [[1,1,0],[0,1,0],[0,0,1]] => [[1,1/2,0],[0,1,0],[0,0,1]]
+in: [[1,1,0],[0,1,0],[0,0,1]]^(1/2)
+expect: [[1,1,0],[0,1,0],[0,0,1]]
+check: matsq
+
+== P38 | square root of the singular [[0,1,0],[0,0,0],[0,0,0]] => [[0,a,b],[0,0,0],[0,1/b,0]]
+in: [[0,1,0],[0,0,0],[0,0,0]]^(1/2)
+expect: [[0,1,0],[0,0,0],[0,0,0]]
+check: matsq
+
+== P39 | singular value decomposition of [[1,1],[2,2],[3,3]]
+in: svd([[1,1],[2,2],[3,3]])
+expect: [2*sqrt(7),0]
+check: manual
+
+== P40 | Jacobian of (r cos t, r sin t)
+in: jacobian([r*cos(t),r*sin(t)],[r,t])
+expect: [[cos(t),-r*sin(t)],[sin(t),r*cos(t)]]
+
+== P41 | Hessian of r^2 sin t
+in: hessian(r^2*sin(t),[r,t])
+expect: [[2*sin(t),2*r*cos(t)],[2*r*cos(t),-r^2*sin(t)]]
+
+== P42 | Wronskian matrix of (cos t, sin t)
+in: wronskianmat([cos(t),sin(t)],t)
+expect: [[cos(t),sin(t)],[-sin(t),cos(t)]]
+
+== P43 | user-defined Jacobian
+pre: g(f):=grad(f,[r,t])
+in: map([r*cos(t),r*sin(t)],g)
+expect: [[cos(t),-r*sin(t)],[sin(t),r*cos(t)]]
+note: no list indexing (L[i] multiplies), so the user function maps over the list
+
+== P44 | user-defined Hessian
+pre: g(f):=grad(f,[r,t])
+in: map(grad(r^2*sin(t),[r,t]),g)
+expect: [[2*sin(t),2*r*cos(t)],[2*r*cos(t),-r^2*sin(t)]]
+
+== P45 | user-defined Wronskian
+pre: g(f):=[f,diff(f,t)]
+in: transpose(map([cos(t),sin(t)],g))
+expect: [[cos(t),sin(t)],[-sin(t),cos(t)]]
+
+@section Q Tensor analysis
+== Q1 | tensor analysis problems (Q1-Q6 in Wester)
+na: tensor analysis (also absent from SymPy's transcription)
+
+@section R Sums
+== R1 | sum((x[i] - xbar)^2) => sum(x[i]^2) - sum(x[i])^2/n
+unsupported: no indexed (subscripted) symbols
+
+== R2 | least squares fit of a line to (x[i], y[i])
+unsupported: no indexed (subscripted) symbols
+
+== R3 | sum((-1)^k binomial(2n, k)^2, k = 0..2n) => (-1)^n binomial(2n, n)
+pre: assume(n,integer)
+in: sum((-1)^k*binomial(2*n,k)^2,k,0,2*n)
+expect: (-1)^n*binomial(2*n,n)
+domain: n=int
+
+== R4 | Gosper: indefinite sum of binomial(n,k)/2^n - binomial(n+1,k)/2^(n+1)
+unsupported: no indefinite summation (Gosper)
+
+== R5 | Dixon's identity => (a+b+c)!/(a! b! c!)
+in: sum((-1)^k*binomial(a+b,a+k)*binomial(b+c,b+k)*binomial(c+a,c+k),k,-a,a)
+expect: factorial(a+b+c)/(factorial(a)*factorial(b)*factorial(c))
+domain: a=int b=int c=int
+note: the sum over -a..a equals Dixon's identity when a = min(a, b, c)
+
+== R6 | telescoping sum(g(k+1) - g(k), k = 0..n) => g(n+1) - g(0)
+in: sum(g(k+1)-g(k),k,0,n)
+allow: g
+expect: g(n+1)-g(0)
+
+== R7 | sum(k^3, k = 1..n) => n^2 (n+1)^2/4
+in: sum(k^3,k,1,n)
+expect: n^2*(n+1)^2/4
+
+== R8 | sum(k^2 binomial(n, k), k = 1..n) => n (n+1) 2^(n-2)
+in: sum(k^2*binomial(n,k),k,1,n)
+expect: n*(n+1)*2^(n-2)
+domain: n=int
+
+== R9 | sum(binomial(n, k)/(k + 1), k = 0..n) => (2^(n+1) - 1)/(n + 1)
+in: sum(binomial(n,k)/(k+1),k,0,n)
+expect: (2^(n+1)-1)/(n+1)
+domain: n=int
+
+== R10 | Vandermonde: sum(binomial(n, k) binomial(m, r - k), k = 0..r) => binomial(n + m, r)
+in: sum(binomial(n,k)*binomial(m,r-k),k,0,r)
+expect: binomial(n+m,r)
+domain: n=int m=int r=int
+
+== R11 | sum(binomial(n, k) fib(k), k = 0..n) => fib(2n)
+in: sum(binomial(n,k)*fibonacci(k),k,0,n)
+expect: fibonacci(2*n)
+domain: n=int
+
+== R12 | sum(fib(k)^2, k = 1..n) => fib(n) fib(n+1)
+in: sum(fibonacci(k)^2,k,1,n)
+expect: fibonacci(n)*fibonacci(n+1)
+domain: n=int
+
+== R13 | sum(sin(k x), k = 1..n) => cot(x/2)/2 - cos((2n+1) x/2)/(2 sin(x/2))
+in: sum(sin(k*x),k,1,n)
+expect: cot(x/2)/2-cos((2*n+1)*x/2)/(2*sin(x/2))
+domain: n=int
+
+== R14 | sum(sin((2k - 1) x), k = 1..n) => sin(n x)^2/sin x
+in: sum(sin((2*k-1)*x),k,1,n)
+expect: sin(n*x)^2/sin(x)
+domain: n=int
+
+== R15 | sum(binomial(n - k, k), k = 0..floor(n/2)) => fib(n + 1)
+in: sum(binomial(n-k,k),k,0,floor(n/2))
+expect: fibonacci(n+1)
+domain: n=int
+
+== R16 | sum(1/k^2 + 1/k^3, k = 1..inf) => pi^2/6 + zeta(3)
+in: sum(1/k^2+1/k^3,k,1,inf)
+expect: pi^2/6+zeta(3)
+
+== R17 | numeric value of R16 => 2.84699
+in: approx(sum(1/k^2+1/k^3,k,1,inf),15)
+expect: 2.8469909700078206
+check: value
+tol: 1e-12
+
+== R18 | sum(1/(2^k k^2), k = 1..inf) => pi^2/12 - log(2)^2/2
+in: sum(1/(2^k*k^2),k,1,inf)
+expect: pi^2/12-ln(2)^2/2
+
+== R19 | sum(1/((3k+1)(3k+2)(3k+3)), k = 0..inf) => sqrt(3) pi/12 - log(3)/4
+in: sum(1/((3*k+1)*(3*k+2)*(3*k+3)),k,0,inf)
+expect: sqrt(3)*pi/12-ln(3)/4
+
+== R20 | sum(binomial(n, 4k), k = 0..inf) => (2^(n-1) + 2^(n/2) cos(n pi/4))/2
+in: sum(binomial(n,4*k),k,0,inf)
+expect: (2^(n-1)+2^(n/2)*cos(n*pi/4))/2
+domain: n=int
+
+== R21 | sum(1/(sqrt(k (k+1)) (sqrt k + sqrt(k+1))), k = 1..inf) => 1
+in: sum(1/(sqrt(k*(k+1))*(sqrt(k)+sqrt(k+1))),k,1,inf)
+expect: 1
+
+== R22 | double sum (capping) => 1/sqrt((1 - x y)^2 - 4 x^2)
+in: sum(sum(binomial(n,k)*binomial(n-k,n-2*k)*x^n*y^(n-2*k),k,0,floor(n/2)),n,0,inf)
+expect: 1/sqrt((1-x*y)^2-4*x^2)
+domain: x=0:0.3 y=0:0.3
+
+== R23 | equivalent double sum
+in: sum(sum(n!/(k!^2*(n-2*k)!)*(x/y)^k*(x*y)^(n-k),n,2*k,inf),k,0,inf)
+expect: 1/sqrt((1-x*y)^2-4*x^2)
+domain: x=0:0.3 y=0:0.3
+
+== R24 | sum(product(k/(2k - 1), k = 1..m), m = 2..inf) => pi/2
+in: sum(product(k/(2*k-1),k,1,m),m,2,inf)
+expect: pi/2
+
+@section S Products
+== S1 | product(gamma(k/3), k = 1..8) => 640 pi^3/(2187 sqrt 3)
+in: product(gamma(k/3),k,1,8)
+expect: 640*pi^3/(2187*sqrt(3))
+check: simp
+slack: 2
+
+== S2 | product(k, k = 1..n) => n!
+in: product(k,k,1,n)
+expect: factorial(n)
+domain: n=int
+
+== S3 | product(x^k, k = 1..n) => x^(n (n+1)/2)
+in: product(x^k,k,1,n)
+expect: x^(n*(n+1)/2)
+domain: n=int
+
+== S4 | product(1 + 1/k, k = 1..n-1) => n
+in: product(1+1/k,k,1,n-1)
+expect: n
+domain: n=int
+
+== S5 | product((2k - 1)/(2k), k = 1..n) => binomial(2n, n)/2^(2n)
+in: product((2*k-1)/(2*k),k,1,n)
+expect: binomial(2*n,n)/4^n
+domain: n=int
+
+== S6 | product(x^2 - 2x cos(k pi/n) + 1, k = 1..n-1) => (x^(2n) - 1)/(x^2 - 1)
+in: product(x^2-2*x*cos(k*pi/n)+1,k,1,n-1)
+expect: (x^(2*n)-1)/(x^2-1)
+domain: n=int
+
+== S7 | product((k^3 - 1)/(k^3 + 1), k = 2..inf) => 2/3
+in: product((k^3-1)/(k^3+1),k,2,inf)
+expect: 2/3
+
+== S8 | product(1 - 1/(2k)^2, k = 1..inf) => 2/pi
+in: product(1-1/(2*k)^2,k,1,inf)
+expect: 2/pi
+
+== S9 | product(1 + (-1)^(k+1)/(2k - 1), k = 1..inf) => sqrt(2)
+in: product(1+(-1)^(k+1)/(2*k-1),k,1,inf)
+expect: sqrt(2)
+
+== S10 | product((k (k+1) + 1 + i)/(k (k+1) + 1 - i), k = 0..inf) => -1
+in: product((k*(k+1)+1+i)/(k*(k+1)+1-i),k,0,inf)
+expect: -1
+
+@section T Limits
+== T1 | limit((1 + 1/n)^n, n, inf) => e
+in: limit((1+1/n)^n,n,inf)
+expect: e
+
+== T2 | limit((1 - cos x)/x^2, x, 0) => 1/2
+in: limit((1-cos(x))/x^2,x,0)
+expect: 1/2
+
+== T3 | limit((3^x + 5^x)^(1/x), x, inf) => 5 (Gruntz)
+in: limit((3^x+5^x)^(1/x),x,inf)
+expect: 5
+
+== T4 | limit(log x/(log x + sin x), x, inf) => 1
+in: limit(ln(x)/(ln(x)+sin(x)),x,inf)
+expect: 1
+
+== T5 | Gruntz: limit((exp(x e^-x/(e^-x + e^(-2x^2/(x+1)))) - e^x)/x, x, inf) => -e^2
+in: limit((exp(x*exp(-x)/(exp(-x)+exp(-2*x^2/(x+1))))-exp(x))/x,x,inf)
+expect: -exp(2)
+
+== T6 | Gruntz: x log x log(x e^x - x^2)^2/log(log(x^2 + 2 e^(e^(3 x^3 log x)))) => 1/3
+in: limit(x*ln(x)*ln(x*exp(x)-x^2)^2/ln(ln(x^2+2*exp(exp(3*x^3*ln(x))))),x,inf)
+expect: 1/3
+
+== T7 | limit(n!^(1/n)/n, n, inf) => 1/e
+in: limit(n!^(1/n)/n,n,inf)
+expect: exp(-1)
+
+== T8 | limit(gamma(n + 1)^(1/n)/n, n, inf) => 1/e
+in: limit(gamma(n+1)^(1/n)/n,n,inf)
+expect: exp(-1)
+
+== T9 | limit(gamma(z + a)/gamma(z) exp(-a log z), z, inf) => 1 (a > 0)
+pre: assume(a>0)
+in: limit(gamma(z+a)/gamma(z)*exp(-a*ln(z)),z,inf)
+expect: 1
+
+== T10 | same for a < 0 => 1
+pre: assume(a<0)
+in: limit(gamma(z+a)/gamma(z)*exp(-a*ln(z)),z,inf)
+expect: 1
+
+== T11 | limit(2F1(1, k; 1; z/k), k, inf) => e^z
+in: limit(hypergeom([1,k],[1],z/k),k,inf)
+expect: exp(z)
+
+== T12 | limit(zeta(x) - 1/(x - 1), x, 1) => Euler's gamma
+in: limit(zeta(x)-1/(x-1),x,1)
+expect: euler_gamma
+
+== T13 | limit(n^x/(x product(1 + x/k, k = 1..n)), n, inf) => gamma(x)
+in: limit(n^x/(x*product(1+x/k,k,1,n)),n,inf)
+expect: gamma(x)
+
+== T14 | limit(x int(exp(-t^2), t = 0..x)/(1 - exp(-x^2)), x, 0) => 1
+in: limit(x*integrate(exp(-t^2),t,0,x)/(1-exp(-x^2)),x,0)
+expect: 1
+
+== T15 | one-sided limits of x/|x| at 0 => [-1, 1]
+in: [limit(x/abs(x),x,0,-1),limit(x/abs(x),x,0,1)]
+expect: [-1,1]
+
+== T16 | limit(atan(-log x), x, 0, +) => pi/2
+in: limit(atan(-ln(x)),x,0,1)
+expect: pi/2
+
+@section U Calculus
+== U1 | d/dx |x| => sign(x)
+in: diff(abs(x),x)
+expect: sign(x)
+domain: x=real
+
+== U2 | derivative of the piecewise function (-x for x < 0, x otherwise)
+in: diff(piecewise(x<0,-x,x),x)
+expect: piecewise(x<0,-1,1)
+domain: x=real
+
+== U2b | same with unit steps: d/dx(-x H(-x) + x H(x)) => sign(x)
+in: simplify(diff(-x*heaviside(-x)+x*heaviside(x),x))
+expect: sign(x)
+domain: x=real
+
+== U3 | f(x) = x^2 - 1 at x = 1, x^3 otherwise: f(1) => 0
+pre: f(x):=piecewise(x=1,x^2-1,x^3)
+in: f(1)
+expect: 0
+
+== U3b | same f: f'(1) => 3
+pre: f(x):=piecewise(x=1,x^2-1,x^3)
+in: subst(diff(f(x),x),x,1)
+expect: 3
+alt: WRONG | diff(0,1) | piecewise with an x = 1 branch is not differentiated, and subst then replaces the differentiation variable: diff(0,1)
+
+== U4 | d^n/dx^n x^n => n! (integer n)
+pre: assume(n,integer)
+in: diff(x^n,x,n)
+expect: factorial(n)
+domain: n=int
+
+== U5 | chain rule: d^2/dt^2 f(g(t)) => f''(g) g'^2 + f'(g) g''
+in: diff(f(g(t)),t,2)
+allow: f g
+check: manual
+alt: PASS | f'(g(t))*diff(diff(g(t),t),t)+f''(g(t))*diff(g(t),t)^2 | the chain rule f''(g) g'^2 + f'(g) g''
+
+== U6 | d/dx int(f(y), y = g(x)..h(x)) => f(h(x)) h'(x) - f(g(x)) g'(x)
+in: diff(integrate(f(y),y,g(x),h(x)),x)
+allow: f g h
+check: manual
+alt: PASS | diff(h(x),x)*f(h(x))-diff(g(x),x)*f(g(x)) | Leibniz: f(h) h' - f(g) g'
+
+== U7 | exact differential d V(P, T) => V_P dP + V_T dT
+unsupported: no total differentials
+
+== U8 | implicit differentiation of y = cos(x y) + x => (1 - y sin(x y))/(1 + x sin(x y))
+in: implicitdiff(y=cos(x*y)+x,y,x)
+expect: (1-y*sin(x*y))/(1+x*sin(x*y))
+
+== U9 | f_x + f_y with f(x, y) = g(x^2 + y^2) => 2 (x + y) g'(x^2 + y^2)
+in: factor(diff(g(x^2+y^2),x)+diff(g(x^2+y^2),y))
+allow: g diff
+check: manual
+alt: UNEVAL | diff(g(x^2+y^2),x)+diff(g(x^2+y^2),y) | no chain rule for unknown functions
+alt: PASS | 2*(x+y)*g'(x^2+y^2) | the expected 2 (x + y) g'(x^2 + y^2)
+
+== U10 | residue((z^3 + 5)/((z^4 - 1)(z + 1)), z, -1) => -9/4
+in: residue((z^3+5)/((z^4-1)*(z+1)),z,-1)
+expect: -9/4
+
+== U11 | wedge product of 1-forms => 8 dx dy dz
+na: differential forms
+
+== U12 | exterior derivative => (15x^4 + 10xy + 8) dx dy dz
+na: differential forms
+
+== U13 | minimum of x^4 - x + 1 => 1 - 3/8 2^(1/3)
+in: minimize(x^4-x+1,x)
+expect: 1-3*2^(1/3)/8
+
+== U14 | [min, max] of 1/(x^2 + y^2 + 1) => [0, 1]
+unsupported: no optimization commands
+
+== U15 | minimize a + b x + c y + d x y on [-1,1]^2
+unsupported: no optimization commands
+
+== U16 | [min, max] of x^2 y^3 on [-1,1]^2 => [-1, 1]
+unsupported: no optimization commands
+
+== U17 | linear programming (symbolic simplex)
+unsupported: no linear programming
+
+@section V Indefinite integrals
+== V1 | int |x| dx => x |x|/2
+in: integrate(abs(x),x)
+expect: abs(x)
+domain: x=real
+check: antideriv
+
+== V2 | int |z| dz for complex z
+unsupported: symbols cannot be declared complex
+
+== V3 | int of the piecewise function (-x for x < 0, x otherwise)
+in: integrate(piecewise(x<0,-x,x),x)
+expect: piecewise(x<0,-x,x)
+domain: x=real
+check: antideriv
+
+== V4 | int -x H(-x) + x H(x) dx
+in: integrate(-x*heaviside(-x)+x*heaviside(x),x)
+expect: -x*heaviside(-x)+x*heaviside(x)
+domain: x=real
+check: antideriv
+
+== V5 | int 1/(x^3 + 2) dx
+in: integrate(1/(x^3+2),x)
+expect: 1/(x^3+2)
+check: antideriv
+
+== V6 | int 2^x/sqrt(1 + 4^x) dx => asinh(2^x)/log 2
+in: integrate(2^x/sqrt(1+4^x),x)
+expect: 2^x/sqrt(1+4^x)
+check: antideriv
+
+== V7 | int (3x - 5)^2/(2x - 1)^(7/2) dx
+in: integrate((3*x-5)^2/(2*x-1)^(7/2),x)
+expect: (3*x-5)^2/(2*x-1)^(7/2)
+domain: x=big
+check: antideriv
+
+== V8 | int 1/(2 e^(m x) - 5 e^(-m x)) dx
+in: integrate(1/(2*exp(m*x)-5*exp(-m*x)),x)
+expect: 1/(2*exp(m*x)-5*exp(-m*x))
+domain: x=big
+check: antideriv
+
+== V9 | int sinh^4 x/cosh^2 x dx
+in: integrate(sinh(x)^4/cosh(x)^2,x)
+expect: sinh(x)^4/cosh(x)^2
+check: antideriv
+
+== V10 | int 1/(a + b cos x) dx (a^2 < b^2)
+in: integrate(1/(a+b*cos(x)),x)
+expect: 1/(a+b*cos(x))
+domain: a=pos b=big
+check: antideriv
+
+== V11 | int 1/(3 + 3 cos x + 4 sin x) dx => log(3 + 4 tan(x/2))/4
+in: integrate(1/(3+3*cos(x)+4*sin(x)),x)
+expect: 1/(3+3*cos(x)+4*sin(x))
+check: antideriv
+
+== V12 | int 1/(4 + 3 cos x + 4 sin x) dx
+in: integrate(1/(4+3*cos(x)+4*sin(x)),x)
+expect: 1/(4+3*cos(x)+4*sin(x))
+check: antideriv
+
+== V13 | int 1/(5 + 3 cos x + 4 sin x) dx => -1/(2 + tan(x/2))
+in: integrate(1/(5+3*cos(x)+4*sin(x)),x)
+expect: 1/(5+3*cos(x)+4*sin(x))
+check: antideriv
+
+== V14 | int 1/(6 + 3 cos x + 4 sin x) dx
+in: integrate(1/(6+3*cos(x)+4*sin(x)),x)
+expect: 1/(6+3*cos(x)+4*sin(x))
+check: antideriv
+
+== V15 | int log|x^2 - a^2| dx
+in: integrate(ln(abs(x^2-a^2)),x)
+expect: ln(abs(x^2-a^2))
+domain: x=real
+check: antideriv
+
+== V16 | int x acot(x/a) dx
+in: integrate(x*acot(x/a),x)
+expect: x*acot(x/a)
+check: antideriv
+
+== V17 | int cos(5x) Ci(2x) dx => sin(5x) Ci(2x)/5 - (Si(7x) + Si(3x))/10
+in: integrate(cos(5*x)*Ci(2*x),x)
+expect: cos(5*x)*Ci(2*x)
+check: antideriv
+
+== V18 | int (f' g - f g')/(f^2 - g^2) dx => log((f - g)/(f + g))/2
+in: integrate((diff(f(x),x)*g(x)-f(x)*diff(g(x),x))/(f(x)^2-g(x)^2),x)
+allow: f g diff
+check: manual
+
+@section W Definite integrals
+== W1 | int 1/(x - a), x = a-1..a+1 => 0 (principal value)
+in: integrate(1/(x-a),x,a-1,a+1)
+expect: 0
+domain: a=real
+alt: UNEVAL | ERROR 2: integral diverges (pole inside the interval) | divergent as an improper integral (as for numeric bounds); the principal value 0 is not computed
+
+== W2 | int 1/(x - a)^2, x = a-1..a+1 => divergent
+in: integrate(1/(x-a)^2,x,a-1,a+1)
+check: error
+
+== W3 | int sqrt(x + 1/x - 2), x = 0..1 => 4/3
+in: integrate(sqrt(x+1/x-2),x,0,1)
+expect: 4/3
+
+== W4 | int sqrt(x + 1/x - 2), x = 1..2 => (4 - sqrt 8)/3
+in: integrate(sqrt(x+1/x-2),x,1,2)
+expect: (4-sqrt(8))/3
+
+== W5 | int sqrt(x + 1/x - 2), x = 0..2 => (8 - sqrt 8)/3
+in: integrate(sqrt(x+1/x-2),x,0,2)
+expect: (8-sqrt(8))/3
+
+== W6 | int sqrt(2 - 2 cos 2x)/2, x = -3 pi/4..-pi/4 => sqrt 2 (Kahan)
+in: integrate(sqrt(2-2*cos(2*x))/2,x,-3*pi/4,-pi/4)
+expect: sqrt(2)
+
+== W7 | int cos x/(x^2 + a^2), x = -inf..inf => pi e^(-a)/a (a > 0)
+pre: assume(a>0)
+in: integrate(cos(x)/(x^2+a^2),x,-inf,inf)
+expect: pi*exp(-a)/a
+
+== W8 | int t^(a-1)/(1 + t), t = 0..inf => pi/sin(pi a) (0 < a < 1)
+pre: assume(a>0)
+in: integrate(t^(a-1)/(1+t),t,0,inf)
+expect: pi/sin(pi*a)
+domain: a=0:1
+
+== W9 | PV int 5x^3/(1 + x + x^2 + x^3 + x^4), -inf..inf => -2 pi (sin(pi/5) + sin(2 pi/5))
+in: integrate(5*x^3/(1+x+x^2+x^3+x^4),x,-inf,inf)
+expect: -2*pi*(sin(pi/5)+sin(2*pi/5))
+alt: UNEVAL | undef | improper integral reported as undefined; no principal value (defensible)
+
+== W10 | int 1/(1 + x + x^2 + x^4), -inf..inf
+in: integrate(1/(1+x+x^2+x^4),x,-inf,inf)
+expect: 1.98667745715246
+check: value
+tol: 1e-9
+note: Wester's closed form is for 1 + x + ... + x^(2n); the expected value here is numeric (mpmath quad); a float result is accepted
+
+== W11 | int sqrt(1 - x^2)/(1 + x^2), x = -1..1 => pi (sqrt 2 - 1)
+in: integrate(sqrt(1-x^2)/(1+x^2),x,-1,1)
+expect: pi*(sqrt(2)-1)
+
+== W12 | int x exp(-p x^2 + 2 q x), x = -inf..inf => q/p sqrt(pi/p) e^(q^2/p)
+pre: assume(p>0)
+in: integrate(x*exp(-p*x^2+2*q*x),x,-inf,inf)
+expect: q/p*sqrt(pi/p)*exp(q^2/p)
+domain: q=real
+
+== W13 | int 1/log t + 1/(1 - t) - log(log(1/t)), t = 0..1 => 2 gamma
+in: integrate(1/ln(t)+1/(1-t)-ln(ln(1/t)),t,0,1)
+expect: 2*euler_gamma
+
+== W14 | int sin t/t exp(2 i t), t = -inf..inf => 0
+in: integrate(sin(t)/t*exp(2*i*t),t,-inf,inf)
+expect: 0
+
+== W15 | int log(gamma(x)) cos(6 pi x), x = 0..1 => 1/12
+in: integrate(ln(gamma(x))*cos(6*pi*x),x,0,1)
+expect: 1/12
+
+== W16 | int (1 + x)^3 P1(x) P2(x), x = -1..1 => 36/35
+in: integrate((1+x)^3*legendre(1,x)*legendre(2,x),x,-1,1)
+expect: 36/35
+
+== W16b | same with the Legendre polynomials written out
+in: integrate((1+x)^3*x*(3*x^2-1)/2,x,-1,1)
+expect: 36/35
+
+== W17 | int exp(-a x) J0(b x), x = 0..inf => 1/sqrt(a^2 + b^2)
+pre: assume(a>0)
+in: integrate(exp(-a*x)*besselj(0,b*x),x,0,inf)
+expect: 1/sqrt(a^2+b^2)
+
+== W18 | int (J1(x)/x)^2, x = 0..inf => 4/(3 pi)
+in: integrate((besselj(1,x)/x)^2,x,0,inf)
+expect: 4/(3*pi)
+
+== W19 | int Ci(x) J0(2 sqrt(7 x)), x = 0..inf => (cos 7 - 1)/7
+in: integrate(Ci(x)*besselj(0,2*sqrt(7*x)),x,0,inf)
+expect: (cos(7)-1)/7
+
+== W20 | int x^2 Li3(1/(x + 1)), x = 0..1 (Mertig)
+in: integrate(x^2*polylog(3,1/(x+1)),x,0,1)
+expect: -(17/3+pi^2)/36+ln(2)/9*(35/3-pi^2/2-4*ln(2)+ln(2)^2)+zeta(3)/4
+
+== W21 | numeric value of W20 => 0.210883
+in: nint(x^2*polylog(3,1/(x+1)),x,0,1)
+expect: 0.210882859565594
+check: value
+tol: 1e-9
+alt: UNSUPPORTED | ERROR 2: numeric integration failed | no polylog function
+
+== W22 | int s(t) cos t, t = 0..u for the step s = 1 on [1, 2]
+in: integrate(piecewise(t>=1 and t<=2,1,0)*cos(t),t,0,u)
+expect: piecewise(u<1,0,u<=2,sin(u)-sin(1),sin(2)-sin(1))
+domain: u=0:3
+
+== W23 | same with s(t) = H(t - 1) - H(t - 2)
+in: integrate((heaviside(t-1)-heaviside(t-2))*cos(t),t,0,u)
+expect: piecewise(u<1,0,u<=2,sin(u)-sin(1),sin(2)-sin(1))
+domain: u=0:3
+
+== W24 | int(int(x/(x^2 + y^2), y = -inf..inf), x = a..b), a, b > 0 => (b - a) pi
+pre: assume(a>0)
+pre: assume(b>0)
+in: integrate(integrate(x/(x^2+y^2),y,-inf,inf),x,a,b)
+expect: pi*(b-a)
+
+== W25 | other order, a, b > 0 => (b - a) pi
+pre: assume(a>0)
+pre: assume(b>0)
+in: integrate(integrate(x/(x^2+y^2),x,a,b),y,-inf,inf)
+expect: pi*(b-a)
+
+== W26 | y first, a < 0 < b => (|b| - |a|) pi
+pre: assume(a<0)
+pre: assume(b>0)
+in: integrate(integrate(x/(x^2+y^2),y,-inf,inf),x,a,b)
+expect: pi*(b+a)
+domain: a=neg
+
+== W27 | x first, a < 0 < b => (|b| - |a|) pi
+pre: assume(a<0)
+pre: assume(b>0)
+in: integrate(integrate(x/(x^2+y^2),x,a,b),y,-inf,inf)
+expect: pi*(b+a)
+domain: a=neg
+
+== W28 | y first, a, b < 0 => (|b| - |a|) pi
+pre: assume(a<0)
+pre: assume(b<0)
+in: integrate(integrate(x/(x^2+y^2),y,-inf,inf),x,a,b)
+expect: pi*(a-b)
+domain: a=neg b=neg
+
+== W29 | x first, a, b < 0 => (|b| - |a|) pi
+pre: assume(a<0)
+pre: assume(b<0)
+in: integrate(integrate(x/(x^2+y^2),x,a,b),y,-inf,inf)
+expect: pi*(a-b)
+domain: a=neg b=neg
+
+== W30 | int(int(sqrt(x^2 + y^2), x = 0..1), y = 0..1) => (log(sqrt 2 + 1) + sqrt 2)/3
+in: integrate(integrate(sqrt(x^2+y^2),x,0,1),y,0,1)
+expect: (ln(sqrt(2)+1)+sqrt(2))/3
+
+== W31 | int(int(sin a sin y/sqrt(1 - sin^2 a sin^2 x sin^2 y), x = 0..pi/2), y = 0..pi/2) => pi a/2
+in: integrate(integrate(sin(a)*sin(y)/sqrt(1-sin(a)^2*sin(x)^2*sin(y)^2),x,0,pi/2),y,0,pi/2)
+expect: pi*a/2
+domain: a=0:1.5
+
+== W32 | int(int(|y - x^2|, y = 0..2), x = -1..1) => 46/15
+in: integrate(integrate(abs(y-x^2),y,0,2),x,-1,1)
+expect: 46/15
+
+== W33 | volume of a tetrahedron => a b c/6
+in: integrate(integrate(integrate(1,z,0,c*(1-x/a-y/b)),y,0,b*(1-x/a)),x,0,a)
+expect: a*b*c/6
+
+@section X Series
+== X1 | Taylor 1/sqrt(1 - (v/c)^2) to O(v^8)
+in: series(1/sqrt(1-(v/c)^2),v,0,8)
+expect: 1+v^2/(2*c^2)+3*v^4/(8*c^4)+5*v^6/(16*c^6)
+
+== X2 | series of 1/s1^2 => 1 - v^2/c^2
+pre: s1:=series(1/sqrt(1-(v/c)^2),v,0,8)
+in: series(1/s1^2,v,0,8)
+expect: 1-v^2/c^2
+
+== X3 | series(sin)/series(cos) => tan series
+in: series(series(sin(x),x,0,8)/series(cos(x),x,0,8),x,0,8)
+expect: x+x^3/3+2*x^5/15+17*x^7/315
+
+== X4 | tan(x) series to O(x^8)
+in: series(tan(x),x,0,8)
+expect: x+x^3/3+2*x^5/15+17*x^7/315
+
+== X5 | log(sin x/x) => -x^2/6 - x^4/180 - x^6/2835
+in: series(ln(sin(x)/x),x,0,8)
+expect: -x^2/6-x^4/180-x^6/2835
+
+== X6 | log of the series of sin x/x
+in: series(ln(series(sin(x)/x,x,0,8)),x,0,8)
+expect: -x^2/6-x^4/180-x^6/2835
+
+== X7 | series of f'(a x) a + g(b x) + int(h(c y), y = 0..x) at x = d
+in: series(diff(f(a*x),x)+g(b*x)+integrate(h(c*y),y,0,x),x,d,2)
+allow: f g h
+check: manual
+
+== X8 | noncommutative exp((A + B) t) - exp(A t) exp(B t)
+na: noncommutative algebra
+
+== X9 | Laurent series of 1/(x (e^x - 1))
+in: series(1/(x*(exp(x)-1)),x,0,7)
+expect: 1/x^2-1/(2*x)+1/12-x^2/720+x^4/30240-x^6/1209600
+
+== X10 | Puiseux series of sqrt(sec x) at 3 pi/2
+in: series(sqrt(sec(x)),x,3*pi/2,4)
+expect: 1/sqrt(x-3*pi/2)+(x-3*pi/2)^(3/2)/12+(x-3*pi/2)^(7/2)/160
+domain: x=4.72:5.2
+
+== X11 | generalized Taylor series of x^x
+in: series(x^x,x,0,4)
+expect: 1+x*ln(x)+x^2*ln(x)^2/2+x^3*ln(x)^3/6
+
+== X12 | log(sinh z) + log(cosh(z + w)) => log z + log cosh w + tanh(w) z
+in: series(ln(sinh(z))+ln(cosh(z+w)),z,0,2)
+expect: ln(z)+ln(cosh(w))+tanh(w)*z
+domain: w=pos
+
+== X13 | log(sinh z cosh(z + w)) => same
+in: series(ln(sinh(z)*cosh(z+w)),z,0,2)
+expect: ln(z)+ln(cosh(w))+tanh(w)*z
+domain: w=pos
+
+== X14 | log(x)^a exp(-b x) at x = 1 => (x-1)^a e^-b (1 - (a + 2b)(x - 1)/2)
+in: series(ln(x)^a*exp(-b*x),x,1,2)
+expect: (x-1)^a*exp(-b)*(1-(a+2*b)*(x-1)/2)
+domain: x=1:1.5
+
+== X15 | asymptotic sqrt(2 x^2 + 1) => sqrt(2) x + O(1/x)
+in: series(sqrt(2*x^2+1),x,inf,1)
+expect: sqrt(2)*x
+check: asym 0.5
+
+== X16 | Wallis: binomial(2n, n)/2^(2n) => 1/sqrt(pi n)
+in: series(binomial(2*n,n)/4^n,n,inf,1)
+expect: 1/sqrt(pi*n)
+var: n
+check: asym 0.75
+
+== X17 | e^x int(e^-t/t, t = x..inf) => 1/x - 1/x^2 + 2/x^3 - 6/x^4
+in: series(exp(x)*integrate(exp(-t)/t,t,x,inf),x,inf,5)
+expect: 1/x-1/x^2+2/x^3-6/x^4
+check: asym 4.5
+
+== X18 | multivariate Taylor cos(x + y) => 1 - (x + y)^2/2
+in: series(cos(x+y),[x,y],[0,0],4)
+expect: 1-(x+y)^2/2
+alt: UNSUPPORTED | ERROR 2: expected a variable name | series() is univariate only
+
+== X19 | power series of log(sin x/x), general term
+unsupported: no formal power series (general term)
+
+== X20 | power series of e^-x sin x, general term
+unsupported: no formal power series (general term)
+
+== X21 | series reversion of x = sin y + cos y
+unsupported: no series reversion
+
+== X22 | Pade approximation of e^-x => (2 - x)/(2 + x)
+in: pade(exp(-x),x,1,1)
+expect: (2-x)/(2+x)
+
+== X23 | Fourier series of x on [-p, p]: b_n => -2 p (-1)^n/(n pi)
+pre: assume(p>0)
+pre: assume(n,integer)
+in: fourier_bn(x,x,2*p,n,-p)
+expect: -2*p*(-1)^n/(n*pi)
+domain: n=int
+
+== X23b | Fourier series of x on [-p, p]: a_n => 0
+pre: assume(p>0)
+pre: assume(n,integer)
+in: fourier_an(x,x,2*p,n,-p)
+expect: 0
+domain: n=int
+
+== X24 | Fourier series of |x| on [-p, p]: a_n => 2 p ((-1)^n - 1)/(pi^2 n^2)
+pre: assume(p>0)
+pre: assume(n,integer)
+in: fourier_an(abs(x),x,2*p,n,-p)
+expect: 2*p*((-1)^n-1)/(pi^2*n^2)
+domain: n=int
+
+== X24b | Fourier series of |x|: constant term => p/2
+pre: assume(p>0)
+in: fourier_an(abs(x),x,2*p,0,-p)
+expect: p/2
+
+@section Y Transforms
+== Y1 | laplace(cos((w - 1) t)) => s/(s^2 + (w - 1)^2)
+in: laplace(cos((w-1)*t),t,s)
+expect: s/(s^2+(w-1)^2)
+
+== Y2 | inverse Laplace back => cos((w - 1) t)
+in: ilaplace(s/(s^2+(w-1)^2),s,t)
+expect: cos((w-1)*t)
+
+== Y3 | laplace(sinh(w t) cosh(w t)) => w/(s^2 - 4 w^2)
+in: laplace(sinh(w*t)*cosh(w*t),t,s)
+expect: w/(s^2-4*w^2)
+domain: s=big w=0:0.9
+
+== Y4 | laplace(erf(3/sqrt t)) => 1/s - e^(-6 sqrt s)/s
+in: laplace(erf(3/sqrt(t)),t,s)
+expect: 1/s-exp(-6*sqrt(s))/s
+
+== Y5 | y'' + y = 4 (H(t - 1) - H(t - 2)), y(0) = 1, y'(0) = 0
+in: dsolve([y''+y=4*(heaviside(x-1)-heaviside(x-2)),y(0)=1,y'(0)=0],y,x)
+expect: Y2+Y-4*(sp.Heaviside(x-1)-sp.Heaviside(x-2))
+ic: [Y.subs(x,0)-1, Y.diff(x).subs(x,0)]
+domain: x=0:3
+check: ode 0
+
+== Y6 | inverse Laplace of the transformed solution of Y5
+in: ilaplace(s/(s^2+1)+4*(1/s-s/(s^2+1))*(exp(-s)-exp(-2*s)),s,t)
+expect: cos(t)+4*((1-cos(t-1))*heaviside(t-1)-(1-cos(t-2))*heaviside(t-2))
+domain: t=0:3
+
+== Y7 | Laplace transform of a square wave (infinite sum of steps)
+in: laplace(1+2*sum((-1)^n*heaviside(t-n*a),n,1,inf),t,s)
+expect: 0
+check: manual
+
+== Y8 | Fourier transform of 1 => sqrt(2 pi) delta(z)
+in: fourier(1,x,z)
+expect: sqrt(2*pi)*dirac(z)
+check: manual
+alt: PASS | sqrt(2)*dirac(z)*sqrt(pi) | sqrt(2 pi) delta(z)
+
+== Y9 | Fourier transform of exp(-9 x^2)
+in: fourier(exp(-9*x^2),x,z)
+expect: exp(-z^2/36)/(3*sqrt(2))
+check: manual
+alt: PASS | sqrt(2)*exp(-z^2/36)/6 | = exp(-z^2/36)/(3 sqrt 2)
+
+== Y10 | Fourier transform of |x| exp(-3 |x|)
+in: fourier(abs(x)*exp(-3*abs(x)),x,z)
+expect: sqrt(2/pi)*(9-z^2)/(9+z^2)^2
+check: manual
+alt: PASS | -sqrt(2)*(z-3)*(z+3)/(sqrt(pi)*(z^2+9)^2) | = sqrt(2/pi) (9 - z^2)/(9 + z^2)^2
+
+== Y11 | Mellin transform of 1/(1 - x) => pi cot(pi s) (PV)
+pre: assume(s>0)
+in: integrate(x^(s-1)/(1-x),x,0,inf)
+expect: pi*cot(pi*s)
+domain: s=0:1
+
+== Y12 | Mellin transform of J3(x)/x^3 => 2^(s-4) gamma(s/2)/gamma(4 - s/2)
+pre: assume(s>0)
+in: integrate(besselj(3,x)/x^3*x^(s-1),x,0,inf)
+expect: 2^(s-4)*gamma(s/2)/gamma(4-s/2)
+domain: s=0:1
+
+== Y13 | Z transform of H(t - 3)
+in: ztrans(heaviside(t-3),t,z)
+expect: 0
+check: manual
+
+== Y14 | Z transform of H(t - m T) => z/(z^m (z - 1))
+in: ztrans(heaviside(t-m),t,z)
+expect: 0
+check: manual
+
+@section Z Difference and differential equations
+== Z1 | r(n+2) - 2 r(n+1) + r(n) = 2, r(0) = 1, r(1) = m => n^2 + (m - 2) n + 1
+in: rsolve(f(n+2)-2*f(n+1)+f(n)=2,f(n),[f(0)=1,f(1)=m])
+allow: f
+expect: n^2+(m-2)*n+1
+
+== Z2 | r(n) = 5 r(n-1) - 6 r(n-2), r(0) = 0, r(1) = 1 => 3^n - 2^n
+in: rsolve(f(n)=5*f(n-1)-6*f(n-2),f(n),[f(0)=0,f(1)=1])
+allow: f
+expect: 3^n-2^n
+
+== Z3 | Fibonacci recurrence, r(1) = 1, r(2) = 2 => fib(n + 1)
+in: rsolve(f(n)=f(n-1)+f(n-2),f(n),[f(1)=1,f(2)=2])
+allow: f
+expect: fibonacci(n+1)
+domain: n=int
+
+== Z4 | Yu-Israel nonlinear-coefficient recurrence
+in: rsolve(f(n)=(1+c-c^(n-1)-c^(n+1))/(1-c^n)*f(n-1)-c*(1-c^(n-2))/(1-c^(n-1))*f(n-2)+1,f(n),[f(1)=1,f(2)=(2+2*c+c^2)/(1+c)])
+allow: f
+expect: (c^(n+1)*(c^(n+1)-2*c-2)+(n+1)*c^2+2*c-n)/((c-1)^3*(c+1))
+domain: n=int
+alt: UNEVAL | rsolve(f(n)=-c*(1-c^(n-2))*f(n-2)/(1-c^(n-1))+(c-c^(n-1)-c^(n+1)+1)*f(n-1)/(1-c^n)+1,f(n),[f(1)=1,f(2)=(c^2+2*c+2)/(c+1)]) | rsolve handles constant coefficients only
+
+== Z5 | f'' + 4 f = sin 2t, f(0) = f'(0) = 0 => sin(2t)/8 - t cos(2t)/4
+in: dsolve([y''+4*y=sin(2*x),y(0)=0,y'(0)=0],y,x)
+expect: Y2+4*Y-sp.sin(2*x)
+ic: [Y.subs(x,0), Y.diff(x).subs(x,0)]
+check: ode 0
+
+== Z6 | same via the Laplace transform: ilaplace(2/(s^2 + 4)^2)
+in: ilaplace(2/(s^2+4)^2,s,t)
+expect: sin(2*t)/8-t*cos(2*t)/4
+
+== Z7 | separable y' = x^2/(y (1 + x)^3)
+in: dsolve(y'=x^2/(y*(1+x)^3),y,x)
+expect: Y1-x**2/(Y*(1+x)**3)
+check: ode 1
+
+== Z8 | homogeneous y' = y/x + x/y => y^2 = 2 x^2 log|A x|
+in: dsolve(y'=y/x+x/y,y,x)
+expect: Y1-(Y/x+x/Y)
+check: ode 1
+
+== Z9 | linear x^2 y' + 3 x y = sin(x)/x => y = (A - cos x)/x^3
+in: dsolve(x^2*y'+3*x*y=sin(x)/x,y,x)
+expect: x**2*Y1+3*x*Y-sp.sin(x)/x
+check: ode 1
+
+== Z10 | exact y' = -(1 + 2 x sin y)/(1 + x^2 cos y) => x + x^2 sin y + y = A
+in: dsolve(y'=-(1+2*x*sin(y))/(1+x^2*cos(y)),y,x)
+expect: Y1+(1+2*x*sp.sin(Y))/(1+x**2*sp.cos(Y))
+check: ode 1
+
+== Z11 | nonlinear y'' + y y'^3 = 0 => y^3/6 + A y = x + B
+in: dsolve(y''+y*y'^3=0,y,x)
+expect: Y2+Y*Y1**3
+check: ode 2
+
+== Z12 | same with y(0) = 0, y'(0) = 2 => (3x + sqrt(1 + 9x^2))^(1/3) - 1/(3x + sqrt(1 + 9x^2))^(1/3)
+in: dsolve([y''+y*y'^3=0,y(0)=0,y'(0)=2],y,x)
+expect: Y2+Y*Y1**3
+ic: [Y.subs(x,0), Y.diff(x).subs(x,0)-2]
+check: ode 0
+
+== Z13 | y' = a y (parametric) => A e^(a x)
+in: dsolve(y'=a*y,y,x)
+expect: Y1-a*Y
+check: ode 1
+
+== Z14 | BVP y'' + k^2 y = 0, y(0) = 0, y'(1) = 0 => A sin(k x) with cos k = 0
+in: dsolve([y''+k^2*y=0,y(0)=0,y'(1)=0],y,x)
+check: manual
+alt: UNEVAL | 0 | only the trivial solution; no eigenvalue condition cos(k) = 0
+
+== Z15 | y'' + y'/x + (1 - v^2/x) y/(4x) = 0 => Z_v(sqrt x)
+in: dsolve(y''+y'/x+(1-v^2/x)*y/(4*x)=0,y,x)
+expect: Y2+Y1/x+(1-v**2/x)*Y/(4*x)
+check: ode 2
+
+== Z16 | delay equation y'(t) + a y(t - 1) = 0
+unsupported: no delay differential equations
+
+== Z17 | discontinuous ODE y'' + sign(t - T) y = 0
+in: dsolve(y''+sign(x-q)*y=0,y,x)
+check: manual
+
+== Z18 | integro-differential equation via Laplace => 5/13 (-8 e^-4t + e^-t (8 cos 2t + sin 2t))
+in: ilaplace(10*s/((s+4)*(s^2+2*s+5)),s,t)
+expect: 5/13*(-8*exp(-4*t)+exp(-t)*(8*cos(2*t)+sin(2*t)))
+note: the transformed equation (s I + 2 I + 5 I/s = 10/(s+4)) was solved by hand
+
+== Z19 | system u' = u - v, v' = u + v
+in: dsolve([u'=u-v,v'=u+v],[u,v],t)
+expect: [U.diff(t)-(U-V), V.diff(t)-(U+V)]
+check: odesys 2
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
+
+== Z20 | triangular system u' = u (1 + cos t/(2 + sin t)), v' = u - v
+in: dsolve([u'=u*(1+cos(t)/(2+sin(t))),v'=u-v],[u,v],t)
+expect: [U.diff(t)-U*(1+sp.cos(t)/(2+sp.sin(t))), V.diff(t)-(U-V)]
+check: odesys 2
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
+
+== Z21 | 3x3 system with roots 2, 1, 3
+in: dsolve([u'=2*u,v'=-2*u+v-2*w,w'=u+3*w],[u,v,w],t)
+expect: [U.diff(t)-2*U, V.diff(t)-(-2*U+V-2*W), W.diff(t)-(U+3*W)]
+check: odesys 3
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
+
+== Z22 | 3x3 system with roots 0, -1 +- sqrt(2) i
+in: dsolve([u'=v,v'=w,w'=-3*v-2*w],[u,v,w],t)
+expect: [U.diff(t)-V, V.diff(t)-W, W.diff(t)-(-3*V-2*W)]
+check: odesys 3
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
+
+== Z23 | 3x3 system with the triple root 2
+in: dsolve([u'=3*u-w,v'=2*v,w'=u+w],[u,v,w],t)
+expect: [U.diff(t)-(3*U-W), V.diff(t)-2*V, W.diff(t)-(U+W)]
+check: odesys 3
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
+
+== Z24 | second order system (Niles) u'' = 2 q v', v'' = -2 q u' + 3 q^2 v
+in: dsolve([u''=2*q*v',v''=-2*q*u'+3*q^2*v],[u,v],t)
+expect: [U.diff(t,2)-2*q*V.diff(t), V.diff(t,2)-(-2*q*U.diff(t)+3*q**2*V)]
+check: odesys 4
+alt: UNSUPPORTED | ERROR 2: dsolve: expected names y, x | dsolve has no systems of ODEs
