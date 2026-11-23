@@ -39,13 +39,14 @@ USB-C port with dfu-util (ROM bootloader) or over SWD with the Debug Probe and O
 
 ## The board
 
-| Top | Bottom |
-|---|---|
-| ![Board, top](hardware/docs/board_top.jpg) | ![Board, bottom](hardware/docs/board_bottom.jpg) |
+| Top | Bottom | First power-up |
+|---|---|---|
+| ![Board, top](hardware/docs/board_top.jpg) | ![Board, bottom](hardware/docs/board_bottom.jpg) | ![Board running](hardware/docs/board_running.jpg) |
 
-Rendered by KiCad from [`hardware/kicad/`](hardware/kicad/). The top carries the MCU, the SDRAM, the display
-connector, the microSD socket, USB-C and the 50 key switches; the bottom, the decoupling capacitors and the
-two holders for the four AAA cells.
+A rev A board as it comes from JLCPCB, still with its panel rails ([`hardware/kicad/`](hardware/kicad/)). The
+top carries the MCU, the SDRAM, the display connector, the microSD socket, USB-C, the debug headers and the 50
+key switches; the bottom, the decoupling capacitors and the two holders for the four AAA cells. On the right,
+the first power-up with the display taped on.
 
 ## What's here
 
