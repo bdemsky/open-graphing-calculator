@@ -8,9 +8,13 @@ An open-source graphing calculator: an STM32H743 board with a 3.2" IPS touch dis
 
 ## Try it in your browser
 
-[`firmware/web/dist/calculator.html`](firmware/web/dist/calculator.html) is the whole calculator (the same
-firmware, compiled to WebAssembly) in one self-contained file. Download it and open it in any modern browser;
-it needs no server and no network. Click the keys or use the computer's keyboard. `make web` in `firmware/`
+**[Open the calculator](https://bdemsky.github.io/open-graphing-calculator/firmware/web/dist/calculator.html)**
+(served by GitHub Pages from this repository).
+
+The page is [`firmware/web/dist/calculator.html`](firmware/web/dist/calculator.html): the whole calculator
+(the same firmware, compiled to WebAssembly) in one self-contained file. GitHub shows `.html` files as source,
+so use the link above, or download the file (Raw, then save) and open it in any modern browser; it needs no
+server and no network. Click the keys or use the computer's keyboard. `make web` in `firmware/`
 rebuilds it ([`firmware/README.md`](firmware/README.md), "Web simulator"). The page leaves out the Python
 module, which runs only on the calculator and the simulator.
 
@@ -32,6 +36,16 @@ You need a soldering iron (for the heat-set inserts), a bench power supply with 
 printer that can pause for a filament change (for the key legends). The first flash goes over the board's
 USB-C port with dfu-util (ROM bootloader) or over SWD with the Debug Probe and OpenOCD; both are in
 `FLASHING.md`.
+
+## The board
+
+| Top | Bottom |
+|---|---|
+| ![Board, top](hardware/docs/board_top.jpg) | ![Board, bottom](hardware/docs/board_bottom.jpg) |
+
+Rendered by KiCad from [`hardware/kicad/`](hardware/kicad/). The top carries the MCU, the SDRAM, the display
+connector, the microSD socket, USB-C and the 50 key switches; the bottom, the decoupling capacitors and the
+two holders for the four AAA cells.
 
 ## What's here
 
