@@ -4,6 +4,9 @@ A step-by-step guide for bringing up an assembled rev A board on your own. Each 
 measure or watch, the expected result, and what to do when it is wrong. Work through the phases in order and
 do not skip a failed step.
 
+A companion file, [`BRINGUP_ASSISTED.md`](BRINGUP_ASSISTED.md), covers the same phases with the same numbers
+for a two-person session in which a coding assistant runs the computer side.
+
 Sources: [`ARCHITECTURE.md`](ARCHITECTURE.md), [`ORDER.md`](ORDER.md), [`pinmap/pinmap.md`](pinmap/pinmap.md),
 [`docs/PANEL_VERIFICATION.md`](docs/PANEL_VERIFICATION.md), the schematic generator `gen/design.py` (with the
 reference designators in `gen/refs.json`), the parts' datasheets (download them by the LCSC numbers in the BOM),

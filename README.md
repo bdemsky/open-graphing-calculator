@@ -4,6 +4,9 @@ An open-source graphing calculator: an STM32H743 board with a 3.2" IPS touch dis
 2D (textbook) math, graphing, statistics, matrices, solvers, finance, base-n, units and an RPN mode, and a
 3D-printed case. The firmware also runs in a macOS simulator and in the browser.
 
+**[Try it in your browser](https://bdemsky.github.io/open-graphing-calculator/)**: the real firmware, compiled
+to WebAssembly, nothing to install.
+
 ![The assembled calculator](hardware/docs/calculator.jpg)
 
 ## The board
@@ -23,15 +26,22 @@ the first power-up with the display taped on.
 
 ## Try it in your browser
 
-**[Open the calculator](https://bdemsky.github.io/open-graphing-calculator/firmware/web/dist/calculator.html)**
-(served by GitHub Pages from this repository).
+**[Open the calculator](https://bdemsky.github.io/open-graphing-calculator/)** (GitHub Pages; with every
+module installed, so the full CAS, the manual, animation and the rest are there). Click the keys or type on
+your keyboard; the shortcuts are listed under the calculator. Some things to try:
 
-The page is [`firmware/web/dist/calculator.html`](firmware/web/dist/calculator.html): the whole calculator
-(the same firmware, compiled to WebAssembly) in one self-contained file. GitHub shows `.html` files as source,
-so use the link above, or download the file (Raw, then save) and open it in any modern browser; it needs no
-server and no network. Click the keys or use the computer's keyboard. `make web` in `firmware/`
-rebuilds it ([`firmware/README.md`](firmware/README.md), "Web simulator"). The page leaves out the Python
-module, which runs only on the calculator and the simulator.
+- Type `integrate(x^2*exp(x),x)` and press Enter: the antiderivative, in textbook form.
+- `sum(1/k^2,k,1,inf)` gives π²/6; `solve(x^3-6*x^2+11*x-6=0,x)` gives [1,2,3]; `factor(x^4-1)`.
+- F1 (graph), type `sin(x)`, F5: a graph cell in the notebook. ENTER on it opens the full graph screen
+  (trace, zoom, CALC).
+- F1 (graph), F1 again (3D), type `4*sin(x)*cos(y)`, F5: a 3D surface. ENTER opens it; F3 (view) has
+  colour by height, contours and a contour map.
+- SHIFT then MENU opens the built-in manual for the screen you are on.
+
+The page is [`firmware/web/dist/calculator.html`](firmware/web/dist/calculator.html), one self-contained
+file: download it (Raw, then save) to run it offline in any modern browser; it needs no server and no
+network. `make web` in `firmware/` rebuilds it ([`firmware/README.md`](firmware/README.md), "Web
+simulator"). The page leaves out the Python module, which runs only on the calculator and the simulator.
 
 ## Build your own
 
