@@ -11,7 +11,7 @@ to WebAssembly, nothing to install.
 
 ## The board
 
-| Top | Bottom | First power-up |
+| Top | Bottom | With Screen |
 |---|---|---|
 | ![Board, top](hardware/docs/board_top.jpg) | ![Board, bottom](hardware/docs/board_bottom.jpg) | ![Board running](hardware/docs/board_running.jpg) |
 
