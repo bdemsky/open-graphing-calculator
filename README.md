@@ -4,7 +4,7 @@ An open-source graphing calculator: an STM32H743 board with a 3.2" IPS touch dis
 2D (textbook) math, graphing, statistics, matrices, solvers, finance, base-n, units and an RPN mode, and a
 3D-printed case. The firmware also runs in a macOS simulator and in the browser.
 
-<p align="center"><img src="hardware/docs/calculator.jpg" alt="The assembled calculator" width="380"></p>
+![The assembled calculator](hardware/docs/calculator.jpg)
 
 ## Try it in your browser
 
